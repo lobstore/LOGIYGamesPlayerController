@@ -1,5 +1,5 @@
 {
-    "name": "RuntimeAssembly",
+    "name": "OpenFracture.Runtime",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],

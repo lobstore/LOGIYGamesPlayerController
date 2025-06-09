@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -11,7 +9,6 @@ public class Fracture : MonoBehaviour
     public FractureOptions fractureOptions;
     public RefractureOptions refractureOptions;
     public CallbackOptions callbackOptions;
-
     /// <summary>
     /// The number of times this fragment has been re-fractured.
     /// </summary>
@@ -231,7 +228,8 @@ public class Fracture : MonoBehaviour
         fragmentRigidBody.angularVelocity = thisRigidBody.angularVelocity;
         fragmentRigidBody.drag = thisRigidBody.drag;
         fragmentRigidBody.angularDrag = thisRigidBody.angularDrag;
-        fragmentRigidBody.useGravity = thisRigidBody.useGravity;
+        fragmentRigidBody.useGravity = fractureOptions.useGravityForFragments;
+
 
         // If refracturing is enabled, create a copy of this component and add it to the template fragment object
         if (refractureOptions.enableRefracturing &&

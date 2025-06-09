@@ -26,6 +26,9 @@ public class FractureOptions
     [Tooltip("Fracturing is performed asynchronously on the main thread.")]
     public bool asynchronous;
 
+    [Tooltip("Fractured fragments will use gravity")]
+    public bool useGravityForFragments;
+
     [Tooltip("The material to use for the inside faces")]
     public Material insideMaterial;
     

@@ -11,7 +11,7 @@ public class Prefracture : MonoBehaviour
     public FractureOptions fractureOptions;
     public CallbackOptions callbackOptions;
     public PrefractureOptions prefractureOptions;
-
+    [SerializeField] bool useGravityForFragments;
     /// <summary>
     /// Collector object that stores the produced fragments
     /// </summary>
@@ -116,11 +116,10 @@ public class Prefracture : MonoBehaviour
         var rigidBody = obj.AddComponent<Rigidbody>();
         // When pre-fracturing, freeze the rigid body so the fragments don't all crash to the ground when the scene starts.
         rigidBody.constraints = RigidbodyConstraints.FreezeAll;
-        //rigidBody.isKinematic = true;
         rigidBody.drag = this.GetComponent<Rigidbody>().drag;
         rigidBody.angularDrag = this.GetComponent<Rigidbody>().angularDrag;
-        //rigidBody.useGravity = this.GetComponent<Rigidbody>().useGravity;
-        rigidBody.useGravity = false;
+
+        rigidBody.useGravity = fractureOptions.useGravityForFragments;
 
         var unfreeze = obj.AddComponent<UnfreezeFragment>();
         unfreeze.unfreezeAll = prefractureOptions.unfreezeAll;

@@ -32,7 +32,7 @@ public class BinSort
     /// <param name="j">Grid column</param>
     /// <param name="n">Grid size</param>
     /// <returns></returns>
-    internal static int GetBinNumber(int i, int j, int n)
+    public static int GetBinNumber(int i, int j, int n)
     {
         return (i % 2 == 0) ? (i * n) + j : (i + 1) * n - j - 1;
     }
@@ -46,7 +46,7 @@ public class BinSort
     /// <param name="lastIndex">The index of the last element in `input` to sort. Only the
     /// elements [0, lastIndex) are sorted.</param>
     /// <param name="binCount">Number of bins</param>
-    internal static T[] Sort<T>(T[] input, int lastIndex, int binCount) where T: IBinSortable
+    public static T[] Sort<T>(T[] input, int lastIndex, int binCount) where T: IBinSortable
     {
         int[] count = new int[binCount];
         T[] output = new T[input.Length];

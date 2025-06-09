@@ -63,7 +63,7 @@ namespace LOGIYGames
 
         [field: SerializeField] public float BaseSpeed { get; set; }
         public float Height { get; set; }
-
+        public float Weight { get; set; }
         public CountdownTimer ExitingWallTimer { get; set; }
 
         [Space(2)]
@@ -85,6 +85,7 @@ namespace LOGIYGames
             controller = GetComponent<CharacterController>();
             Sensors = GetComponent<SensorsModule>();
             Height = controller.height;
+            Weight = 1f;
             ExitingWallTimer = new CountdownTimer(0.05f);
             PlayerTimers.Add(ExitingWallTimer);
             Animator = GetComponent<Animator>();
@@ -200,11 +201,11 @@ namespace LOGIYGames
             if (IsGrounded
                 && verticalVelocity < 0)
             {
-                verticalVelocity = -4 + Physics.gravity.y * horizontalVelocity.magnitude;
+                verticalVelocity = -4 + (Physics.gravity.y-Weight/10) * horizontalVelocity.magnitude;
             }
             else
             {
-                verticalVelocity += Physics.gravity.y * Time.deltaTime * gravityMultiplier;
+                verticalVelocity += (Physics.gravity.y - Weight/10)  * Time.deltaTime * gravityMultiplier;
             }
         }
         public void ResetMotion()
