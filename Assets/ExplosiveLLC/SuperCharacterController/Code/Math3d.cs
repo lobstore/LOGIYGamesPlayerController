@@ -385,9 +385,9 @@ public class Math3d:MonoBehaviour
 
 	// This function transforms one object as if it was parented to the other.
 	// Before using this function, the Init() function must be called
-	// Input: parentRotation and parentPosition: the current parent transform.
-	// Input: startParentRotation and startParentPosition: the transform of the parent object at the time the objects are parented.
-	// Input: startChildRotation and startChildPosition: the transform of the child object at the time the objects are parented.
+	// MouseDelta: parentRotation and parentPosition: the current parent transform.
+	// MouseDelta: startParentRotation and startParentPosition: the transform of the parent object at the time the objects are parented.
+	// MouseDelta: startChildRotation and startChildPosition: the transform of the child object at the time the objects are parented.
 	// Output: childRotation and childPosition.
 	// All transforms are in world space.
 	public static void TransformWithParent(out Quaternion childRotation, out Vector3 childPosition, Quaternion parentRotation, Vector3 parentPosition, Quaternion startParentRotation, Vector3 startParentPosition, Quaternion startChildRotation, Vector3 startChildPosition)

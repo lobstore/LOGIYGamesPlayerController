@@ -41,7 +41,7 @@ namespace LOGIYGames
 #else
             StartMicrophone();
 #endif
-            GameControlInputManager.Instance.OnVoiceChatStarted.AddListener(ActivateVoiceChat);
+            GameControlInputManager.Instance.VoiceChatPressed.AddListener(ActivateVoiceChat);
             StopMicrophone();
         }
         void ActivateVoiceChat(bool isPressing)
@@ -290,7 +290,7 @@ namespace LOGIYGames
 
             if (GameControlInputManager.Instance != null)
             {
-                GameControlInputManager.Instance.OnVoiceChatStarted.RemoveListener(ActivateVoiceChat);
+                GameControlInputManager.Instance.VoiceChatPressed.RemoveListener(ActivateVoiceChat);
             }
         }
         public void SetMicrophoneVolume(float volume)

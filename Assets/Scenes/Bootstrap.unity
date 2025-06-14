@@ -233,6 +233,8 @@ GameObject:
   m_Component:
   - component: {fileID: 745903291}
   - component: {fileID: 745903292}
+  - component: {fileID: 745903293}
+  - component: {fileID: 745903294}
   m_Layer: 0
   m_Name: Bootstrap
   m_TagString: Untagged
@@ -267,6 +269,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2e726275d210345ae8fb34ff568c2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &745903293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745903290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3007422613
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &745903294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745903290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3151a94619e6fd147895040abe354927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 0}
+  smoothTime: 0.3
+  Acceleration: 0
+  Deceleration: 0
+  InternalSpeedMultiplier: 0
+  MotionType: 0
 --- !u!1001 &816036234
 PrefabInstance:
   m_ObjectHideFlags: 0

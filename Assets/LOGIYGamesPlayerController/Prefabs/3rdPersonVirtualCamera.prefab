@@ -336,7 +336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerIndex: -1
   AutoEnableInputs: 1
-  XYAxis: {fileID: 5509028316760227230, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-  ZAxis: {fileID: 4410616160587466882, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-  freeLookCamControl: {fileID: 0}
+  XYAxis: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
+  ZAxis: {fileID: 6986982598937743682, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
+  DragInput: {fileID: 0}
   IsMobile: 0

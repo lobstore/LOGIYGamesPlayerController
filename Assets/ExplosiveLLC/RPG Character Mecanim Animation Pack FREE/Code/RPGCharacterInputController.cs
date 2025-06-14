@@ -68,7 +68,7 @@ namespace RPGCharacterAnims
         }
 
         /// <summary>
-        /// Input abstraction for easier asset updates using outside control schemes.
+        /// MouseDelta abstraction for easier asset updates using outside control schemes.
         /// </summary>
         private void Inputs()
         {

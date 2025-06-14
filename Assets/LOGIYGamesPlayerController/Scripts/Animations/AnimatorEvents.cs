@@ -6,6 +6,7 @@ namespace LOGIYGames
     public class AnimatorMoveEvent : UnityEvent<Vector3, Quaternion> { }
     public class AnimatorEvents : MonoBehaviour
     {
+        [SerializeField] private Animator animator;
         public UnityEvent OnHit = new UnityEvent();
         public UnityEvent OnShoot = new UnityEvent();
         public UnityEvent OnFootR = new UnityEvent();
@@ -15,12 +16,6 @@ namespace LOGIYGames
 
         public AnimatorMoveEvent OnMove = new AnimatorMoveEvent();
 
-        private Animator animator;
-
-        void Awake()
-        {
-            animator = GetComponent<Animator>();
-        }
 
         public void Hit() => OnHit.Invoke();
         public void Shoot() => OnShoot.Invoke();

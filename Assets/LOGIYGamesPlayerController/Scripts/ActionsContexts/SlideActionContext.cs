@@ -13,7 +13,7 @@ public class SlideActionContext : NetworkBehaviour, IActionContext
     private SensorsModule sensors;
     private PlayerCameraManager cameraManager;
     private CharacterController characterController;
-    private PlayerMovementInputManager input;
+    private PlayerInputsManager input;
 
     [Header("Slide Settings")]
     [SerializeField] private float slideHeightMultiplier = 0.2f;
@@ -26,12 +26,7 @@ public class SlideActionContext : NetworkBehaviour, IActionContext
     [field: SerializeField] public float Deceleration { get; set; } = 10f;
     [field: SerializeField] public MotionType MotionType { get; private set; }
     [Header("Slope Settings")]
-    [SerializeField]
-    private bool useAutoCalculatedPlayerSpeedMultiplier = false;
-    [Tooltip("Used if useAutoCalculatedPlayerSpeedMultiplier == true")]
-    [Range(0,1)]
-    [SerializeField]
-    private float slopeAffectRate;
+
     [SerializeField] private float maxSlideAngle = 85f;
     private Vector3 slideDirection;
 
@@ -74,17 +69,21 @@ public class SlideActionContext : NetworkBehaviour, IActionContext
     private void OnEnable()
     {
         slippingTimer.Reset(slipTime);
-        input = PlayerMovementInputManager.Instance;
-        input.CtrlPressed.AddListener(RunToSlide);
+        input = PlayerInputsManager.Instance;
+        input.Crouched.AddListener(RunToSlide);
     }
     private void OnDisable()
     {
-        input.CtrlPressed.RemoveListener(RunToSlide);
+        input.Crouched.RemoveListener(RunToSlide);
+    }
+    public void OnFixedUpdate()
+    {
+        if (!IsOwner) return;
+        Slide();
     }
     public void OnUpdate()
     {
         if (!IsOwner) return;
-        Slide();
     }
     private void RunToSlide()
     {
@@ -119,42 +118,15 @@ public class SlideActionContext : NetworkBehaviour, IActionContext
 
     private void UpdatePlayerVelocity()
     {
-        Vector3 projectedVelocity = Vector3.ProjectOnPlane(
-        Vector3.down,
-        sensors.BelowHit.normal
-        );
-        if (!IsSliding)
+        if (IsSliding)
         {
-            if (input.MovementInput.magnitude > 0)
-                player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.Acceleration;
-        }
-        else
-        {
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(
+            Vector3.down,
+            sensors.BelowHit.normal
+                );
+
             player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.Acceleration;
         }
-        if (useAutoCalculatedPlayerSpeedMultiplier)
-        {
-            CalculateSlopeSpeedMultiplier(projectedVelocity);
-        }
-    }
-
-    private void CalculateSlopeSpeedMultiplier(Vector3 projectedVelocity)
-    {
-        // Вычисляем косинус угла между направлением движения и направлением склона
-        float dot = Vector3.Dot(player.HorizontalVelocity, projectedVelocity);
-
-        // Теперь множитель скорости зависит от направления движения:
-        // - dot > 0: движение вниз по склону — ускорение
-        // - dot < 0: движение в гору — замедление
-        // - dot ≈ 0: движение перпендикулярно склону — без изменений
-
-
-        // Итоговый множитель скорости:
-        var targetMultiplier = Mathf.Clamp(1f + dot*slopeAffectRate, 0.5f, 1.5f);
-        player.ExternalSpeedMultiplier = Mathf.Lerp(
-        player.ExternalSpeedMultiplier,
-        targetMultiplier,
-        Time.deltaTime * player.Acceleration);
     }
 
     private void RotatePlayer()
@@ -203,6 +175,14 @@ public class SlideActionContext : NetworkBehaviour, IActionContext
     }
     public void EnterState()
     {
+        if (MotionType == MotionType.AnimatorController)
+        {
+            animator.applyRootMotion = true;
+        }
+        else
+        {
+            animator.applyRootMotion = false;
+        }
         player.Acceleration = Acceleration;
         player.Deceleration = Deceleration;
         player.InternalSpeedMultiplier = InternalSpeedMultiplier;

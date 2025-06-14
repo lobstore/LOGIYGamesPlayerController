@@ -1,12 +1,12 @@
 using UnityEngine;
 using LOGIYGames;
 [RequireComponent(typeof(CharacterModule))]
-[RequireComponent(typeof(PlayerMovementInputManager))]
+[RequireComponent(typeof(PlayerInputsManager))]
 [RequireComponent(typeof(SensorsModule))]
 public class WallRunActionContext : MonoBehaviour, IActionContext
 {
     SensorsModule Sensors;
-    PlayerMovementInputManager HumanoidLocomotionInput;
+    PlayerInputsManager HumanoidLocomotionInput;
     PlayerCameraManager CameraManager;
     CharacterModule Player;
     private float turnSmoothTime;
@@ -137,7 +137,7 @@ public class WallRunActionContext : MonoBehaviour, IActionContext
 
     void Awake()
     {
-        HumanoidLocomotionInput = GetComponent<PlayerMovementInputManager>();
+        HumanoidLocomotionInput = GetComponent<PlayerInputsManager>();
         Player = GetComponent<CharacterModule>();
         Sensors = GetComponent<SensorsModule>();
         wallJumpCooldownTimer = new CountdownTimer(wallJumpCooldown);
@@ -167,6 +167,11 @@ public class WallRunActionContext : MonoBehaviour, IActionContext
     }
 
     public void OnUpdate()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnFixedUpdate()
     {
         throw new System.NotImplementedException();
     }

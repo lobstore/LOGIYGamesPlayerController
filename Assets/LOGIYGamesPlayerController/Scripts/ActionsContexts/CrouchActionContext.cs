@@ -25,7 +25,7 @@ public class CrouchActionContext : NetworkBehaviour, IActionContext
     private SensorsModule sensors;
     private CharacterModule player;
     private CharacterController characterController;
-    private PlayerMovementInputManager input;
+    private PlayerInputsManager input;
     private PlayerCameraManager cameraManager;
     private float smoothTime = 0.5f;
 
@@ -65,14 +65,19 @@ public class CrouchActionContext : NetworkBehaviour, IActionContext
         CrouchHeight = StandingHeight * crouchHeightMultiplier;
     }
 
-    private void OnEnable() => input = PlayerMovementInputManager.Instance;
+    private void OnEnable() => input = PlayerInputsManager.Instance;
+    public void OnFixedUpdate()
+    {
+        if (!IsOwner) return; 
+        CrouchMove();
+    }
     public void OnUpdate()
     {
-        CrouchMove();
+        if (!IsOwner) return;
+        SpeedControl();
     }
     private void CrouchMove()
     {
-        if (!IsOwner) return;
 
         if (cameraManager.IsFP)
         {
@@ -138,7 +143,7 @@ public class CrouchActionContext : NetworkBehaviour, IActionContext
         IsCrouching = sensors.IsObstacleAbove || input.IsCrouching;
     }
 
-    public void SpeedControl()
+    private void SpeedControl()
     {
         if (!IsOwner) return;
 
@@ -152,6 +157,14 @@ public class CrouchActionContext : NetworkBehaviour, IActionContext
 
     public void EnterState()
     {
+        if (MotionType == MotionType.AnimatorController)
+        {
+            animator.applyRootMotion = true;
+        }
+        else
+        {
+            animator.applyRootMotion = false;
+        }
         player.Acceleration = Acceleration;
         player.Deceleration = Deceleration;
         player.Height = CrouchHeight;

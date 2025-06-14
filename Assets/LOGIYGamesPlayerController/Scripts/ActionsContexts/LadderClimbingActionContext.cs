@@ -5,8 +5,8 @@ using UnityEngine;
 public class LadderClimbingActionContext : NetworkBehaviour, IActionContext
 {
     SensorsModule Sensors;
-    private Animator animator;
-    private PlayerMovementInputManager MovementInput;
+    [SerializeField] private Animator animator;
+    private PlayerInputsManager MovementInput;
     AnimatorState climbingAnimation;
     int ladderClimbDownStartedTriggerHash = Animator.StringToHash("LadderClimbingDownStarted");
     int ladderClimbUpStartedTriggerHash = Animator.StringToHash("LadderClimbingUpStarted");
@@ -23,17 +23,21 @@ public class LadderClimbingActionContext : NetworkBehaviour, IActionContext
     public MotionType MotionType => throw new System.NotImplementedException();
     private void Awake()
     {
-        animator = GetComponent<Animator>();
         player = GetComponent<CharacterModule>();
         cc = GetComponent<CharacterController>();
     }
     private void OnEnable()
     {
-        MovementInput = PlayerMovementInputManager.Instance;
+        MovementInput = PlayerInputsManager.Instance;
         IsLadderClimbRequisted = false;
         IsClimbing = false;
     }
     public void OnUpdate()
+    {
+        if (!IsOwner) return;
+
+    }
+    public void OnFixedUpdate()
     {
         if (!IsOwner) return;
         if (MovementInput.MovementInput.y == 0)
@@ -52,10 +56,6 @@ public class LadderClimbingActionContext : NetworkBehaviour, IActionContext
             animator.SetBool(isLadderClimbingUpHash, false);
             animator.SetBool(isLadderClimbingDownHash, true);
         }
-    }
-    public void OnFixedUpdate()
-    {
-        if (!IsOwner) return;
     }
     public void EnterState()
     {

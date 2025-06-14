@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.Events;
 namespace LOGIYGames
 {
-    public class GameControlInputManager : MonoBehaviour, PlayerInputActions.IGameControlActions
+    public class GameControlInputManager : MonoBehaviour, GameInputs.IGameControlActions
     {
         public static GameControlInputManager Instance { get; private set; }
-        public PlayerInputActions InputActions { get; private set; }
+        public GameInputs InputActions { get; private set; }
         [SerializeField] bool dontDestroyOnLoad;
-        public UnityEvent OnExitButtonClicked { get; private set; } = new UnityEvent();
-        public UnityEvent<bool> OnVoiceChatStarted { get; private set; } = new();
+        public UnityEvent Exited { get; private set; } = new UnityEvent();
+        public UnityEvent<bool> VoiceChatPressed { get; private set; } = new();
         private void Awake()
         {
             if (Instance == null)
@@ -43,7 +43,7 @@ namespace LOGIYGames
             switch (context.phase)
             {
                 case InputActionPhase.Performed:
-                    OnExitButtonClicked.Invoke();
+                    Exited.Invoke();
                     break;
                 default:
                     break;
@@ -55,11 +55,11 @@ namespace LOGIYGames
             switch (context.phase)
             {
                 case InputActionPhase.Performed:
-                    OnVoiceChatStarted.Invoke(true);
+                    VoiceChatPressed.Invoke(true);
                     print("Voice On");
                     break;
                 case InputActionPhase.Canceled:
-                    OnVoiceChatStarted.Invoke(false);
+                    VoiceChatPressed.Invoke(false);
                     print("Voice Off");
                     break;
                 default:

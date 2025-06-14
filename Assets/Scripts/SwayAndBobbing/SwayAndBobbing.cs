@@ -9,8 +9,8 @@ namespace LOGIYGames
 
 
         [SerializeField] CharacterModule Player;
-        PlayerMovementInputManager MovementInput;
-        MouseInputManager MouseInput;
+        PlayerInputsManager MovementInput;
+        CameraInputManager CameraInput;
 
         [Header("Sway")]
         public float step = 0.01f;
@@ -41,8 +41,8 @@ namespace LOGIYGames
         Vector3 bobEulerRotation;
         private void OnEnable()
         {
-            MovementInput = PlayerMovementInputManager.Instance;
-            MouseInput = MouseInputManager.Instance;
+            MovementInput = PlayerInputsManager.Instance;
+            CameraInput = CameraInputManager.Instance;
         }
 
         void Update()
@@ -67,8 +67,8 @@ namespace LOGIYGames
             walkInput.x = MovementInput.MovementInput.x;
             walkInput.y = MovementInput.MovementInput.y;
 
-            lookInput.x = MouseInput.Input.x;
-            lookInput.y = MouseInput.Input.y;
+            lookInput.x = CameraInput.LookInput.x;
+            lookInput.y = CameraInput.LookInput.y;
         }
 
 

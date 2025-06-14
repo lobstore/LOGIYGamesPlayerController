@@ -41,15 +41,15 @@ namespace LOGIYGames
         private void OnEnable()
         {
             sendMessageButton.onClick.AddListener(SendMessage);
-            InputField.onSelect.AddListener(InputFielsInFocus);
-            InputField.onDeselect.AddListener(InputFielsOutFocus);
+            InputField.onSelect.AddListener(InputFieldInFocus);
+            InputField.onDeselect.AddListener(InputFieldOutFocus);
             OnGotNewMessage.AddListener(GotNewMessage);
         }
         private void OnDisable()
         {
             sendMessageButton.onClick.RemoveListener(SendMessage);
-            InputField.onSelect.RemoveListener(InputFielsInFocus);
-            InputField.onDeselect.RemoveListener(InputFielsOutFocus);
+            InputField.onSelect.RemoveListener(InputFieldInFocus);
+            InputField.onDeselect.RemoveListener(InputFieldOutFocus);
             OnGotNewMessage.RemoveListener(GotNewMessage);
         }
         private void GotNewMessage(MessagePresenter newMessage)
@@ -57,15 +57,15 @@ namespace LOGIYGames
             NewMessageBlob.gameObject.SetActive(true);
         }
 
-        private void InputFielsInFocus(string str)
+        private void InputFieldInFocus(string str)
         {
-            PlayerMovementInputManager.Instance.gameObject.SetActive(false);
-            MouseInputManager.Instance.gameObject.SetActive(false);
+            PlayerInputsManager.Instance.gameObject.SetActive(false);
+            CameraInputManager.Instance.gameObject.SetActive(false);
         }
-        private void InputFielsOutFocus(string str)
+        private void InputFieldOutFocus(string str)
         {
-            PlayerMovementInputManager.Instance.gameObject.SetActive(true);
-            MouseInputManager.Instance.gameObject.SetActive(true);
+            PlayerInputsManager.Instance.gameObject.SetActive(true);
+            CameraInputManager.Instance.gameObject.SetActive(true);
         }
         private void SendMessage()
         {

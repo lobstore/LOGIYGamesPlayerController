@@ -9,7 +9,7 @@ public class RollActionContext : NetworkBehaviour, IActionContext
     [SerializeField] private Animator animator;
     private CharacterModule player;
     private PlayerCameraManager cameraManager;
-    private PlayerMovementInputManager input;
+    private PlayerInputsManager input;
 
     [Header("Jump Settings")]
     [SerializeField] private float rollDistance = 2f;
@@ -45,13 +45,13 @@ public class RollActionContext : NetworkBehaviour, IActionContext
 
     private void OnEnable()
     {
-        if (PlayerMovementInputManager.Instance == null)
+        if (PlayerInputsManager.Instance == null)
         {
             Debug.LogWarning("PlayerMovementInputManager.Instance was not found");
             return;
         }
 
-        input = PlayerMovementInputManager.Instance;
+        input = PlayerInputsManager.Instance;
         input.Rolled.AddListener(Roll);
     }
 
@@ -69,10 +69,14 @@ public class RollActionContext : NetworkBehaviour, IActionContext
         if (IsRolling) return;
         IsRolling = true;
     }
-    public void OnUpdate()
+    public void OnFixedUpdate()
     {
         if (!IsOwner) return;
         Move();
+    }
+    public void OnUpdate()
+    {
+        if (!IsOwner) return;
     }
     public void Move()
     {
@@ -92,10 +96,19 @@ public class RollActionContext : NetworkBehaviour, IActionContext
     private void ExecuteRoll()
     {
         Rotate();
+
     }
 
     public void EnterState()
     {
+        if (MotionType == MotionType.AnimatorController)
+        {
+            animator.applyRootMotion = true;
+        }
+        else
+        {
+            animator.applyRootMotion = false;
+        }
         ExecuteRoll();
         player.Acceleration = Acceleration;
         player.Deceleration = Deceleration;
@@ -103,7 +116,6 @@ public class RollActionContext : NetworkBehaviour, IActionContext
 
     public void ExitState()
     {
-        //player.InternalSpeedMultiplier = 0f;
     }
     private void OnAnimationEnd()
     {

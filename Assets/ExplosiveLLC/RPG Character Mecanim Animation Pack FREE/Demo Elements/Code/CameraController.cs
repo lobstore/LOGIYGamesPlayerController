@@ -7,8 +7,8 @@ using UnityEngine.InputSystem;
 namespace RPGCharacterAnims
 {
 	/// <summary>
-	/// Basic Camera Controller with Follow, Rotate, and Zoom functionality.
-	/// Can be used with either Legacy Input or Input System inputs.
+	/// Basic Camera Controller with Follow, Rotate, and ZoomDelta functionality.
+	/// Can be used with either Legacy MouseDelta or MouseDelta System inputs.
 	/// </summary>
 	public class CameraController:MonoBehaviour
 	{
@@ -59,7 +59,7 @@ namespace RPGCharacterAnims
 		}
 
 		/// <summary>
-		/// Sets the inputs depending on whether the Input System is used or the Legacy Inputs.
+		/// Sets the inputs depending on whether the MouseDelta System is used or the Legacy Inputs.
 		/// </summary>
 		private void Inputs()
 		{

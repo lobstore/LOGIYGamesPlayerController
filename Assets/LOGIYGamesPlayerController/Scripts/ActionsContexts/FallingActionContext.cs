@@ -26,7 +26,7 @@ public class FallingActionContext : NetworkBehaviour, IActionContext
     [Header("Component References")]
     private CharacterModule player;
     private PlayerCameraManager cameraManager;
-    private PlayerMovementInputManager input;
+    private PlayerInputsManager input;
 
     // State Management
     private CountdownTimer landingCoolDownTimer;
@@ -56,7 +56,7 @@ public class FallingActionContext : NetworkBehaviour, IActionContext
         player.PlayerTimers.Add(fallingTimer);
     }
 
-    private void OnEnable() => input = PlayerMovementInputManager.Instance;
+    private void OnEnable() => input = PlayerInputsManager.Instance;
 
     public void StartFallingTimer() => fallingTimer.Start();
 
@@ -105,10 +105,15 @@ public class FallingActionContext : NetworkBehaviour, IActionContext
         animator.SetInteger(landingStateHash, FallingTime <= fallingTimeForHardLanding
             ? 1 : 2);
     }
-    public void OnUpdate()
+    public void OnFixedUpdate()
     {
         if (!IsOwner) return;
         Move();
+    }
+    public void OnUpdate()
+    {
+        if (!IsOwner) return;
+        SpeedControl();
     }
     private void Move()
     {
@@ -167,7 +172,7 @@ public class FallingActionContext : NetworkBehaviour, IActionContext
             Time.deltaTime * Acceleration);
     }
 
-    public void SpeedControl()
+    private void SpeedControl()
     {
         if (!IsOwner) return;
 
@@ -185,7 +190,14 @@ public class FallingActionContext : NetworkBehaviour, IActionContext
 
     public void EnterState()
     {
-        animator.applyRootMotion = false;
+        if (MotionType == MotionType.AnimatorController)
+        {
+            animator.applyRootMotion = true;
+        }
+        else
+        {
+            animator.applyRootMotion = false;
+        }
         player.Acceleration = Acceleration;
         player.Deceleration = Deceleration;
         StartFallingTimer();
@@ -195,7 +207,6 @@ public class FallingActionContext : NetworkBehaviour, IActionContext
 
     public void ExitState()
     {
-        animator.applyRootMotion = true;
         animator?.SetBool(isFallingHash, false);
         animator?.SetInteger(landingStateHash, 0);
         StopFallingTimer();

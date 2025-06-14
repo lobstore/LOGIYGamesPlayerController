@@ -1,5 +1,8 @@
-﻿using UnityEngine;
-
+﻿using System.Linq.Expressions;
+using System;
+using UnityEngine;
+using RandomUnity = UnityEngine.Random;
+using System.Reflection;
 public static class DebugDraw
 {
 	public static void DrawMarker(Vector3 position, float size, Color color, float duration, bool depthTest = true)
@@ -17,6 +20,7 @@ public static class DebugDraw
 		Debug.DrawLine(line2PosA, line2PosB, color, duration, depthTest);
 		Debug.DrawLine(line3PosA, line3PosB, color, duration, depthTest);
 	}
+
 
 	public static void DrawPlane(Vector3 position, Vector3 normal, float size, Color color, float duration, bool depthTest = true)
 	{
@@ -73,5 +77,9 @@ public static class DebugDraw
 	}
 
 	public static Color RandomColor()
-	{ return new Color(Random.value, Random.value, Random.value); }
+	{ return new Color(RandomUnity.value, RandomUnity.value, RandomUnity.value); }
+
+	public static void DebugField<T>(T field, string fieldName) {
+		Debug.Log(fieldName + " : " + field);
+	}
 }

@@ -239,7 +239,7 @@ namespace RPGCharacterAnims
             // Unlock actions and movement.
             Unlock(true, true);
 
-			// Set Aim Input.
+			// Set Aim MouseDelta.
 			SetAimInput(target.transform.position);
 		}
 

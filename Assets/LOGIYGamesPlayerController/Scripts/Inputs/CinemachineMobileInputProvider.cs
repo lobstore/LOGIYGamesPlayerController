@@ -4,7 +4,7 @@ namespace LOGIYGames
 {
     public class CinemachineMobileInputProvider : CinemachineInputProvider
     {
-        [SerializeField] DragHandler DragInput;
+        [SerializeField] DragPointerHandler DragInput;
         [SerializeField] bool IsMobile;
         public override float GetAxisValue(int axis)
         {

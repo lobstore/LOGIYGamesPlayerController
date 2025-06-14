@@ -4,7 +4,7 @@ public class LedgeClimbingActionContext : MonoBehaviour
 {
     CharacterModule Player;
     SensorsModule Sensors;
-    PlayerMovementInputManager HumanoidInput;
+    PlayerInputsManager HumanoidInput;
     CountdownTimer climbJumpCooldownTimer;
     CountdownTimer jumpCooldownTimer;
 
@@ -19,7 +19,7 @@ public class LedgeClimbingActionContext : MonoBehaviour
     {
         Sensors = GetComponent<SensorsModule>();
         Player = GetComponent<CharacterModule>();
-        HumanoidInput = GetComponent<PlayerMovementInputManager>();
+        HumanoidInput = GetComponent<PlayerInputsManager>();
         climbJumpCooldownTimer = new CountdownTimer(climbJumpingCooldown);
         jumpCooldownTimer = new CountdownTimer(jumpCooldown);
         HumanoidInput.Jumped.AddListener(OnJump);

@@ -686,7 +686,7 @@ ModelImporter:
     second: RPG-Character-Mesh
   - first:
       74: 7400000
-    second: 2Hand-Sword-Run-Right
+    second: 2Hand-Sword-Strafe-Run-Right
   - first:
       95: 9500000
     second: //RootNode
@@ -732,7 +732,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: 2Hand-Sword-Run-Right
+      name: 2Hand-Sword-Strafe-Run-Right
       takeName: Take 001
       internalID: 7400000
       firstFrame: 0

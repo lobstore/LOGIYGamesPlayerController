@@ -8,11 +8,11 @@ public class JumpActionContext : NetworkBehaviour, IActionContext
     [SerializeField] private Animator animator;
     private CharacterModule player;
     private PlayerCameraManager cameraManager;
-    private PlayerMovementInputManager input;
+    private PlayerInputsManager input;
 
     [Header("Jump Settings")]
-    [SerializeField] private float jumpVerticalForce = 1.5f;
-    [SerializeField] private float jumpPlanarForce = 1f;
+    [SerializeField] private float jumpVerticalImpulse = 1.5f;
+    [SerializeField] private float jumpPlanarImpulse = 1f;
     [SerializeField] private float jumpCooldown = 0.2f;
     [SerializeField] private int maxJumpCount = 2;
     [field: SerializeField] public bool CanJump { get; set; } = true;
@@ -51,13 +51,13 @@ public class JumpActionContext : NetworkBehaviour, IActionContext
 
     private void OnEnable()
     {
-        if (PlayerMovementInputManager.Instance == null)
+        if (PlayerInputsManager.Instance == null)
         {
             Debug.LogWarning("PlayerMovementInputManager.Instance was not found");
             return;
         }
         jumpCooldownTimer.Reset(jumpCooldown);
-        input = PlayerMovementInputManager.Instance;
+        input = PlayerInputsManager.Instance;
         input.Jumped.AddListener(Jump);
         jumpCooldownTimer.OnTimerStart += StartJump;
         jumpCooldownTimer.OnTimerStop += StopJump;
@@ -88,10 +88,14 @@ public class JumpActionContext : NetworkBehaviour, IActionContext
     {
         IsJumping = false;
     }
-    public void OnUpdate()
+    public void OnFixedUpdate()
     {
         if (!IsOwner) return;
         Move();
+    }
+    public void OnUpdate()
+    {
+        if (!IsOwner) return;
     }
     private void Move()
     {
@@ -113,17 +117,17 @@ public class JumpActionContext : NetworkBehaviour, IActionContext
 
     private void ExecuteJump()
     {
-        player.VerticalVelocity = Mathf.Sqrt(jumpVerticalForce * -2f * Physics.gravity.y);
+        player.VerticalVelocity = Mathf.Sqrt(jumpVerticalImpulse * -2f * Physics.gravity.y);
         if (input.MovementInput.magnitude > 0)
         {
             if (!cameraManager.IsFP)
             {
 
-                player.HorizontalVelocity += player.transform.forward * player.CurrentSpeed * input.MovementInput.magnitude * jumpPlanarForce;
+                player.HorizontalVelocity += player.transform.forward * player.TotalSpeedMultiplier * input.MovementInput.magnitude * jumpPlanarImpulse;
             }
             else
             {
-                player.HorizontalVelocity += (player.transform.forward * input.MovementInput.y + player.transform.right * player.CurrentSpeed * input.MovementInput.x) *player.CurrentSpeed* jumpPlanarForce;
+                player.HorizontalVelocity += (player.transform.forward * input.MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * input.MovementInput.x) *player.CurrentSpeed* jumpPlanarImpulse;
  
             }
         }
@@ -133,7 +137,14 @@ public class JumpActionContext : NetworkBehaviour, IActionContext
 
     public void EnterState()
     {
-        animator.applyRootMotion = false;
+        if (MotionType == MotionType.AnimatorController)
+        {
+            animator.applyRootMotion = true;
+        }
+        else
+        {
+            animator.applyRootMotion = false;
+        }
         player.Acceleration = Acceleration;
         player.Deceleration = Deceleration;
         player.InternalSpeedMultiplier = 1f;
@@ -143,7 +154,6 @@ public class JumpActionContext : NetworkBehaviour, IActionContext
 
     public void ExitState()
     {
-        animator.applyRootMotion = true;
         // Cleanup logic can be added here if needed
     }
 

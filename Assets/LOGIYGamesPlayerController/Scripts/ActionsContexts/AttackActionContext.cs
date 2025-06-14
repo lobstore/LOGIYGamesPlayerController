@@ -3,10 +3,10 @@ using Unity.Netcode;
 using UnityEngine;
 public class AttackActionContext : NetworkBehaviour, IActionContext
 {
-    public MotionType MotionType => throw new System.NotImplementedException();
+    [field: SerializeField] public MotionType MotionType {  get; private set; }
     CharacterModule player;
-    Animator animator;
-    private MouseInputManager input;
+    [SerializeField] Animator animator;
+    private PlayerInputsManager input;
     [SerializeField] private WeaponItem currentWeapon;
     private CombatControllerModule combatController;
     public bool IsAttackRequested { get; set; }
@@ -18,21 +18,20 @@ public class AttackActionContext : NetworkBehaviour, IActionContext
     {
         player = GetComponent<CharacterModule>();
         combatController = GetComponent<CombatControllerModule>();
-        animator = GetComponent<Animator>();
 
     }
     private void OnEnable()
     {
-        input = MouseInputManager.Instance;
+        input = PlayerInputsManager.Instance;
         if (input == null)
         {
             Debug.LogWarning("PlayerMovementInputManager.Instance was not found");
         }
-        input.LCMPressed.AddListener(Attack);
+        input.Attacked.AddListener(Attack);
     }
     private void OnDisable()
     {
-        input.LCMPressed.RemoveListener(Attack);
+        input.Attacked.RemoveListener(Attack);
     }
     private void Attack()
     {
@@ -43,7 +42,7 @@ public class AttackActionContext : NetworkBehaviour, IActionContext
             combatController.PerformAttack(currentWeapon);
         }
     }
-    public void OnUpdate()
+    public void OnFixedUpdate()
     {
         if (!IsOwner) return;
         if (!combatController.IsAttacking)
@@ -52,8 +51,20 @@ public class AttackActionContext : NetworkBehaviour, IActionContext
         }
 
     }
+    public void OnUpdate()
+    {
+        if (!IsOwner) return;
+    }
     public void EnterState()
     {
+        if (MotionType == MotionType.AnimatorController)
+        {
+            animator.applyRootMotion = true;
+        }
+        else
+        {
+            animator.applyRootMotion = false;
+        }
         combatController.PerformAttack(currentWeapon);
         player.InternalSpeedMultiplier = 0;
         InContext = true;

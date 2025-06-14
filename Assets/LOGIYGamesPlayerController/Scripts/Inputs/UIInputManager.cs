@@ -5,10 +5,10 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 namespace LOGIYGames
 {
-    public class UIInputManager : MonoBehaviour, PlayerInputActions.IUIActions
+    public class UIInputManager : MonoBehaviour, GameInputs.IUIActions
     {
         public static UIInputManager Instance { get; private set; }
-        public PlayerInputActions InputActions { get; private set; }
+        public GameInputs InputActions { get; private set; }
         public UnityEvent Submitted { get; private set; } = new();
 
         public void OnSubmit(InputAction.CallbackContext context)

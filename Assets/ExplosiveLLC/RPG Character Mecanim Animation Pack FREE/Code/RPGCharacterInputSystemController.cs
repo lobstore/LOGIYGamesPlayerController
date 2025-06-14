@@ -1,5 +1,5 @@
 // To switch your project to using the new InputSystem:
-// Edit>Project Settings>Player>Active Input Handling change to "Input System Package (New)".
+// Edit>Project Settings>Player>Active MouseDelta Handling change to "MouseDelta System Package (New)".
 
 using UnityEngine;
 using RPGCharacterAnims.Actions;
@@ -90,7 +90,7 @@ namespace RPGCharacterAnims
 		}
 
 		/// <summary>
-		/// Input abstraction for easier asset updates using outside control schemes.
+		/// MouseDelta abstraction for easier asset updates using outside control schemes.
 		/// </summary>
 		private void Inputs()
         {

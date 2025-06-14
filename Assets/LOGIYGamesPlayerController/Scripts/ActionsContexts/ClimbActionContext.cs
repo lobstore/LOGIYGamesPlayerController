@@ -1,13 +1,13 @@
 using LOGIYGames;
 using UnityEngine;
 [RequireComponent(typeof(CharacterModule))]
-[RequireComponent(typeof(PlayerMovementInputManager))]
+[RequireComponent(typeof(PlayerInputsManager))]
 [RequireComponent(typeof(SensorsModule))]
 public class ClimbActionContext : MonoBehaviour, IActionContext
 {
     SensorsModule Sensors;
     CharacterModule player;
-    PlayerMovementInputManager HumanoidInput;
+    PlayerInputsManager HumanoidInput;
     PlayerCameraManager CameraManager;
     private CountdownTimer climbingTimer;
     private CountdownTimer climbJumpCooldownTimer;
@@ -31,7 +31,7 @@ public class ClimbActionContext : MonoBehaviour, IActionContext
     void Awake()
     {
         player = GetComponent<CharacterModule>();
-        HumanoidInput = GetComponent<PlayerMovementInputManager>();
+        HumanoidInput = GetComponent<PlayerInputsManager>();
         CameraManager = GetComponent<PlayerCameraManager>();
         Sensors = GetComponent<SensorsModule>();
         climbingTimer = new CountdownTimer(climbingWallTime);
@@ -155,6 +155,11 @@ public class ClimbActionContext : MonoBehaviour, IActionContext
     }
 
     public void OnUpdate()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnFixedUpdate()
     {
         throw new System.NotImplementedException();
     }

@@ -34,7 +34,7 @@ namespace LOGIYGames
 
         private void Zoom()
         {
-            float zoomValue = +MouseInputManager.Instance.MiddleScrollingDelta * zoomSensitivity;
+            float zoomValue = CameraInputManager.Instance.ZoomDelta * zoomSensitivity;
             currentTargetDistance = Mathf.Clamp(currentTargetDistance + zoomValue, minimumDistance, maximumDistance);
             if (Mathf.Abs(Distance - currentTargetDistance) > 0.01f)
             {

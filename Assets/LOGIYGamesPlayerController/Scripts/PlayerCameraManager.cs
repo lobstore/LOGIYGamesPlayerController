@@ -40,21 +40,21 @@ namespace LOGIYGames
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
-            PlayerMovementInputManager.Instance.Interacted.AddListener(SwitchPOV);
+            PlayerInputsManager.Instance.Interacted.AddListener(SwitchPOV);
             InitControllersViews();
         }
         private void OnDisable()
         {
-            PlayerMovementInputManager.Instance.Interacted.RemoveListener(SwitchPOV);
+            PlayerInputsManager.Instance.Interacted.RemoveListener(SwitchPOV);
         }
         override public void OnDestroy()
         {
-            PlayerMovementInputManager.Instance.Interacted.RemoveListener(SwitchPOV);
+            PlayerInputsManager.Instance.Interacted.RemoveListener(SwitchPOV);
         }
         public override void OnNetworkDespawn()
         {
 
-            PlayerMovementInputManager.Instance.Interacted.RemoveListener(SwitchPOV);
+            PlayerInputsManager.Instance.Interacted.RemoveListener(SwitchPOV);
         }
         private void SwitchPOV()
         {
