@@ -2,20 +2,20 @@
 
 public abstract class GroundedActionContext : ActionContextBase
 {
+    [SerializeField]
+    private bool useAutoCalculatedPlayerSpeedMultiplier = false;
+    [Tooltip("Used if UseAutoCalculatedPlayerSpeedMultiplier is On")]
     [Range(0,1)]
     [SerializeField] protected float slopeAffectRate;
     Vector3 projectedVelocity;
 
-    protected override void ChangeVelocity()
+    protected override void ChangeVelocity(Vector3 moveDirection)
     {
-        base.ChangeVelocity();
-
-        CalculateSlopeSpeedMultiplier();
-    }
-    protected override void DebugInfo()
-    {
-        base.DebugInfo();
-        Debug.Log(projectedVelocity); 
+        base.ChangeVelocity(moveDirection);
+        if (useAutoCalculatedPlayerSpeedMultiplier)
+        {
+            CalculateSlopeSpeedMultiplier();
+        }
     }
     private void CalculateSlopeSpeedMultiplier()
     {

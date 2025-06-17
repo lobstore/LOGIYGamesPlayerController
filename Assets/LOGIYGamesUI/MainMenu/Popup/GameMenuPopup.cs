@@ -10,7 +10,7 @@ namespace LOGIYGames
 
         private void Awake()
         {
-            GameControlInputManager.Instance.Exited.AddListener(ChangeState);
+            //GameControlInputManager.Instance.Exited.AddListener(ChangeState);
             ExitLobbyButton.onClick.AddListener(OnExitLobbyClicked);
         }
         protected override void Start()
@@ -19,7 +19,7 @@ namespace LOGIYGames
         }
         private void OnDestroy()
         {
-            GameControlInputManager.Instance.Exited.RemoveListener(ChangeState);
+            //GameControlInputManager.Instance.Exited.RemoveListener(ChangeState);
         }
         public override void Hide()
         {

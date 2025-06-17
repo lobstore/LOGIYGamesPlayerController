@@ -125,7 +125,7 @@ public class TouchISX : MonoBehaviour
         }
     }
 
-    // When a touch input ends, set the highlight inactive.
+    // When a touch Input ends, set the highlight inactive.
     private void EndTouchInput(TouchControl control)
     {
         int id = control.touchId.ReadValue();

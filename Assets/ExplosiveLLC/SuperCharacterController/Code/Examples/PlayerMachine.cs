@@ -43,7 +43,7 @@ public class PlayerMachine:SuperStateMachine
 	// This is run regardless of what state you're in.
 	protected override void EarlyGlobalSuperUpdate()
 	{
-		// Rotate out facing direction horizontally based on mouse input.
+		// Rotate out facing direction horizontally based on mouse Input.
 		// (Taking into account that this method may be called multiple times per frame)
 		lookDirection = Quaternion.AngleAxis(input.Current.MouseInput.x * (controller.deltaTime / Time.deltaTime), controller.up) * lookDirection;
 	}

@@ -135,7 +135,7 @@ public class Math3d:MonoBehaviour
 		// Lines are not coplanar. Take into account rounding errors.
 		if ((planarFactor >= 0.00001f) || (planarFactor <= -0.00001f)) { return false; }
 
-		// Note: sqrMagnitude does x*x+y*y+z*z on the input vector.
+		// Note: sqrMagnitude does x*x+y*y+z*z on the Input vector.
 		float s = Vector3.Dot(crossVec3and2, crossVec1and2) / crossVec1and2.sqrMagnitude;
 
 		if ((s >= 0.0f) && (s <= 1.0f)) {
@@ -251,10 +251,10 @@ public class Math3d:MonoBehaviour
 		Vector3 perpVector;
 		float dot;
 
-		// Use the geometry object normal and one of the input vectors to calculate the perpendicular vector.
+		// Use the geometry object normal and one of the Input vectors to calculate the perpendicular vector.
 		perpVector = Vector3.Cross(normal, vectorA);
 
-		// Now calculate the dot product between the perpendicular vector (perpVector) and the other input vector.
+		// Now calculate the dot product between the perpendicular vector (perpVector) and the other Input vector.
 		dot = Vector3.Dot(perpVector, vectorB);
 
 		return dot;
@@ -265,10 +265,10 @@ public class Math3d:MonoBehaviour
 		Vector3 perpVector;
 		float angle;
 
-		// Use the geometry object normal and one of the input vectors to calculate the perpendicular vector.
+		// Use the geometry object normal and one of the Input vectors to calculate the perpendicular vector.
 		perpVector = Vector3.Cross(normal, referenceVector);
 
-		// Now calculate the dot product between the perpendicular vector (perpVector) and the other input vector.
+		// Now calculate the dot product between the perpendicular vector (perpVector) and the other Input vector.
 		angle = Vector3.Angle(referenceVector, otherVector);
 		angle *= Mathf.Sign(Vector3.Dot(perpVector, otherVector));
 
@@ -282,7 +282,7 @@ public class Math3d:MonoBehaviour
 		float dot;
 		float angle;
 
-		// Calculate the the dot product between the two input vectors. This gives the cosine between the two vectors.
+		// Calculate the the dot product between the two Input vectors. This gives the cosine between the two vectors.
 		dot = Vector3.Dot(vector, normal);
 
 		// This is in radians.
@@ -319,7 +319,7 @@ public class Math3d:MonoBehaviour
 		planeNormal = Vector3.zero;
 		planePoint = Vector3.zero;
 
-		// Make two vectors from the 3 input points, originating from point A.
+		// Make two vectors from the 3 Input points, originating from point A.
 		Vector3 AB = pointB - pointA;
 		Vector3 AC = pointC - pointA;
 
@@ -365,7 +365,7 @@ public class Math3d:MonoBehaviour
 	}
 
 	// This is an alternative for Quaternion.LookRotation. Instead of aligning the forward and up vector of the game
-	// object with the input vectors, a custom direction can be used instead of the fixed forward and up vectors.
+	// object with the Input vectors, a custom direction can be used instead of the fixed forward and up vectors.
 	// alignWithVector and alignWithNormal are in world space.
 	// customForward and customUp are in object space.
 	// Usage: use alignWithVector and alignWithNormal as if you are using the default LookRotation function.

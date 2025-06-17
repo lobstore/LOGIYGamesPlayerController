@@ -60,7 +60,7 @@ namespace RPGCharacterAnims
 
 		private void Update()
 		{
-			// Pause input for other external input.
+			// Pause Input for other external Input.
 			if (inputPaused) {
 				if (Time.time > inputPauseTimeout) { inputPaused = false; }
 				else { return; }
@@ -80,9 +80,9 @@ namespace RPGCharacterAnims
 		}
 
 		/// <summary>
-		/// Pause input for a number of seconds.
+		/// Pause Input for a number of seconds.
 		/// </summary>
-		/// <param name="timeout">The amount of time in seconds to ignore input.</param>
+		/// <param name="timeout">The amount of time in seconds to ignore Input.</param>
 		public void PauseInput(float timeout)
 		{
 			inputPaused = true;
@@ -138,7 +138,7 @@ namespace RPGCharacterAnims
 
 		private void Jumping()
 		{
-			// Set the input on the jump axis every frame.
+			// Set the Input on the jump axis every frame.
 			Vector3 jumpInput = inputJump ? Vector3.up : Vector3.zero;
 			rpgCharacterController.SetJumpInput(jumpInput);
 
@@ -225,7 +225,7 @@ namespace RPGCharacterAnims
 		}
 
 		/// <summary>
-		/// Cycle weapons using directional pad input. Up and Down cycle forward and backward through
+		/// Cycle weapons using directional pad Input. Up and Down cycle forward and backward through
 		/// the list of two handed weapons. Left cycles through the left hand weapons. Right cycles through
 		/// the right hand weapons.
 		/// </summary>
@@ -241,7 +241,7 @@ namespace RPGCharacterAnims
 			var context = new SwitchWeaponContext();
 			var weaponNumber = Weapon.Unarmed;
 
-			// Cycle through 2Handed weapons if any input happens on the up-down axis.
+			// Cycle through 2Handed weapons if any Input happens on the up-down axis.
 			if (inputSwitchUp || inputSwitchDown) {
 				var twoHandedWeapons = new Weapon[] {
 					Weapon.TwoHandSword
@@ -265,7 +265,7 @@ namespace RPGCharacterAnims
 				context.rightWeapon = weaponNumber;
 			}
 
-			// If we've received input, then "doSwitch" is true, and the context is filled out,
+			// If we've received Input, then "doSwitch" is true, and the context is filled out,
 			// so start the SwitchWeapon action.
 			if (doSwitch) { rpgCharacterController.StartAction(HandlerTypes.SwitchWeapon, context); }
 		}

@@ -18,7 +18,6 @@ namespace LOGIYGames
         [SerializeField] RectTransform content;
 
         [Header("Settings")]
-        [SerializeField] private float _visibilityOffset = 50f; // Отступ для проверки видимости
 
         [SerializeField] Image NewMessageBlob;
 

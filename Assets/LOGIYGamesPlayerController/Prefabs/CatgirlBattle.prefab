@@ -4917,8 +4917,6 @@ MonoBehaviour:
   downCheckDistance: 0.27
   castUpSphereRadius: 0.3
   castDownSphereRadius: 0.3
-  edgeDetectionRayOffset: 0.1
-  edgeDetectionRayCount: 4
   includeLayers:
     serializedVersion: 2
     m_Bits: 593
@@ -4970,6 +4968,7 @@ MonoBehaviour:
   sampleRate: 16000
   bufferDuration: 0.2
   microphoneVolume: 1
+  inputReader: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   MuteForSelf: 0
 --- !u!114 &6249374095147057133
 MonoBehaviour:
@@ -4983,16 +4982,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f3f3826aa7aac449342e7185ae2b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 0.2
-  sprintTurnSmoothTime: 8
-  normalTurnSmoothTime: 10
-  <Acceleration>k__BackingField: 2
-  <Deceleration>k__BackingField: 25
-  sprintSpeedMultiplier: 1.5
-  runSpeedMultiplier: 1
-  <MotionType>k__BackingField: 1
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  Acceleration: 2
+  Deceleration: 25
+  InternalSpeedMultiplier: 1
+  IsFocusing: 1
+  MotionType: 1
   useAutoCalculatedPlayerSpeedMultiplier: 1
   slopeAffectRate: 0.5
+  smoothTime: 0.2
 --- !u!114 &1411414839543553356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5005,18 +5003,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4719735af7b6a904ca23c54db1c84e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 5626656295038298431}
-  turnSmoothTime: 10
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  Acceleration: 0
+  Deceleration: 0
+  InternalSpeedMultiplier: 0
+  IsFocusing: 1
+  MotionType: 1
   landingDuration: 0.1
   minFallingTimeToLandingTransition: 0.8
   fallingTimeForHardLanding: 1
   hardLandingDuration: 1.5
   autoCalculateLandingDuration: 0
-  landingSpeedMultiplier: 0
-  fallingMoveSpeedMultiplier: 0.5
-  <Acceleration>k__BackingField: 1
-  <Deceleration>k__BackingField: 1
-  <MotionType>k__BackingField: 1
 --- !u!114 &6273646928145268170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5029,12 +5026,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e278e037e9eef24493d8b95ee1b2f48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 5626656295038298431}
-  crouchSpeedMultiplier: 0.25
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  Acceleration: 2
+  Deceleration: 25
+  InternalSpeedMultiplier: 0.5
+  IsFocusing: 1
+  MotionType: 1
+  useAutoCalculatedPlayerSpeedMultiplier: 1
+  slopeAffectRate: 0
+  smoothTime: 0.3
   crouchHeightMultiplier: 0.5
-  <Acceleration>k__BackingField: 2
-  <Deceleration>k__BackingField: 25
-  <MotionType>k__BackingField: 0
 --- !u!114 &8625556036348828932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5047,14 +5048,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af65d28d168c2a48a488b5e151262dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 5626656295038298431}
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  Acceleration: 10
+  Deceleration: 2
+  InternalSpeedMultiplier: 1
+  IsFocusing: 1
+  MotionType: 0
+  useAutoCalculatedPlayerSpeedMultiplier: 0
+  slopeAffectRate: 0
   slideHeightMultiplier: 0.2
   speedTresholdForExitSliding: 0.5
   turnSmoothTime: 20
-  InternalSpeedMultiplier: 1
-  <Acceleration>k__BackingField: 10
-  <Deceleration>k__BackingField: 1
-  <MotionType>k__BackingField: 2
   maxSlideAngle: 85
   jumpSlidespeed: 2
   slipTime: 0.5
@@ -5230,6 +5234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a9d2d6bc049297448052b69b9bb2a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   CameraRenderFps:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -5299,14 +5304,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8523d5b50279c40ab6ffc094fb56a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MotionType>k__BackingField: 2
-  animator: {fileID: 5626656295038298431}
-  rollDistance: 2
-  rollCooldown: 0.16
-  maxRollsCount: 1
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  Acceleration: 0
+  Deceleration: 0
+  InternalSpeedMultiplier: 0
+  IsFocusing: 1
+  MotionType: 0
   <CanRoll>k__BackingField: 1
-  <Acceleration>k__BackingField: 2
-  <Deceleration>k__BackingField: 25
 --- !u!114 &9063052285891225577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5319,17 +5323,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbeec636e64884347873e6d038ab3062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 5626656295038298431}
-  jumpVerticalForce: 1.5
-  jumpPlanarForce: 1
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  Acceleration: 0
+  Deceleration: 0
+  InternalSpeedMultiplier: 0
+  IsFocusing: 1
+  MotionType: 0
+  jumpVerticalImpulse: 1.5
+  jumpPlanarImpulse: 1
   jumpCooldown: 0.2
   maxJumpCount: 2
   <CanJump>k__BackingField: 1
-  turnSmoothTime: 10
-  <Acceleration>k__BackingField: 0
-  <Deceleration>k__BackingField: 1
-  <InternalSpeedMultiplier>k__BackingField: 1
-  <MotionType>k__BackingField: 1
 --- !u!114 &7433937345471640345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5342,11 +5346,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14eff808cb397b44cb169afe8a71f4a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MotionType>k__BackingField: 2
-  animator: {fileID: 5626656295038298431}
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  Acceleration: 0
+  Deceleration: 0
+  InternalSpeedMultiplier: 0
+  IsFocusing: 1
+  MotionType: 2
   currentWeapon: {fileID: 11400000, guid: ec32752e7fdd53646a66a025fe5f53aa, type: 2}
-  <AirbornAcceleration>k__BackingField: 2
-  <AirbornDeceleration>k__BackingField: 3
 --- !u!114 &7561530883498523404
 MonoBehaviour:
   m_ObjectHideFlags: 0

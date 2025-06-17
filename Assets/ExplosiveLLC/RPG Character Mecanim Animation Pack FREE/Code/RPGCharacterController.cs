@@ -155,13 +155,13 @@ namespace RPGCharacterAnims
         public bool maintainingGround => TryGetHandlerActive(HandlerTypes.MaintainingGround);
 
         /// <summary>
-        /// Vector3 for move input. Use SetMoveInput to change this.
+        /// Vector3 for move Input. Use SetMoveInput to change this.
         /// </summary>
         public Vector3 moveInput => _moveInput;
         private Vector3 _moveInput;
 
         /// <summary>
-        /// Vector3 for aim input. Use SetAimInput to change this.
+        /// Vector3 for aim Input. Use SetAimInput to change this.
         /// </summary>
         public Vector3 aimInput => _aimInput;
         private Vector3 _aimInput;
@@ -173,13 +173,13 @@ namespace RPGCharacterAnims
         private Vector3 _faceInput;
 
         /// <summary>
-        /// Vector3 for jump input. Use SetJumpInput to change this.
+        /// Vector3 for jump Input. Use SetJumpInput to change this.
         /// </summary>
         public Vector3 jumpInput => _jumpInput;
         private Vector3 _jumpInput;
 
         /// <summary>
-        /// Camera relative input in the XZ plane. This is calculated when SetMoveInput is called.
+        /// Camera relative Input in the XZ plane. This is calculated when SetMoveInput is called.
         /// </summary>
         public Vector3 cameraRelativeInput => _cameraRelativeInput;
         private Vector3 _cameraRelativeInput;
@@ -348,15 +348,15 @@ namespace RPGCharacterAnims
         #region Input
 
         /// <summary>
-        /// Set move input. This method expects the x-axis to be left-right input and the
-        /// y-axis to be up-down input.
+        /// Set move Input. This method expects the x-axis to be left-right Input and the
+        /// y-axis to be up-down Input.
         ///
         /// The z-axis is ignored, but the type is a Vector3 in case you wish to use the z-axis.
         ///
-        /// This method computes CameraRelativeInput using the x and y axis of the move input
+        /// This method computes CameraRelativeInput using the x and y axis of the move Input
         /// and the main camera, producing a normalized Vector3 in the XZ plane.
         /// </summary>
-        /// <param name="_moveInput">Vector3 move input</param>
+        /// <param name="_moveInput">Vector3 move Input</param>
         public void SetMoveInput(Vector3 _moveInput)
         {
             this._moveInput = _moveInput;
@@ -370,35 +370,35 @@ namespace RPGCharacterAnims
             var right = new Vector3(forward.z, 0, -forward.x);
             var relativeVelocity = _moveInput.x * right + _moveInput.y * forward;
 
-            // Reduce input for diagonal movement.
+            // Reduce Input for diagonal movement.
             if (relativeVelocity.magnitude > 1) { relativeVelocity.Normalize(); }
 
             _cameraRelativeInput = relativeVelocity;
         }
 
         /// <summary>
-        /// Set facing input. This is a position in world space of the object that the character
+        /// Set facing Input. This is a position in world space of the object that the character
         /// is facing towards.
         /// </summary>
-        /// <param name="_faceInput">Vector3 face input.</param>
+        /// <param name="_faceInput">Vector3 face Input.</param>
         public void SetFaceInput(Vector3 _faceInput)
         { this._faceInput = _faceInput; }
 
         /// <summary>
-        /// Set aim input. This is a position in world space of the object that the character
+        /// Set aim Input. This is a position in world space of the object that the character
         /// is aiming at, so that you can easily lock on to a moving target.
         /// </summary>
-        /// <param name="_aimInput">Vector3 aim input.</param>
+        /// <param name="_aimInput">Vector3 aim Input.</param>
         public void SetAimInput(Vector3 _aimInput)
         { this._aimInput = _aimInput; }
 
         /// <summary>
-        /// Set jump input. Use this with Vector3.up and Vector3.down (y-axis).
+        /// Set jump Input. Use this with Vector3.up and Vector3.down (y-axis).
         ///
         /// The X and Z axes are  ignored, but the type is a Vector3 in case you wish to
         /// use the X and Z axes for other actions.
         /// </summary>
-        /// <param name="_jumpInput">Vector3 jump input.</param>
+        /// <param name="_jumpInput">Vector3 jump Input.</param>
         public void SetJumpInput(Vector3 _jumpInput)
         { this._jumpInput = _jumpInput; }
 

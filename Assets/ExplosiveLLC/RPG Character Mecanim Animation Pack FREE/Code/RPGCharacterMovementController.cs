@@ -81,7 +81,7 @@ namespace RPGCharacterAnims
         [HideInInspector] public bool canJump;
 
         /// <summary>
-        /// Internal flag for if the player is holding the jump input. If this is released while
+        /// Internal flag for if the player is holding the jump Input. If this is released while
         /// the character is still ascending, the vertical speed is damped.
         /// </summary>
         [HideInInspector] public bool holdingJump;

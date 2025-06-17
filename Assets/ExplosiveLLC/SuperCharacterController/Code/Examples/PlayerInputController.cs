@@ -14,8 +14,8 @@ public class PlayerInputController:MonoBehaviour
 
 	private void Update()
 	{
-		// Retrieve our current WASD or Arrow Key input.
-		// Using GetAxisRaw removes any kind of gravity or filtering being applied to the input
+		// Retrieve our current WASD or Arrow Key Input.
+		// Using GetAxisRaw removes any kind of gravity or filtering being applied to the Input
 		// Ensuring that we are getting either -1, 0 or 1.
 		#if ENABLE_INPUT_SYSTEM
 		Vector3 moveInput = new Vector3(Keyboard.current.dKey.ReadValue() - Keyboard.current.aKey.ReadValue(), 0,

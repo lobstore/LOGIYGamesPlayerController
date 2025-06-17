@@ -8,7 +8,7 @@ public class TouchOldInput : MonoBehaviour
 {
     // This is the object contains all the highlight for touch inputs
     // There should be 10 highlight gameobjects in the pool for 10 touches at the same time
-    // They are assigned to a touch input accord to the fingerId
+    // They are assigned to a touch Input accord to the fingerId
     [Tooltip("The Gameobject holds all the highlight objects for Input Manager")]
     public Transform m_HighlightPool;
 
@@ -18,7 +18,7 @@ public class TouchOldInput : MonoBehaviour
     [Header("Script to Show More Info")]
     public TouchDebugInfo m_touchInfo;
 
-    // The old input manager does not support touch input for Standalone build, even when the device does.
+    // The old Input manager does not support touch Input for Standalone build, even when the device does.
 
     // Use this for initialization
     void Start()

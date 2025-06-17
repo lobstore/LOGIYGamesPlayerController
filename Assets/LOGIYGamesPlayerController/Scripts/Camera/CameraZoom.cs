@@ -4,6 +4,7 @@ namespace LOGIYGames
 {
     public class CameraZoom : MonoBehaviour
     {
+        [SerializeField] InputReader Input;
         [SerializeField][Range(0f, 10f)] private float defaultDistance = 4f;
         [SerializeField][Range(0f, 10f)] private float minimumDistance = 1f;
         [SerializeField][Range(0f, 10f)] private float maximumDistance = 6f;
@@ -34,7 +35,7 @@ namespace LOGIYGames
 
         private void Zoom()
         {
-            float zoomValue = CameraInputManager.Instance.ZoomDelta * zoomSensitivity;
+            float zoomValue = Input.ZoomDelta * zoomSensitivity;
             currentTargetDistance = Mathf.Clamp(currentTargetDistance + zoomValue, minimumDistance, maximumDistance);
             if (Mathf.Abs(Distance - currentTargetDistance) > 0.01f)
             {

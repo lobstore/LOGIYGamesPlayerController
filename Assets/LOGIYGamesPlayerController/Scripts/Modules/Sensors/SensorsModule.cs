@@ -13,9 +13,6 @@ namespace LOGIYGames
         [SerializeField] private float downCheckDistance = 0.27f;
         [SerializeField] private float castUpSphereRadius = 0.3f;
         [SerializeField] private float castDownSphereRadius = 0.3f;
-        [SerializeField] private float edgeDetectionRayOffset = 0.1f;
-        [SerializeField] private int edgeDetectionRayCount = 4;
-
 
         [Header("Layer Mask")]
         [SerializeField] private LayerMask includeLayers;

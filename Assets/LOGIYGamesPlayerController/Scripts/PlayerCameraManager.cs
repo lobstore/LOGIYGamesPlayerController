@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(CameraTarget))]
     public class PlayerCameraManager : NetworkBehaviour
     {
+        [SerializeField] InputReader Input;
         [SerializeField] LayerMask CameraRenderFps;
         [SerializeField] LayerMask CameraRenderTps;
         private Camera MainCamera;
@@ -40,24 +43,28 @@ namespace LOGIYGames
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
-            PlayerInputsManager.Instance.Interacted.AddListener(SwitchPOV);
+            Input.InteractEvent.AddListener(SwitchPOV);
             InitControllersViews();
         }
         private void OnDisable()
         {
-            PlayerInputsManager.Instance.Interacted.RemoveListener(SwitchPOV);
+            Input.InteractEvent.RemoveListener(SwitchPOV);
         }
         override public void OnDestroy()
         {
-            PlayerInputsManager.Instance.Interacted.RemoveListener(SwitchPOV);
+            Input.InteractEvent.RemoveListener(SwitchPOV);
         }
         public override void OnNetworkDespawn()
         {
 
-            PlayerInputsManager.Instance.Interacted.RemoveListener(SwitchPOV);
+            Input.InteractEvent.RemoveListener(SwitchPOV);
         }
-        private void SwitchPOV()
+        private void SwitchPOV(CallbackContext context)
         {
+            if (!context.performed)
+            {
+                return;
+            } 
             if (!IsOwner)
             {
                 return;

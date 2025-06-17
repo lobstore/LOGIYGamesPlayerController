@@ -17,7 +17,7 @@ public class KeyboardMouseOldInput : MonoBehaviour
 #if ENABLE_LEGACY_INPUT_MANAGER
     void Update()
     {
-        // Keyboard input or mouse button is pressed
+        // Keyboard Input or mouse button is pressed
         foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
         {
             if (Input.GetKeyDown(kcode))

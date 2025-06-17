@@ -193,7 +193,7 @@ public class AnalogStick
         m_positionText = posText;
     }
 
-    // Update the stick position according to the input value
+    // Update the stick position according to the Input value
     public void UpdatePosition(float xValue, float yValue)
     {
         if (m_positionText != null)
@@ -220,7 +220,7 @@ public class AnalogButton
 
     // It may take a pair of buttons to complete the whole axis.
     // For example: D-Pad on Windows are represented as Axis 6 and 7.
-    // In that case, DPad_Left input value range is [-1, 0] while DPad_Right input value range is (0, 1]
+    // In that case, DPad_Left Input value range is [-1, 0] while DPad_Right Input value range is (0, 1]
     protected float min_input_value = -1;
     protected float max_input_value = 1;
     protected float deadzone = 0.1f;
@@ -249,7 +249,7 @@ public class AnalogButton
         deadzone = deadzn;
     }
 
-    // Decide if the button is "pressed" based on the input value
+    // Decide if the button is "pressed" based on the Input value
     public virtual bool IsPressed(float inputValue)
     {
         if (Mathf.Abs(inputValue) > deadzone && inputValue >= min_input_value && inputValue <= max_input_value)

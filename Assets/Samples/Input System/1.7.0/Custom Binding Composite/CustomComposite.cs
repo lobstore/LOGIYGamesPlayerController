@@ -21,15 +21,15 @@ using UnityEngine.UIElements;
 // of value we return.
 //
 // NOTE: By advertising the type of value we return, we also allow the
-//       input system to filter out our composite if it is not applicable
+//       Input system to filter out our composite if it is not applicable
 //       to a specific type of action. For example, if an action is set
 //       to "Value" as its type and its "Control Type" is set to "Axis",
 //       our composite will not be shown as our value type (Vector2) is
 //       incompatible with the value type of Axis (float).
 //
-// Also, we need to register our composite with the input system. And we
+// Also, we need to register our composite with the Input system. And we
 // want to do it in a way that makes the composite visible in the action
-// editor of the input system.
+// editor of the Input system.
 //
 // For that to happen, we need to call InputSystem.RegisterBindingComposite
 // sometime during startup. We make that happen by using [InitializeOnLoad]
@@ -63,7 +63,7 @@ public class CustomComposite : InputBindingComposite<Vector2>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initialize()
     {
-        // This registers the composite with the input system. After calling this
+        // This registers the composite with the Input system. After calling this
         // method, we can have bindings reference the composite. Also, the
         // composite will show up in the action editor.
         //
@@ -84,24 +84,24 @@ public class CustomComposite : InputBindingComposite<Vector2>
 
     // So, we need two parts for our composite. The part that delivers the stick
     // value and the part that delivers the axis multiplier. Note that each part
-    // may be bound to multiple controls. The input system handles that for us
+    // may be bound to multiple controls. The Input system handles that for us
     // by giving us an integer identifier for each part that reads a single value
     // from however many controls are bound to the part.
     //
     // In our case, this could be used, for example, to bind the "multiplier" part
     // to both the left and the right trigger on the gamepad.
 
-    // To tell the input system of a "part" binding that we need for a composite,
+    // To tell the Input system of a "part" binding that we need for a composite,
     // we add a public field with an "int" type and annotated with an [InputControl]
     // attribute. We set the "layout" property on the attribute to tell the system
     // what kind of control we expect to be bound to the part.
     //
-    // NOTE: These part binding need to be *public fields* for the input system
+    // NOTE: These part binding need to be *public fields* for the Input system
     //       to find them.
     //
     // So this is introduces a part to the composite called "multiplier" and
     // expecting an "Axis" control. The value of the field will be set by the
-    // input system. It will be some internal, unique numeric ID for the part
+    // Input system. It will be some internal, unique numeric ID for the part
     // which we can then use with InputBindingCompositeContext.ReadValue to
     // read out the value of just that part.
     [InputControl(layout = "Axis")]
@@ -130,20 +130,20 @@ public class CustomComposite : InputBindingComposite<Vector2>
     public float scaleFactor = 1;
 
     // Ok, so now we have all the configuration in place. The final piece we
-    // need is the actual logic that reads input from "multiplier" and "stick"
-    // and computes a final input value.
+    // need is the actual logic that reads Input from "multiplier" and "stick"
+    // and computes a final Input value.
     //
     // We can do that by defining a ReadValue method which is the actual workhorse
     // for our composite.
     public override Vector2 ReadValue(ref InputBindingCompositeContext context)
     {
-        // We read input from the parts we have by simply
-        // supplying the part IDs that the input system has set up
+        // We read Input from the parts we have by simply
+        // supplying the part IDs that the Input system has set up
         // for us to ReadValue.
         //
         // NOTE: Vector2 is a less straightforward than primitive value types
         //       like int and float. If there are multiple controls bound to the
-        //       "stick" part, we need to tell the input system which one to pick.
+        //       "stick" part, we need to tell the Input system which one to pick.
         //       We do so by giving it an IComparer. In this case, we choose
         //       Vector2MagnitudeComparer to return the Vector2 with the greatest
         //       length.
@@ -172,7 +172,7 @@ public class CustomCompositeEditor : InputParameterEditor<CustomComposite>
         var currentValue = target.scaleFactor;
 
         // The easiest way to lay out our UI is to simply use EditorGUILayout.
-        // We simply assign the changed value back to the 'target' object. The input
+        // We simply assign the changed value back to the 'target' object. The Input
         // system will automatically detect a change in value.
         target.scaleFactor = EditorGUILayout.Slider(m_ScaleFactorLabel, currentValue, 0, 2);
     }

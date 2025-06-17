@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(AudioSource))]
@@ -14,6 +15,7 @@ namespace LOGIYGames
         [SerializeField] private float bufferDuration = 0.2f;
         [SerializeField] private float microphoneVolume = 1.0f;
 
+        [SerializeField] InputReader inputReader;
         // Системные переменные
         private AudioClip microphoneClip;
         private AudioSource audioSource;
@@ -41,19 +43,22 @@ namespace LOGIYGames
 #else
             StartMicrophone();
 #endif
-            GameControlInputManager.Instance.VoiceChatPressed.AddListener(ActivateVoiceChat);
+            inputReader.VoiceChatEvent.AddListener(ActivateVoiceChat);
             StopMicrophone();
         }
-        void ActivateVoiceChat(bool isPressing)
+        void ActivateVoiceChat(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
-            if (isPressing)
+            switch (context.phase)
             {
-                StartTransmitting();
-            }
-            else
-            {
-                StopTransmitting();
+                case InputActionPhase.Performed:
+                    StartTransmitting();
+                    break;
+                case InputActionPhase.Canceled:
+                    StopTransmitting();
+                    break;
+                default:
+                    break;
             }
         }
         private IEnumerator CheckMicrophonePermission()
@@ -290,7 +295,7 @@ namespace LOGIYGames
 
             if (GameControlInputManager.Instance != null)
             {
-                GameControlInputManager.Instance.VoiceChatPressed.RemoveListener(ActivateVoiceChat);
+                inputReader.VoiceChatEvent.RemoveListener(ActivateVoiceChat);
             }
         }
         public void SetMicrophoneVolume(float volume)

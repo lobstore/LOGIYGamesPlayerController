@@ -186,7 +186,7 @@ public class BSPTree:MonoBehaviour
 	}
 
 	/// <summary>
-	/// Splits a a set of input triangles by a partition plane into positive and negative sets, with triangles
+	/// Splits a a set of Input triangles by a partition plane into positive and negative sets, with triangles
 	/// that are intersected by the partition plane being placed in both sets.
 	/// </summary>
 	private void Split(List<int> triangles, Vector3 partitionPoint, Vector3 partitionNormal, out List<int> positiveTriangles, out List<int> negativeTriangles)

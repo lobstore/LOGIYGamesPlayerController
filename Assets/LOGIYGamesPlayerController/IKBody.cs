@@ -39,7 +39,7 @@ namespace LOGIYGames
             this.m_AimPosition = this.m_Transform.position + this.m_CameraTransform.forward * this.m_LookOffset.z + Vector3.up * this.m_LookOffset.y + this.m_CameraTransform.right * (this.m_LookOffset.x - relativeX * 2f);
             Vector3 directionToTarget = this.m_Transform.position - this.m_CameraTransform.position;
             float angle = Vector3.Angle(this.m_Transform.forward, directionToTarget);
-            if (Mathf.Abs(angle) < angle && this.m_ControllerActive && ik)
+            if (Mathf.Abs(angle) < maxLookAngle && this.m_ControllerActive && ik)
             {
                 this.m_Weight = Mathf.Lerp(this.m_Weight, 1f, Time.deltaTime);
             }

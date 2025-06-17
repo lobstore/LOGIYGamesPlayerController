@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3a67c76897d5e4abc768d717859af8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   defaultDistance: 6
   minimumDistance: 4
   maximumDistance: 10

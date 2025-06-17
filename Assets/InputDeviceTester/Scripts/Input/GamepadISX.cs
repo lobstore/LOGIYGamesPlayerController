@@ -47,7 +47,7 @@ public class GamepadISX : MonoBehaviour
         string buttonName = control.name;
         Transform button = null;
 
-        // If the button input is from pressing a stick
+        // If the button Input is from pressing a stick
         if (buttonName.Contains("StickPress"))
         {
             buttonName = buttonName.Replace("Press", "");
@@ -73,7 +73,7 @@ public class GamepadISX : MonoBehaviour
             StopHighlight(button);
     }
 
-    // Find a transform for a input.
+    // Find a transform for a Input.
     // dpadName: to find the transform. Then find child transfomr with the same name from control
     // isStick: Used when stick is moved or pressed. Find the child transform named "stick"
     protected virtual Transform GetInputTransform(string inputName, bool isStick = false, string dpadName = null)
@@ -83,7 +83,7 @@ public class GamepadISX : MonoBehaviour
         else if (dpadName != null) input = m_buttonContainer.Find(dpadName + "/" + inputName);
         else                       input = m_buttonContainer.Find(inputName);
 
-        // The transform does not exist for the input button
+        // The transform does not exist for the Input button
         if (input == null)
             ShowMessage(inputName);
 

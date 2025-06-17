@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 
-// Use a separate PlayerInput component for setting up input.
+// Use a separate PlayerInput component for setting up Input.
 public class SimpleController_UsingPlayerInput : MonoBehaviour
 {
     public float moveSpeed;

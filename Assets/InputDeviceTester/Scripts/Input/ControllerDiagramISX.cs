@@ -40,7 +40,7 @@ public class ControllerDiagramISX : GamepadISX
     // Callback funtion when a button is pressed. The button can be on a keyboard or mouse
     private void OnButtonPress(ButtonControl control)
     {
-        // Rule out Keyboard and Mouse input
+        // Rule out Keyboard and Mouse Input
         string device = control.device.description.deviceClass;
         if (device == "Keyboard" || device == "Mouse")
             return;
@@ -48,7 +48,7 @@ public class ControllerDiagramISX : GamepadISX
         OnControllerButtonPress(control);
     }
 
-    // Get the Transform in scene for input control (button, stick, dpad)
+    // Get the Transform in scene for Input control (button, stick, dpad)
     // If no existing one is assigned, assign a new one
     protected override Transform GetInputTransform(string inputName, bool isStick = false, string dpadName = null)
     {
@@ -91,7 +91,7 @@ public class ControllerDiagramISX : GamepadISX
             positionText.GetComponent<TextMesh>().text = pos.ToString("F2");
     }
 
-    // When a input is used for the first time, remove all tranparency from it
+    // When a Input is used for the first time, remove all tranparency from it
     private void FirstTimeUse(Transform controlTrans)
     {
         // Remove transparency from all the Sprite Renderers

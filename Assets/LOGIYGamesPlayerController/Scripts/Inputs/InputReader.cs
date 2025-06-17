@@ -26,8 +26,7 @@ namespace LOGIYGames
         public InputEvent MapEvent { get; private set; } = new();
         public InputEvent SprintEvent { get; private set; } = new();
         public InputEvent VoiceChatEvent { get; private set; } = new();
-
-
+        public InputEvent MoveEvent { get; private set; } = new();
         private void OnEnable()
         {
   
@@ -115,6 +114,7 @@ namespace LOGIYGames
 
         public void OnMove(InputAction.CallbackContext context)
         {
+            MoveEvent.Invoke(context);
             MoveInput = context.ReadValue<Vector2>();
         }
 

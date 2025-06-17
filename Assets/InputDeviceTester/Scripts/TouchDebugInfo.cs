@@ -79,7 +79,7 @@ public class TouchDebugInfo : InputDebugInfo
         max = Mathf.Max(max, 1);                    // The first section always shows
         max = Mathf.Min(max, infoPool.childCount);  // No need to be bigger than the child objects need
 
-        // Clear the content in the first section when there is no touch input
+        // Clear the content in the first section when there is no touch Input
         if (count == 0)
             infoPool.GetChild(0).GetComponent<Text>().text = "";
 

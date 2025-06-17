@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using RandomUnity = UnityEngine.Random;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 public static class DebugDraw
 {
 	public static void DrawMarker(Vector3 position, float size, Color color, float duration, bool depthTest = true)
@@ -81,5 +82,10 @@ public static class DebugDraw
 
 	public static void DebugField<T>(T field, string fieldName) {
 		Debug.Log(fieldName + " : " + field);
+	}
+
+	public static void Log(string message, [CallerMemberName] string member = "", [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+	{
+		Debug.Log($"[{System.IO.Path.GetFileName(file)}:{line} - {member}] {message}");
 	}
 }

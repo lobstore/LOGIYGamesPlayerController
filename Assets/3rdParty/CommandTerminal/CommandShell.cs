@@ -134,7 +134,7 @@ namespace CommandTerminal
         }
 
         /// <summary>
-        /// Parses an input line into a command and runs that command.
+        /// Parses an Input line into a command and runs that command.
         /// </summary>
         public void RunCommand(string line) {
             string remaining = line;
