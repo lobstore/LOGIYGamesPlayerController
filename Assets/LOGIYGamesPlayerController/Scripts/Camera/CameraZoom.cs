@@ -1,4 +1,4 @@
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 namespace LOGIYGames
 {
@@ -12,18 +12,18 @@ namespace LOGIYGames
         [SerializeField][Range(0f, 10f)] private float smoothing = 4f;
         [SerializeField][Range(0f, 10f)] private float zoomSensitivity = 1f;
 
-        private CinemachineFramingTransposer framingTransposer;
-        private CinemachineInputProvider inputProvider;
+        private CinemachinePositionComposer framingTransposer;
+        private CinemachineInputAxisController inputProvider;
 
-        private float Distance { get { return framingTransposer.m_CameraDistance; } set { framingTransposer.m_CameraDistance = value; } }
+        private float Distance { get { return framingTransposer.CameraDistance; } set { framingTransposer.CameraDistance = value; } }
 
         private float currentTargetDistance;
 
         private void Awake()
         {
-            framingTransposer = GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineFramingTransposer>();
+            framingTransposer = GetComponent<CinemachinePositionComposer>();
 
-            inputProvider = GetComponent<CinemachineInputProvider>();
+            inputProvider = GetComponent<CinemachineInputAxisController>();
 
             currentTargetDistance = defaultDistance;
         }

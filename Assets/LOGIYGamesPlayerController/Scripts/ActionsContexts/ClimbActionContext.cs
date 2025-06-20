@@ -8,7 +8,7 @@ public class ClimbActionContext : MonoBehaviour, IActionContext
     SensorsModule Sensors;
     CharacterModule player;
     PlayerInputsManager HumanoidInput;
-    PlayerCameraManager CameraManager;
+    CinemachineCameraSwitcher CameraManager;
     private CountdownTimer climbingTimer;
     private CountdownTimer climbJumpCooldownTimer;
     [SerializeField] private float climbingWallTime = 1f;
@@ -32,7 +32,7 @@ public class ClimbActionContext : MonoBehaviour, IActionContext
     {
         player = GetComponent<CharacterModule>();
         HumanoidInput = GetComponent<PlayerInputsManager>();
-        CameraManager = GetComponent<PlayerCameraManager>();
+        CameraManager = GetComponent<CinemachineCameraSwitcher>();
         Sensors = GetComponent<SensorsModule>();
         climbingTimer = new CountdownTimer(climbingWallTime);
         climbJumpCooldownTimer = new CountdownTimer(climbJumpingCooldown);
@@ -111,7 +111,7 @@ public class ClimbActionContext : MonoBehaviour, IActionContext
         return Sensors.IsObstacleLegsFront
                     && HumanoidInput.MovementInput.y > 0
                     && Vector3.Angle(player.transform.forward, -Sensors.LegsFrontHit.normal) < maxWallLookAngle
-                    && Vector3.Angle(player.transform.forward, CameraManager.CurentCameraController.CameraTransform.forward) < 30;
+                    && Vector3.Angle(player.transform.forward, Camera.main.transform.forward) < 30;
     }
 
     public void SpeedControl()

@@ -201,7 +201,7 @@ namespace LOGIYGames
             if (IsGrounded
                 && verticalVelocity < 0)
             {
-                verticalVelocity = -4 + (Physics.gravity.y-Weight/10) * horizontalVelocity.magnitude;
+                verticalVelocity = -4 / (gravityMultiplier+0.001f);
             }
             else
             {

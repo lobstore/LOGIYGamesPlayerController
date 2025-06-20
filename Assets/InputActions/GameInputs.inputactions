@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInputActions",
+    "name": "GameInputs",
     "maps": [
         {
             "name": "PlayerInputs",
@@ -274,7 +274,7 @@
                     "name": "Submit",
                     "type": "Button",
                     "id": "2196cef1-8950-41d9-850c-c6a22952c5f7",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -313,7 +313,7 @@
                     "name": "Escape",
                     "type": "Button",
                     "id": "7633bc4b-b804-4618-b883-28362a908df6",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -401,7 +401,7 @@
                     "name": "Focus",
                     "type": "Button",
                     "id": "19444a48-41c3-4956-9a5b-d5ee7d63cfbb",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -415,6 +415,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Mouse",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ddde6349-ddfe-42a2-bcce-e99b3e6f404d",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false

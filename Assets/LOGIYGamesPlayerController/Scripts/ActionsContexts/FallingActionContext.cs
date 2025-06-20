@@ -17,7 +17,7 @@ public class FallingActionContext : AerialActionContext
 
 
     [Header("Component References")]
-    private PlayerCameraManager cameraManager;
+    private CinemachineCameraSwitcher cameraManager;
 
     // State Management
     private CountdownTimer landingCoolDownTimer;

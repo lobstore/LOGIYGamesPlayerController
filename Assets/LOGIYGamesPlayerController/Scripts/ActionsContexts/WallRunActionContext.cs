@@ -7,7 +7,7 @@ public class WallRunActionContext : MonoBehaviour, IActionContext
 {
     SensorsModule Sensors;
     PlayerInputsManager HumanoidLocomotionInput;
-    PlayerCameraManager CameraManager;
+    CinemachineCameraSwitcher CameraManager;
     CharacterModule Player;
     private float turnSmoothTime;
     CountdownTimer wallJumpCooldownTimer;
@@ -89,7 +89,7 @@ public class WallRunActionContext : MonoBehaviour, IActionContext
                     && !Player.IsGrounded
                     && HumanoidLocomotionInput.MovementInput.y > 0
                     && !Sensors.IsObstacleLegsFront
-                    && Vector3.Angle(Player.transform.forward, CameraManager.CurentCameraController.CameraTransform.forward) < 60;
+                    && Vector3.Angle(Player.transform.forward, Camera.main.transform.forward) < 60;
     }
 
     private void StopWallRunning()

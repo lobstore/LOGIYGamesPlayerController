@@ -835,7 +835,7 @@ namespace JL.Splitting
             newBody.isKinematic = originalRb.isKinematic;
             newBody.useGravity = originalRb.useGravity;
             newBody.mass = newMass;
-            newBody.velocity = originalRb.velocity;
+            newBody.linearVelocity = originalRb.linearVelocity;
             newBody.angularVelocity = originalRb.angularVelocity;
 
             return newBody;

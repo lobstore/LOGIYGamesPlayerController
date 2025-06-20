@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -42,8 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -66,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -247,6 +244,7 @@ MonoBehaviour:
     zAxis: 0
     detectFloatingFragments: 0
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: f4f112cd5a11456468ff76364c69496a, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -281,10 +279,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 84233250}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 10
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -339,6 +337,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -413,9 +414,8 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 341833651}
   m_Enabled: 1
-  serializedVersion: 10
+  serializedVersion: 11
   m_Type: 1
-  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -465,8 +465,12 @@ Light:
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!4 &341833653
 Transform:
   m_ObjectHideFlags: 0
@@ -774,9 +778,8 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584796071}
   m_Enabled: 1
-  serializedVersion: 10
+  serializedVersion: 11
   m_Type: 1
-  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -826,8 +829,12 @@ Light:
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!4 &584796073
 Transform:
   m_ObjectHideFlags: 0
@@ -967,6 +974,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 3369d0f8fe8bcb54daee528b26ee74b9, type: 2}
   m_audioClip: {fileID: 8300000, guid: c8f8b0ef7762ff44db09f386473bc170, type: 3}
+  m_Resource: {fileID: 8300000, guid: c8f8b0ef7762ff44db09f386473bc170, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.311
   m_Pitch: 1
@@ -1078,6 +1086,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 3369d0f8fe8bcb54daee528b26ee74b9, type: 2}
   m_audioClip: {fileID: 8300000, guid: fd91763803673254e8e6c93e68aa4d58, type: 3}
+  m_Resource: {fileID: 8300000, guid: fd91763803673254e8e6c93e68aa4d58, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -1932,6 +1941,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -1986,6 +1996,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2040,6 +2051,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2094,6 +2106,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2148,6 +2161,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2202,6 +2216,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2256,6 +2271,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2310,6 +2326,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2364,6 +2381,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2418,6 +2436,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2472,6 +2491,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2526,6 +2546,7 @@ MonoBehaviour:
     zAxis: 1
     detectFloatingFragments: 1
     asynchronous: 0
+    useGravityForFragments: 0
     insideMaterial: {fileID: 2100000, guid: 5b762f42d3498c64eb3e6b8c8284a09d, type: 2}
     textureScale: {x: 1, y: 1}
     textureOffset: {x: 0, y: 0}
@@ -2593,10 +2614,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2005373689}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 40
-  m_Drag: 10
-  m_AngularDrag: 0.05
+  m_LinearDamping: 10
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2670,6 +2691,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

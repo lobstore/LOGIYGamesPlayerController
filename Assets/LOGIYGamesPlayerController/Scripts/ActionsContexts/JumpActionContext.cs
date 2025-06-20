@@ -83,7 +83,7 @@ public class JumpActionContext : AerialActionContext
             }
             else
             {
-                player.HorizontalVelocity += (player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * player.CurrentSpeed * jumpPlanarImpulse;
+                player.HorizontalVelocity += (player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse;
 
             }
         }

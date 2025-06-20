@@ -86,14 +86,13 @@ public abstract class ActionContextBase : NetworkBehaviour
         if (UseProjectionOnPlane)
         {
             moveDirection = Vector3.ProjectOnPlane(moveDirection, sensors.BelowHit.normal).normalized;
-            if (Input.MoveInput.magnitude > 0)
-                player.RotateToDirection(new Vector3(moveDirection.x, 0, moveDirection.z), TurnSmoothTime);
         }
         ChangeVelocity(moveDirection);
     }
 
     protected virtual void ChangeVelocity(Vector3 moveDirection)
     {
+        player.InternalSpeedMultiplier = InternalSpeedMultiplier * MovementInput.magnitude;
         player.HorizontalVelocity = moveDirection * player.CurrentSpeed;
     }
 

@@ -144,7 +144,7 @@ namespace JL.Demo
 
         private void DoMovement()
         {
-            _rigidbody.velocity = _velocity;
+            _rigidbody.linearVelocity = _velocity;
         }
 
         public bool IsGrounded()

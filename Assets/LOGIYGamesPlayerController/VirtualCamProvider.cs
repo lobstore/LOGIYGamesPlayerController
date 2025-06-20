@@ -1,5 +1,3 @@
-using Cinemachine;
-using System.Collections.Generic;
 using UnityEngine;
 namespace LOGIYGames
 {
