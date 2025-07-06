@@ -15,18 +15,14 @@ public class SlideActionContext : GroundedActionContext
     [SerializeField] private float turnSmoothTime = 20f;
     [Header("Slope Settings")]
 
-    [SerializeField] private float maxSlideAngle = 85f;
-    private Vector3 slideDirection;
-
     [Header("Slip Settings")]
     [SerializeField] private float jumpSlidespeed = 2f;
     CountdownTimer slippingTimer;
     [SerializeField] private float slipTime = 1f;
+    [SerializeField] private float slideSpeed = 1f;
     private float SlideSlopeAngleLimit => Mathf.Atan(FrictionCoefficient) * Mathf.Rad2Deg;
     [SerializeField] private float requiredSpeedMultiplierToSlip = 0.5f;
     int isSlidingHash = Animator.StringToHash("IsSliding");
-    [Header("Debug")]
-    float currentSlopeAngle;
 
     public float FrictionCoefficient
     {
@@ -65,7 +61,6 @@ public class SlideActionContext : GroundedActionContext
         Input.CrouchEvent.RemoveListener(PerformRunToSlideJump);
     }
 
-
     private void PerformRunToSlideJump(InputAction.CallbackContext context)
     {
         switch (context.phase)
@@ -87,13 +82,6 @@ public class SlideActionContext : GroundedActionContext
         }
     }
 
-
-
-    private void ApplyGravity()
-    {
-        player.VerticalVelocity = -20f;
-    }
-
     protected override Vector3 RotateAndGetMovementDirection()
     {
         Vector3 lookDirection = new Vector3(player.HorizontalVelocity.x, 0f, player.HorizontalVelocity.z);
@@ -105,12 +93,24 @@ public class SlideActionContext : GroundedActionContext
     {
         if (IsSliding)
         {
+            player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, 0, Time.deltaTime * player.Deceleration);
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(
             Vector3.down,
             sensors.BelowHit.normal
                 );
 
-            player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.Acceleration;
+
+            if (sensors.GroundAngle > SlideSlopeAngleLimit)
+            {
+                player.HorizontalVelocity += projectedVelocity * Time.deltaTime * slideSpeed;
+
+            }
+            else
+            {
+                player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.CurrentSpeed;
+                player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, Time.deltaTime * player.Deceleration);
+            }
+
         }
     }
 

@@ -69,8 +69,9 @@ namespace LOGIYGames
         [Space(2)]
         [Header("Physics")]
         [SerializeField] bool useGravity;
-        [SerializeField] bool useInertia;
         [SerializeField] float gravityMultiplier;
+        [SerializeField] private float groundMagnit;
+
         public bool UseGravity { get => useGravity; set => useGravity = value; }
 
         public bool IsGrounded
@@ -101,7 +102,7 @@ namespace LOGIYGames
         {
             base.OnFixedUpdate(fixedDeltaTime);
 
-            ApplyForces();
+            Move();
             ApplyGravity();
         }
 
@@ -159,21 +160,9 @@ namespace LOGIYGames
             }
         }
 
-        private void ApplyForces()
+        private void Move()
         {
             Vector3 newVelocity;
-            if (useInertia)
-            {
-                if (horizontalVelocity.magnitude > 0.01f)
-                {
-                    horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Deceleration * Time.deltaTime);
-                }
-                else
-                {
-                    horizontalVelocity = Vector3.zero;
-                }
-            }
-
             newVelocity = HandleSteepWalls(new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z));
             controller.Move(newVelocity * Time.deltaTime);
         }
@@ -201,7 +190,7 @@ namespace LOGIYGames
             if (IsGrounded
                 && verticalVelocity < 0)
             {
-                verticalVelocity = -4 / (gravityMultiplier+0.001f);
+                verticalVelocity = groundMagnit ;
             }
             else
             {

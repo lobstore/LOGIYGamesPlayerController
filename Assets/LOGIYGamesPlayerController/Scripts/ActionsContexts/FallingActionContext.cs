@@ -65,11 +65,11 @@ public class FallingActionContext : AerialActionContext
     public override void EnterState()
     {
         base.EnterState();
+        //player.InternalSpeedMultiplier = 0;
         StartFallingTimer();
         animator?.SetBool(isFallingHash, true);
         animator?.SetInteger(landingStateHash, 0);
     }
-
     public override void ExitState()
     {
         base.ExitState();
@@ -78,12 +78,6 @@ public class FallingActionContext : AerialActionContext
         StopFallingTimer();
 
     }
-
-
-
-
-    private void PlayImmediateAnimation(string name) =>
-        animator?.Play(name);
 
     private void Update()
     {

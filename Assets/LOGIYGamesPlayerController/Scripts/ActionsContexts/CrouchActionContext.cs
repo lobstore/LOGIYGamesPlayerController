@@ -12,7 +12,7 @@ public class CrouchActionContext : LocomotionActionContext
     [Header("Component References")]
     private CharacterController characterController;
 
-    public bool IsCrouching { get; private set; }
+    public bool IsCrouching => sensors.IsObstacleAbove || IsCrouchingPressed;
     private bool IsCrouchingPressed;
 
     public float CrouchHeight { get; private set; }
@@ -35,14 +35,9 @@ public class CrouchActionContext : LocomotionActionContext
         {
             case InputActionPhase.Performed:
                 IsCrouchingPressed = true;
-                IsCrouching = IsCrouchingPressed;
                 break;
             case InputActionPhase.Canceled:
-                if (!sensors.IsObstacleAbove)
-                {
-                    IsCrouchingPressed = false;
-
-                }
+                IsCrouchingPressed = false;
                 break;
             default:
                 break;
@@ -64,14 +59,9 @@ public class CrouchActionContext : LocomotionActionContext
         CrouchHeight = StandingHeight * crouchHeightMultiplier;
     }
 
-    private void CheckForStanding()
-    {
-        IsCrouching = sensors.IsObstacleAbove || IsCrouchingPressed;
-    }
     public override void OnUpdate()
     {
         base.OnUpdate();
-        CheckForStanding();
     }
 
     public override void EnterState()

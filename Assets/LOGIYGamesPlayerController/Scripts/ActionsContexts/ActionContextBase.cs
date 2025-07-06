@@ -17,6 +17,7 @@ public abstract class ActionContextBase : NetworkBehaviour
     protected float TurnSmoothTime = 10f;
     protected bool isMoving;
     protected float deltaY;
+    float targetAngle = 0;
     public Vector2 MovementInput => Input.MoveInput;
 
     [SerializeField] public bool IsFocusing = true;
@@ -39,7 +40,6 @@ public abstract class ActionContextBase : NetworkBehaviour
 
         ApplyRootMotion();
 
-        player.InternalSpeedMultiplier = InternalSpeedMultiplier;
         player.Acceleration = Acceleration;
         player.Deceleration = Deceleration;
 
@@ -67,7 +67,6 @@ public abstract class ActionContextBase : NetworkBehaviour
     public virtual void OnUpdate()
     {
         if (!IsOwner) return;
-        SpeedControl();
     }
 
     public virtual void OnFixedUpdate()
@@ -92,54 +91,63 @@ public abstract class ActionContextBase : NetworkBehaviour
 
     protected virtual void ChangeVelocity(Vector3 moveDirection)
     {
-        player.InternalSpeedMultiplier = InternalSpeedMultiplier * MovementInput.magnitude;
-        player.HorizontalVelocity = moveDirection * player.CurrentSpeed;
+        if (MovementInput.magnitude > 0)
+        {
+            player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier * MovementInput.magnitude, player.Acceleration * Time.deltaTime);
+        }
+        else
+        {
+            player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier * MovementInput.magnitude, player.Deceleration * Time.deltaTime);
+        }
+        if (MotionType != MotionType.AnimatorController)
+        {
+            player.HorizontalVelocity = moveDirection * player.CurrentSpeed;
+
+        }
+        else
+        {
+            player.HorizontalVelocity = Vector3.zero;
+        }
     }
+
 
     protected virtual Vector3 RotateAndGetMovementDirection()
     {
         if (IsFocusing)
         {
-            return RotateAlongCamera();
+            return RotateAndGetDirectionAlongCamera();
         }
         else
         {
-            if (MovementInput.magnitude != 0)
-            {
-                return RotateRelativeCamera();
-            }
-            return Vector3.zero;
+
+
+            return RotateAndGetDirectionRelativeCamera();
         }
     }
 
-    protected virtual void SpeedControl()
-    {
-        if (MovementInput.magnitude == 0)
-        {
-            player.InternalSpeedMultiplier = 0f;
-            return;
-        }
 
-        player.InternalSpeedMultiplier = Mathf.Lerp(
-            player.InternalSpeedMultiplier,
-            InternalSpeedMultiplier,
-            Time.deltaTime * Acceleration);
-    }
-
-    protected virtual Vector3 RotateAlongCamera()
+    protected virtual Vector3 RotateAndGetDirectionAlongCamera()
     {
-        float targetAngle = Camera.main.transform.eulerAngles.y;
+        targetAngle = Camera.main.transform.eulerAngles.y;
         Rotate(targetAngle, TurnSmoothTime);
         return player.transform.right * MovementInput.x + player.transform.forward * MovementInput.y;
     }
 
-    protected virtual Vector3 RotateRelativeCamera()
+    protected virtual Vector3 RotateAndGetDirectionRelativeCamera()
     {
-        float targetAngle = Mathf.Atan2(MovementInput.x, MovementInput.y) * Mathf.Rad2Deg
-                          + Camera.main.transform.eulerAngles.y;
 
-        Rotate(targetAngle, TurnSmoothTime);
-        return Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+        if (MovementInput.magnitude > 0)
+        {
+            targetAngle = Mathf.Atan2(MovementInput.x, MovementInput.y) * Mathf.Rad2Deg
+                  + Camera.main.transform.eulerAngles.y;
+        }
+
+        if (MovementInput.magnitude != 0)
+        {
+
+            Rotate(targetAngle, TurnSmoothTime);
+        }
+        return player.transform.forward;
     }
 
     protected virtual void Rotate(float targetAngle, float turnSmoothTime = 0)

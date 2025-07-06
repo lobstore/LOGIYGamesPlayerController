@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 877521847433825980}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: LeftHandTarget
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8072149263141999784}
   - component: {fileID: 5507838238362382911}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: ItemGrabber
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9197493383171371188}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: DefaultSight
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
@@ -150,7 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3938466337814438791}
   - component: {fileID: 1275009845756594103}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,8 +165,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 97999323047740486}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000475168, y: 0.0008457279, z: -0.000000014863447, w: 0.99999964}
-  m_LocalPosition: {x: 0.2138984, y: 0.0000022591978, z: 0.000030468}
+  m_LocalRotation: {x: 1.9828158e-12, y: -0.00000017881393, z: 4.440892e-15, w: 1}
+  m_LocalPosition: {x: 0.21389699, y: 0.000002264977, z: 0.00001283735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -203,7 +203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3866818417655339911}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: HeadTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8137375051927373668}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Thumb3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -249,8 +249,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 164689318167872091}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00038298036, y: 0.008001938, z: -0.040174846, w: 0.9991605}
-  m_LocalPosition: {x: -0.02858358, y: 0.000010450742, z: -0.0000009788382}
+  m_LocalRotation: {x: -0.0086794505, y: 0.02912347, z: 0.15520313, w: 0.9874151}
+  m_LocalPosition: {x: -0.028583352, y: 0.000009746295, z: -0.00000043399632}
   m_LocalScale: {x: 1.0000001, y: 1.0000004, z: 1.0000002}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -265,7 +265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1308320090214786823}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Index3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,8 +280,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 180974018351973548}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000015992553, y: -0.0025861443, z: -0.0029295115, w: 0.9999924}
-  m_LocalPosition: {x: 0.02042045, y: -0.000000048211678, z: -0.0000010934967}
+  m_LocalRotation: {x: -0.011259269, y: 0.0022498828, z: 0.3159509, w: -0.9487061}
+  m_LocalPosition: {x: 0.02042029, y: -0.00000006049318, z: -0.0000005346274}
   m_LocalScale: {x: 1, y: 1.0000002, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -296,7 +296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8142431107680897392}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Little1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,8 +311,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186207218267529343}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 2.3245292e-16, w: 1}
-  m_LocalPosition: {x: -0.060913656, y: 0.0073628426, z: -0.02910677}
+  m_LocalRotation: {x: -0, y: -0.07640213, z: 0.28650802, w: 0.9550266}
+  m_LocalPosition: {x: -0.060913503, y: 0.0073628444, z: -0.02910679}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -329,7 +329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2872561761483995504}
   - component: {fileID: 6981351277658837747}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +378,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1210668439614761606}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: CameraFollow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3906393006877326254}
   - component: {fileID: 8505117997882307185}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtBack_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -459,7 +459,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1184903920952730977}
   - component: {fileID: 5874085475725399583}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4705338011494435353}
   - component: {fileID: 2488169920222497084}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 114717862230904648}
   - component: {fileID: 5946994355947859034}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -609,7 +609,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7817957660052227723}
   - component: {fileID: 5157548219214149718}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -658,7 +658,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6522580210014228149}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -673,8 +673,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 642434070144775444}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.16787012, y: -0.011883824, z: 0.06960794, w: 0.9832767}
-  m_LocalPosition: {x: -0.022342458, y: 0.109383896, z: 0.0067765648}
+  m_LocalRotation: {x: 0.16787007, y: -0.011883683, z: 0.06960712, w: 0.9832768}
+  m_LocalPosition: {x: -0.022342509, y: 0.10938416, z: 0.006777204}
   m_LocalScale: {x: 0.99999994, y: 0.99999976, z: 0.9999997}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -692,7 +692,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2408090189990595795}
   - component: {fileID: 2035193787286812063}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtBack_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -741,7 +741,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5813981305252685624}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -756,8 +756,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695649488904571381}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.030527594, y: -0, z: -0, w: 0.99953395}
-  m_LocalPosition: {x: 0, y: -0.41376987, z: 0.0026469363}
+  m_LocalRotation: {x: -0.03052762, y: -1.7763567e-15, z: 1.7763567e-15, w: 0.99953395}
+  m_LocalPosition: {x: 0, y: -0.41377017, z: 0.0026453997}
   m_LocalScale: {x: 1, y: 0.99999976, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -774,7 +774,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2817247045253441365}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Middle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -789,8 +789,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 785198783191563351}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03694383, y: 0, z: 0}
+  m_LocalRotation: {x: 7.1054274e-15, y: -0, z: 0.31337747, w: -0.94962865}
+  m_LocalPosition: {x: 0.036943793, y: -0.00000011920932, z: 0.0000000037252903}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -806,7 +806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9140509583615290183}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Thumb3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -821,8 +821,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 794851526303367842}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00038298036, y: -0.008001938, z: 0.040174846, w: 0.9991605}
-  m_LocalPosition: {x: 0.02858358, y: 0.000010450742, z: -0.0000009788382}
+  m_LocalRotation: {x: 0.008679468, y: 0.029123463, z: 0.15520315, w: -0.98741513}
+  m_LocalPosition: {x: 0.028583352, y: 0.000009746295, z: -0.00000043399632}
   m_LocalScale: {x: 1.0000001, y: 1.0000004, z: 1.0000002}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -838,7 +838,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2825577608119809131}
   - component: {fileID: 136641685218069102}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtBack_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -888,7 +888,7 @@ GameObject:
   m_Component:
   - component: {fileID: 55813294494561593}
   - component: {fileID: 9098539129922376844}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -938,7 +938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2430686524653346415}
   - component: {fileID: 4485820998520875750}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -988,7 +988,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6455306563273485289}
   - component: {fileID: 3074153766643488084}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1037,7 +1037,7 @@ GameObject:
   m_Component:
   - component: {fileID: 194645654454652289}
   - component: {fileID: 4483454441596201271}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1087,7 +1087,7 @@ GameObject:
   m_Component:
   - component: {fileID: 762059842935021684}
   - component: {fileID: 4909441660199808987}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1137,7 +1137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5293308872628410408}
   - component: {fileID: 1513043370682553575}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair4_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1187,7 +1187,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8766864079458585033}
   - component: {fileID: 5939729838393480324}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtBack_end_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1236,7 +1236,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8441105104995904213}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: CameraLookAt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1268,7 +1268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3478428329223461950}
   - component: {fileID: 4905438737636635623}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtBack_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1318,7 +1318,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3414854286755466228}
   - component: {fileID: 2603624339155763180}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_03_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1367,7 +1367,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1872165308981326804}
   - component: {fileID: 4302393181883636864}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtSide2_end_02_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1415,7 +1415,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5669514078024584924}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Index2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1430,8 +1430,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273917707679367791}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0001379414, y: 0.009555165, z: -0.014440291, w: 0.9998501}
-  m_LocalPosition: {x: 0.033163816, y: 0.0000013084506, z: -0.0000013062911}
+  m_LocalRotation: {x: -0.009206253, y: -0.009132041, z: 0.32692766, w: -0.9449605}
+  m_LocalPosition: {x: 0.033166952, y: -0.0000000014631106, z: -0.0000013928285}
   m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 1.0000002}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1448,7 +1448,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5691229695782396673}
   - component: {fileID: 378091450999017170}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtSide2_end_02_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1497,7 +1497,7 @@ GameObject:
   m_Component:
   - component: {fileID: 16161025585529463}
   - component: {fileID: 8193074450156972253}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtSide2_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1547,7 +1547,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7788188416004675141}
   - component: {fileID: 1926344888455499727}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_05_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1596,7 +1596,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6284352267766519129}
   - component: {fileID: 3439603887712423697}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtFront_end_02_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1635,6 +1635,37 @@ MonoBehaviour:
   m_gravityDir: {x: 0, y: -1, z: 0}
   m_dragForce: 0.5
   m_jointRadius: 0
+--- !u!1 &1634399580175195798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1018370520228649236}
+  m_Layer: 13
+  m_Name: _look_at_origin_
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1018370520228649236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634399580175195798}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.09648177, y: -0.00027354644, z: -0.0000014051369, w: 0.99533474}
+  m_LocalPosition: {x: -0.000000001837634, y: 0.06000004, z: 0.00000009546058}
+  m_LocalScale: {x: 1.0000001, y: 1.0000001, z: 1.0000002}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 308205438940467838}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1727480056108937515
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,7 +1676,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4711352955173599549}
   - component: {fileID: 6256479884524691478}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail8_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1697,7 +1728,7 @@ GameObject:
   - component: {fileID: 3211124641664043159}
   - component: {fileID: 6174792400520393265}
   - component: {fileID: 2834867864501484032}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1712,8 +1743,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733503294763713809}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000004470348, y: 0.0000000027939675, z: 0.07061509, w: 0.99750364}
-  m_LocalPosition: {x: 0.086891286, y: 0.00000027384425, z: -0.00000006366726}
+  m_LocalRotation: {x: 0.017244732, y: -0.24360079, z: -0.26651472, w: 0.9323793}
+  m_LocalPosition: {x: 0.08689127, y: -0.00000011023081, z: -0.000000028606879}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1781,7 +1812,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4162180057691395666}
   - component: {fileID: 2599537798986275583}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtFront_end_02_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1829,7 +1860,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 877207632702076180}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: LeftHandAim-Hint
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -1861,7 +1892,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3212206882588550192}
   - component: {fileID: 1539467583043539493}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtFront_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1909,7 +1940,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4265857157062078729}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_UpperLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1924,8 +1955,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1857895686527298433}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.052454762, y: -0, z: -0, w: 0.9986233}
-  m_LocalPosition: {x: -0.0769738, y: -0.03982422, z: 0.0013621874}
+  m_LocalRotation: {x: -0.30917522, y: -0, z: -0.00000005960465, w: 0.9510051}
+  m_LocalPosition: {x: -0.0769738, y: -0.039824225, z: 0.0013630213}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1941,7 +1972,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8407700272250459062}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Little2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1956,8 +1987,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1982010435700996138}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.031346835, y: 0, z: 0.000000022351742}
+  m_LocalRotation: {x: -2.810794e-16, y: -0, z: 0.31337747, w: 0.94962865}
+  m_LocalPosition: {x: -0.031346917, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1974,7 +2005,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8789179349036364238}
   - component: {fileID: 1642505442037244896}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2024,7 +2055,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1019726913374490274}
   - component: {fileID: 1089598733972793954}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair5_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2073,7 +2104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7214540595535904715}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Ring1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2088,8 +2119,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2037092061506150863}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -2.3245292e-16, w: 1}
-  m_LocalPosition: {x: 0.065417975, y: 0.007362962, z: -0.0135559775}
+  m_LocalRotation: {x: -0.000000003584497, y: -0.038284965, z: 0.28713712, w: -0.9571241}
+  m_LocalPosition: {x: 0.065417945, y: 0.0073629636, z: -0.013556005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2105,7 +2136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 139031776338735548}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RightHandAim-Hint
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -2137,7 +2168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8367358216751435458}
   - component: {fileID: 911641091445284608}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtFront_end_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2187,7 +2218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3893627643584242737}
   - component: {fileID: 3703387429208680524}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_02_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2235,7 +2266,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9011464563847673937}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SightTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2266,7 +2297,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8887765244378513305}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Little3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2281,8 +2312,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2195618130289151619}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000063422874, y: 0.009609775, z: -0.007768749, w: 0.99992365}
-  m_LocalPosition: {x: -0.018065766, y: 0.0000003703225, z: 0.00000044384169}
+  m_LocalRotation: {x: -0.003011542, y: 0.009125681, z: 0.30597627, w: 0.9519906}
+  m_LocalPosition: {x: -0.018066347, y: 0.00000011920932, z: 0.0000000037252903}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2297,7 +2328,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7043308380515252821}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_LowerLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2312,8 +2343,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2211946482766094486}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.022809703, y: -0, z: -0, w: 0.9997399}
-  m_LocalPosition: {x: -0.000000014901161, y: -0.3518033, z: 0.0000063059365}
+  m_LocalRotation: {x: 0.66005, y: 0.000000029802319, z: -0.000000016763803, w: 0.7512218}
+  m_LocalPosition: {x: -0.000000014901161, y: -0.35180348, z: 0.0000062808404}
   m_LocalScale: {x: 1, y: 1.0000002, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2335,7 +2366,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3929152499772476235}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_L_CatEar1_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2367,7 +2398,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5908218297125608027}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Little1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2382,8 +2413,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2324665465079933676}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -2.3245292e-16, w: 1}
-  m_LocalPosition: {x: 0.060913656, y: 0.0073628426, z: -0.02910677}
+  m_LocalRotation: {x: -0, y: -0.07640213, z: 0.28650802, w: -0.9550266}
+  m_LocalPosition: {x: 0.060913503, y: 0.0073628444, z: -0.02910679}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2400,7 +2431,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6479626874475044711}
   - component: {fileID: 7717594202197024524}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail2_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2449,7 +2480,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1881184890203912590}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Thumb1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2464,8 +2495,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2407547618827206688}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.70316595, y: -0.24679948, z: 0.24397954, w: 0.6205818}
-  m_LocalPosition: {x: 0.0035131343, y: -0.00998461, z: 0.015926799}
+  m_LocalRotation: {x: -0.63201916, y: 0.4059733, z: -0.25042006, w: -0.6107597}
+  m_LocalPosition: {x: 0.0035130382, y: -0.009984615, z: 0.015925635}
   m_LocalScale: {x: 1, y: 1.0000001, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2482,7 +2513,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8646487990146635469}
   - component: {fileID: 1580869885418827738}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_R_CatEar2_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2532,7 +2563,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7355651598208076898}
   - component: {fileID: 4789738290647015223}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_08_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2580,7 +2611,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5575308908564579692}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Middle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2595,8 +2626,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2531910601596586870}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 2.3245292e-16, w: 1}
-  m_LocalPosition: {x: -0.066171736, y: 0.007363081, z: 0.0020421483}
+  m_LocalRotation: {x: -7.105428e-15, y: 0.038284965, z: 0.2871372, w: 0.9571241}
+  m_LocalPosition: {x: -0.066171825, y: 0.007363083, z: 0.0020421408}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2613,7 +2644,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1849641608768277359}
   - component: {fileID: 4439687746944453050}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: HandsRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2701,7 +2732,7 @@ GameObject:
   m_Component:
   - component: {fileID: 597252546748981959}
   - component: {fileID: 3941584766031166374}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_Bust1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2750,7 +2781,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7938687630837491488}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Thumb1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2765,8 +2796,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2707987487534144120}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.70316595, y: 0.24679948, z: -0.24397954, w: 0.6205818}
-  m_LocalPosition: {x: -0.0035131343, y: -0.00998461, z: 0.015926799}
+  m_LocalRotation: {x: 0.6320194, y: 0.40597323, z: -0.25041977, w: 0.6107596}
+  m_LocalPosition: {x: -0.0035130382, y: -0.009984615, z: 0.015925635}
   m_LocalScale: {x: 1, y: 1.0000001, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2782,7 +2813,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3171361900135910085}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Adj_L_FaceEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2797,8 +2828,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2744208665920808352}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.020395486, y: -0.18894772, z: 0.00615907, w: 0.981756}
-  m_LocalPosition: {x: -0.015936984, y: 0.06046415, z: 0.021324651}
+  m_LocalRotation: {x: 0.020395396, y: -0.18894742, z: 0.006159068, w: 0.9817561}
+  m_LocalPosition: {x: -0.015936993, y: 0.060463496, z: 0.021305988}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2814,7 +2845,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7910983477409696651}
   - component: {fileID: 4499313444087718958}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtSide2_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2863,7 +2894,7 @@ GameObject:
   m_Component:
   - component: {fileID: 997979229337842221}
   - component: {fileID: 6488228632680996828}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2913,7 +2944,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4118633124668810062}
   - component: {fileID: 2233064418369123548}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2962,7 +2993,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4371727119805970620}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_R_CatEar1_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2994,7 +3025,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4196758651761548513}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: DefaultRightHandTransform
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
@@ -3026,7 +3057,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3851641889325608339}
   - component: {fileID: 2778932491493408983}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: HeadAim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3114,7 +3145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 159045226939393312}
   - component: {fileID: 6652702753680781234}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_06_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3163,7 +3194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1960219829096633022}
   - component: {fileID: 2162457048823297381}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_C_Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3178,8 +3209,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3109428142214061641}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.012796813, y: -0, z: -0, w: 0.99991816}
-  m_LocalPosition: {x: 6.3873994e-32, y: 0.053104796, z: 0.005866989}
+  m_LocalRotation: {x: 0.012796089, y: -0, z: -0, w: 0.9999181}
+  m_LocalPosition: {x: 6.3873994e-32, y: 0.05310456, z: 0.0058671106}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3213,7 +3244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3939891489952575618}
   - component: {fileID: 6058772050668434380}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtSide2_end_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3263,7 +3294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1781997940852163721}
   - component: {fileID: 1846270291435447406}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_15_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3311,7 +3342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3189598745731144222}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Middle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3326,8 +3357,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3290456267172131160}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -2.3245292e-16, w: 1}
-  m_LocalPosition: {x: 0.066171736, y: 0.007363081, z: 0.0020421483}
+  m_LocalRotation: {x: 1.4210856e-14, y: 0.038284965, z: 0.2871372, w: -0.9571241}
+  m_LocalPosition: {x: 0.066171825, y: 0.007363083, z: 0.0020421408}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3344,7 +3375,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8480184622314207536}
   - component: {fileID: 4770211741187715545}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: LeftHandAim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3401,7 +3432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3575028749153235157}
   - component: {fileID: 7196414486630071009}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Face
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3706,7 +3737,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8345711633700543402}
   - component: {fileID: 4295474234330338870}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FootStepR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3835,7 +3866,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1493125250649099181}
   - component: {fileID: 7110964685811104492}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtFront_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3885,7 +3916,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3727779876154323462}
   - component: {fileID: 5838884344322868796}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair5_11_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3934,7 +3965,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1612856401810160357}
   - component: {fileID: 5880012315671505244}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail1_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3984,7 +4015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1315315075166741299}
   - component: {fileID: 6899761020316365907}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtBack_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4033,7 +4064,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2378369893121492436}
   - component: {fileID: 4864642815089896575}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4083,7 +4114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5047268758184334501}
   - component: {fileID: 6857751888981575607}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4132,7 +4163,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5904125995203381703}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: DefaultLeftHandTransform
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
@@ -4164,7 +4195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7448880025841465141}
   - component: {fileID: 140095225211754236}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_Bust1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4245,7 +4276,7 @@ GameObject:
   - component: {fileID: 4589375459768253339}
   - component: {fileID: 3100746177014881581}
   - component: {fileID: -6839706499932825156}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: CatgirlBattle
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -4260,7 +4291,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3530808098429098423}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.10895777, y: -0.026200239, z: 6.010076}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4797,7 +4828,12 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'J_Bip_R_LowerArm'\n\tTransform 'J_Bip_C_Neck'\n\tTransform
+    'J_Bip_R_UpperArm'\n\tTransform 'J_Bip_L_UpperArm'\n\tTransform 'J_Bip_R_Hand'\n\tTransform
+    'J_Bip_C_Head'\n\tTransform 'J_Bip_L_Hand'\n\tTransform 'J_Bip_L_LowerArm'\n\tTransform
+    'J_Bip_R_LowerArm'\n\tTransform 'J_Bip_C_Neck'\n\tand more ..."
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -4840,7 +4876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2805783193
+  GlobalObjectIdHash: 2403495314
   InScenePlacedSourceGlobalObjectIdHash: 2299257396
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -4898,9 +4934,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17bbd476057ac7f4eb41ba79d21c3d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <BaseSpeed>k__BackingField: 8
+  <BaseSpeed>k__BackingField: 5
   useGravity: 1
-  useInertia: 1
   gravityMultiplier: 1.5
 --- !u!114 &310127018671441999
 MonoBehaviour:
@@ -4987,13 +5022,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 2
-  Deceleration: 25
+  Deceleration: 2
   InternalSpeedMultiplier: 1
   IsFocusing: 1
   UseProjectionOnPlane: 1
   MotionType: 1
   useAutoCalculatedPlayerSpeedMultiplier: 1
-  slopeAffectRate: 0.5
+  slopeAffectRate: 0.134
   smoothTime: 0.2
 --- !u!114 &1411414839543553356
 MonoBehaviour:
@@ -5008,9 +5043,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
-  Acceleration: 0
-  Deceleration: 0
-  InternalSpeedMultiplier: 0
+  Acceleration: 1
+  Deceleration: 1
+  InternalSpeedMultiplier: 0.2
   IsFocusing: 1
   UseProjectionOnPlane: 1
   MotionType: 1
@@ -5055,20 +5090,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
-  Acceleration: 10
+  Acceleration: 0
   Deceleration: 2
   InternalSpeedMultiplier: 1
   IsFocusing: 1
   UseProjectionOnPlane: 1
-  MotionType: 0
-  useAutoCalculatedPlayerSpeedMultiplier: 0
-  slopeAffectRate: 0
+  MotionType: 1
+  useAutoCalculatedPlayerSpeedMultiplier: 1
+  slopeAffectRate: 0.572
   slideHeightMultiplier: 0.2
   speedTresholdForExitSliding: 0.5
   turnSmoothTime: 20
-  maxSlideAngle: 85
-  jumpSlidespeed: 2
+  jumpSlidespeed: 6
   slipTime: 0.5
+  slideSpeed: 50
   requiredSpeedMultiplierToSlip: 0.5
 --- !u!114 &8304454482092951230
 MonoBehaviour:
@@ -5327,12 +5362,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
-  Acceleration: 0
+  Acceleration: 100
   Deceleration: 0
-  InternalSpeedMultiplier: 0
+  InternalSpeedMultiplier: 1
   IsFocusing: 1
   UseProjectionOnPlane: 1
-  MotionType: 0
+  MotionType: 1
   jumpVerticalImpulse: 1.5
   jumpPlanarImpulse: 1
   jumpCooldown: 0.2
@@ -5670,7 +5705,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5676595285015940198}
   - component: {fileID: 6970999377283817622}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtFront_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5720,7 +5755,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6214794804815642422}
   - component: {fileID: 6773436159869704871}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtSide1_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5779,7 +5814,7 @@ GameObject:
   - component: {fileID: 7272477718785123978}
   - component: {fileID: 7086266511193635847}
   - component: {fileID: 7759444575240334195}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: secondary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5973,7 +6008,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4898641790783869345}
   - component: {fileID: 4699134302754598135}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtSide1_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6022,7 +6057,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5762329097148152538}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Ring2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6037,8 +6072,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3737641590750364500}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.034270026, y: 0, z: -0.000000022351742}
+  m_LocalRotation: {x: 7.1054274e-15, y: -0, z: 0.31337753, w: -0.9496287}
+  m_LocalPosition: {x: 0.03426993, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6055,7 +6090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2891247561918603666}
   - component: {fileID: 3810447934584958302}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtBack_end_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6105,7 +6140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8716942122301536830}
   - component: {fileID: 7080584920992094434}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6154,7 +6189,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5561103828178671185}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6169,8 +6204,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3783641354077592914}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.16787012, y: 0.011883824, z: -0.06960794, w: 0.9832767}
-  m_LocalPosition: {x: 0.022342458, y: 0.109383896, z: 0.0067765648}
+  m_LocalRotation: {x: 0.16787007, y: 0.011883683, z: -0.06960712, w: 0.9832768}
+  m_LocalPosition: {x: 0.022342509, y: 0.10938416, z: 0.006777204}
   m_LocalScale: {x: 0.99999994, y: 0.99999976, z: 0.9999997}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6188,7 +6223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3380173216529760408}
   - component: {fileID: 3253545905885477534}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_Bust2_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6237,7 +6272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3177227087133567010}
   - component: {fileID: 4587471209001617299}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6485,7 +6520,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1804150718834472087}
   - component: {fileID: 897522832083243629}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail3_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6536,7 +6571,7 @@ GameObject:
   - component: {fileID: 5208148643227491212}
   - component: {fileID: 623836878794337285}
   - component: {fileID: 8545818440845402236}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: TrackObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6605,7 +6640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7689232950924032367}
   - component: {fileID: 2927277069722221873}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair5_10_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6654,7 +6689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1292520486931282950}
   - component: {fileID: 8666308827498262127}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6703,7 +6738,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7233447663668367975}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_C_Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6718,8 +6753,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3955679125734408180}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.13622193, y: -0, z: -0, w: 0.99067837}
-  m_LocalPosition: {x: -2.1635149e-17, y: 0.11191439, z: -0.014004976}
+  m_LocalRotation: {x: -0.1362193, y: -0, z: -0, w: 0.9906788}
+  m_LocalPosition: {x: -2.1635149e-17, y: 0.11191443, z: -0.014004922}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6736,7 +6771,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1013659185113061688}
   - component: {fileID: 263875924931591241}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6973,7 +7008,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 477469608046963335}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Thumb2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6988,8 +7023,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4211832490715177403}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00006002188, y: 0.0027946683, z: -0.022355469, w: 0.9997462}
-  m_LocalPosition: {x: 0.04646867, y: 0.000015127237, z: -0.0000008031223}
+  m_LocalRotation: {x: 0.007719673, y: 0.018605031, z: 0.21667425, w: -0.9760362}
+  m_LocalPosition: {x: 0.046469484, y: 0.000015895814, z: -0.0000008232889}
   m_LocalScale: {x: 0.9999996, y: 0.99999964, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7006,7 +7041,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1009974365257721694}
   - component: {fileID: 8953993966554492954}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair5_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7056,7 +7091,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1307398062773833580}
   - component: {fileID: 2668054886248927705}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FootStepL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7185,7 +7220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8936443928134492223}
   - component: {fileID: 6997970716398865907}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_L_CatEar2_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7235,7 +7270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8074706659708826794}
   - component: {fileID: 7467706260976058590}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtBack_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7285,7 +7320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4833188333279097001}
   - component: {fileID: 1798938641789591425}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7334,7 +7369,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7906106973796626592}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_LowerLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7349,8 +7384,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4627917235843333393}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.022809703, y: -0, z: -0, w: 0.9997399}
-  m_LocalPosition: {x: 0.000000014901161, y: -0.3518033, z: 0.0000063059365}
+  m_LocalRotation: {x: 0.6600497, y: 0.000000029802322, z: -0.000000014901168, w: 0.751222}
+  m_LocalPosition: {x: 0.000000014901161, y: -0.35180348, z: 0.0000062808404}
   m_LocalScale: {x: 1, y: 1.0000002, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7372,7 +7407,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5412940736151526289}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Little2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7387,8 +7422,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4693190607444197247}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.031346835, y: 0, z: 0.000000022351742}
+  m_LocalRotation: {x: -0, y: -0, z: 0.31337747, w: -0.94962865}
+  m_LocalPosition: {x: 0.031346917, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7405,7 +7440,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1554333153148208399}
   - component: {fileID: 4063578260973779420}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7454,7 +7489,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5722524574432379143}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RightHandTarget
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
@@ -7486,7 +7521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6118791904256197356}
   - component: {fileID: 237975879188668604}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtSide2_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7538,7 +7573,7 @@ GameObject:
   - component: {fileID: 6010334551619203927}
   - component: {fileID: 1715344230590793408}
   - component: {fileID: 6874273541238623661}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_C_UpperChest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7553,8 +7588,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4829002690729819095}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.10797432, y: -0, z: -0, w: 0.99415374}
-  m_LocalPosition: {x: 3.122814e-17, y: 0.108369395, z: -0.0014527516}
+  m_LocalRotation: {x: -0.10797621, y: 0.000000014901161, z: -0.000000029802322, w: 0.9941535}
+  m_LocalPosition: {x: 3.122814e-17, y: 0.10836949, z: -0.0014543742}
   m_LocalScale: {x: 1, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7626,7 +7661,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3262442395398821441}
   - component: {fileID: 9029316836118855414}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtSide2_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7676,7 +7711,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7353299281329765688}
   - component: {fileID: 5796132115005962759}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7726,7 +7761,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7446632691845682976}
   - component: {fileID: 6807773822729558336}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: HeadRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7773,7 +7808,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9078238438905383169}
   - component: {fileID: 5301912942446237372}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7822,7 +7857,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3238792229711280539}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Middle3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7837,8 +7872,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5056251463843558524}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.022791365, y: 0, z: -0.000000007450581}
+  m_LocalRotation: {x: 7.1054274e-15, y: -0, z: 0.31337747, w: -0.94962865}
+  m_LocalPosition: {x: 0.022791386, y: 0, z: -0.000000014901161}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7854,7 +7889,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5700736035300307031}
   - component: {fileID: 4471688523233660451}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Hair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8095,7 +8130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2978295696852515465}
   - component: {fileID: 5984251606901727606}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtFront_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8145,7 +8180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6989358544433949921}
   - component: {fileID: 4085566506790574101}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_13_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8194,7 +8229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 232819623333244715}
   - component: {fileID: 5660729972356535805}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_C_Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8209,8 +8244,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5280692327968189196}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22687021, y: -0, z: -0, w: 0.973925}
-  m_LocalPosition: {x: 9.800484e-17, y: 0.13719673, z: 0.00768582}
+  m_LocalRotation: {x: 0.22686821, y: -0.000000029802322, z: 0.000000014901161, w: 0.9739255}
+  m_LocalPosition: {x: 9.800484e-17, y: 0.1371963, z: 0.007688755}
   m_LocalScale: {x: 1, y: 0.9999998, z: 0.9999998}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8247,7 +8282,7 @@ GameObject:
   - component: {fileID: 7738174617967754987}
   - component: {fileID: 7394925685636287089}
   - component: {fileID: 6913314273517450631}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_LowerArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8262,8 +8297,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5404746137353753531}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000047516803, y: 0.0008457279, z: -0.000000014863447, w: 0.99999964}
-  m_LocalPosition: {x: -0.21932144, y: -0.00000010800827, z: -0.000017682298}
+  m_LocalRotation: {x: -0.000000012107192, y: 0.6427427, z: -0.000000015832482, w: 0.7660821}
+  m_LocalPosition: {x: -0.21932285, y: -0.000000003268167, z: 9.7398936e-17}
   m_LocalScale: {x: 1.0000001, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8348,7 +8383,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5325291899736894404}
   - component: {fileID: 8473831402593775208}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair5_07_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8396,7 +8431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5249326388593921346}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Middle3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8411,8 +8446,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5417175873147191072}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.022791365, y: 0, z: -0.000000007450581}
+  m_LocalRotation: {x: -7.1054274e-15, y: -0, z: 0.31337747, w: 0.94962865}
+  m_LocalPosition: {x: -0.022791386, y: 0, z: -0.000000014901161}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8428,7 +8463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6980455492756879985}
   - component: {fileID: 5978057724805465887}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtSide2_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8478,7 +8513,7 @@ GameObject:
   m_Component:
   - component: {fileID: 626122805326176008}
   - component: {fileID: 5961780224922340148}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair4_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8527,7 +8562,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7707845372439258287}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Ring3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8542,8 +8577,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5488419749602647362}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000000767962, y: -0.011434329, z: 0.0062165386, w: 0.9999153}
-  m_LocalPosition: {x: -0.01977334, y: 0.0000026072564, z: 0.000004183084}
+  m_LocalRotation: {x: 0.0035845023, y: -0.010862196, z: 0.31925642, w: 0.9475994}
+  m_LocalPosition: {x: -0.019777536, y: 0.00000011920932, z: -0.000000014901161}
   m_LocalScale: {x: 1, y: 1.0000002, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8558,7 +8593,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1432184185073149518}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_ToeBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8573,8 +8608,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5530493134459183928}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.002166694, y: -0, z: -0, w: 0.99999774}
-  m_LocalPosition: {x: 0, y: -0.062299293, z: 0.110770345}
+  m_LocalRotation: {x: 0.002154531, y: -0, z: -0, w: 0.9999977}
+  m_LocalPosition: {x: 0, y: -0.062300023, z: 0.110771045}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8590,7 +8625,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7869566479447592042}
   - component: {fileID: 8645166025241645550}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8640,7 +8675,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6113387696182621777}
   - component: {fileID: 4245499161165901395}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8693,7 +8728,7 @@ GameObject:
   - component: {fileID: 4284014779476992263}
   - component: {fileID: 3164433072809206667}
   - component: {fileID: 6757239706087281}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_LowerArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8708,8 +8743,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5696757131323935879}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000047516803, y: -0.0008457279, z: 0.000000014863447, w: 0.99999964}
-  m_LocalPosition: {x: 0.21932144, y: -0.00000010800827, z: -0.000017682298}
+  m_LocalRotation: {x: -0.000000025145706, y: -0.6427426, z: 0.000000072643154, w: 0.7660822}
+  m_LocalPosition: {x: 0.21932285, y: -0.000000003268167, z: 9.7398936e-17}
   m_LocalScale: {x: 1.0000001, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8794,7 +8829,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3763249829967108155}
   - component: {fileID: 1294579931799439571}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtFront_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8843,7 +8878,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7798862153675828372}
   - component: {fileID: 4023738605605530748}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail8_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8894,7 +8929,7 @@ GameObject:
   - component: {fileID: 4755224379926344491}
   - component: {fileID: 8171863783321865121}
   - component: {fileID: 3138734629180958962}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8909,8 +8944,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5748448249518585088}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000004470348, y: -0.0000000027939675, z: -0.07061509, w: 0.99750364}
-  m_LocalPosition: {x: -0.086891286, y: 0.00000027384425, z: -0.00000006366726}
+  m_LocalRotation: {x: 0.017244736, y: 0.2436006, z: 0.26651454, w: 0.9323794}
+  m_LocalPosition: {x: -0.08689127, y: -0.00000011023081, z: -0.000000028606879}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8978,7 +9013,7 @@ GameObject:
   m_Component:
   - component: {fileID: 583744884586519058}
   - component: {fileID: 3248201032367765660}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtBack_end_02_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9027,7 +9062,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1635082741114846730}
   - component: {fileID: 8651596110149865220}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9077,7 +9112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7469685292135196908}
   - component: {fileID: 632517753901248702}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtSide2_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9127,7 +9162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4760828842920948404}
   - component: {fileID: 9149763029636715279}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_Bust2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9177,7 +9212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8341802295655986328}
   - component: {fileID: 7762840967577473139}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtSide1_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9227,7 +9262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 956288432121934063}
   - component: {fileID: 374203161549180509}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtFront_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9277,7 +9312,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9068392347625425483}
   - component: {fileID: 1196058086556629200}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtFront_end_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9327,7 +9362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5638018357266883090}
   - component: {fileID: 2456668314675687010}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail8_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9377,7 +9412,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2729268671465168311}
   - component: {fileID: 3023219102906218473}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtBack_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9429,7 +9464,7 @@ GameObject:
   - component: {fileID: 7783186197547323465}
   - component: {fileID: 6315520468833341514}
   - component: {fileID: 3712639313406768553}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: NearestTrackableFinder
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -9526,7 +9561,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2400409774824650189}
   - component: {fileID: 7051238121140486957}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_Bust2_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9574,7 +9609,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5748996601217049969}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Index3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9589,8 +9624,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6402876507474114034}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000015992553, y: 0.0025861443, z: 0.0029295115, w: 0.9999924}
-  m_LocalPosition: {x: -0.02042045, y: -0.000000048211678, z: -0.0000010934967}
+  m_LocalRotation: {x: 0.011259268, y: 0.0022498805, z: 0.31595108, w: 0.9487061}
+  m_LocalPosition: {x: -0.02042029, y: -0.00000006049318, z: -0.0000005346274}
   m_LocalScale: {x: 1, y: 1.0000002, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9606,7 +9641,7 @@ GameObject:
   m_Component:
   - component: {fileID: 308205438940467838}
   - component: {fileID: 6498404509136046580}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_C_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9621,8 +9656,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6482750423461419723}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.054336958, y: -0.00000022020465, z: -0.00000001198188, w: 0.99852264}
-  m_LocalPosition: {x: -2.6061242e-10, y: 0.073731795, z: 0.00034762436}
+  m_LocalRotation: {x: 0.036857758, y: 0.00027316812, z: -0.000014930965, w: 0.9993205}
+  m_LocalPosition: {x: -1.6058961e-10, y: 0.07373404, z: 0.00036409227}
   m_LocalScale: {x: 1, y: 1.0000001, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9648,6 +9683,7 @@ Transform:
   - {fileID: 8441105104995904213}
   - {fileID: 1210668439614761606}
   - {fileID: 5208148643227491212}
+  - {fileID: 1018370520228649236}
   m_Father: {fileID: 232819623333244715}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6498404509136046580
@@ -9677,7 +9713,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8021582185860765364}
   - component: {fileID: 5463056525024936649}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9727,7 +9763,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8902145490104688661}
   - component: {fileID: 6952765944781309760}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtBack_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9777,7 +9813,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2498136382585767137}
   - component: {fileID: 8291523685350598954}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair5_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9826,7 +9862,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3983015300959781055}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Thumb2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9841,8 +9877,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6516029860665555085}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00006002188, y: -0.0027946683, z: 0.022355469, w: 0.9997462}
-  m_LocalPosition: {x: -0.04646867, y: 0.000015127237, z: -0.0000008031223}
+  m_LocalRotation: {x: -0.0077196937, y: 0.018605033, z: 0.21667431, w: 0.97603613}
+  m_LocalPosition: {x: -0.046469484, y: 0.000015895814, z: -0.0000008232889}
   m_LocalScale: {x: 0.9999996, y: 0.99999964, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9859,7 +9895,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8314832990328010201}
   - component: {fileID: 2204619867055061887}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9908,7 +9944,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8244020449690395751}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Index2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9923,8 +9959,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6648316211238118216}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0001379414, y: -0.009555165, z: 0.014440291, w: 0.9998501}
-  m_LocalPosition: {x: -0.033163816, y: 0.0000013084506, z: -0.0000013062911}
+  m_LocalRotation: {x: 0.009206254, y: -0.009132039, z: 0.3269276, w: 0.9449604}
+  m_LocalPosition: {x: -0.033166952, y: -0.0000000014631106, z: -0.0000013928285}
   m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 1.0000002}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9941,7 +9977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7169441922605522648}
   - component: {fileID: 1997262580350710286}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9991,7 +10027,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3910322844771131792}
   - component: {fileID: 7604677331421457041}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_04_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10040,7 +10076,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8612528350762616989}
   - component: {fileID: 1004948251363081151}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10090,7 +10126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7877258545664707916}
   - component: {fileID: 5388055767025367375}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_L_CatEar2_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10139,7 +10175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8632029466493258046}
   - component: {fileID: 3427884890138305471}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail4_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10189,7 +10225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5908679360637117382}
   - component: {fileID: 2743870741269371820}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10239,7 +10275,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4486402221189060015}
   - component: {fileID: 7371293346454914121}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10288,7 +10324,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6269324032066743831}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Index1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10303,8 +10339,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7273944078155113429}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000004068987, y: -0.0097104255, z: 0.0000000070175723, w: 0.9999529}
-  m_LocalPosition: {x: -0.065282464, y: 0.007362841, z: 0.019612981}
+  m_LocalRotation: {x: 0.0027785792, y: 0.06713655, z: 0.28649452, w: 0.95572275}
+  m_LocalPosition: {x: -0.065282404, y: 0.0073629636, z: 0.019610306}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10320,7 +10356,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8721669174954089028}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Little3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10335,8 +10371,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7286462572779171329}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000063422874, y: -0.009609775, z: 0.007768749, w: 0.99992365}
-  m_LocalPosition: {x: 0.018065766, y: 0.0000003703225, z: 0.00000044384169}
+  m_LocalRotation: {x: 0.0030115421, y: 0.009125681, z: 0.30597627, w: -0.9519906}
+  m_LocalPosition: {x: 0.018066347, y: 0.00000011920932, z: 0.0000000037252903}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10352,7 +10388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7342765054012765506}
   - component: {fileID: 7578076760760011792}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_12_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10401,7 +10437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4654985454669200700}
   - component: {fileID: 6672138762413809499}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail7_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10450,7 +10486,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8321008857365799591}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Ring3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10465,8 +10501,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7447639467898390399}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000000767962, y: 0.011434329, z: -0.0062165386, w: 0.9999153}
-  m_LocalPosition: {x: 0.01977334, y: 0.0000026072564, z: 0.000004183084}
+  m_LocalRotation: {x: -0.0035845044, y: -0.010862195, z: 0.3192566, w: -0.94759935}
+  m_LocalPosition: {x: 0.019777536, y: 0.00000011920932, z: -0.000000014901161}
   m_LocalScale: {x: 1, y: 1.0000002, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10482,7 +10518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3142537850202544229}
   - component: {fileID: 6250087974684448563}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10531,7 +10567,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3980734331888840944}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Ring1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10546,8 +10582,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7553798677910876645}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 2.3245292e-16, w: 1}
-  m_LocalPosition: {x: -0.065417975, y: 0.007362962, z: -0.0135559775}
+  m_LocalRotation: {x: -0, y: -0.038284965, z: 0.2871372, w: 0.9571241}
+  m_LocalPosition: {x: -0.065417945, y: 0.0073629636, z: -0.013556005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10564,7 +10600,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8189575257967435230}
   - component: {fileID: 1072735691033622016}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_R_CatEar2_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10613,7 +10649,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2299754028737633495}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_ToeBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10628,8 +10664,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7620336166882882768}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.002166694, y: -0, z: -0, w: 0.99999774}
-  m_LocalPosition: {x: 0, y: -0.062299293, z: 0.110770345}
+  m_LocalRotation: {x: 0.002154531, y: -0, z: -0, w: 0.9999977}
+  m_LocalPosition: {x: 0, y: -0.062300023, z: 0.110771045}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10645,7 +10681,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4677949290483490363}
   - component: {fileID: 4563770967080097041}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtSide2_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10693,7 +10729,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2999652778646453987}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_UpperLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10708,8 +10744,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7649505933932714880}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.052454762, y: -0, z: -0, w: 0.9986233}
-  m_LocalPosition: {x: 0.0769738, y: -0.03982422, z: 0.0013621874}
+  m_LocalRotation: {x: -0.30917522, y: -0, z: 0.000000029802326, w: 0.95100516}
+  m_LocalPosition: {x: 0.0769738, y: -0.039824225, z: 0.0013630213}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10726,7 +10762,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8249200468004858038}
   - component: {fileID: 6434849897274322257}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtFront_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10776,7 +10812,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7600834104956612683}
   - component: {fileID: 7908486540001883436}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair4_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10826,7 +10862,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9062246686250422789}
   - component: {fileID: 8250861215979047267}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10876,7 +10912,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7475838164386883271}
   - component: {fileID: 7757948315405214090}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtBack_end_02_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10925,7 +10961,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6534271627196270235}
   - component: {fileID: 767085966695326660}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10975,7 +11011,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6928682191559664862}
   - component: {fileID: 8623719611849928731}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_14_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11024,7 +11060,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5350389634716649156}
   - component: {fileID: 4773557851670658015}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_Bust2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11074,7 +11110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4265207997956369960}
   - component: {fileID: 8622338651955280078}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtSide2_end_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11124,7 +11160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 712822916654114035}
   - component: {fileID: 2291850210403279589}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_R_CatEar2_end_01_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11172,7 +11208,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5997256765836985323}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11187,8 +11223,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8177785377788766972}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.030527594, y: -0, z: -0, w: 0.99953395}
-  m_LocalPosition: {x: 0, y: -0.41376987, z: 0.0026469363}
+  m_LocalRotation: {x: -0.030527769, y: -0, z: 1.7763567e-15, w: 0.99953395}
+  m_LocalPosition: {x: 0, y: -0.41377017, z: 0.0026453997}
   m_LocalScale: {x: 1, y: 0.99999976, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11206,7 +11242,7 @@ GameObject:
   m_Component:
   - component: {fileID: 563081907672996062}
   - component: {fileID: 3095968926564877164}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_L_CatEar2_end_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11256,7 +11292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7490810643344377722}
   - component: {fileID: 7586530937070316168}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair5_09_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11305,7 +11341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3660164711745038230}
   - component: {fileID: 621856212408475230}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11355,7 +11391,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1603028202417692645}
   - component: {fileID: 2917252005077358389}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11370,8 +11406,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8326644840774001567}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000475168, y: -0.0008457279, z: 0.000000014863447, w: 0.99999964}
-  m_LocalPosition: {x: -0.2138984, y: 0.0000022591978, z: 0.000030468}
+  m_LocalRotation: {x: -0, y: -0, z: 4.884981e-15, w: 1}
+  m_LocalPosition: {x: -0.21389699, y: 0.000002264977, z: 0.00001283735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11409,7 +11445,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2979377510052142951}
   - component: {fileID: 4626439500188150802}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11459,7 +11495,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7740220687678780060}
   - component: {fileID: 7522522613176853822}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_R_CoatSkirtSide2_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11509,7 +11545,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5874929506593595940}
   - component: {fileID: 6521163826048534522}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtSide1_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11559,7 +11595,7 @@ GameObject:
   m_Component:
   - component: {fileID: 529031669599219053}
   - component: {fileID: 5397637570528320211}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11609,7 +11645,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6023735298391114831}
   - component: {fileID: 5686695561558203552}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair5_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11658,7 +11694,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8104937711340642010}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_C_Hips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11673,8 +11709,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8442195236302980178}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06289843, y: -0, z: -0, w: 0.99801993}
-  m_LocalPosition: {x: 0, y: 0.92346996, z: 0.0035753676}
+  m_LocalRotation: {x: 0.06289842, y: -0.0000000044015076, z: 0.000000005181867, w: 0.99801993}
+  m_LocalPosition: {x: -0.0013173074, y: -0.038387235, z: -0.021560192}
   m_LocalScale: {x: 1, y: 0.9999999, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11694,7 +11730,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7459498533981850582}
   - component: {fileID: 8501823390448514250}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11744,7 +11780,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6188650539343870406}
   - component: {fileID: 1652946864684140876}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair1_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11794,7 +11830,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3429759024602398388}
   - component: {fileID: 3460454003448778982}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11844,7 +11880,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974097305035313667}
   - component: {fileID: 2804326618230094738}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11894,7 +11930,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3678791553850405821}
   - component: {fileID: 8950223454345137770}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail6_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11944,7 +11980,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3734241044646610244}
   - component: {fileID: 7079568968921850376}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair4_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11994,7 +12030,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1709460950622880377}
   - component: {fileID: 2473838282665604274}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12044,7 +12080,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3833975374071139272}
   - component: {fileID: 8133297471844642407}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Opt_C_CatTail5_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12093,7 +12129,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7628740816879876200}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Middle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12108,8 +12144,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8805411616791728509}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.03694383, y: 0, z: 0}
+  m_LocalRotation: {x: -7.1054274e-15, y: -0, z: 0.31337747, w: 0.94962865}
+  m_LocalPosition: {x: -0.036943793, y: -0.00000011920932, z: 0.0000000037252903}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12125,7 +12161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5876889527487321653}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Adj_R_FaceEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12140,8 +12176,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8849181366683786829}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.020395475, y: 0.18894756, z: -0.006159069, w: 0.98175603}
-  m_LocalPosition: {x: 0.015936973, y: 0.060464155, z: 0.02132459}
+  m_LocalRotation: {x: 0.020395404, y: 0.1889471, z: -0.0061590606, w: 0.9817561}
+  m_LocalPosition: {x: 0.01593699, y: 0.060463496, z: 0.021305973}
   m_LocalScale: {x: 0.99999994, y: 1.0000001, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12156,7 +12192,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 914979818551167058}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_R_Index1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12171,8 +12207,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8854008987883592132}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000004068987, y: 0.0097104255, z: -0.0000000070175723, w: 0.9999529}
-  m_LocalPosition: {x: 0.065282464, y: 0.007362841, z: 0.019612981}
+  m_LocalRotation: {x: -0.0027785788, y: 0.06713655, z: 0.28649446, w: -0.95572275}
+  m_LocalPosition: {x: 0.065282404, y: 0.0073629636, z: 0.019610306}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12189,7 +12225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4410491955066990026}
   - component: {fileID: 8659567398290044503}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12239,7 +12275,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3996817022830722555}
   - component: {fileID: 1595343360152451260}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair2_14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12289,7 +12325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8451576578086631014}
   - component: {fileID: 8591163794166937777}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_Hair3_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12339,7 +12375,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4233371871823880509}
   - component: {fileID: 7937845735604880645}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RightHandAim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12395,7 +12431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 293849199675653640}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Bip_L_Ring2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12410,8 +12446,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9128751118819507887}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.034270026, y: 0, z: -0.000000022351742}
+  m_LocalRotation: {x: -5.2327934e-15, y: -0, z: 0.31337753, w: 0.9496287}
+  m_LocalPosition: {x: -0.03426993, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12428,7 +12464,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1471017361706392845}
   - component: {fileID: 3255985329350919191}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: J_Sec_L_CoatSkirtFront_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

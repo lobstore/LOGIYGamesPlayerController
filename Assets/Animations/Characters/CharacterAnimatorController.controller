@@ -2339,12 +2339,12 @@ AnimatorStateMachine:
   m_EntryTransitions:
   - {fileID: 8661927534249901949}
   m_StateMachineTransitions:
-  - first: {fileID: 4237130971827686398}
-    second:
-    - {fileID: -4083470930634532886}
   - first: {fileID: -4653152044506742034}
     second:
     - {fileID: -869773826286604009}
+  - first: {fileID: 4237130971827686398}
+    second:
+    - {fileID: -4083470930634532886}
   m_StateMachineBehaviours:
   - {fileID: -1357318795653651908}
   - {fileID: -6484691328233203120}
@@ -2474,24 +2474,24 @@ AnimatorStateMachine:
     - {fileID: -3176827979216995322}
     - {fileID: 7382870870819448823}
     - {fileID: 3704943636007337431}
+  - first: {fileID: 2518387403826169624}
+    second:
+    - {fileID: -8556225358824716510}
+    - {fileID: 1980128554843855417}
+    - {fileID: -5617937570731961479}
+  - first: {fileID: 7138453214340666131}
+    second:
+    - {fileID: -1394246212671552960}
   - first: {fileID: 1300231003425257662}
     second:
     - {fileID: -8262818429473420611}
     - {fileID: -7150818219190046792}
     - {fileID: 5012207726023744606}
     - {fileID: 4002551404626391677}
-  - first: {fileID: 2518387403826169624}
-    second:
-    - {fileID: -8556225358824716510}
-    - {fileID: 1980128554843855417}
-    - {fileID: -5617937570731961479}
   - first: {fileID: 1255699695766555364}
     second:
     - {fileID: 3501585314022461350}
     - {fileID: -6231620174762001772}
-  - first: {fileID: 7138453214340666131}
-    second:
-    - {fileID: -1394246212671552960}
   - first: {fileID: -5771468056608768662}
     second:
     - {fileID: -6600459702600143294}
@@ -2759,7 +2759,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Locomotion Free
+  m_Name: Locomotion
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
