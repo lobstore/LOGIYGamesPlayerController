@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UniGLTF.Extensions.VRMC_springBone;
 using UnityEngine;
 namespace LOGIYGames
 {
@@ -71,6 +72,7 @@ namespace LOGIYGames
         [SerializeField] bool useGravity;
         [SerializeField] float gravityMultiplier;
         [SerializeField] private float groundMagnit;
+        [SerializeField] private float pushPower = 2;
 
         public bool UseGravity { get => useGravity; set => useGravity = value; }
 
@@ -165,6 +167,33 @@ namespace LOGIYGames
             Vector3 newVelocity;
             newVelocity = HandleSteepWalls(new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z));
             controller.Move(newVelocity * Time.deltaTime);
+
+        }
+        void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            Rigidbody body = hit.collider.attachedRigidbody;
+
+            // no rigidbody
+            if (body == null || body.isKinematic)
+            {
+                return;
+            }
+
+            // We dont want to push objects below us
+            if (hit.moveDirection.y < -0.3)
+            {
+                return;
+            }
+
+            // Calculate push direction from move direction,
+            // we only push objects to the sides never up and down
+            Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+
+            // If you know how fast your character is trying to move,
+            // then you can also multiply the push velocity by that.
+
+            // Apply the push
+            body.AddForce(pushDir * pushPower, ForceMode.Force);
         }
         private Vector3 HandleSteepWalls(Vector3 velocity)
         {
@@ -190,11 +219,11 @@ namespace LOGIYGames
             if (IsGrounded
                 && verticalVelocity < 0)
             {
-                verticalVelocity = groundMagnit ;
+                verticalVelocity = groundMagnit;
             }
             else
             {
-                verticalVelocity += (Physics.gravity.y - Weight/10)  * Time.deltaTime * gravityMultiplier;
+                verticalVelocity += (Physics.gravity.y - Weight / 10) * Time.deltaTime * gravityMultiplier;
             }
         }
         public void ResetMotion()

@@ -1,6 +1,7 @@
 using LOGIYGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class JumpActionContext : AerialActionContext
 {
 
@@ -73,22 +74,52 @@ public class JumpActionContext : AerialActionContext
 
     private void ExecuteJump()
     {
-        player.VerticalVelocity = Mathf.Sqrt(jumpVerticalImpulse * -2f * Physics.gravity.y);
-        if (MovementInput.magnitude > 0)
+        switch (MotionType)
         {
-            if (IsFocusing)
-            {
+            case MotionType.RigidBody:
+                {
+                    var rb = GetComponent<Rigidbody>();
+                    rb.AddForce(Vector3.up * jumpVerticalImpulse * -2f * Physics.gravity.y, ForceMode.Impulse);
+                    if (MovementInput.magnitude > 0)
+                    {
+                        if (IsFocusing)
+                        {
+                            rb.AddForce(player.transform.forward * player.TotalSpeedMultiplier * MovementInput.magnitude * jumpPlanarImpulse, ForceMode.Impulse);
+                        }
+                        else
+                        {
+                            rb.AddForce((player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse, ForceMode.Impulse);
+                        }
+                    }
+                }
+                break;
+            case MotionType.CharacterController:
+                {
+                    player.VerticalVelocity = Mathf.Sqrt(jumpVerticalImpulse * -2f * Physics.gravity.y);
+                    if (MovementInput.magnitude > 0)
+                    {
+                        if (IsFocusing)
+                        {
 
-                player.HorizontalVelocity += player.transform.forward * player.TotalSpeedMultiplier * MovementInput.magnitude * jumpPlanarImpulse;
-            }
-            else
-            {
-                player.HorizontalVelocity += (player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse;
+                            player.HorizontalVelocity += player.transform.forward * player.TotalSpeedMultiplier * MovementInput.magnitude * jumpPlanarImpulse;
+                        }
+                        else
+                        {
+                            player.HorizontalVelocity += (player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse;
 
-            }
+                        }
+                    }
+
+                }
+                break;
+            case MotionType.AnimatorController:
+                break;
+            default:
+                break;
         }
         animator?.CrossFade("JumpUpward", 0.05f);
         currentJumpCount--;
+
     }
 
     public override void EnterState()

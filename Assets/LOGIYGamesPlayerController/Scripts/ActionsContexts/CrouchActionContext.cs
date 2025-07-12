@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterModule))]
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(SensorsModule))]
+[DefaultExecutionOrder(-1)]
 public class CrouchActionContext : LocomotionActionContext
 {
 

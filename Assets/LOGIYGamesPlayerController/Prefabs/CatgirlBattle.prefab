@@ -4937,6 +4937,8 @@ MonoBehaviour:
   <BaseSpeed>k__BackingField: 5
   useGravity: 1
   gravityMultiplier: 1.5
+  groundMagnit: -10
+  pushPower: 2
 --- !u!114 &310127018671441999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5029,7 +5031,7 @@ MonoBehaviour:
   MotionType: 1
   useAutoCalculatedPlayerSpeedMultiplier: 1
   slopeAffectRate: 0.134
-  smoothTime: 0.2
+  smoothTime: 0.1
 --- !u!114 &1411414839543553356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5101,7 +5103,7 @@ MonoBehaviour:
   slideHeightMultiplier: 0.2
   speedTresholdForExitSliding: 0.5
   turnSmoothTime: 20
-  jumpSlidespeed: 6
+  jumpSlidespeed: 10
   slipTime: 0.5
   slideSpeed: 50
   requiredSpeedMultiplierToSlip: 0.5
@@ -5362,7 +5364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
-  Acceleration: 100
+  Acceleration: 0
   Deceleration: 0
   InternalSpeedMultiplier: 1
   IsFocusing: 1
