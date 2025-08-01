@@ -150,7 +150,7 @@ namespace LOGIYGames
             Vector3 desiredDirection = position - transform.position;
             RotateToDirection(desiredDirection.normalized);
         }
-        public void Rotate(Quaternion targetRotation, float turnSmoothTime)
+        public void Rotate(Quaternion targetRotation, float turnSmoothTime = 0)
         {
             if (turnSmoothTime != 0)
             {

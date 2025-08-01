@@ -412,6 +412,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UIEngage"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5ab2806-3d6b-400f-a53a-b2f39386e2bf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -456,6 +465,28 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Voice"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2dc36a14-2bcf-4856-b6e2-c6664b731bcb"",
+                    ""path"": ""<Keyboard>/leftAlt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""UIEngage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f271b2dc-78aa-4aa3-9f1e-b5f84d41ae3e"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""UIEngage"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -589,6 +620,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_GameControl = asset.FindActionMap("GameControl", throwIfNotFound: true);
         m_GameControl_Escape = m_GameControl.FindAction("Escape", throwIfNotFound: true);
         m_GameControl_Voice = m_GameControl.FindAction("Voice", throwIfNotFound: true);
+        m_GameControl_UIEngage = m_GameControl.FindAction("UIEngage", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Look = m_Camera.FindAction("Look", throwIfNotFound: true);
@@ -959,6 +991,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private List<IGameControlActions> m_GameControlActionsCallbackInterfaces = new List<IGameControlActions>();
     private readonly InputAction m_GameControl_Escape;
     private readonly InputAction m_GameControl_Voice;
+    private readonly InputAction m_GameControl_UIEngage;
     /// <summary>
     /// Provides access to input actions defined in input action map "GameControl".
     /// </summary>
@@ -978,6 +1011,10 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GameControl/Voice".
         /// </summary>
         public InputAction @Voice => m_Wrapper.m_GameControl_Voice;
+        /// <summary>
+        /// Provides access to the underlying input action "GameControl/UIEngage".
+        /// </summary>
+        public InputAction @UIEngage => m_Wrapper.m_GameControl_UIEngage;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1010,6 +1047,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Voice.started += instance.OnVoice;
             @Voice.performed += instance.OnVoice;
             @Voice.canceled += instance.OnVoice;
+            @UIEngage.started += instance.OnUIEngage;
+            @UIEngage.performed += instance.OnUIEngage;
+            @UIEngage.canceled += instance.OnUIEngage;
         }
 
         /// <summary>
@@ -1027,6 +1067,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Voice.started -= instance.OnVoice;
             @Voice.performed -= instance.OnVoice;
             @Voice.canceled -= instance.OnVoice;
+            @UIEngage.started -= instance.OnUIEngage;
+            @UIEngage.performed -= instance.OnUIEngage;
+            @UIEngage.canceled -= instance.OnUIEngage;
         }
 
         /// <summary>
@@ -1324,6 +1367,13 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnVoice(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UIEngage" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUIEngage(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Camera" which allows adding and removing callbacks.

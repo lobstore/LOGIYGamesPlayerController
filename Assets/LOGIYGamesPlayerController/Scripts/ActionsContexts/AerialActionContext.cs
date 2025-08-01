@@ -3,7 +3,7 @@
 public abstract class AerialActionContext : ActionContextBase
 {
 
-    protected override void ChangeVelocity(Vector3 moveDirection)
+    protected override void ChangeVelocity()
     {
         
         Vector3 desiredVelocity = moveDirection * player.CurrentSpeed;

@@ -60,11 +60,6 @@ public class CrouchActionContext : LocomotionActionContext
         CrouchHeight = StandingHeight * crouchHeightMultiplier;
     }
 
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
-
     public override void EnterState()
     {
         base.EnterState();

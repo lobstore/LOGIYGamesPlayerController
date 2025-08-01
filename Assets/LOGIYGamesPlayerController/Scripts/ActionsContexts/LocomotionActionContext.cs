@@ -1,6 +1,7 @@
 ﻿using LOGIYGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 [RequireComponent(typeof(CharacterModule))]
 public class LocomotionActionContext : GroundedActionContext
 {
@@ -14,7 +15,7 @@ public class LocomotionActionContext : GroundedActionContext
 
     [SerializeField] float smoothTime = 0.3f;
 
-
+    public bool IsTurning {  get; set; }
     public bool IsSprinting { get; private set; } = false;
 
 
@@ -26,18 +27,28 @@ public class LocomotionActionContext : GroundedActionContext
         animator.SetFloat(speedHash, player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
         if (IsFocusing)
         {
-            animator.SetFloat(verticalSpeedHash, MovementInput.y * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
-            animator.SetFloat(horizontalSpeedHash, MovementInput.x * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
+            Vector3 localVelocity = transform.InverseTransformDirection(player.HorizontalVelocity);
+
+            animator.SetFloat(horizontalSpeedHash, Mathf.Clamp( localVelocity.x, -1, 1) * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
+            animator.SetFloat(verticalSpeedHash, Mathf.Clamp( localVelocity.z, -1, 1) * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
         }
         else
         {
+
             animator.SetFloat(verticalSpeedHash, player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
             animator.SetFloat(horizontalSpeedHash, 0);
         }
         animator.SetFloat(yawInputHash, Mathf.Clamp(deltaY, -1, 1), smoothTime, Time.deltaTime);
     }
-
-
+    protected override void Rotate()
+    {
+        if (!IsFocusing && Vector3.Angle(transform.forward, moveDirection) > 140)
+        {
+            IsTurning = true;
+            return;
+        }
+        base.Rotate();
+    }
     public override void ExitState()
     {
         base.ExitState();

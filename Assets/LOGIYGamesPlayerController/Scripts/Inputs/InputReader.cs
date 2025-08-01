@@ -1,6 +1,10 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 public class InputEvent : UnityEvent<InputAction.CallbackContext> { }
 
@@ -11,6 +15,9 @@ namespace LOGIYGames
     {
 
         private GameInputs gameInputs;
+
+        GameObject lastUISelection;
+        GameObject firstUISelection;
 
         public Vector2 LookInput { get; private set; }
         public Vector2 MoveInput { get; private set; }
@@ -23,10 +30,13 @@ namespace LOGIYGames
         public InputEvent BlockEvent { get; private set; } = new();
         public InputEvent FocusingEvent { get; private set; } = new();
         public InputEvent ExitEvent { get; private set; } = new();
-        public InputEvent MapEvent { get; private set; } = new();
+        public InputEvent ShowMapEvent { get; private set; } = new();
         public InputEvent SprintEvent { get; private set; } = new();
         public InputEvent VoiceChatEvent { get; private set; } = new();
         public InputEvent MoveEvent { get; private set; } = new();
+        public UnityEvent UIEngaged { get; private set; } = new();
+        public UnityEvent UIDisengaged { get; private set; } = new();
+
         private void OnEnable()
         {
   
@@ -38,7 +48,7 @@ namespace LOGIYGames
                 gameInputs.GameControl.SetCallbacks(this);
                 gameInputs.Camera.SetCallbacks(this);
             }
-            EnableInputs();
+
         }
 
         private void OnDisable()
@@ -50,20 +60,121 @@ namespace LOGIYGames
                 gameInputs.GameControl.RemoveCallbacks(this);
                 gameInputs.Camera.RemoveCallbacks(this);
             }
-            DisableInputs();
         }
-        public void EnableInputs()
+        public void EnableAllInputs()
         {
-            Debug.Log("EnebleInputReader");
+            Debug.Log("EnableInputReader");
             gameInputs.Enable();
+            //var evetnSystem = EventSystem.current;
+            //if (evetnSystem == null)
+            //{
+            //    Debug.Log("None EventSystem was found in scene");
+            //    return;
+            //}
+            //var uiModule = evetnSystem.GetComponent<InputSystemUIInputModule>();
+            //if (uiModule == null)
+            //{
+            //    Debug.Log("None InputSystemUIInputModule was found in scene");
+            //    return;
+            //}
+            //if (uiModule.actionsAsset != gameInputs.asset)
+            //{
+            //    uiModule.actionsAsset = gameInputs.asset;
+            //    Debug.Log("Successfully assigned gameInputs.asset to InputSystemUIInputModule");
+            //}
+            //Debug.Log("Initialized InputReader");
         }
-        public void DisableInputs()
+        public void DisableAllInputs()
         {
             Debug.Log("DisableInputReader");
             gameInputs.Disable();
         }
+        public void EnableCharacterInputs() {
+            Debug.Log("EnablePlayerInputs");
+            gameInputs.PlayerInputs.Enable();
+        }
+        public void DisableCharacterInputs() {
+            Debug.Log("DisablePlayerInputs");
+            gameInputs.PlayerInputs.Disable();
+        }
+        public void EnableCameraInputs()
+        {
+            Debug.Log("EnableCameraInputs");
+            gameInputs.Camera.Enable();
+        }
+        public void DisableCameraInputs()
+        {
+            Debug.Log("DisableCameraInputs");
+            gameInputs.Camera.Enable();
+        }
+        public void EnableUIInputs() {
+            Debug.Log("EnableUIInputs");
+            gameInputs.UI.Enable();
+            var evetnSystem = EventSystem.current;
+            if (evetnSystem == null)
+            {
+                Debug.Log("None EventSystem was found in scene");
+                return;
+            }
+            var uiModule = evetnSystem.GetComponent<InputSystemUIInputModule>();
+            uiModule.actionsAsset.Enable();
+        }
+        public void DisableUIInputs() {
+            Debug.Log("DisableUIInputs");
+            gameInputs.UI.Enable();
+            var evetnSystem = EventSystem.current;
+            if (evetnSystem == null)
+            {
+                Debug.Log("None EventSystem was found in scene");
+                return;
+            }
+            var uiModule = evetnSystem.GetComponent<InputSystemUIInputModule>();
+            uiModule.actionsAsset.Disable();
+        }
+        public bool IsMouseDevice { get; private set; }
+        bool IsMouse(InputAction.CallbackContext context) => IsMouseDevice = context.control.device is Mouse;
+
+        public bool IsUIEngaged {  get; private set; }
+        public void OnUIEngage(InputAction.CallbackContext context)
+        {
+            if (!context.performed) return;
+            IsUIEngaged = !IsUIEngaged;
+
+            if (IsUIEngaged)
+            {
+                if (lastUISelection == null) lastUISelection = firstUISelection;
+                EventSystem.current.SetSelectedGameObject(lastUISelection);
+                DisableCharacterInputs();
+
+                Cursor.lockState = CursorLockMode.None;
+                UIEngaged?.Invoke();
+            }
+            else
+            {
+                lastUISelection = EventSystem.current.currentSelectedGameObject;
+                EventSystem.current.SetSelectedGameObject(null);
+                EnableCharacterInputs();
+                Cursor.lockState = CursorLockMode.Locked;
+                UIDisengaged?.Invoke();
+            }
+        }
+
+
+        readonly PointerEventData pointerEventData = new(EventSystem.current);
+        readonly List<RaycastResult> raycastResults = new();
+        bool IsPointerOverUI(Vector2 screenPosition)
+        {
+            pointerEventData.position = screenPosition;
+            raycastResults.Clear();
+            EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+
+            return raycastResults.Count > 0;
+        }
         public void OnAttack(InputAction.CallbackContext context)
         {
+            if (!context.performed) return;
+            var pointer = Pointer.current;
+            if (pointer != null && IsPointerOverUI(pointer.position.ReadValue())) { Debug.Log("Hover UI"); return; }
             AttackEvent.Invoke(context);
         }
 
@@ -100,6 +211,7 @@ namespace LOGIYGames
         public void OnJump(InputAction.CallbackContext context)
         {
             JumpEvent.Invoke(context);
+            IsMouse(context);
         }
 
         public void OnLook(InputAction.CallbackContext context)
@@ -109,7 +221,7 @@ namespace LOGIYGames
 
         public void OnMap(InputAction.CallbackContext context)
         {
-            MapEvent.Invoke(context);
+            ShowMapEvent.Invoke(context);
         }
 
         public void OnMove(InputAction.CallbackContext context)

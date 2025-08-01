@@ -9,9 +9,9 @@ public abstract class GroundedActionContext : ActionContextBase
     [SerializeField] protected float slopeAffectRate;
     Vector3 projectedVelocity;
 
-    protected override void ChangeVelocity(Vector3 moveDirection)
+    protected override void ChangeVelocity()
     {
-        base.ChangeVelocity(moveDirection);
+        base.ChangeVelocity();
         if (useAutoCalculatedPlayerSpeedMultiplier)
         {
             CalculateSlopeSpeedMultiplier();

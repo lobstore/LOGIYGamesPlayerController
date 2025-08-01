@@ -326,6 +326,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UIEngage",
+                    "type": "Button",
+                    "id": "d5ab2806-3d6b-400f-a53a-b2f39386e2bf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -370,6 +379,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Voice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2dc36a14-2bcf-4856-b6e2-c6664b731bcb",
+                    "path": "<Keyboard>/leftAlt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "UIEngage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f271b2dc-78aa-4aa3-9f1e-b5f84d41ae3e",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "UIEngage",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

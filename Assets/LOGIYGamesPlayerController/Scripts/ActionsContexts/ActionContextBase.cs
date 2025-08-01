@@ -9,15 +9,15 @@ public abstract class ActionContextBase : NetworkBehaviour
     [SerializeField] protected float Acceleration = 0f;
     [SerializeField] protected float Deceleration = 0f;
     [SerializeField] protected float InternalSpeedMultiplier = 0f;
+    [SerializeField] protected float TurnSmoothTime = 10f;
 
     protected CharacterModule player;
     protected SensorsModule sensors;
     protected Animator animator;
     private float turnSmoothVelocity;
-    protected float TurnSmoothTime = 10f;
     protected bool isMoving;
     protected float deltaY;
-    float targetAngle = 0;
+    protected Vector3 moveDirection;
     public Vector2 MovementInput => Input.MoveInput;
 
     [SerializeField] public bool IsFocusing = true;
@@ -31,7 +31,7 @@ public abstract class ActionContextBase : NetworkBehaviour
         sensors = GetComponent<SensorsModule>();
         player = GetComponent<CharacterModule>();
         animator = GetComponent<Animator>();
-        Input.EnableInputs();
+        Input.EnableAllInputs();
     }
 
     public virtual void EnterState()
@@ -73,86 +73,139 @@ public abstract class ActionContextBase : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        //Rotate(); // если нужно, можно раскомментировать и переопределить Rotate
+
         Move();
+
         UpdateAnimations();
     }
 
     protected virtual void Move()
     {
+
+
         GetDeltaAngle();
-        Vector3 moveDirection = RotateAndGetMovementDirection();
-        if (UseProjectionOnPlane)
-        {
-            moveDirection = Vector3.ProjectOnPlane(moveDirection, sensors.BelowHit.normal).normalized;
-        }
-        ChangeVelocity(moveDirection);
+        GetMovementDirection();
+
+
+        DebugDraw.DrawVector(transform.position, player.HorizontalVelocity, 1, 1, Color.blue, 0);
+        ChangeVelocity();
+        Rotate();
     }
 
-    protected virtual void ChangeVelocity(Vector3 moveDirection)
+    protected virtual void ChangeVelocity()
     {
         if (MovementInput.magnitude > 0)
         {
             player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier * MovementInput.magnitude, player.Acceleration * Time.deltaTime);
-        }
-        else
-        {
-            player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier * MovementInput.magnitude, player.Deceleration * Time.deltaTime);
-        }
-        if (MotionType != MotionType.AnimatorController)
-        {
-            player.HorizontalVelocity = moveDirection * player.CurrentSpeed;
+            player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, moveDirection * player.CurrentSpeed, Acceleration * Time.fixedDeltaTime );
 
         }
         else
         {
-            player.HorizontalVelocity = Vector3.zero;
+            player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, 0, player.Deceleration * Time.deltaTime);
+            player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, player.Deceleration * Time.fixedDeltaTime);
+
+            //if (IsFocusing)
+            //{
+            //    player.HorizontalVelocity = GetMovementDirectionAlongCamera() * player.CurrentSpeed;
+            //}
+            //else
+            //{
+            //    var dir = Vector3.ProjectOnPlane(player.transform.forward, sensors.BelowHit.normal).normalized;
+            //    player.HorizontalVelocity = dir * player.CurrentSpeed;
+            //}
+
+
         }
     }
 
 
-    protected virtual Vector3 RotateAndGetMovementDirection()
+    protected virtual void GetMovementDirection()
     {
         if (IsFocusing)
         {
-            return RotateAndGetDirectionAlongCamera();
+            moveDirection = GetMovementDirectionAlongCamera();
         }
         else
         {
-
-
-            return RotateAndGetDirectionRelativeCamera();
+            moveDirection = GetMovementDirectionRelativeCamera();
+        }
+        if (UseProjectionOnPlane)
+        {
+            moveDirection = Vector3.ProjectOnPlane(moveDirection, sensors.BelowHit.normal).normalized;
         }
     }
 
 
-    protected virtual Vector3 RotateAndGetDirectionAlongCamera()
+    protected virtual Vector3 GetMovementDirectionAlongCamera()
     {
-        targetAngle = Camera.main.transform.eulerAngles.y;
-        Rotate(targetAngle, TurnSmoothTime);
         return player.transform.right * MovementInput.x + player.transform.forward * MovementInput.y;
     }
 
-    protected virtual Vector3 RotateAndGetDirectionRelativeCamera()
+    protected virtual Vector3 GetMovementDirectionRelativeCamera()
     {
 
-        if (MovementInput.magnitude > 0)
+        Vector3 movement = new Vector3(MovementInput.x, 0, MovementInput.y);
+
+        Vector3 cam = Camera.main.transform.forward;
+
+        return Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement;
+
+    }
+    protected virtual void Rotate()
+    {
+        if (!IsFocusing)
         {
-            targetAngle = Mathf.Atan2(MovementInput.x, MovementInput.y) * Mathf.Rad2Deg
-                  + Camera.main.transform.eulerAngles.y;
+            RotateRelativeCamera();
+
+        }
+        else
+        {
+            RotateAlongCamera();
         }
 
-        if (MovementInput.magnitude != 0)
-        {
 
-            Rotate(targetAngle, TurnSmoothTime);
-        }
-        return player.transform.forward;
+
     }
 
-    protected virtual void Rotate(float targetAngle, float turnSmoothTime = 0)
+    private void RotateRelativeCamera()
     {
-        player.Rotate(Quaternion.Euler(0f, targetAngle, 0f), turnSmoothTime);
+        if (moveDirection.magnitude > 0f)
+        {
+            // Рассчитываем угол поворота по направлению движения
+            var targetAngle = Mathf.Atan2(player.HorizontalVelocity.x, player.HorizontalVelocity.z) * Mathf.Rad2Deg;
+
+            // Плавно поворачиваем объект в сторону этого угла
+            player.Rotate(Quaternion.Euler(0f, targetAngle, 0f));
+        }
+    }
+    protected float lastVerticalAngle = 0f;
+    protected const float angleThreshold = 45f;
+    private void RotateAlongCamera()
+    {
+        var targetAngle = Camera.main.transform.eulerAngles.y;
+        player.Rotate(Quaternion.Euler(0f, targetAngle, 0f), TurnSmoothTime);
+
+        // Получаем текущий вертикальный угол камеры (ось X)
+        float currentVerticalAngle = Camera.main.transform.eulerAngles.y;
+
+        // Считаем разницу углов с учётом перехода через 360/0 градусов
+        float deltaAngle = Mathf.DeltaAngle(lastVerticalAngle, currentVerticalAngle);
+        if (Mathf.Abs(deltaAngle) > angleThreshold)
+        {
+            if (deltaAngle > 0)
+            {
+                Debug.Log("RightTurnTriggered");
+                animator.SetTrigger("IsRightTurning");
+            }
+            else
+            {
+                Debug.Log("LeftTurnTriggered");
+                animator.SetTrigger("IsLeftTurning");
+            }
+            lastVerticalAngle = currentVerticalAngle; // сохраняем угол после срабатывания
+        }
+
     }
 
     protected virtual void UpdateAnimations()

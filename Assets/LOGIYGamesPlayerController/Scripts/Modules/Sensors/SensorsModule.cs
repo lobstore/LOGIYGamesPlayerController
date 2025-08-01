@@ -114,7 +114,7 @@ namespace LOGIYGames
                 downCheckDistance,
                 includeLayers);
 
-            GroundAngle = Vector3.Angle(characterController.transform.up, belowHit.normal);
+            GroundAngle = Vector3.SignedAngle(characterController.transform.up, belowHit.normal, characterController.transform.right);
             IsOnSlope = GroundAngle == 0 ? false : true;
 
             if (EdgeDetection())

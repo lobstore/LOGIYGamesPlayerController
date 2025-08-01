@@ -8,6 +8,8 @@ namespace LOGIYGames
 {
     public class ChatPopup : PopupBaseNetwork
     {
+        [SerializeField] InputReader Inputs;
+
         [SerializeField] GameObject fromPlayerMessagePrefab;
         [SerializeField] GameObject fromAnotherMessagePrefab;
         [SerializeField] Button sendMessageButton;
@@ -58,13 +60,24 @@ namespace LOGIYGames
 
         private void InputFieldInFocus(string str)
         {
-            PlayerInputsManager.Instance.gameObject.SetActive(false);
-            CameraInputManager.Instance.gameObject.SetActive(false);
+            Inputs.DisableCharacterInputs();
+            Inputs.DisableCameraInputs();
         }
         private void InputFieldOutFocus(string str)
         {
-            PlayerInputsManager.Instance.gameObject.SetActive(true);
-            CameraInputManager.Instance.gameObject.SetActive(true);
+
+            if (Inputs.IsUIEngaged)
+            {
+                Inputs.DisableCharacterInputs();
+                Inputs.DisableCameraInputs();
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                Inputs.EnableCharacterInputs();
+                Inputs.EnableCameraInputs();
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
         private void SendMessage()
         {

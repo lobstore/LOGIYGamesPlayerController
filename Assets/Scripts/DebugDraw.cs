@@ -49,8 +49,8 @@ public static class DebugDraw
 
 	public static void DrawVector(Vector3 position, Vector3 direction, float raySizeScale, float markerSize, Color color, float duration, bool depthTest = true)
 	{
-		Debug.DrawRay(position, direction * raySizeScale, color, 0, false);
-		DebugDraw.DrawMarker(position + direction * raySizeScale, markerSize, color, 0, false);
+		Debug.DrawRay(position, direction * raySizeScale, color, duration, false);
+		DebugDraw.DrawMarker(position + direction * raySizeScale, markerSize, color, duration, false);
 	}
 
 	public static void DrawTriangle(Vector3 a, Vector3 b, Vector3 c, Color color)

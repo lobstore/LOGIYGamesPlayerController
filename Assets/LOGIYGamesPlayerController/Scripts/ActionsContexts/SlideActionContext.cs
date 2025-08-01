@@ -66,7 +66,7 @@ public class SlideActionContext : GroundedActionContext
         switch (context.phase)
         {
             case InputActionPhase.Performed:
-                if (player.TotalSpeedMultiplier > requiredSpeedMultiplierToSlip && player.IsGrounded && !slippingTimer.IsRunning && !IsSliding)
+                if (player.TotalSpeedMultiplier > requiredSpeedMultiplierToSlip && player.IsGrounded && !slippingTimer.IsRunning && !IsSliding && sensors.GroundAngle > -30)
                 {
                     IsSliding = true;
                     slippingTimer.Start();
@@ -82,14 +82,14 @@ public class SlideActionContext : GroundedActionContext
         }
     }
 
-    protected override Vector3 RotateAndGetMovementDirection()
+    protected override void GetMovementDirection()
     {
         Vector3 lookDirection = new Vector3(player.HorizontalVelocity.x, 0f, player.HorizontalVelocity.z);
         player.RotateToDirection(lookDirection, turnSmoothTime);
-        return new Vector3(sensors.BelowHit.normal.x, 0f, sensors.BelowHit.normal.z).normalized;
+        moveDirection = new Vector3(sensors.BelowHit.normal.x, 0f, sensors.BelowHit.normal.z).normalized;
     }
 
-    protected override void ChangeVelocity(Vector3 moveDirection)
+    protected override void ChangeVelocity()
     {
         if (IsSliding)
         {
@@ -107,8 +107,17 @@ public class SlideActionContext : GroundedActionContext
             }
             else
             {
-                player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.CurrentSpeed;
-                player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, Time.deltaTime * player.Deceleration);
+                if (sensors.GroundAngle < -30)
+                {
+                    player.HorizontalVelocity = projectedVelocity * Time.deltaTime * slideSpeed;
+
+                }
+                else
+                {
+                    player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.CurrentSpeed;
+                    player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, Time.deltaTime * player.Deceleration);
+                }
+
             }
 
         }
@@ -133,7 +142,7 @@ public class SlideActionContext : GroundedActionContext
             return;
         }
 
-        if (sensors.GroundAngle > SlideSlopeAngleLimit)
+        if (Mathf.Abs(sensors.GroundAngle) > SlideSlopeAngleLimit)
         {
             IsSliding = true;
         }

@@ -34,11 +34,11 @@ public class RollActionContext : ActionContextBase
                 break;
         }
     }
-    protected override void Rotate(float targetAngle, float turnSmoothTime)
+    protected override void Rotate()
     {
         return;
     }
-    protected override void ChangeVelocity(Vector3 moveDirection)
+    protected override void ChangeVelocity()
     {
         player.HorizontalVelocity = Vector3.zero;
     }
