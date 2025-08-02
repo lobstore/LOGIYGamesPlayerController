@@ -1,7 +1,6 @@
 ﻿using LOGIYGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 [RequireComponent(typeof(CharacterModule))]
 public class LocomotionActionContext : GroundedActionContext
 {
@@ -12,12 +11,36 @@ public class LocomotionActionContext : GroundedActionContext
     private int isSprintingHash = Animator.StringToHash("IsSprinting");
     private int verticalSpeedHash = Animator.StringToHash("VerticalSpeed");
     private int horizontalSpeedHash = Animator.StringToHash("HorizontalSpeed");
-
+    private int runTurn180TriggerHash = Animator.StringToHash("BackTurn");
     [SerializeField] float smoothTime = 0.3f;
 
-    public bool IsTurning {  get; set; }
+    public bool IsTurning { get; set; }
     public bool IsSprinting { get; private set; } = false;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        Input.SprintEvent.AddListener(Sprint);
+    }
+
+    private void Sprint(InputAction.CallbackContext arg0)
+    {
+        switch (arg0.phase)
+        {
+            case InputActionPhase.Performed:
+                IsSprinting = true;
+                animator.SetBool(isSprintingHash, true);
+                InternalSpeedMultiplier = 1.5f;
+                break;
+            case InputActionPhase.Canceled:
+                animator.SetBool(isSprintingHash, false);
+                IsSprinting = false;
+                InternalSpeedMultiplier = 1f;
+                break;
+            default:
+                break;
+        }
+    }
 
     protected override void UpdateAnimations()
     {
@@ -29,8 +52,8 @@ public class LocomotionActionContext : GroundedActionContext
         {
             Vector3 localVelocity = transform.InverseTransformDirection(player.HorizontalVelocity);
 
-            animator.SetFloat(horizontalSpeedHash, Mathf.Clamp( localVelocity.x, -1, 1) * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
-            animator.SetFloat(verticalSpeedHash, Mathf.Clamp( localVelocity.z, -1, 1) * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
+            animator.SetFloat(horizontalSpeedHash, Mathf.Clamp(localVelocity.x, -1, 1) * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
+            animator.SetFloat(verticalSpeedHash, Mathf.Clamp(localVelocity.z, -1, 1) * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
         }
         else
         {
@@ -42,12 +65,18 @@ public class LocomotionActionContext : GroundedActionContext
     }
     protected override void Rotate()
     {
-        if (!IsFocusing && Vector3.Angle(transform.forward, moveDirection) > 140)
+        if (!IsFocusing && Vector3.Angle(transform.forward, moveDirection) > 140 && !IsTurning)
         {
+            Debug.Log(IsTurning);
             IsTurning = true;
+            animator.SetTrigger(runTurn180TriggerHash);
             return;
         }
-        base.Rotate();
+        else
+        {
+            base.Rotate();
+
+        }
     }
     public override void ExitState()
     {

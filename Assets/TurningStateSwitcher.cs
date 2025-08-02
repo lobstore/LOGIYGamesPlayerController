@@ -12,6 +12,11 @@ namespace LOGIYGames
                 action_context = animator.GetComponent<LocomotionActionContext>();
             }
             action_context.IsTurning = true;
+            action_context.CanMove = false;
+            if (action_context.MotionType != MotionType.AnimatorController)
+            {
+                animator.applyRootMotion = true;
+            }
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -28,6 +33,16 @@ namespace LOGIYGames
                 action_context = animator.GetComponent<LocomotionActionContext>();
             }
             action_context.IsTurning = false;
+            action_context.CanMove = true;
+            if (action_context.MotionType == MotionType.AnimatorController)
+            {
+                animator.applyRootMotion = true;
+            }
+            else
+            {
+                animator.applyRootMotion = false;
+            }
+
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,7 +9,7 @@ public class InputEvent : UnityEvent<InputAction.CallbackContext> { }
 
 namespace LOGIYGames
 {
-    [CreateAssetMenu(menuName ="Input/InputReader", fileName ="InputReader")]
+    [CreateAssetMenu(menuName = "Input/InputReader", fileName = "InputReader")]
     public class InputReader : ScriptableObject, GameInputs.IPlayerInputsActions, GameInputs.IGameControlActions, GameInputs.IUIActions, GameInputs.ICameraActions
     {
 
@@ -19,6 +18,56 @@ namespace LOGIYGames
         GameObject lastUISelection;
         GameObject firstUISelection;
 
+        public bool PlayerInputsEnable
+        {
+            get => gameInputs.PlayerInputs.enabled; 
+            set
+            {
+                if (value)
+                {
+                    gameInputs.PlayerInputs.Enable();
+                    Debug.Log("EnabledPlayerInputs");
+                }
+                else
+                {
+                    gameInputs.PlayerInputs.Disable();
+                    Debug.Log("DisabledPlayerInputs");
+                }
+            }
+        }
+
+        public bool CameraInputsEnable
+        {
+            get => gameInputs.Camera.enabled;
+            set
+            {
+                if (value)
+                {
+                    gameInputs.Camera.Enable();
+                    Debug.Log("EnableCameraInputs");
+                }
+                else
+                {
+                    gameInputs.Camera.Disable();
+                    Debug.Log("DisableCameraInputs");
+                }
+            }
+        }
+        public bool UIInputsEnable
+        {
+            get => gameInputs.UI.enabled;
+            set
+            {
+                if (value)
+                {
+                    EnableAllInputs();
+                }
+                else
+                {
+                    DisableUIInputs();
+                }
+            }
+        }
         public Vector2 LookInput { get; private set; }
         public Vector2 MoveInput { get; private set; }
         public float ZoomDelta { get; private set; }
@@ -39,7 +88,7 @@ namespace LOGIYGames
 
         private void OnEnable()
         {
-  
+
             if (gameInputs == null)
             {
                 gameInputs = new GameInputs();
@@ -53,7 +102,7 @@ namespace LOGIYGames
 
         private void OnDisable()
         {
-            if(gameInputs != null)
+            if (gameInputs != null)
             {
                 gameInputs.UI.RemoveCallbacks(this);
                 gameInputs.PlayerInputs.RemoveCallbacks(this);
@@ -89,25 +138,9 @@ namespace LOGIYGames
             Debug.Log("DisableInputReader");
             gameInputs.Disable();
         }
-        public void EnableCharacterInputs() {
-            Debug.Log("EnablePlayerInputs");
-            gameInputs.PlayerInputs.Enable();
-        }
-        public void DisableCharacterInputs() {
-            Debug.Log("DisablePlayerInputs");
-            gameInputs.PlayerInputs.Disable();
-        }
-        public void EnableCameraInputs()
+
+        private void EnableUIInputs()
         {
-            Debug.Log("EnableCameraInputs");
-            gameInputs.Camera.Enable();
-        }
-        public void DisableCameraInputs()
-        {
-            Debug.Log("DisableCameraInputs");
-            gameInputs.Camera.Enable();
-        }
-        public void EnableUIInputs() {
             Debug.Log("EnableUIInputs");
             gameInputs.UI.Enable();
             var evetnSystem = EventSystem.current;
@@ -119,7 +152,8 @@ namespace LOGIYGames
             var uiModule = evetnSystem.GetComponent<InputSystemUIInputModule>();
             uiModule.actionsAsset.Enable();
         }
-        public void DisableUIInputs() {
+        private void DisableUIInputs()
+        {
             Debug.Log("DisableUIInputs");
             gameInputs.UI.Enable();
             var evetnSystem = EventSystem.current;
@@ -134,7 +168,7 @@ namespace LOGIYGames
         public bool IsMouseDevice { get; private set; }
         bool IsMouse(InputAction.CallbackContext context) => IsMouseDevice = context.control.device is Mouse;
 
-        public bool IsUIEngaged {  get; private set; }
+        public bool IsUIEngaged { get; private set; }
         public void OnUIEngage(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
@@ -144,7 +178,7 @@ namespace LOGIYGames
             {
                 if (lastUISelection == null) lastUISelection = firstUISelection;
                 EventSystem.current.SetSelectedGameObject(lastUISelection);
-                DisableCharacterInputs();
+                PlayerInputsEnable = false;
 
                 Cursor.lockState = CursorLockMode.None;
                 UIEngaged?.Invoke();
@@ -153,7 +187,7 @@ namespace LOGIYGames
             {
                 lastUISelection = EventSystem.current.currentSelectedGameObject;
                 EventSystem.current.SetSelectedGameObject(null);
-                EnableCharacterInputs();
+                PlayerInputsEnable = true;
                 Cursor.lockState = CursorLockMode.Locked;
                 UIDisengaged?.Invoke();
             }
@@ -237,7 +271,7 @@ namespace LOGIYGames
 
         public void OnSubmit(InputAction.CallbackContext context)
         {
-            
+
         }
 
         public void OnVoice(InputAction.CallbackContext context)

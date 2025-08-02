@@ -20,11 +20,13 @@ public abstract class ActionContextBase : NetworkBehaviour
     protected Vector3 moveDirection;
     public Vector2 MovementInput => Input.MoveInput;
 
+    public bool CanMove { get => Input.PlayerInputsEnable; set => Input.PlayerInputsEnable = value; }
+
     [SerializeField] public bool IsFocusing = true;
     [SerializeField] protected bool UseProjectionOnPlane = true;
     private float lastYRotation;
 
-    [SerializeField] protected MotionType MotionType;
+    [SerializeField] public MotionType MotionType;
 
     protected virtual void Awake()
     {
@@ -97,7 +99,7 @@ public abstract class ActionContextBase : NetworkBehaviour
         if (MovementInput.magnitude > 0)
         {
             player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier * MovementInput.magnitude, player.Acceleration * Time.deltaTime);
-            player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, moveDirection * player.CurrentSpeed, Acceleration * Time.fixedDeltaTime );
+            player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, moveDirection * player.CurrentSpeed, Acceleration * Time.fixedDeltaTime);
 
         }
         else
@@ -170,13 +172,13 @@ public abstract class ActionContextBase : NetworkBehaviour
 
     private void RotateRelativeCamera()
     {
-        if (moveDirection.magnitude > 0f)
+        if (moveDirection.magnitude > 0)
         {
             // Рассчитываем угол поворота по направлению движения
             var targetAngle = Mathf.Atan2(player.HorizontalVelocity.x, player.HorizontalVelocity.z) * Mathf.Rad2Deg;
 
             // Плавно поворачиваем объект в сторону этого угла
-            player.Rotate(Quaternion.Euler(0f, targetAngle, 0f));
+            player.Rotate(Quaternion.Euler(0f, targetAngle, 0f), TurnSmoothTime);
         }
     }
     protected float lastVerticalAngle = 0f;

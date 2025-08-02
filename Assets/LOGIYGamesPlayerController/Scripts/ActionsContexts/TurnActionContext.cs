@@ -7,18 +7,12 @@ namespace LOGIYGames
         private int speedHash = Animator.StringToHash("Speed");
         private int walkTurn180Hash = Animator.StringToHash("Walk Turn 180");
         private int runTurn180Hash = Animator.StringToHash("Run Turn 180");
+
         public override void EnterState()
         {
             base.EnterState();
-            if (player.InternalSpeedMultiplier > 0.5)
-            {
-                animator.CrossFade(runTurn180Hash, 0.1f);
-                player.InternalSpeedMultiplier = 0.5f;
-            }
-            else
-            {
-                animator.CrossFade(walkTurn180Hash, 0.1f);
-            }
+
+            player.InternalSpeedMultiplier = 0.5f;
         }
         protected override void ChangeVelocity()
         {
