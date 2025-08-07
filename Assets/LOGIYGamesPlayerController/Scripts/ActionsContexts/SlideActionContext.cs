@@ -71,6 +71,7 @@ public class SlideActionContext : GroundedActionContext
                     IsSliding = true;
                     slippingTimer.Start();
                     player.HorizontalVelocity += MovementInput.magnitude * jumpSlidespeed * player.transform.forward;
+                    player.InternalSpeedMultiplier = InternalSpeedMultiplier;
                     CrouchPressed = true;
                 }
                 break;
@@ -93,7 +94,7 @@ public class SlideActionContext : GroundedActionContext
     {
         if (IsSliding)
         {
-            player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, 0, Time.deltaTime * player.Deceleration);
+
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(
             Vector3.down,
             sensors.BelowHit.normal
@@ -102,20 +103,39 @@ public class SlideActionContext : GroundedActionContext
 
             if (sensors.GroundAngle > SlideSlopeAngleLimit)
             {
-                player.HorizontalVelocity += projectedVelocity * Time.deltaTime * slideSpeed;
+                player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier, Time.deltaTime * player.Acceleration);
+                player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.CurrentSpeed;
 
             }
             else
             {
                 if (sensors.GroundAngle < -30)
                 {
-                    player.HorizontalVelocity = projectedVelocity * Time.deltaTime * slideSpeed;
+                    player.HorizontalVelocity = projectedVelocity * Time.deltaTime * player.CurrentSpeed;
 
                 }
                 else
                 {
-                    player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.CurrentSpeed;
-                    player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, Time.deltaTime * player.Deceleration);
+                    //To Do smoothly change InternalSpeed depend on angle
+                    if (sensors.GroundAngle>0)
+                    {
+                        player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, 0, Time.deltaTime * player.Deceleration/2);
+
+                        player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, Time.deltaTime * player.Deceleration/2);
+                    }
+                    else if(sensors.GroundAngle < 0)
+                    {
+                        player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, 0, Time.deltaTime * player.Deceleration*2);
+                       
+                        player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, Time.deltaTime * player.Deceleration*2);
+                    }
+                    else
+                    {
+                        player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, 0, Time.deltaTime * player.Deceleration);
+
+                        player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, Time.deltaTime * player.Deceleration);
+                    }
+                        player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.CurrentSpeed;
                 }
 
             }

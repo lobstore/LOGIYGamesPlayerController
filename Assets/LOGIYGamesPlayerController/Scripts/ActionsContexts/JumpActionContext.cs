@@ -82,14 +82,8 @@ public class JumpActionContext : AerialActionContext
                     rb.AddForce(Vector3.up * jumpVerticalImpulse * -2f * Physics.gravity.y, ForceMode.Impulse);
                     if (MovementInput.magnitude > 0)
                     {
-                        if (IsFocusing)
-                        {
-                            rb.AddForce(player.transform.forward * player.TotalSpeedMultiplier * MovementInput.magnitude * jumpPlanarImpulse, ForceMode.Impulse);
-                        }
-                        else
-                        {
-                            rb.AddForce((player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse, ForceMode.Impulse);
-                        }
+
+                        rb.AddForce((player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse, ForceMode.Impulse);
                     }
                 }
                 break;
@@ -98,16 +92,7 @@ public class JumpActionContext : AerialActionContext
                     player.VerticalVelocity = Mathf.Sqrt(jumpVerticalImpulse * -2f * Physics.gravity.y);
                     if (MovementInput.magnitude > 0)
                     {
-                        if (IsFocusing)
-                        {
-
-                            player.HorizontalVelocity += player.transform.forward * player.TotalSpeedMultiplier * MovementInput.magnitude * jumpPlanarImpulse;
-                        }
-                        else
-                        {
-                            player.HorizontalVelocity += (player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse;
-
-                        }
+                        player.HorizontalVelocity += (player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse;
                     }
 
                 }

@@ -5694,7 +5694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b69641ca45859e34b8afcbd7063235a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LookOffset: {x: 0, y: 1.5, z: 1}
+  m_LookOffset: {x: 0, y: 1.5, z: 10}
   m_BodyWeight: 0.6
   m_HeadWeight: 0.2
   m_EyesWeight: 0.2
