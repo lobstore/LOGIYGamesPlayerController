@@ -2,21 +2,21 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public abstract class ActionContextBase : NetworkBehaviour
+public abstract class ActionContextBase : MonoBehaviour
 {
     [SerializeField] protected InputReader Input;
 
     [SerializeField] protected float Acceleration = 0f;
     [SerializeField] protected float Deceleration = 0f;
-    [SerializeField] protected float InternalSpeedMultiplier = 0f;
+    protected float InternalSpeedMultiplier = 0f;
     [SerializeField] protected float TurnSmoothTime = 10f;
 
     protected CharacterModule player;
     protected SensorsModule sensors;
     protected Animator animator;
-    private float turnSmoothVelocity;
+
     protected bool isMoving;
-    protected float deltaY;
+    protected float deltaYaw;
     protected Vector3 moveDirection;
     public Vector2 MovementInput => Input.MoveInput;
 
@@ -30,15 +30,18 @@ public abstract class ActionContextBase : NetworkBehaviour
 
     protected virtual void Awake()
     {
+
+        print("a");
         sensors = GetComponent<SensorsModule>();
         player = GetComponent<CharacterModule>();
+        print("l");
         animator = GetComponent<Animator>();
-        Input.EnableAllInputs();
+        Input.PlayerInputsEnable=true;
     }
 
     public virtual void EnterState()
     {
-        if (!IsOwner) return;
+       // if (!IsOwner) return;
 
         ApplyRootMotion();
 
@@ -62,20 +65,20 @@ public abstract class ActionContextBase : NetworkBehaviour
 
     public virtual void ExitState()
     {
-        if (!IsOwner) return;
+       // if (!IsOwner) return;
         UpdateAnimations();
     }
 
     public virtual void OnUpdate()
     {
-        if (!IsOwner) return;
+      //  if (!IsOwner) return;
     }
 
     public virtual void OnFixedUpdate()
     {
-        if (!IsOwner) return;
+      //  if (!IsOwner) return;
 
-
+        
         Move();
 
         UpdateAnimations();
@@ -100,7 +103,7 @@ public abstract class ActionContextBase : NetworkBehaviour
         {
             player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier * MovementInput.magnitude, player.Acceleration * Time.deltaTime);
             player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, moveDirection * player.CurrentSpeed, Acceleration * Time.fixedDeltaTime);
-
+            
         }
         else
         {
@@ -218,7 +221,7 @@ public abstract class ActionContextBase : NetworkBehaviour
     protected virtual void GetDeltaAngle()
     {
         float currentYRotation = transform.eulerAngles.y;
-        deltaY = Mathf.DeltaAngle(lastYRotation, currentYRotation) * Time.deltaTime * 10f;
+        deltaYaw = Mathf.DeltaAngle(lastYRotation, currentYRotation) * Time.deltaTime * 10f;
         lastYRotation = currentYRotation;
     }
 }

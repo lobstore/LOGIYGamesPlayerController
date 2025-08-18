@@ -293,10 +293,9 @@ namespace LOGIYGames
                 Microphone.End(null);
             }
 
-            if (GameControlInputManager.Instance != null)
-            {
-                inputReader.VoiceChatEvent.RemoveListener(ActivateVoiceChat);
-            }
+
+            inputReader.VoiceChatEvent.RemoveListener(ActivateVoiceChat);
+
         }
         public void SetMicrophoneVolume(float volume)
         {

@@ -53,7 +53,7 @@ public class JumpActionContext : AerialActionContext
         switch (context.phase)
         {
             case InputActionPhase.Performed:
-                if (IsOwner && CanJump && currentJumpCount > 0 && !jumpCooldownTimer.IsRunning)
+                if (CanJump && currentJumpCount > 0 && !jumpCooldownTimer.IsRunning)
                 {
                     jumpCooldownTimer.Start();
                 }

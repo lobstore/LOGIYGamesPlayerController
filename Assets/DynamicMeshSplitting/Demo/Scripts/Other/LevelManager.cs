@@ -40,7 +40,7 @@ namespace JL.Demo
 
         private void ToggleWireframe()
         {
-            GameObject[] objects = Object.FindObjectsOfType<GameObject>();
+            GameObject[] objects = FindObjectsByType<GameObject>(sortMode: FindObjectsSortMode.None);
             foreach (GameObject go in objects)
             {
                 if (go.layer == _layerID)

@@ -13,11 +13,10 @@ public class FallingActionContext : AerialActionContext
     [SerializeField] private float fallingTimeForHardLanding = 1f;
     [SerializeField] private float hardLandingDuration = 1.5f;
     [SerializeField] private bool autoCalculateLandingDuration = false;
-
+    [SerializeField] float floatingSpeed;
 
 
     [Header("Component References")]
-    private CinemachineCameraSwitcher cameraManager;
 
     // State Management
     private CountdownTimer landingCoolDownTimer;
@@ -65,7 +64,7 @@ public class FallingActionContext : AerialActionContext
     public override void EnterState()
     {
         base.EnterState();
-        //player.InternalSpeedMultiplier = 0;
+        InternalSpeedMultiplier = floatingSpeed;
         StartFallingTimer();
         animator?.SetBool(isFallingHash, true);
         animator?.SetInteger(landingStateHash, 0);
@@ -81,7 +80,7 @@ public class FallingActionContext : AerialActionContext
 
     private void Update()
     {
-        if (!IsOwner) return;
+        //if (!IsOwner) return;
 
         if (landingCoolDownTimer.IsFinished)
         {

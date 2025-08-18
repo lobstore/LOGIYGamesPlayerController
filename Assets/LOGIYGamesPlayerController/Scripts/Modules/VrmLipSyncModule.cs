@@ -5,7 +5,7 @@ using UnityEngine;
 using UniVRM10;
 namespace LOGIYGames
 {
-    public class VrmLipSyncModule : NetworkModuleBase
+    public class VrmLipSyncModule : MonoModuleBase
     {
 
         [System.Serializable]

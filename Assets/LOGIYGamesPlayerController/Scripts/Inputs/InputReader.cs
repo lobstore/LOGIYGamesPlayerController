@@ -5,22 +5,22 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 
-public class InputEvent : UnityEvent<InputAction.CallbackContext> { }
 
 namespace LOGIYGames
 {
+    public class InputEvent : UnityEvent<InputAction.CallbackContext> { }
     [CreateAssetMenu(menuName = "Input/InputReader", fileName = "InputReader")]
     public class InputReader : ScriptableObject, GameInputs.IPlayerInputsActions, GameInputs.IGameControlActions, GameInputs.IUIActions, GameInputs.ICameraActions
     {
-
         private GameInputs gameInputs;
-
+        public GameInputs GameInputs => gameInputs;
         GameObject lastUISelection;
         GameObject firstUISelection;
 
         public bool PlayerInputsEnable
         {
-            get => gameInputs.PlayerInputs.enabled; 
+           
+            get => gameInputs.PlayerInputs.enabled;
             set
             {
                 if (value)
@@ -60,7 +60,7 @@ namespace LOGIYGames
             {
                 if (value)
                 {
-                    EnableAllInputs();
+                    EnableUIInputs();
                 }
                 else
                 {

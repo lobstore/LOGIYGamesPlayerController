@@ -13,7 +13,9 @@ public class LocomotionActionContext : GroundedActionContext
     private int horizontalSpeedHash = Animator.StringToHash("HorizontalSpeed");
     private int runTurn180TriggerHash = Animator.StringToHash("BackTurn");
     [SerializeField] float smoothTime = 0.3f;
-
+    [SerializeField] float walkSpeed = 0.5f;
+    [SerializeField] float runSpeed = 1f;
+    [SerializeField] float sprintSpeed = 1.5f;
     public bool IsTurning { get; set; }
     public bool IsSprinting { get; private set; } = false;
 
@@ -30,12 +32,12 @@ public class LocomotionActionContext : GroundedActionContext
             case InputActionPhase.Performed:
                 IsSprinting = true;
                 animator.SetBool(isSprintingHash, true);
-                InternalSpeedMultiplier = 1.5f;
+                InternalSpeedMultiplier = sprintSpeed;
                 break;
             case InputActionPhase.Canceled:
                 animator.SetBool(isSprintingHash, false);
                 IsSprinting = false;
-                InternalSpeedMultiplier = 1f;
+                InternalSpeedMultiplier = runSpeed;
                 break;
             default:
                 break;
@@ -51,9 +53,9 @@ public class LocomotionActionContext : GroundedActionContext
         if (IsFocusing)
         {
             Vector3 localVelocity = transform.InverseTransformDirection(player.HorizontalVelocity);
-
-            animator.SetFloat(horizontalSpeedHash, Mathf.Clamp(localVelocity.x, -1, 1) * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
-            animator.SetFloat(verticalSpeedHash, Mathf.Clamp(localVelocity.z, -1, 1) * player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
+            localVelocity.Normalize();
+            animator.SetFloat(horizontalSpeedHash, localVelocity.x* player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
+            animator.SetFloat(verticalSpeedHash,localVelocity.z* player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
         }
         else
         {
@@ -61,7 +63,7 @@ public class LocomotionActionContext : GroundedActionContext
             animator.SetFloat(verticalSpeedHash, player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
             animator.SetFloat(horizontalSpeedHash, 0);
         }
-        animator.SetFloat(yawInputHash, Mathf.Clamp(deltaY, -1, 1), smoothTime, Time.deltaTime);
+        animator.SetFloat(yawInputHash, Mathf.Clamp(deltaYaw, -1, 1), smoothTime, Time.deltaTime);
     }
     protected override void Rotate()
     {
@@ -77,6 +79,11 @@ public class LocomotionActionContext : GroundedActionContext
             base.Rotate();
 
         }
+    }
+    public override void EnterState()
+    {
+        base.EnterState();
+        InternalSpeedMultiplier = runSpeed;
     }
     public override void ExitState()
     {

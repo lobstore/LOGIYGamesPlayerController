@@ -4263,8 +4263,6 @@ GameObject:
   - component: {fileID: 2294956343371378774}
   - component: {fileID: 2076825939332830178}
   - component: {fileID: 7194812434217020263}
-  - component: {fileID: 8599912531821920719}
-  - component: {fileID: 366271243577435498}
   - component: {fileID: 6561411529045119186}
   - component: {fileID: -4271881859243634792}
   - component: {fileID: 9063052285891225577}
@@ -4822,7 +4820,7 @@ Animator:
   m_GameObject: {fileID: 3530808098429098423}
   m_Enabled: 1
   m_Avatar: {fileID: -7015762578403652589, guid: 84eae5ce6c2238f41b556e702b08d5bc, type: 3}
-  m_Controller: {fileID: 22100000, guid: 380815d7f9dc6f44ba189e512f690a7f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8eccf9a92ff353147a77f36f4eaef42b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -4930,11 +4928,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17bbd476057ac7f4eb41ba79d21c3d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InputReader: {fileID: 0}
   <BaseSpeed>k__BackingField: 0.1
   useGravity: 1
   gravityMultiplier: 1.5
   groundMagnit: -10
   pushPower: 2
+  <CinemachineCameraLookAtTransform>k__BackingField: {fileID: 0}
+  <CinemachineCameraFollowTransform>k__BackingField: {fileID: 0}
 --- !u!114 &310127018671441999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5021,7 +5022,6 @@ MonoBehaviour:
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 2
   Deceleration: 4
-  InternalSpeedMultiplier: 1
   TurnSmoothTime: 10
   IsFocusing: 1
   UseProjectionOnPlane: 1
@@ -5029,6 +5029,9 @@ MonoBehaviour:
   useAutoCalculatedPlayerSpeedMultiplier: 1
   slopeAffectRate: 0.134
   smoothTime: 0.1
+  walkSpeed: 0.5
+  runSpeed: 1
+  sprintSpeed: 1.5
 --- !u!114 &1411414839543553356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5044,7 +5047,6 @@ MonoBehaviour:
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 1
   Deceleration: 1
-  InternalSpeedMultiplier: 0.2
   TurnSmoothTime: 10
   IsFocusing: 1
   UseProjectionOnPlane: 1
@@ -5054,6 +5056,7 @@ MonoBehaviour:
   fallingTimeForHardLanding: 1
   hardLandingDuration: 1.5
   autoCalculateLandingDuration: 0
+  floatingSpeed: 1
 --- !u!114 &6273646928145268170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5069,7 +5072,6 @@ MonoBehaviour:
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 2
   Deceleration: 25
-  InternalSpeedMultiplier: 0.5
   TurnSmoothTime: 10
   IsFocusing: 1
   UseProjectionOnPlane: 1
@@ -5077,7 +5079,11 @@ MonoBehaviour:
   useAutoCalculatedPlayerSpeedMultiplier: 1
   slopeAffectRate: 0
   smoothTime: 0.3
+  walkSpeed: 0.5
+  runSpeed: 1
+  sprintSpeed: 1.5
   crouchHeightMultiplier: 0.5
+  crouchSpeed: 0.3
 --- !u!114 &8625556036348828932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5093,7 +5099,6 @@ MonoBehaviour:
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 0
   Deceleration: 2
-  InternalSpeedMultiplier: 1
   TurnSmoothTime: 10
   IsFocusing: 1
   UseProjectionOnPlane: 1
@@ -5267,34 +5272,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8599912531821920719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3530808098429098423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d675a135a1520d240be0b76c1f5f454f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
-  <PlayerAnimator>k__BackingField: {fileID: 5626656295038298431}
---- !u!114 &366271243577435498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3530808098429098423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0148c86a738b6e745bae0b90c9513777, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Follow>k__BackingField: {fileID: 1210668439614761606}
-  <LookAt>k__BackingField: {fileID: 8441105104995904213}
 --- !u!114 &6561411529045119186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5346,7 +5323,6 @@ MonoBehaviour:
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 0
   Deceleration: 0
-  InternalSpeedMultiplier: 0
   TurnSmoothTime: 10
   IsFocusing: 1
   UseProjectionOnPlane: 1
@@ -5367,7 +5343,6 @@ MonoBehaviour:
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 0
   Deceleration: 0
-  InternalSpeedMultiplier: 1
   TurnSmoothTime: 10
   IsFocusing: 1
   UseProjectionOnPlane: 1
@@ -5392,7 +5367,6 @@ MonoBehaviour:
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 0
   Deceleration: 0
-  InternalSpeedMultiplier: 0
   TurnSmoothTime: 10
   IsFocusing: 1
   UseProjectionOnPlane: 1
@@ -5715,7 +5689,6 @@ MonoBehaviour:
   Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 0
   Deceleration: 0
-  InternalSpeedMultiplier: 0
   TurnSmoothTime: 10
   IsFocusing: 1
   UseProjectionOnPlane: 1

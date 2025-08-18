@@ -147,7 +147,7 @@ public class SlideActionContext : GroundedActionContext
 
     private void Update()
     {
-        if (!IsOwner) return;
+       // if (!IsOwner) return;
         if (!player.IsGrounded)
         {
             IsSliding = false;

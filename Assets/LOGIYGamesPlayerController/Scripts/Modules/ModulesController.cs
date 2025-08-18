@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 namespace LOGIYGames
 {
-    public class ModulesController : NetworkBehaviour
+    public class ModulesController : MonoBehaviour
     {
         List<IModule> modules = new();
         private void Awake()

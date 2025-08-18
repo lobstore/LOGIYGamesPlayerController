@@ -15,7 +15,7 @@ public class CrouchActionContext : LocomotionActionContext
 
     public bool IsCrouching => sensors.IsObstacleAbove || IsCrouchingPressed;
     private bool IsCrouchingPressed;
-
+    [SerializeField] float crouchSpeed=0.3f;
     public float CrouchHeight { get; private set; }
     public float StandingHeight { get; private set; }
 
@@ -29,7 +29,6 @@ public class CrouchActionContext : LocomotionActionContext
     {
         Input.CrouchEvent.AddListener(PerformCrouch);
     }
-
     private void PerformCrouch(InputAction.CallbackContext context)
     {
         switch (context.phase)
@@ -64,6 +63,7 @@ public class CrouchActionContext : LocomotionActionContext
     {
         base.EnterState();
         player.Height = CrouchHeight;
+        InternalSpeedMultiplier = crouchSpeed;
     }
     public override void ExitState()
     {

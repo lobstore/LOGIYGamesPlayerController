@@ -2,7 +2,7 @@ using UnityEngine;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(CharacterController))]
-    public class SensorsModule : NetworkModuleBase
+    public class SensorsModule : MonoModuleBase
     {
         [Header("Component References")]
         [SerializeField] private CharacterController characterController;

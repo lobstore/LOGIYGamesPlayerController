@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 namespace LOGIYGames
 {
-    public class NearestInteractableFinder : NetworkBehaviour
+    public class NearestInteractableFinder : MonoBehaviour
     {
         [SerializeField] Vrm10LookAtModule lookAt;
         [SerializeField] Transform Head;

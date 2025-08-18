@@ -1,15 +1,14 @@
 using System.Collections.Generic;
-using UniGLTF.Extensions.VRMC_springBone;
 using UnityEngine;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(SensorsModule))]
     [RequireComponent(typeof(CharacterController))]
-    [DefaultExecutionOrder(-2)]
-    public class CharacterModule : NetworkModuleBase
+    public class CharacterModule : MonoModuleBase, IControllable
     {
 
         [Header("References")]
+        [SerializeField] InputReader InputReader;
         private Animator Animator;
         private SensorsModule Sensors = null;
         private CharacterController controller = null;
@@ -83,8 +82,12 @@ namespace LOGIYGames
 
         public float HeightChangingSmoothTime { get; private set; } = 4f;
 
+        [field: SerializeField] public Transform CinemachineCameraLookAtTransform { get; set; }
+        [field: SerializeField] public Transform CinemachineCameraFollowTransform { get; set; }
+
         private void Awake()
         {
+
             controller = GetComponent<CharacterController>();
             Sensors = GetComponent<SensorsModule>();
             Height = controller.height;
@@ -233,6 +236,31 @@ namespace LOGIYGames
             Acceleration = 0;
             Deceleration = 0;
             InternalSpeedMultiplier = 0;
+        }
+
+        public void OnControlGained()
+        {
+            CameraManager.Instance.SetTargetTo(
+            CinemachineCameraFollowTransform,
+            CinemachineCameraLookAtTransform
+            
+            );
+            CameraManager.Instance.SetTPView();
+        }
+
+        public void OnControlLost()
+        {
+            
+        }
+
+        public void EnableControl()
+        {
+           
+        }
+
+        public void DisableControl()
+        {
+           
         }
     }
 }

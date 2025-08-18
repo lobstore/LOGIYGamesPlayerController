@@ -3,7 +3,7 @@ using UnityEngine;
 using UniVRM10;
 namespace LOGIYGames
 {
-    public class EyeBlinkerModule : NetworkModuleBase
+    public class EyeBlinkerModule : MonoModuleBase
     {
         [Header("Required References")]
         [SerializeField] private Vrm10Instance _vrm10;
