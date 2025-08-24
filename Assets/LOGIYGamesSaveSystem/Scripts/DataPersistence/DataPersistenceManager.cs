@@ -9,6 +9,7 @@ namespace LOGIYGames
     {
         [Header("Debugging")]
         [SerializeField] private bool disableDataPersistence = false;
+        public bool IsPersistenceDisabled {  get { return disableDataPersistence; } }
         [SerializeField] private bool initializeDataIfNull = false;
         [SerializeField] private bool overrideSelectedProfileId = false;
         [SerializeField] private string testSelectedProfileId = "test";

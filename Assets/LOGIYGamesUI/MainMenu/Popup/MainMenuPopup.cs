@@ -1,5 +1,3 @@
-using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.UI;
 namespace LOGIYGames
@@ -20,10 +18,14 @@ namespace LOGIYGames
         private void OnContinueGameClicked()
         {
             // save the game anytime before loading a new scene
-            DataPersistenceManager.Instance.SaveGame();
+            if (!DataPersistenceManager.Instance.IsPersistenceDisabled)
+            {
+                DataPersistenceManager.Instance.SaveGame();
+
+            }
             // load the next scene - which will in turn load the game because of 
             // OnSceneLoaded() in the DataPersistenceManager
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData("127.0.0.1", 15000);
+            //NetworkManager.Singleton?.GetComponent<UnityTransport>().SetConnectionData("127.0.0.1", 15000);
             LevelLoader.Instance.SwitchToScene(2);
         }
         private void OnExitButtonClick()

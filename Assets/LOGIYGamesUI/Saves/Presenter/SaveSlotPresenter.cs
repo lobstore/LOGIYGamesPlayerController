@@ -1,6 +1,4 @@
 using System;
-using Unity.Netcode.Transports.UTP;
-using Unity.Netcode;
 namespace LOGIYGames
 {
     public class SaveSlotPresenter : IDisposable
@@ -9,9 +7,9 @@ namespace LOGIYGames
         private SaveSlotView saveSlotView;
         private bool isForLoadingData;
 
-        public delegate void SlotClickedEvent(SaveSlotModel lobbyModel);
+        public delegate void SlotClickedEvent(SaveSlotModel saveSlotModel);
         public event SlotClickedEvent OnSlotClickedEvent;
-        public delegate void ClearSlotClickedEvent(SaveSlotModel lobbyModel);
+        public delegate void ClearSlotClickedEvent(SaveSlotModel saveSlotModel);
         public event ClearSlotClickedEvent OnClearSlotClickedEvent;
         public SaveSlotPresenter(SaveSlotView saveSlotView, SaveSlotModel saveSlotModel, bool isForLoadingData)
         {
@@ -84,10 +82,14 @@ namespace LOGIYGames
         private void SaveGameAndLoadScene()
         {
             // save the game anytime before loading a new scene
-            DataPersistenceManager.Instance.SaveGame();
+            if (!DataPersistenceManager.Instance.IsPersistenceDisabled)
+            {
+                DataPersistenceManager.Instance.SaveGame();
+
+            }
             // load the next scene - which will in turn load the game because of 
             // OnSceneLoaded() in the DataPersistenceManager
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData("127.0.0.1", 15000);
+            //NetworkManager.Singleton?.GetComponent<UnityTransport>().SetConnectionData("127.0.0.1", 15000);
             LevelLoader.Instance.SwitchToScene(2);
         }
         public void Dispose()

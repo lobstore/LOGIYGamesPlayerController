@@ -8383,6 +8383,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1475422378811526061, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2000587793280069993, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3464949716
@@ -8410,14 +8414,22 @@ PrefabInstance:
     - target: {fileID: 5203934957089095800, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
       propertyPath: <CinemachineCameraFollowTransform>k__BackingField
       value: 
-      objectReference: {fileID: 525112638}
+      objectReference: {fileID: 320720213}
     - target: {fileID: 5203934957089095800, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
       propertyPath: <CinemachineCameraLookAtTransform>k__BackingField
       value: 
-      objectReference: {fileID: 525112638}
+      objectReference: {fileID: 320720214}
     - target: {fileID: 6249374095147057133, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
       propertyPath: MotionType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6895123380604793174, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8492954502755187818, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8435,6 +8447,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17bbd476057ac7f4eb41ba79d21c3d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &320720213 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1210668439614761606, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
+  m_PrefabInstance: {fileID: 320720211}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &320720214 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8441105104995904213, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
+  m_PrefabInstance: {fileID: 320720211}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &324517030
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10994,11 +11016,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c07f24e35f07ce74ba43afa35d48adf7, type: 3}
---- !u!4 &525112638 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1083684028782909141, guid: 4f1824e18f2fcf744b71a4b668123056, type: 3}
-  m_PrefabInstance: {fileID: 320720211}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &528522898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11823,6 +11840,10 @@ PrefabInstance:
     - target: {fileID: 3624899074434009970, guid: 41f206a6b037a84439c2c2bb5b5fc86d, type: 3}
       propertyPath: m_Name
       value: NetworkManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624899074434009970, guid: 41f206a6b037a84439c2c2bb5b5fc86d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9076899421006469305, guid: 41f206a6b037a84439c2c2bb5b5fc86d, type: 3}
       propertyPath: NetworkConfig.PlayerPrefab
@@ -20221,7 +20242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1293647569
 Transform:
   m_ObjectHideFlags: 0

@@ -905,6 +905,31 @@ AnimatorTransition:
   m_Mute: 0
   m_IsExit: 1
   serializedVersion: 1
+--- !u!1101 &-3894725835226450705
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: IsRolling
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 0}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 1
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.7222222
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!206 &-3433902499755158070
 BlendTree:
   m_ObjectHideFlags: 1
@@ -1987,9 +2012,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.33942413
+  m_TransitionDuration: 0.10549116
   m_TransitionOffset: 0
-  m_ExitTime: 0.61529654
+  m_ExitTime: 0.8822645
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -2083,12 +2108,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.47471857
+  m_TransitionDuration: 0.30597305
   m_TransitionOffset: 0
-  m_ExitTime: 0.940487
+  m_ExitTime: 0.8875056
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!206 &1218271063102575986
@@ -2213,6 +2238,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 768782636002515375}
+  - {fileID: -3894725835226450705}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -2784,25 +2810,25 @@ AnimatorStateMachine:
   - {fileID: -5855415165151187582}
   m_EntryTransitions: []
   m_StateMachineTransitions:
+  - first: {fileID: -5771468056608768662}
+    second:
+    - {fileID: -6600459702600143294}
   - first: {fileID: -1442532923352455332}
     second:
     - {fileID: 281953427698560649}
     - {fileID: -3176827979216995322}
     - {fileID: 7382870870819448823}
     - {fileID: 3704943636007337431}
+  - first: {fileID: 1255699695766555364}
+    second:
+    - {fileID: 3501585314022461350}
+    - {fileID: -6231620174762001772}
   - first: {fileID: 1300231003425257662}
     second:
     - {fileID: -8262818429473420611}
     - {fileID: -7150818219190046792}
     - {fileID: 5012207726023744606}
     - {fileID: 4002551404626391677}
-  - first: {fileID: 1255699695766555364}
-    second:
-    - {fileID: 3501585314022461350}
-    - {fileID: -6231620174762001772}
-  - first: {fileID: -5771468056608768662}
-    second:
-    - {fileID: -6600459702600143294}
   - first: {fileID: 2518387403826169624}
     second:
     - {fileID: -8556225358824716510}

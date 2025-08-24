@@ -31,10 +31,8 @@ public abstract class ActionContextBase : MonoBehaviour
     protected virtual void Awake()
     {
 
-        print("a");
         sensors = GetComponent<SensorsModule>();
         player = GetComponent<CharacterModule>();
-        print("l");
         animator = GetComponent<Animator>();
         Input.PlayerInputsEnable=true;
     }
