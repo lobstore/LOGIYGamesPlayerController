@@ -46,7 +46,8 @@ public class LocomotionActionContext : GroundedActionContext
 
     protected override void UpdateAnimations()
     {
-        IsFocusing = animator.GetBool("IsFocusing");
+        IsFocusing = CameraManager.Instance.IsLockedOn;
+        animator.SetBool("IsFocusing", IsFocusing);
         isMoving = MovementInput.magnitude > 0;
         animator.SetBool(isMovingHash, isMoving);
         animator.SetFloat(speedHash, player.TotalSpeedMultiplier, smoothTime, Time.deltaTime);

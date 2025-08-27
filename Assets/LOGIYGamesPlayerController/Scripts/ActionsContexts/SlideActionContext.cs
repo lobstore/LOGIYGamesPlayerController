@@ -104,14 +104,14 @@ public class SlideActionContext : GroundedActionContext
             if (sensors.GroundAngle > SlideSlopeAngleLimit)
             {
                 player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier, Time.deltaTime * player.Acceleration);
-                player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.CurrentSpeed;
+                player.HorizontalVelocity += projectedVelocity * Time.deltaTime * slideSpeed;
 
             }
             else
             {
                 if (sensors.GroundAngle < -30)
                 {
-                    player.HorizontalVelocity = projectedVelocity * Time.deltaTime * player.CurrentSpeed;
+                    player.HorizontalVelocity = projectedVelocity * Time.deltaTime * slideSpeed;
 
                 }
                 else
@@ -135,7 +135,7 @@ public class SlideActionContext : GroundedActionContext
 
                         player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, Time.deltaTime * player.Deceleration);
                     }
-                        player.HorizontalVelocity += projectedVelocity * Time.deltaTime * player.CurrentSpeed;
+                        player.HorizontalVelocity += projectedVelocity * Time.deltaTime * slideSpeed;
                 }
 
             }

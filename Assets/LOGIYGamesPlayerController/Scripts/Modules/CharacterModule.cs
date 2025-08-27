@@ -245,7 +245,7 @@ namespace LOGIYGames
             CinemachineCameraLookAtTransform
             
             );
-            CameraManager.Instance.SetTPView();
+            CameraManager.Instance.SetFPView();
         }
 
         public void OnControlLost()

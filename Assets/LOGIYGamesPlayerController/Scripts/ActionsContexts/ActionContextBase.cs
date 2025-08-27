@@ -108,31 +108,22 @@ public abstract class ActionContextBase : MonoBehaviour
             player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, 0, player.Deceleration * Time.deltaTime);
             player.HorizontalVelocity = Vector3.Lerp(player.HorizontalVelocity, Vector3.zero, player.Deceleration * Time.fixedDeltaTime);
 
-            //if (IsFocusing)
-            //{
-            //    player.HorizontalVelocity = GetMovementDirectionAlongCamera() * player.CurrentSpeed;
-            //}
-            //else
-            //{
-            //    var dir = Vector3.ProjectOnPlane(player.transform.forward, sensors.BelowHit.normal).normalized;
-            //    player.HorizontalVelocity = dir * player.CurrentSpeed;
-            //}
-
-
         }
     }
 
 
     protected virtual void GetMovementDirection()
     {
-        if (IsFocusing)
-        {
-            moveDirection = GetMovementDirectionAlongCamera();
-        }
-        else
-        {
-            moveDirection = GetMovementDirectionRelativeCamera();
-        }
+        //if (IsFocusing)
+        //{
+        //    moveDirection = GetMovementDirectionAlongCamera();
+        //}
+        //else
+        //{
+        //    moveDirection = GetMovementDirectionRelativeCamera();
+        //}
+
+        moveDirection = CameraManager.Instance.CurrentControlState.GetMovementDirection(player,Camera.main.transform, MovementInput);
         if (UseProjectionOnPlane)
         {
             moveDirection = Vector3.ProjectOnPlane(moveDirection, sensors.BelowHit.normal).normalized;
@@ -157,17 +148,17 @@ public abstract class ActionContextBase : MonoBehaviour
     }
     protected virtual void Rotate()
     {
-        if (!IsFocusing)
-        {
-            RotateRelativeCamera();
+        //if (!IsFocusing)
+        //{
+        //    RotateRelativeCamera();
 
-        }
-        else
-        {
-            RotateAlongCamera();
-        }
+        //}
+        //else
+        //{
+        //    RotateAlongCamera();
+        //}
 
-
+        CameraManager.Instance.CurrentControlState.Rotate(player,Camera.main.transform,TurnSmoothTime, moveDirection);
 
     }
 
@@ -196,16 +187,6 @@ public abstract class ActionContextBase : MonoBehaviour
         float deltaAngle = Mathf.DeltaAngle(lastVerticalAngle, currentVerticalAngle);
         if (Mathf.Abs(deltaAngle) > angleThreshold)
         {
-            if (deltaAngle > 0)
-            {
-                Debug.Log("RightTurnTriggered");
-                animator.SetTrigger("IsRightTurning");
-            }
-            else
-            {
-                Debug.Log("LeftTurnTriggered");
-                animator.SetTrigger("IsLeftTurning");
-            }
             lastVerticalAngle = currentVerticalAngle; // сохраняем угол после срабатывания
         }
 
