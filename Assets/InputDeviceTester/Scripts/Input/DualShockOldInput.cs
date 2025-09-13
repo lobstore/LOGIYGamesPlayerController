@@ -150,7 +150,7 @@ public class DualShockOldInput : GamepadOldInput
 #endif
 }
 
-// This is for DualShock controller triggers on Windows and OSX
+// This is for DualShock CController triggers on Windows and OSX
 // The trigger starts at 0 until it is first used. Then the range is [-1, 1].
 public class DualShockTrigger : AnalogButton
 {

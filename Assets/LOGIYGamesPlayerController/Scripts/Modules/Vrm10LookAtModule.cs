@@ -8,7 +8,7 @@ namespace LOGIYGames
         [SerializeField] private Vrm10Instance _vrm10;
         private Vrm10Runtime Vrm10Runtime;
 
-        public Transform TargetTransform; // Объект, за которым следим (если null - смотрит вперёд)
+        [HideInInspector] public Transform TargetTransform; // Объект, за которым следим (если null - смотрит вперёд)
 
         [Header("Random Offset Settings")]
         [SerializeField] private float maxOffsetRadius = 0.1f; // Максимальный радиус случайного смещения

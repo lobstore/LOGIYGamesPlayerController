@@ -4246,12 +4246,12 @@ GameObject:
   - component: {fileID: 1083684028782909141}
   - component: {fileID: 6188299836170170351}
   - component: {fileID: 4608324259769996759}
+  - component: {fileID: 1197931224311539108}
   - component: {fileID: 5626656295038298431}
   - component: {fileID: 407529434757957560}
   - component: {fileID: 2000587793280069993}
   - component: {fileID: 6152273653618469035}
   - component: {fileID: 7211271801408443133}
-  - component: {fileID: 5203934957089095800}
   - component: {fileID: 310127018671441999}
   - component: {fileID: 5170419924626862599}
   - component: {fileID: 701530662734502845}
@@ -4266,15 +4266,12 @@ GameObject:
   - component: {fileID: 6561411529045119186}
   - component: {fileID: -4271881859243634792}
   - component: {fileID: 9063052285891225577}
-  - component: {fileID: 7433937345471640345}
   - component: {fileID: 3407827933409572790}
-  - component: {fileID: 8492954502755187818}
-  - component: {fileID: 1475422378811526061}
-  - component: {fileID: 6895123380604793174}
   - component: {fileID: 4589375459768253339}
   - component: {fileID: 3100746177014881581}
   - component: {fileID: -6839706499932825156}
-  - component: {fileID: -1908022825285840099}
+  - component: {fileID: 2631146254849125921}
+  - component: {fileID: 4034911605881369183}
   m_Layer: 13
   m_Name: CatgirlBattle
   m_TagString: Player
@@ -4290,7 +4287,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3530808098429098423}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.10895777, y: -0.026200239, z: 6.010076}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4810,6 +4807,24 @@ MonoBehaviour:
   m_RightLittleProximal: {fileID: 5908218297125608027}
   m_RightLittleIntermediate: {fileID: 5412940736151526289}
   m_RightLittleDistal: {fileID: 8721669174954089028}
+--- !u!114 &1197931224311539108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3530808098429098423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4d1c4cabaa87f439bd975e3bbabc3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ModulePriority>k__BackingField: 0
+  InputReader: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
+  <BaseSpeed>k__BackingField: 4
+  <Height>k__BackingField: 0
+  <CinemachineCameraLookAtTransform>k__BackingField: {fileID: 8441105104995904213}
+  <CinemachineCameraFollowTransform>k__BackingField: {fileID: 1210668439614761606}
 --- !u!95 &5626656295038298431
 Animator:
   serializedVersion: 7
@@ -4870,8 +4885,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2403495314
-  InScenePlacedSourceGlobalObjectIdHash: 2299257396
+  GlobalObjectIdHash: 3464949716
+  InScenePlacedSourceGlobalObjectIdHash: 2403495314
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -4916,26 +4931,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9612d601dbd390d4796cf684eceb9347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5203934957089095800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3530808098429098423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17bbd476057ac7f4eb41ba79d21c3d0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InputReader: {fileID: 0}
-  <BaseSpeed>k__BackingField: 0.1
-  useGravity: 1
-  gravityMultiplier: 1.5
-  groundMagnit: -10
-  pushPower: 2
-  <CinemachineCameraLookAtTransform>k__BackingField: {fileID: 0}
-  <CinemachineCameraFollowTransform>k__BackingField: {fileID: 0}
 --- !u!114 &310127018671441999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4948,6 +4943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1231c0fd016cc941a15bea9993fe88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ModulePriority>k__BackingField: 0
   characterController: {fileID: 6152273653618469035}
   rayDistance: 0.3
   upCheckDistance: 1
@@ -4970,6 +4966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 640038f6592c8894d93e11f2c4ddbe57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ModulePriority>k__BackingField: 0
   updateMethod: 0
   blendShapes:
   - phoneme: A
@@ -5005,7 +5002,7 @@ MonoBehaviour:
   sampleRate: 16000
   bufferDuration: 0.2
   microphoneVolume: 1
-  inputReader: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  inputReader: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
   MuteForSelf: 0
 --- !u!114 &6249374095147057133
 MonoBehaviour:
@@ -5019,19 +5016,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f3f3826aa7aac449342e7185ae2b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
-  Acceleration: 2
-  Deceleration: 4
-  TurnSmoothTime: 10
-  IsFocusing: 1
+  Acceleration: 7
+  Deceleration: 7
+  TurnSmoothTime: 6
   UseProjectionOnPlane: 1
-  MotionType: 2
+  MotionType: 1
   useAutoCalculatedPlayerSpeedMultiplier: 1
   slopeAffectRate: 0.134
   smoothTime: 0.1
   walkSpeed: 0.5
   runSpeed: 1
   sprintSpeed: 1.5
+  locomotionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.0074287225
+      outSlope: -0.053506214
+      tangentMode: 1
+      weightedMode: 2
+      inWeight: 0
+      outWeight: 0.31791243
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.2712171
+      outSlope: 1.3211626
+      tangentMode: 1
+      weightedMode: 3
+      inWeight: 0.59601146
+      outWeight: 0.365206
+    - serializedVersion: 3
+      time: 1.5
+      value: 1.5
+      inSlope: 0.532467
+      outSlope: 0.532467
+      tangentMode: 0
+      weightedMode: 1
+      inWeight: 0.695796
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &1411414839543553356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5044,19 +5072,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4719735af7b6a904ca23c54db1c84e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 1
   Deceleration: 1
   TurnSmoothTime: 10
-  IsFocusing: 1
   UseProjectionOnPlane: 1
   MotionType: 1
+  floatingSpeed: 1
   landingDuration: 0.1
   minFallingTimeToLandingTransition: 0.8
   fallingTimeForHardLanding: 1
   hardLandingDuration: 1.5
   autoCalculateLandingDuration: 0
-  floatingSpeed: 1
 --- !u!114 &6273646928145268170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5069,11 +5095,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e278e037e9eef24493d8b95ee1b2f48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 2
   Deceleration: 25
   TurnSmoothTime: 10
-  IsFocusing: 1
   UseProjectionOnPlane: 1
   MotionType: 1
   useAutoCalculatedPlayerSpeedMultiplier: 1
@@ -5082,8 +5106,14 @@ MonoBehaviour:
   walkSpeed: 0.5
   runSpeed: 1
   sprintSpeed: 1.5
-  crouchHeightMultiplier: 0.5
+  locomotionCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   crouchSpeed: 0.3
+  crouchHeightMultiplier: 0.5
 --- !u!114 &8625556036348828932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5096,11 +5126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af65d28d168c2a48a488b5e151262dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 0
   Deceleration: 2
   TurnSmoothTime: 10
-  IsFocusing: 1
   UseProjectionOnPlane: 1
   MotionType: 1
   useAutoCalculatedPlayerSpeedMultiplier: 1
@@ -5112,6 +5140,7 @@ MonoBehaviour:
   slipTime: 0.5
   slideSpeed: 50
   requiredSpeedMultiplierToSlip: 0.5
+  CanSlide: 0
 --- !u!114 &8304454482092951230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5141,10 +5170,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"Kind":"Object","collection":{"$content":[{"name":"Animator","value":{"$content":0,"$type":"UnityEngine.Object"},"typeHandle":{"Identification":"UnityEngine.Animator,
-      UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","$version":"A"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
-    _objectReferences:
-    - {fileID: 5626656295038298431}
+    _json: '{"declarations":{"Kind":"Object","collection":{"$content":[],"$version":"A"},"$version":"A"}}'
+    _objectReferences: []
 --- !u!114 &2076825939332830178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5320,11 +5347,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8523d5b50279c40ab6ffc094fb56a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 0
   Deceleration: 0
   TurnSmoothTime: 10
-  IsFocusing: 1
   UseProjectionOnPlane: 1
   MotionType: 2
   <CanRoll>k__BackingField: 1
@@ -5340,38 +5365,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbeec636e64884347873e6d038ab3062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
   Acceleration: 0
   Deceleration: 0
   TurnSmoothTime: 10
-  IsFocusing: 1
   UseProjectionOnPlane: 1
   MotionType: 1
   jumpVerticalImpulse: 1.5
-  jumpPlanarImpulse: 1
+  jumpPlanarImpulse: 2
   jumpCooldown: 0.2
   maxJumpCount: 2
   <CanJump>k__BackingField: 1
---- !u!114 &7433937345471640345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3530808098429098423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14eff808cb397b44cb169afe8a71f4a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
-  Acceleration: 0
-  Deceleration: 0
-  TurnSmoothTime: 10
-  IsFocusing: 1
-  UseProjectionOnPlane: 1
-  MotionType: 2
-  currentWeapon: {fileID: 11400000, guid: ec32752e7fdd53646a66a025fe5f53aa, type: 2}
 --- !u!114 &3407827933409572790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5454,63 +5457,6 @@ MonoBehaviour:
   OnMove:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8492954502755187818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3530808098429098423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 0
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 0
-  SyncScaleX: 0
-  SyncScaleY: 1
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  Interpolate: 1
-  SlerpPosition: 0
---- !u!114 &1475422378811526061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3530808098429098423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad8deae8091111f4eb30a56c1f4e0d3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 5626656295038298431}
---- !u!114 &6895123380604793174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3530808098429098423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3944a04bd7525dd4a9db9485b21cd1ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4589375459768253339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5523,6 +5469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b9d38090dfbad34a94c98f681863df1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ModulePriority>k__BackingField: 0
   _vrm10: {fileID: 6188299836170170351}
   TargetTransform: {fileID: 0}
   maxOffsetRadius: 0.1
@@ -5617,6 +5564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdb791f27c5538547bb1e50276b18065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ModulePriority>k__BackingField: 0
   _vrm10: {fileID: 6188299836170170351}
   skinnedMeshRenderer: {fileID: 7196414486630071009}
   blinkBlendshapeName: Fcl_EYE_Close
@@ -5668,13 +5616,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b69641ca45859e34b8afcbd7063235a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ModulePriority>k__BackingField: 0
   m_LookOffset: {x: 0, y: 1.5, z: 10}
   m_BodyWeight: 0.6
   m_HeadWeight: 0.2
   m_EyesWeight: 0.2
   m_ClampWeight: 0.35
   maxLookAngle: 70
---- !u!114 &-1908022825285840099
+--- !u!114 &2631146254849125921
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5683,18 +5632,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 3530808098429098423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e17fc227248147148b2bc0e5a2dbe756, type: 3}
+  m_Script: {fileID: 11500000, guid: 01b1a392b9d7c8d449075a2afbdee374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
-  Acceleration: 0
-  Deceleration: 0
-  TurnSmoothTime: 10
-  IsFocusing: 1
-  UseProjectionOnPlane: 1
-  MotionType: 2
-  useAutoCalculatedPlayerSpeedMultiplier: 0
-  slopeAffectRate: 0
+  <ModulePriority>k__BackingField: 1
+  useGravity: 1
+  gravityMultiplier: 1.5
+  groundMagnit: 2
+--- !u!114 &4034911605881369183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3530808098429098423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a12cefd246a7fa8458698c95708d4759, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pushPower: 2
 --- !u!1 &3541237992491481965
 GameObject:
   m_ObjectHideFlags: 0

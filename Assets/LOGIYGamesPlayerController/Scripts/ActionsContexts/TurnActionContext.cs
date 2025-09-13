@@ -12,18 +12,18 @@ namespace LOGIYGames
         {
             base.EnterState();
 
-            player.InternalSpeedMultiplier = 0.5f;
+            Character.InternalSpeedMultiplier = 0.5f;
         }
         protected override void ChangeVelocity()
         {
-            player.HorizontalVelocity = Vector3.zero;
+            Character.HorizontalVelocity = Vector3.zero;
             if (MovementInput.magnitude > 0)
             {
-                player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, InternalSpeedMultiplier * MovementInput.magnitude, player.Acceleration * Time.deltaTime);
+                Character.InternalSpeedMultiplier = Mathf.Lerp(Character.InternalSpeedMultiplier, InternalSpeedMultiplier * MovementInput.magnitude, Character.Acceleration * Time.deltaTime);
             }
             else
             {
-                player.InternalSpeedMultiplier = Mathf.Lerp(player.InternalSpeedMultiplier, 0, player.Deceleration * Time.deltaTime);
+                Character.InternalSpeedMultiplier = Mathf.Lerp(Character.InternalSpeedMultiplier, 0, Character.Deceleration * Time.deltaTime);
 
             }
         }

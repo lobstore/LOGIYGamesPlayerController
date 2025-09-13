@@ -3,7 +3,7 @@ namespace LOGIYGames
 {
     public class GameManager : MonoBehaviour
     {
-
+        [SerializeField] InputReader InputReader;
         public static GameManager Instance { get; private set; }
 
         [SerializeField] string productPath;
@@ -18,6 +18,7 @@ namespace LOGIYGames
 
             }
             else { Destroy(gameObject); }
+            InputReader.GameControlInputsEnable = true;
         }
     }
 }

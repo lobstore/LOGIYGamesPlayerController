@@ -2,7 +2,7 @@
 //using LOGIYGames;
 //public class LedgeClimbingActionContext : MonoBehaviour
 //{
-//    CharacterModule Player;
+//    Character Player;
 //    SensorsModule Sensors;
 //    PlayerInputsManager HumanoidInput;
 //    CountdownTimer climbJumpCooldownTimer;
@@ -18,13 +18,13 @@
 //    private void Awake()
 //    {
 //        Sensors = GetComponent<SensorsModule>();
-//        Player = GetComponent<CharacterModule>();
+//        Player = GetComponent<Character>();
 //        HumanoidInput = GetComponent<PlayerInputsManager>();
 //        climbJumpCooldownTimer = new CountdownTimer(climbJumpingCooldown);
 //        jumpCooldownTimer = new CountdownTimer(jumpCooldown);
 //        HumanoidInput.Jumped.AddListener(OnJump);
-//        Player.PlayerTimers.Add(climbJumpCooldownTimer);
-//        Player.PlayerTimers.Add(jumpCooldownTimer);
+//        Player.CharacterTimers.Add(climbJumpCooldownTimer);
+//        Player.CharacterTimers.Add(jumpCooldownTimer);
 //    }
 //    private void OnJump()
 //    {

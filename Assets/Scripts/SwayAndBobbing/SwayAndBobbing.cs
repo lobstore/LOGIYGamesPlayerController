@@ -8,7 +8,7 @@
 //    {
 
 
-//        [SerializeField] CharacterModule Player;
+//        [SerializeField] Character Player;
 //        PlayerInputsManager MovementInput;
 //        CameraInputManager CameraInput;
 

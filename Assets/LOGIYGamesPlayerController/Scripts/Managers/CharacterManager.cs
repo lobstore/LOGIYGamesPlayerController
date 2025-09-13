@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 namespace LOGIYGames
 {
@@ -12,20 +11,33 @@ namespace LOGIYGames
         void DisableControl();
         void OnControlGained();
         void OnControlLost();
+        void HandleInputs();
     }
 
     public class CharacterManager : Singleton<CharacterManager>
     {
-        [SerializeField] List<CharacterModule> characters;
+        [SerializeField] List<Character> characters;
         public IControllable CurrentControllable { get; private set; }
-        protected override void Awake()
-        {
-            base.Awake();
-        }
+        int index = 0;
         private IEnumerator Start()
         {
             yield return null;
-            SetCharacterControl(characters[0]);
+            SetCharacterControl(characters[index]);
+        }
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SetCharacterControl(characters[index++ %characters.Count]);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                SetCharacterControl(characters[index-- % characters.Count]);
+            }
+        }
+        private void FixedUpdate()
+        {
+            CurrentControllable?.HandleInputs();
         }
         public void SetCharacterControl(IControllable ccontrollable)
         {
@@ -38,8 +50,14 @@ namespace LOGIYGames
             CurrentControllable?.OnControlLost();
             CurrentControllable = ccontrollable;
 
+            CameraManager.Instance.SetTargetTo(
+            CurrentControllable.CinemachineCameraFollowTransform,
+            CurrentControllable.CinemachineCameraLookAtTransform
+            );
+
             CurrentControllable.EnableControl();
             CurrentControllable.OnControlGained();
         }
+
     }
 }

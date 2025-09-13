@@ -3,49 +3,38 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class RollActionContext : ActionContextBase
+namespace LOGIYGames
 {
-    [field: SerializeField] public bool CanRoll { get; set; } = true;
-    public bool IsRolling { get => animator.GetBool(isRollingHash); private set => animator.SetBool(isRollingHash, value); }
-    int isRollingHash = Animator.StringToHash("IsRolling");
-    int RollHash = Animator.StringToHash("Roll");
-
-
-    private void OnEnable()
+    public class RollActionContext : ActionContextBase
     {
-        Input.EvadeEvent.AddListener(PerformRoll);
-    }
+        [field: SerializeField] public bool CanRoll { get; set; } = true;
+        public bool IsRolling { get => animator.GetBool(isRollingHash); private set => animator.SetBool(isRollingHash, value); }
+        int isRollingHash = Animator.StringToHash("IsRolling");
+        int RollHash = Animator.StringToHash("Roll");
 
-    private void OnDisable()
-    {
-        Input.EvadeEvent.RemoveListener(PerformRoll);
-    }
-    private void PerformRoll(InputAction.CallbackContext context)
-    {
-        switch (context.phase)
+        private void FixedUpdate()
         {
+            if (Character.EvadePressed && Sensors.IsGrounded && CanRoll && !IsRolling) {
+                IsRolling = true;
+            }
+        }
 
-            case InputActionPhase.Performed:
-                if (player.IsGrounded&& CanRoll&&!IsRolling)
-                {
-                    IsRolling = true;
-                }
-                break;
-            default:
-                break;
+        protected override void Rotate()
+        {
+            return;
+        }
+        protected override void ChangeVelocity()
+        {
+            Character.HorizontalVelocity = Vector3.zero;
+        }
+        private void OnAnimationEnd()
+        {
+            IsRolling = false;
+        }
+        public override void EnterState()
+        {
+            Character.EvadePressed = false;
+            base.EnterState();
         }
     }
-    protected override void Rotate()
-    {
-        return;
-    }
-    protected override void ChangeVelocity()
-    {
-        player.HorizontalVelocity = Vector3.zero;
-    }
-    private void OnAnimationEnd()
-    {
-        IsRolling = false;
-    }
-
 }

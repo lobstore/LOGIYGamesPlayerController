@@ -3,23 +3,51 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class CameraManager : MonoBehaviour
+    public enum CameraPerspectiveType
     {
-        public static CameraManager Instance { get; private set; }
+        FirstPerson,
+        ThirdPerson,
+        Top_Down
+    }
+    public class CameraManager : Singleton<CameraManager>
+    {
         List<CinemachineCameraController> cinemachineCameraControllers = new();
         public CinemachineCameraController CurentCameraController { get; private set; }
         [SerializeField] CinemachineCameraController FPSCameraController;
         [SerializeField] CinemachineCameraController TPSCameraController;
         [SerializeField] CinemachineCameraController TDSCameraController;
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        private void Awake()
+        [SerializeField] public CameraPerspectiveType CameraPerspectiveType = CameraPerspectiveType.ThirdPerson;
+        protected override void Initialize()
         {
-            if (Instance==null)
+            cinemachineCameraControllers.Add(FPSCameraController);
+            cinemachineCameraControllers.Add(TPSCameraController);
+            cinemachineCameraControllers.Add(TDSCameraController);
+           
+        }
+        private void Start()
+        {
+            SetTPView();
+        }
+        int index = 0;
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F))
             {
-                Instance = this;
+                index++;
+                index = index % cinemachineCameraControllers.Count;
+                if (index == 0)
+                {
+                    SetTPView();
+                }
+                else if (index == 1)
+                {
+                    SetFPView();
+                }
+                else if(index == 2)
+                {
+                    SetTDView();
+                }
             }
-            
-            InitControllersViews();
         }
         public void SetTargetTo(Transform Follow, Transform LookAt)
         {
@@ -30,19 +58,8 @@ namespace LOGIYGames
             }
         }
 
-        private void InitControllersViews()
-        {
-            cinemachineCameraControllers.Add(FPSCameraController);
-            cinemachineCameraControllers.Add(TPSCameraController);
-            cinemachineCameraControllers.Add(TDSCameraController);
-        }
 
 
-        public void SetTPView()
-        {
-            CurentCameraController = TPSCameraController;
-            SetPriorVirtualCamera(CurentCameraController);
-        }
         void SetPriorVirtualCamera(CinemachineCameraController cameraController)
         {
             foreach (var controller in cinemachineCameraControllers)
@@ -60,16 +77,24 @@ namespace LOGIYGames
             }
 
         }
+        public void SetTPView()
+        {
+            CurentCameraController = TPSCameraController;
+            CameraPerspectiveType = CameraPerspectiveType.ThirdPerson;
+            SetPriorVirtualCamera(CurentCameraController);
+        }
         public void SetFPView()
         {
             CurentCameraController = FPSCameraController;
+            CameraPerspectiveType = CameraPerspectiveType.FirstPerson;
             SetPriorVirtualCamera(CurentCameraController);
         }
         public void SetTDView()
         {
             CurentCameraController = TDSCameraController;
+            CameraPerspectiveType = CameraPerspectiveType.Top_Down;
             SetPriorVirtualCamera(CurentCameraController);
         }
-
+        
     }
 }

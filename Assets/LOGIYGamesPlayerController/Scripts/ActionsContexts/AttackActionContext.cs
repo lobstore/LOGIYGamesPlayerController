@@ -14,29 +14,13 @@ public class AttackActionContext : ActionContextBase
         combatController = GetComponent<CombatControllerModule>();
 
     }
-    private void OnEnable()
+    private void FixedUpdate()
     {
-        Input.AttackEvent.AddListener(Attack);
-    }
-    private void OnDisable()
-    {
-        Input.AttackEvent.RemoveListener(Attack);
-    }
-    private void Attack(InputAction.CallbackContext context)
-    {
-        switch (context.phase)
+        IsAttackRequested = Character.AttackPressed;
+
+        if (InContext)
         {
-            case InputActionPhase.Performed:
-                IsAttackRequested = true;
-                if (InContext)
-                {
-                    combatController.PerformAttack(currentWeapon);
-                }
-                break;
-            case InputActionPhase.Canceled:
-                break;
-            default:
-                break;
+            combatController.PerformAttack(currentWeapon);
         }
     }
     public override void OnFixedUpdate()
@@ -44,22 +28,24 @@ public class AttackActionContext : ActionContextBase
         base.OnFixedUpdate();
         if (!combatController.IsAttacking)
         {
+
             IsAttackRequested = false;
         }
 
     }
     public override void EnterState()
     {
+        Character.AttackPressed = false;
         base.EnterState();
         combatController.PerformAttack(currentWeapon);
-        player.InternalSpeedMultiplier = 0;
+        Character.InternalSpeedMultiplier = 0;
         InContext = true;
     }
 
     public override void ExitState()
     {
         base.ExitState();
-        player.InternalSpeedMultiplier = 0;
+        Character.InternalSpeedMultiplier = 0;
         combatController.InterroptAttack();
         InContext = false;
     }

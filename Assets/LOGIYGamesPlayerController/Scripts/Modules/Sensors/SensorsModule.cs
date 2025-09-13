@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(CharacterController))]
@@ -53,6 +54,10 @@ namespace LOGIYGames
         public bool IsOnSlope { get; private set; }
         public float GroundAngle { get; private set; }
 
+        public bool IsGrounded
+        {
+            get => IsObstacleBelow && IsValidSlope(BelowHit.normal);
+        }
         float prevGroundAngle;
 
         private void Awake()
@@ -74,6 +79,12 @@ namespace LOGIYGames
             {
                 UpdateDebugInfo();
             }
+        }
+        public bool IsValidSlope(Vector3 normal)
+        {
+            float angle = Vector3.Angle(normal, Vector3.up);
+            bool validAngle = angle <= 85;
+            return validAngle;
         }
         private void PerformDetection()
         {

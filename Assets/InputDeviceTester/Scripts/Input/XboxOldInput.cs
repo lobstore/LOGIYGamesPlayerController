@@ -148,7 +148,7 @@ public class XboxOldInput : GamepadOldInput
 #endif
 }
 
-// This is for xbox controller triggers on MacOS ONLY
+// This is for xbox CController triggers on MacOS ONLY
 // The trigger initially starts at 0 until it is first used. Then the range is [-1, 1].
 public class XboxTrigger : AnalogButton
 {

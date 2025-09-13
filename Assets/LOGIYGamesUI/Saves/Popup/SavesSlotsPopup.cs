@@ -59,6 +59,10 @@ namespace LOGIYGames
             {
                 presenter.Dispose();
             }
+            foreach (var view in saveSlotsViews)
+            {
+                Destroy(view.gameObject);
+            }
             saveSlotsModels.Clear();
             saveSlotsViews.Clear();
             saveSlotsPresenters.Clear();

@@ -2,7 +2,8 @@
 
 public abstract class MonoModuleBase : MonoBehaviour, IModule
 {
-    public int ModulePriority { get; protected set; } = 0;
+    
+    [field:SerializeField][Tooltip("Less value mean earlier calls")] public int ModulePriority { get; protected set; } = 0;
 
     public virtual void Initialize() { }
     public virtual void OnUpdate(float deltaTime) { }

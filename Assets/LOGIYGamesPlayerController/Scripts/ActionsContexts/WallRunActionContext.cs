@@ -1,6 +1,6 @@
 //using UnityEngine;
 //using LOGIYGames;
-//[RequireComponent(typeof(CharacterModule))]
+//[RequireComponent(typeof(Character))]
 //[RequireComponent(typeof(PlayerInputsManager))]
 //[RequireComponent(typeof(SensorsModule))]
 //public class WallRunActionContext : MonoBehaviour, IActionContext
@@ -8,7 +8,7 @@
 //    SensorsModule Sensors;
 //    PlayerInputsManager HumanoidLocomotionInput;
 //    CinemachineCameraSwitcher CameraManager;
-//    CharacterModule Player;
+//    Character Player;
 //    private float turnSmoothTime;
 //    CountdownTimer wallJumpCooldownTimer;
 //    CountdownTimer runningWallTimer;
@@ -138,12 +138,12 @@
 //    void Awake()
 //    {
 //        HumanoidLocomotionInput = GetComponent<PlayerInputsManager>();
-//        Player = GetComponent<CharacterModule>();
+//        Player = GetComponent<Character>();
 //        Sensors = GetComponent<SensorsModule>();
 //        wallJumpCooldownTimer = new CountdownTimer(wallJumpCooldown);
 //        runningWallTimer = new CountdownTimer(runningWallTime);
-//        Player.PlayerTimers.Add(wallJumpCooldownTimer);
-//        Player.PlayerTimers.Add(runningWallTimer);
+//        Player.CharacterTimers.Add(wallJumpCooldownTimer);
+//        Player.CharacterTimers.Add(runningWallTimer);
 //        HumanoidLocomotionInput.Jumped.AddListener(OnJump);
 //    }
 

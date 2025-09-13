@@ -1,74 +1,60 @@
 using LOGIYGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
-[RequireComponent(typeof(CharacterModule))]
-[RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(SensorsModule))]
-[DefaultExecutionOrder(-1)]
-public class CrouchActionContext : LocomotionActionContext
+namespace LOGIYGames
 {
-
-    [Header("Movement Settings")]
-    [SerializeField] private float crouchHeightMultiplier = 0.5f;
-    [Header("Component References")]
-    private CharacterController characterController;
-
-    public bool IsCrouching => sensors.IsObstacleAbove || IsCrouchingPressed;
-    private bool IsCrouchingPressed;
-    [SerializeField] float crouchSpeed=0.3f;
-    public float CrouchHeight { get; private set; }
-    public float StandingHeight { get; private set; }
-
-    protected override void Awake()
+    [RequireComponent(typeof(Character))]
+    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(SensorsModule))]
+    [DefaultExecutionOrder(-1)]
+    public class CrouchActionContext : LocomotionActionContext
     {
-        base.Awake();
-        InitializeComponents();
-        InitializeHeightValues();
-    }
-    private void OnEnable()
-    {
-        Input.CrouchEvent.AddListener(PerformCrouch);
-    }
-    private void PerformCrouch(InputAction.CallbackContext context)
-    {
-        switch (context.phase)
+
+        [SerializeField] float crouchSpeed = 0.3f;
+        [Header("Movement Settings")]
+        [SerializeField] private float crouchHeightMultiplier = 0.5f;
+        [Header("Component References")]
+        private CharacterController characterController;
+
+        public bool IsCrouching => Sensors.IsObstacleAbove || IsCrouchingPressed;
+        private bool IsCrouchingPressed;
+        public float CrouchHeight { get; private set; }
+        public float StandingHeight { get; private set; }
+
+        protected override void Awake()
         {
-            case InputActionPhase.Performed:
-                IsCrouchingPressed = true;
-                break;
-            case InputActionPhase.Canceled:
-                IsCrouchingPressed = false;
-                break;
-            default:
-                break;
+            base.Awake();
+            InitializeComponents();
+            InitializeHeightValues();
         }
-    }
 
-    private void OnDisable()
-    {
-        Input.CrouchEvent.RemoveListener(PerformCrouch);
-    }
-    private void InitializeComponents()
-    {
-        characterController = GetComponent<CharacterController>();
-    }
+        private void Update()
+        {
+            IsCrouchingPressed = Character.CrouchPressed;
+        }
 
-    private void InitializeHeightValues()
-    {
-        StandingHeight = characterController.height;
-        CrouchHeight = StandingHeight * crouchHeightMultiplier;
-    }
+        private void InitializeComponents()
+        {
+            characterController = GetComponent<CharacterController>();
+        }
 
-    public override void EnterState()
-    {
-        base.EnterState();
-        player.Height = CrouchHeight;
-        InternalSpeedMultiplier = crouchSpeed;
-    }
-    public override void ExitState()
-    {
-        base.ExitState();
-        player.Height = StandingHeight;
-    }
+        private void InitializeHeightValues()
+        {
+            StandingHeight = characterController.height;
+            CrouchHeight = StandingHeight * crouchHeightMultiplier;
+        }
 
+        public override void EnterState()
+        {
+            base.EnterState();
+            Character.Height = CrouchHeight;
+            InternalSpeedMultiplier = crouchSpeed;
+        }
+        public override void ExitState()
+        {
+            base.ExitState();
+            Character.Height = StandingHeight;
+        }
+
+    }
 }

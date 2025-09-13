@@ -1,121 +1,118 @@
-using LOGIYGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-public class JumpActionContext : AerialActionContext
+namespace LOGIYGames
 {
-
-    [Header("Jump Settings")]
-    [SerializeField] private float jumpVerticalImpulse = 1.5f;
-    [SerializeField] private float jumpPlanarImpulse = 1f;
-    [SerializeField] private float jumpCooldown = 0.2f;
-    [SerializeField] private int maxJumpCount = 2;
-    [field: SerializeField] public bool CanJump { get; set; } = true;
-
-    // State Variables
-    private CountdownTimer jumpCooldownTimer;
-    private int currentJumpCount;
-    public bool IsJumping { get; private set; }
-
-    protected override void Awake()
+    public class JumpActionContext : AerialActionContext
     {
-        base.Awake();
-        InitializeJumpSystem();
-    }
 
-    private void InitializeJumpSystem()
-    {
-        jumpCooldownTimer = new CountdownTimer(jumpCooldown);
-        player.PlayerTimers.Add(jumpCooldownTimer);
-        currentJumpCount = maxJumpCount;
-    }
+        [Header("Jump Settings")]
+        [SerializeField] private float jumpVerticalImpulse = 1.5f;
+        [SerializeField] private float jumpPlanarImpulse = 1f;
+        [SerializeField] private float jumpCooldown = 0.2f;
+        [SerializeField] private int maxJumpCount = 2;
+        CharacterGravityModule characterGravityModule;
+        [field: SerializeField] public bool CanJump { get; set; } = true;
 
-    private void OnEnable()
-    {
-        jumpCooldownTimer.Reset(jumpCooldown);
-        Input.JumpEvent.AddListener(PerformJump);
-        jumpCooldownTimer.OnTimerStart += StartJump;
-        jumpCooldownTimer.OnTimerStop += StopJump;
+        // State Variables
+        private CountdownTimer jumpCooldownTimer;
+        private int currentJumpCount;
+        public bool IsJumping { get; private set; }
 
-    }
-
-
-
-    private void OnDisable()
-    {
-        Input.JumpEvent.RemoveListener(PerformJump);
-        jumpCooldownTimer.OnTimerStart -= StartJump;
-        jumpCooldownTimer.OnTimerStop -= StopJump;
-
-    }
-    private void PerformJump(InputAction.CallbackContext context)
-    {
-        switch (context.phase)
+        protected override void Awake()
         {
-            case InputActionPhase.Performed:
-                if (CanJump && currentJumpCount > 0 && !jumpCooldownTimer.IsRunning)
-                {
-                    jumpCooldownTimer.Start();
-                }
-                break;
-            default:
-                break;
+            base.Awake();
+            InitializeJumpSystem();
         }
-    }
-    private void StartJump()
-    {
-        IsJumping = true;
 
-    }
-    private void StopJump()
-    {
-        IsJumping = false;
-    }
-
-    private void ExecuteJump()
-    {
-        switch (MotionType)
+        private void InitializeJumpSystem()
         {
-            case MotionType.RigidBody:
-                {
-                    var rb = GetComponent<Rigidbody>();
-                    rb.AddForce(Vector3.up * jumpVerticalImpulse * -2f * Physics.gravity.y, ForceMode.Impulse);
-                    if (MovementInput.magnitude > 0)
-                    {
-
-                        rb.AddForce((player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse, ForceMode.Impulse);
-                    }
-                }
-                break;
-            case MotionType.CharacterController:
-                {
-                    player.VerticalVelocity = Mathf.Sqrt(jumpVerticalImpulse * -2f * Physics.gravity.y);
-                    if (MovementInput.magnitude > 0)
-                    {
-                        player.HorizontalVelocity += (player.transform.forward * MovementInput.y + player.transform.right * player.TotalSpeedMultiplier * MovementInput.x) * jumpPlanarImpulse;
-                    }
-
-                }
-                break;
-            case MotionType.AnimatorController:
-                break;
-            default:
-                break;
+            jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+            Character.CharacterTimers.Add(jumpCooldownTimer);
+            currentJumpCount = maxJumpCount;
+            characterGravityModule = GetComponent<CharacterGravityModule>();
         }
-        animator?.CrossFade("JumpUpward", 0.05f);
-        currentJumpCount--;
 
-    }
+        private void OnEnable()
+        {
+            jumpCooldownTimer.Reset(jumpCooldown);
+            jumpCooldownTimer.OnTimerStart += StartJump;
+            jumpCooldownTimer.OnTimerStop += StopJump;
 
-    public override void EnterState()
-    {
-        base.EnterState();
-        ExecuteJump();
-    }
+        }
 
-    public void ResetJump(int newJumpCount = -1)
-    {
-        IsJumping = false;
-        currentJumpCount = newJumpCount >= 0 ? newJumpCount : maxJumpCount;
+
+
+        private void OnDisable()
+        {
+            jumpCooldownTimer.OnTimerStart -= StartJump;
+            jumpCooldownTimer.OnTimerStop -= StopJump;
+
+        }
+        private void Update()
+        {
+            if (CanJump && currentJumpCount > 0 && Character.JumpPressed && !jumpCooldownTimer.IsRunning)
+            {
+                jumpCooldownTimer.Start();
+            }
+        }
+
+        private void StartJump()
+        {
+            IsJumping = true;
+        }
+        private void StopJump()
+        {
+            IsJumping = false;
+        }
+
+        private void ExecuteJump()
+        {
+            switch (MotionType)
+            {
+                case MotionType.RigidBody:
+                    {
+                        var rb = GetComponent<Rigidbody>();
+                        rb.AddForce(Vector3.up * jumpVerticalImpulse * -2f * Physics.gravity.y, ForceMode.Impulse);
+                        if (MovementInput.magnitude > 0)
+                        {
+                            rb.AddForce((Character.transform.forward * MovementInput.y + Character.transform.right  * MovementInput.x) * Character.TotalSpeedMultiplier * jumpPlanarImpulse, ForceMode.Impulse);
+                        }
+                    }
+                    break;
+                case MotionType.CharacterController:
+                    {
+                        characterGravityModule.VerticalVelocity = Mathf.Sqrt(jumpVerticalImpulse * -2f * Physics.gravity.y);
+                        if (MovementInput.magnitude > 0)
+                        {
+                            Vector3 movement = new Vector3(MovementInput.x, 0, MovementInput.y);
+
+                            Vector3 cam = Camera.main.transform.forward;
+                            ;
+                            Character.HorizontalVelocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * Character.TotalSpeedMultiplier * jumpPlanarImpulse;
+                        }
+                    }
+                    break;
+                case MotionType.AnimatorController:
+                    break;
+                default:
+                    break;
+            }
+            animator?.CrossFade("JumpUpward", 0.05f);
+            currentJumpCount--;
+            Character.JumpPressed = false;
+
+        }
+
+        public override void EnterState()
+        {
+            base.EnterState();
+            ExecuteJump();
+        }
+
+        public void ResetJump(int newJumpCount = -1)
+        {
+            IsJumping = false;
+            currentJumpCount = newJumpCount >= 0 ? newJumpCount : maxJumpCount;
+        }
     }
 }

@@ -339,8 +339,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1701183408068252506, guid: ab8757a57d601394285301e6071efb6e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1934671380767108572, guid: ab8757a57d601394285301e6071efb6e, type: 3}
+      propertyPath: InputReader
+      value: 
+      objectReference: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
     - target: {fileID: 1934671380767108572, guid: ab8757a57d601394285301e6071efb6e, type: 3}
       propertyPath: settingsDbContext
       value: 

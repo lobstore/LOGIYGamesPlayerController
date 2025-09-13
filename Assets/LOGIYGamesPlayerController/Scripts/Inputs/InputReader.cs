@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -10,28 +12,28 @@ namespace LOGIYGames
 {
     public class InputEvent : UnityEvent<InputAction.CallbackContext> { }
     [CreateAssetMenu(menuName = "Input/InputReader", fileName = "InputReader")]
-    public class InputReader : ScriptableObject, GameInputs.IPlayerInputsActions, GameInputs.IGameControlActions, GameInputs.IUIActions, GameInputs.ICameraActions
+    public class InputReader : ScriptableObject, GameInputs.ICharacterInputsActions, GameInputs.IGameControlActions, GameInputs.IUIActions, GameInputs.ICameraActions
     {
         private GameInputs gameInputs;
         public GameInputs GameInputs => gameInputs;
         GameObject lastUISelection;
         GameObject firstUISelection;
 
-        public bool PlayerInputsEnable
+        public bool CharacterInputsEnable
         {
            
-            get => gameInputs.PlayerInputs.enabled;
+            get => gameInputs.CharacterInputs.enabled;
             set
             {
                 if (value)
                 {
-                    gameInputs.PlayerInputs.Enable();
-                    Debug.Log("EnabledPlayerInputs");
+                    gameInputs.CharacterInputs.Enable();
+                    Debug.Log("EnabledCharacterInputs");
                 }
                 else
                 {
-                    gameInputs.PlayerInputs.Disable();
-                    Debug.Log("DisabledPlayerInputs");
+                    gameInputs.CharacterInputs.Disable();
+                    Debug.Log("DisabledCharacterInputs");
                 }
             }
         }
@@ -68,9 +70,34 @@ namespace LOGIYGames
                 }
             }
         }
+        public bool GameControlInputsEnable
+        {
+            get => gameInputs.GameControl.enabled;
+            set
+            {
+                if (value)
+                {
+                    gameInputs.GameControl.Enable();
+                }
+                else
+                {
+                    gameInputs.GameControl.Disable();
+                }
+            }
+        }
+
+
         public Vector2 LookInput { get; private set; }
-        public Vector2 MoveInput { get; private set; }
+        public Vector2 MovementInput { get; private set; }
         public float ZoomDelta { get; private set; }
+        public bool JumpPressed { get; private set; }
+        public bool CrouchPressed { get; private set; }
+        public bool AttackPressed { get; private set; }
+        public bool SprintPressed { get; private set; }
+        public bool InteractPressed { get; private set; }
+        public bool EvadePressed { get; private set; }
+        public bool BlockPressed { get; private set; }
+
         public InputEvent JumpEvent { get; private set; } = new();
         public InputEvent EvadeEvent { get; private set; } = new();
         public InputEvent InteractEvent { get; private set; } = new();
@@ -93,7 +120,7 @@ namespace LOGIYGames
             {
                 gameInputs = new GameInputs();
                 gameInputs.UI.SetCallbacks(this);
-                gameInputs.PlayerInputs.SetCallbacks(this);
+                gameInputs.CharacterInputs.SetCallbacks(this);
                 gameInputs.GameControl.SetCallbacks(this);
                 gameInputs.Camera.SetCallbacks(this);
             }
@@ -105,7 +132,7 @@ namespace LOGIYGames
             if (gameInputs != null)
             {
                 gameInputs.UI.RemoveCallbacks(this);
-                gameInputs.PlayerInputs.RemoveCallbacks(this);
+                gameInputs.CharacterInputs.RemoveCallbacks(this);
                 gameInputs.GameControl.RemoveCallbacks(this);
                 gameInputs.Camera.RemoveCallbacks(this);
             }
@@ -169,27 +196,39 @@ namespace LOGIYGames
         bool IsMouse(InputAction.CallbackContext context) => IsMouseDevice = context.control.device is Mouse;
 
         public bool IsUIEngaged { get; private set; }
+        public void EngageUI()
+        {
+            if (lastUISelection == null) lastUISelection = firstUISelection;
+            EventSystem.current.SetSelectedGameObject(lastUISelection);
+            CharacterInputsEnable = false;
+            CameraInputsEnable = false;
+            Cursor.lockState = CursorLockMode.None;
+            IsUIEngaged = true;
+            UIEngaged?.Invoke();
+
+
+        }
+        public void DisengageUI()
+        {
+            lastUISelection = EventSystem.current.currentSelectedGameObject;
+            EventSystem.current.SetSelectedGameObject(null);
+            CharacterInputsEnable = true;
+            CameraInputsEnable = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            IsUIEngaged = false;
+            UIDisengaged?.Invoke();
+        }
         public void OnUIEngage(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
             IsUIEngaged = !IsUIEngaged;
-
             if (IsUIEngaged)
             {
-                if (lastUISelection == null) lastUISelection = firstUISelection;
-                EventSystem.current.SetSelectedGameObject(lastUISelection);
-                PlayerInputsEnable = false;
-
-                Cursor.lockState = CursorLockMode.None;
-                UIEngaged?.Invoke();
+                EngageUI();
             }
             else
             {
-                lastUISelection = EventSystem.current.currentSelectedGameObject;
-                EventSystem.current.SetSelectedGameObject(null);
-                PlayerInputsEnable = true;
-                Cursor.lockState = CursorLockMode.Locked;
-                UIDisengaged?.Invoke();
+                DisengageUI();
             }
         }
 
@@ -206,7 +245,19 @@ namespace LOGIYGames
         }
         public void OnAttack(InputAction.CallbackContext context)
         {
+
             if (!context.performed) return;
+            switch (context.phase)
+            {
+                case InputActionPhase.Performed:
+                    AttackPressed = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    AttackPressed = false;
+                    break;
+                default:
+                    break;
+            }
             var pointer = Pointer.current;
             if (pointer != null && IsPointerOverUI(pointer.position.ReadValue())) { Debug.Log("Hover UI"); return; }
             AttackEvent.Invoke(context);
@@ -214,11 +265,33 @@ namespace LOGIYGames
 
         public void OnBlock(InputAction.CallbackContext context)
         {
+            switch (context.phase)
+            {
+                case InputActionPhase.Performed:
+                    BlockPressed = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    BlockPressed = false;
+                    break;
+                default:
+                    break;
+            }
             BlockEvent.Invoke(context);
         }
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
+            switch (context.phase)
+            {
+                case InputActionPhase.Performed:
+                    CrouchPressed = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    CrouchPressed = false;
+                    break;
+                default:
+                    break;
+            }
             CrouchEvent.Invoke(context);
         }
 
@@ -229,6 +302,17 @@ namespace LOGIYGames
 
         public void OnEvade(InputAction.CallbackContext context)
         {
+            switch (context.phase)
+            {
+                case InputActionPhase.Performed:
+                    EvadePressed = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    EvadePressed = false;
+                    break;
+                default:
+                    break;
+            }
             EvadeEvent.Invoke(context);
         }
 
@@ -239,11 +323,33 @@ namespace LOGIYGames
 
         public void OnInteraction(InputAction.CallbackContext context)
         {
+            switch (context.phase)
+            {
+                case InputActionPhase.Performed:
+                    InteractPressed = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    InteractPressed = false;
+                    break;
+                default:
+                    break;
+            }
             InteractEvent.Invoke(context);
         }
 
         public void OnJump(InputAction.CallbackContext context)
         {
+            switch (context.phase)
+            {
+                case InputActionPhase.Performed:
+                    JumpPressed = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    JumpPressed = false;
+                    break;
+                default:
+                    break;
+            }
             JumpEvent.Invoke(context);
             IsMouse(context);
         }
@@ -261,11 +367,23 @@ namespace LOGIYGames
         public void OnMove(InputAction.CallbackContext context)
         {
             MoveEvent.Invoke(context);
-            MoveInput = context.ReadValue<Vector2>();
+            MovementInput = context.ReadValue<Vector2>();
         }
 
         public void OnSprint(InputAction.CallbackContext context)
         {
+            switch (context.phase)
+            {
+                case InputActionPhase.Performed:
+                    SprintPressed = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    SprintPressed = false;
+                    break;
+                default:
+                    break;
+            }
+ 
             SprintEvent.Invoke(context);
         }
 

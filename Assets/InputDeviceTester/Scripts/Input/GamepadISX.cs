@@ -41,7 +41,7 @@ public class GamepadISX : MonoBehaviour
             stick.localPosition = new Vector3(pos.x * m_stickMaxMove, pos.y * m_stickMaxMove, stick.localPosition.z);
     }
 
-    // If the one of the controller button is pressed
+    // If the one of the CController button is pressed
     protected virtual void OnControllerButtonPress(ButtonControl control, string dpadName = null, bool isXbox = false, bool isPS = false)
     {
         string buttonName = control.name;

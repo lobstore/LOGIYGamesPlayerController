@@ -1,12 +1,12 @@
 //using LOGIYGames;
 //using UnityEngine;
-//[RequireComponent(typeof(CharacterModule))]
+//[RequireComponent(typeof(Character))]
 //[RequireComponent(typeof(PlayerInputsManager))]
 //[RequireComponent(typeof(SensorsModule))]
 //public class ClimbActionContext : MonoBehaviour, IActionContext
 //{
 //    SensorsModule Sensors;
-//    CharacterModule player;
+//    Character Character;
 //    PlayerInputsManager HumanoidInput;
 //    CinemachineCameraSwitcher CameraManager;
 //    private CountdownTimer climbingTimer;
@@ -30,24 +30,24 @@
 
 //    void Awake()
 //    {
-//        player = GetComponent<CharacterModule>();
+//        Character = GetComponent<Character>();
 //        HumanoidInput = GetComponent<PlayerInputsManager>();
 //        CameraManager = GetComponent<CinemachineCameraSwitcher>();
 //        Sensors = GetComponent<SensorsModule>();
 //        climbingTimer = new CountdownTimer(climbingWallTime);
 //        climbJumpCooldownTimer = new CountdownTimer(climbJumpingCooldown);
-//        player.PlayerTimers.Add(climbingTimer);
-//        player.PlayerTimers.Add(climbJumpCooldownTimer);
+//        Character.CharacterTimers.Add(climbingTimer);
+//        Character.CharacterTimers.Add(climbJumpCooldownTimer);
 //        HumanoidInput.Jumped.AddListener(OnJump);
 //    }
 //    private void OnJump()
 //    {
 //        if (!climbJumpCooldownTimer.IsRunning)
 //        {
-//            if (Sensors.IsObstacleLegsFront && !player.IsGrounded)
+//            if (Sensors.IsObstacleLegsFront && !Character.IsGrounded)
 //            {
 //                IsJumping = true;
-//                player.ExitingWallTimer.Start();
+//                Character.ExitingWallTimer.Start();
 //                climbJumpCooldownTimer.Start();
 //            }
 //        }
@@ -55,15 +55,15 @@
 //    public void Climb()
 //    {
 
-//        player.RotateToDirection(-Sensors.LegsFrontHit.normal, 0);
-//        player.VerticalVelocity = player.CurrentSpeed;
+//        Character.RotateToDirection(-Sensors.LegsFrontHit.normal, 0);
+//        Character.VerticalVelocity = Character.CurrentSpeed;
 //    }
 //    public void ClimbJump()
 //    {
 //        StopWallClimbing();
-//        player.VerticalVelocity = Mathf.Sqrt(jumpForce * -2 * Physics.gravity.y);
-//        player.HorizontalVelocity = Sensors.LegsFrontHit.normal * wallJumpForce;
-//        player.RotateToDirection(Sensors.LegsFrontHit.normal, 0);
+//        Character.VerticalVelocity = Mathf.Sqrt(jumpForce * -2 * Physics.gravity.y);
+//        Character.HorizontalVelocity = Sensors.LegsFrontHit.normal * wallJumpForce;
+//        Character.RotateToDirection(Sensors.LegsFrontHit.normal, 0);
 //    }
 //    private void StartWallClimbing()
 //    {
@@ -74,18 +74,18 @@
 //    {
 //        IsClimbing = false;
 //        climbingTimer.Stop();
-//        player.ExitingWallTimer.Start();
+//        Character.ExitingWallTimer.Start();
 
 //    }
 //    private void CheckForWallClimbing()
 //    {
-//        if (player.IsGrounded)
+//        if (Character.IsGrounded)
 //        {
 //            climbingTimer.Reset();
 //        }
 //        if (CanClimbWall())
 //        {
-//            if (!IsClimbing && climbingTimer.Progress >= 0 && !player.ExitingWallTimer.IsRunning)
+//            if (!IsClimbing && climbingTimer.Progress >= 0 && !Character.ExitingWallTimer.IsRunning)
 //            {
 //                StartWallClimbing();
 //            }
@@ -110,8 +110,8 @@
 //    {
 //        return Sensors.IsObstacleLegsFront
 //                    && HumanoidInput.MovementInput.y > 0
-//                    && Vector3.Angle(player.transform.forward, -Sensors.LegsFrontHit.normal) < maxWallLookAngle
-//                    && Vector3.Angle(player.transform.forward, Camera.main.transform.forward) < 30;
+//                    && Vector3.Angle(Character.transform.forward, -Sensors.LegsFrontHit.normal) < maxWallLookAngle
+//                    && Vector3.Angle(Character.transform.forward, Camera.main.transform.forward) < 30;
 //    }
 
 //    public void SpeedControl()
@@ -145,8 +145,8 @@
 
 //    public void EnterState()
 //    {
-//        player.Acceleration = Acceleration;
-//        player.Deceleration = Deceleration;
+//        Character.Acceleration = Acceleration;
+//        Character.Deceleration = Deceleration;
 //    }
 
 //    public void ExitState()

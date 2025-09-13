@@ -38,14 +38,9 @@ namespace LOGIYGames
         }
         public void SwitchToScene(int index)
         {
-            print("LoadingPre");
-
             m_Animator.SetTrigger("CloseScene");
-            print("LoadingA");
-
             newSceneLoadingOperation = SceneManager.LoadSceneAsync(index);
             newSceneLoadingOperation.allowSceneActivation = false;
-            print("LoadingB");
         }
         public void OnCloseSceneAnimationEnd()
         {

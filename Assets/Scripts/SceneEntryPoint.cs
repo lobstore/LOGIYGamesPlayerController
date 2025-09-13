@@ -5,16 +5,27 @@ namespace LOGIYGames
 {
     public class SceneEntryPoint : MonoBehaviour
     {
-        // Start is called before the first frame update
+        [SerializeField] InputReader InputReader;
+        [SerializeField] bool visibleCursor;
         void Start()
         {
-            if (LobbyManager.Instance.JoinedLobby != null && !LobbyManager.Instance.IsHost)
+
+            //if (LobbyManager.Instance.JoinedLobby != null && !LobbyManager.Instance.IsHost)
+            //{
+            //    NetworkManager.Singleton.StartClient();
+            //}
+            //else
+            //{
+            //    NetworkManager.Singleton.StartHost();
+            //}
+
+            if (visibleCursor)
             {
-                NetworkManager.Singleton.StartClient();
+                InputReader.EngageUI();
             }
             else
             {
-                NetworkManager.Singleton.StartHost();
+                InputReader.DisengageUI();
             }
         }
 

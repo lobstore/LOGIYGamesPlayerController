@@ -1,31 +1,57 @@
+using System.Linq;
 using UnityEngine;
 
-namespace LOGIYGames
+/// <summary>
+/// Базовый класс для синглтона в Unity
+/// </summary>
+/// <typeparam name="T">Тип класса-наследника</typeparam>
+public abstract class Singleton<T> : MonoBehaviour where T : Component
 {
-    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+    private static T _instance;
+    private static readonly object _lock = new object();
+
+    /// <summary>
+    /// Глобальный доступ к экземпляру синглтона
+    /// </summary>
+    public static T Instance
     {
-        public static T Instance { get; private set; }
-        protected virtual void Awake()
+        get
         {
-            T[] objs = FindObjectsByType<T>(FindObjectsSortMode.None);
-            if (Instance == null)
+
+            lock (_lock)
             {
-                if (objs.Length > 1)
-                {
-
-                    Instance = objs[0];
-                    for (int i = 1; i < objs.Length; i++)
-                    {
-                        Destroy(objs[i].gameObject);
-                    }
-                }
-                else if (objs.Length == 0)
-                {
-                    gameObject.AddComponent<T>();
-                }
+                return _instance;
             }
-            else { Destroy(gameObject); }
-
         }
     }
+
+    /// <summary>
+    /// Виртуальный метод для инициализации синглтона
+    /// </summary>
+    protected virtual void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this as T;
+            DontDestroyOnLoad(gameObject);
+
+            // Дополнительная инициализация
+            Initialize();
+        }
+        //else if (_instance != this)
+        //{
+        //    Debug.LogWarning($"[Singleton] Удаляем дубликат экземпляра {typeof(T)}");
+        //    Destroy(gameObject);
+        //}
+    }
+
+    /// <summary>
+    /// Переопределите этот метод для кастомной инициализации
+    /// </summary>
+    protected virtual void Initialize()
+    {
+        // Базовая реализация пуста
+    }
+
+
 }

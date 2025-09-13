@@ -14,7 +14,7 @@
 //    int isLadderClimbingDownHash = Animator.StringToHash("IsLadderClimbingDown");
 //    int ladderClimbingUpEndedTriggerHash = Animator.StringToHash("LadderClimbingUpEnded");
 //    int ladderClimbingDownEndedTriggerHash = Animator.StringToHash("LadderClimbingDownEnded");
-//    CharacterModule player;
+//    Character Character;
 //    CharacterController cc;
 //    Vector3 ladderPosition;
 //    Vector3 ladderRotation;
@@ -23,7 +23,7 @@
 //    public MotionType MotionType => throw new System.NotImplementedException();
 //    private void Awake()
 //    {
-//        player = GetComponent<CharacterModule>();
+//        Character = GetComponent<Character>();
 //        cc = GetComponent<CharacterController>();
 //    }
 //    private void OnEnable()
@@ -59,23 +59,23 @@
 //    }
 //    public void EnterState()
 //    {
-//        player.UseGravity = false;
-//        player.ResetMotion();
+//        Character.UseGravity = false;
+//        Character.ResetMotion();
 //        CharacterToLadder();
 //    }
 //    private void CharacterToLadder()
 //    {
-//        var targetPosition = new Vector3(ladderPosition.x, player.transform.position.y, ladderPosition.z);
-//        var direction = (targetPosition - player.transform.position).normalized;
-//        float distanceToLadder = Vector3.Distance(player.transform.position, targetPosition);
-//        //player.transform.position = direction * distanceToLadder;
+//        var targetPosition = new Vector3(ladderPosition.x, Character.transform.position.y, ladderPosition.z);
+//        var direction = (targetPosition - Character.transform.position).normalized;
+//        float distanceToLadder = Vector3.Distance(Character.transform.position, targetPosition);
+//        //Character.transform.position = direction * distanceToLadder;
 //        cc.Move(direction * distanceToLadder);
-//        player.RotateToDirection(ladderRotation);
+//        Character.RotateToDirection(ladderRotation);
 //    }
 //    public void ExitState()
 //    {
 
-//        player.UseGravity = true;
+//        Character.UseGravity = true;
 //    }
 //    private void OnAnimationExit()
 //    {

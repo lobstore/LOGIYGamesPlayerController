@@ -60,24 +60,12 @@ namespace LOGIYGames
 
         private void InputFieldInFocus(string str)
         {
-            Inputs.PlayerInputsEnable = false;
-            Inputs.CameraInputsEnable = false;
+            Inputs.EngageUI();
         }
         private void InputFieldOutFocus(string str)
         {
+            Inputs.DisengageUI();
 
-            if (Inputs.IsUIEngaged)
-            {
-                Inputs.PlayerInputsEnable = false;
-                Inputs.CameraInputsEnable = false;
-                Cursor.lockState = CursorLockMode.None;
-            }
-            else
-            {
-                Inputs.PlayerInputsEnable = true;
-                Inputs.CameraInputsEnable = true;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
         }
         private void SendMessage()
         {

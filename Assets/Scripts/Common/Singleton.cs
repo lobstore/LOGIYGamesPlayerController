@@ -9,18 +9,18 @@ namespace InputSamples
     public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {
         /// <summary>
-        /// The static reference to the instance.
+        /// The static reference to the Instance.
         /// </summary>
         public static T Instance { get; protected set; }
 
         /// <summary>
-        /// Gets whether an instance of this singleton exists.
+        /// Gets whether an Instance of this singleton exists.
         /// </summary>
         public static bool InstanceExists => Instance != null;
 
 
         /// <summary>
-        /// Gets the instance of this singleton, and returns true if it is not null.
+        /// Gets the Instance of this singleton, and returns true if it is not null.
         /// Prefer this whenever you would otherwise use InstanceExists and Instance together.
         /// </summary>
         public static bool TryGetInstance(out T result)
@@ -31,7 +31,7 @@ namespace InputSamples
         }
 
         /// <summary>
-        /// Awake method to associate singleton with instance.
+        /// Awake method to associate singleton with Instance.
         /// </summary>
         protected virtual void Awake()
         {

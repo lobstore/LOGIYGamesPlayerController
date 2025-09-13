@@ -128,7 +128,7 @@ public class GamepadOldInput : MonoBehaviour
             return null;
     }
 
-    // If the button has a name, like button0 on xbox controller is called A in Windows environment.
+    // If the button has a name, like button0 on xbox CController is called A in Windows environment.
     protected string GetButtonName(string buttonCode)
     {
         string buttonName;
@@ -156,7 +156,7 @@ public class AnalogStick
     //-------------------------------------------------------------------------------------------
 
     private Transform stick;            // The moving part of the analog stick. It is the child object named "Stick";
-    private string name;                // The name for the Transform Stick. It should make sense for the controller used, such as "Left_Stick" for Xbox controller.
+    private string name;                // The name for the Transform Stick. It should make sense for the CController used, such as "Left_Stick" for Xbox CController.
     private string x_axis_name;         // The Axis controlled through the stick's movement in X direction. The name is set in MouseDelta Manager.
     private string y_axis_name;         // The Axis controlled through the stick's movement in Y direction. The name is set in MouseDelta Manager.
     private bool is_y_reversed = false; // In case the Y axis is reversed, like for MouseDelta Manager.
@@ -215,7 +215,7 @@ public class AnalogStick
 public class AnalogButton
 {
     protected Transform button;       // The Transform for the button
-    protected string name;            // Name of the Transform. It should make sense for the context, such as "Left_Trigger" for xbox controller.
+    protected string name;            // Name of the Transform. It should make sense for the context, such as "Left_Trigger" for xbox CController.
     protected string axis_name;       // The name of the axis it associated with. This is set in MouseDelta Manager.
 
     // It may take a pair of buttons to complete the whole axis.

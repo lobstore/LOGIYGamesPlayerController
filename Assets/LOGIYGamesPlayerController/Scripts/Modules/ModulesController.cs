@@ -19,18 +19,15 @@ namespace LOGIYGames
         }
         void Update()
         {
-            var deltaTime = Time.deltaTime;
-            modules.ForEach((m) => { m.OnUpdate(deltaTime); });
+            modules.ForEach((m) => { m.OnUpdate(Time.deltaTime); });
         }
         private void FixedUpdate()
         {
-            var fixedDeltaTime = Time.fixedDeltaTime;
-            modules.ForEach((m) => { m.OnFixedUpdate(fixedDeltaTime); });
+            modules.ForEach((m) => { m.OnFixedUpdate(Time.fixedDeltaTime); });
         }
         private void LateUpdate()
         {
-            var deltaTime = Time.deltaTime;
-            modules.ForEach((m) => { m.OnLateUpdate(deltaTime); });
+            modules.ForEach((m) => { m.OnLateUpdate(Time.deltaTime); });
         }
     }
 }
