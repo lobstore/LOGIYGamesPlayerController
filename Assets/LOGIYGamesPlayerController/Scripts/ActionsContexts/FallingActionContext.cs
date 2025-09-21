@@ -1,6 +1,8 @@
 using LOGIYGames;
 using Unity.Netcode;
 using UnityEngine;
+using LOGIYGames.CharacterCore;
+using LOGIYGames.Timers;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(Character))]
@@ -24,7 +26,7 @@ namespace LOGIYGames
         private CountdownTimer landingCoolDownTimer;
         private StopwatchTimer fallingTimer;
         public bool IsLanding { get; private set; }
-        public float FallingTime => fallingTimer.GetTime();
+        public float FallingTime => fallingTimer.CurrentTime;
 
         protected override void Awake()
         {
@@ -36,8 +38,7 @@ namespace LOGIYGames
         {
             landingCoolDownTimer = new CountdownTimer(landingDuration);
             fallingTimer = new StopwatchTimer();
-            Character.CharacterTimers.Add(landingCoolDownTimer);
-            Character.CharacterTimers.Add(fallingTimer);
+
         }
 
         public void StartFallingTimer() => fallingTimer.Start();

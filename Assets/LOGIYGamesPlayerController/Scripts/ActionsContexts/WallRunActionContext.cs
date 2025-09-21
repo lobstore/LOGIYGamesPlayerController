@@ -132,7 +132,7 @@
 
 //        }
 //        var desiredVelocity = (wallAlong * Player.CurrentSpeed + magnit);
-//        Player.HorizontalVelocity = Vector3.Lerp(Player.HorizontalVelocity, desiredVelocity, Acceleration * Time.deltaTime);
+//        Player.HorizontalVelocity = Vector3.Lerp(Player.HorizontalVelocity, desiredVelocity, Acceleration * CurrentTime.deltaTime);
 //    }
 
 //    void Awake()

@@ -1,14 +1,34 @@
-﻿using System;
-namespace LOGIYGames
+﻿using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+namespace LOGIYGames.Timers
 {
-    [Serializable]
-    public abstract class Timer
+    public static class TimersManager
     {
+        static readonly List<Timer> timers = new();
+
+        public static void RegisterTimer(Timer timer) => timers.Add(timer);
+        public static void DeregisterTimer(Timer timer) => timers.Remove(timer);
+
+        public static void UpdateTimers()
+        {
+            foreach (var timer in new List<Timer>(timers) )
+            {
+                timer.Tick();
+            }
+        }
+        public static void Clear() => timers.Clear();
+    }
+    [Serializable]
+    public abstract class Timer : IDisposable
+    {
+        protected bool IsStopped;
         protected float initialTime;
-        protected float Time { get; set; }
+        public float CurrentTime { get; set; }
         public bool IsRunning { get; protected set; }
 
-
+        public float Progress => Mathf.Clamp(CurrentTime / initialTime, 0, 1);
 
         public Action OnTimerStart = delegate { };
         public Action OnTimerStop = delegate { };
@@ -21,10 +41,12 @@ namespace LOGIYGames
 
         public void Start()
         {
-            Time = initialTime;
+            CurrentTime = initialTime;
             if (!IsRunning)
             {
                 IsRunning = true;
+                IsStopped = false;
+                TimersManager.RegisterTimer(this);
                 OnTimerStart.Invoke();
             }
         }
@@ -34,6 +56,8 @@ namespace LOGIYGames
             if (IsRunning)
             {
                 IsRunning = false;
+                IsStopped = true;
+                TimersManager.DeregisterTimer(this);
                 OnTimerStop.Invoke();
             }
         }
@@ -41,52 +65,106 @@ namespace LOGIYGames
 
         public void Resume() => IsRunning = true;
         public void Pause() => IsRunning = false;
+        public virtual void Reset() => CurrentTime = initialTime;
+        public virtual void Reset(float newTime)
+        {
+            initialTime = newTime;
+            Reset();
+        }
 
-        public abstract void Tick(float deltaTime);
+        public abstract void Tick();
+        public abstract bool IsFinished { get; }
+
+        bool disposed;
+
+        ~Timer()
+        {
+            Dispose(false);
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed) return;
+            if (disposing)
+            {
+                TimersManager.DeregisterTimer(this);
+            }
+            disposed = true;
+        }
+
     }
     [Serializable]
     public class CountdownTimer : Timer
     {
         public CountdownTimer(float value) : base(value) { }
-        public float Progress => Time / initialTime;
-        public override void Tick(float deltaTime)
+        public override void Tick()
         {
-            if (IsRunning && Time > 0)
+            if (IsRunning && CurrentTime > 0)
             {
-                Time -= deltaTime;
+                CurrentTime -= Time.deltaTime;
             }
 
-            if (IsRunning && Time <= 0)
+            if (IsRunning && CurrentTime <= 0)
             {
                 Stop();
             }
         }
 
-        public bool IsFinished => Time <= 0;
+        public override bool IsFinished => CurrentTime <= 0;
 
-        public void Reset() { Stop(); Start(); }
-
-        public void Reset(float newTime)
-        {
-            initialTime = newTime;
-            Reset();
-        }
     }
     [Serializable]
     public class StopwatchTimer : Timer
     {
         public StopwatchTimer() : base(0) { }
 
-        public override void Tick(float deltaTime)
+        public override void Tick()
         {
             if (IsRunning)
             {
-                Time += deltaTime;
+                CurrentTime += Time.deltaTime;
             }
         }
+        public override bool IsFinished => IsStopped;
+    }
+    [Serializable]
+    public class IntervalTimer : Timer
+    {
+        readonly float interval;
+        float nextInterval;
 
-        public void Reset() { Stop(); Start(); }
+        public Action OnInterval = delegate { };
 
-        public float GetTime() => Time;
+        public IntervalTimer(float totalTime, float intervalSeconds) : base(totalTime)
+        {
+            interval = intervalSeconds;
+            nextInterval = totalTime - interval;
+        }
+
+        public override bool IsFinished => CurrentTime<=0;
+
+        public override void Tick()
+        {
+            if (IsRunning&&CurrentTime>0)
+            {
+                CurrentTime -= Time.deltaTime;
+
+                while (CurrentTime <= nextInterval && nextInterval >= 0)
+                {
+                    OnInterval.Invoke();
+                    nextInterval-=interval;
+                }
+            }
+            if (IsRunning&&CurrentTime<=0)
+            {
+                CurrentTime = 0;
+                Stop();
+            }
+        }
     }
 }

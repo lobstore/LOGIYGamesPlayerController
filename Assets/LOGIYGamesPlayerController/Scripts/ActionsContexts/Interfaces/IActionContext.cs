@@ -10,7 +10,6 @@
     }
     public enum MotionType
     {
-        RigidBody,
         CharacterController,
         AnimatorController
     }

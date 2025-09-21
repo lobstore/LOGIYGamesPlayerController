@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using LOGIYGames.CharacterCore;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(Character))]
@@ -48,7 +49,7 @@ namespace LOGIYGames
             animator.SetBool(isMovingHash, isMoving);
             animator.SetFloat(yawInputHash, Mathf.Clamp(deltaYaw, -1, 1), smoothTime, Time.deltaTime);
             animator.SetFloat(speedHash, animatedspeed);
-            if (CameraManager.Instance.CameraPerspectiveType == CameraPerspectiveType.FirstPerson)
+            if (CameraManager.Instance.CameraFocusingState == CameraFocusingState.Focus)
             {
                 Vector3 localVelocity = transform.InverseTransformDirection(Character.HorizontalVelocity);
                 localVelocity.Normalize();

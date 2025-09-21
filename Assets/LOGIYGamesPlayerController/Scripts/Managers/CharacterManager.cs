@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace LOGIYGames
+
+namespace LOGIYGames.CharacterCore
 {
     public interface IControllable
     {

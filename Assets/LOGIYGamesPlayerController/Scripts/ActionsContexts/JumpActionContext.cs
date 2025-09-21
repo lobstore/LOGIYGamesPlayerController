@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using LOGIYGames.Timers;
 namespace LOGIYGames
 {
     public class JumpActionContext : AerialActionContext
@@ -11,7 +12,6 @@ namespace LOGIYGames
         [SerializeField] private float jumpCooldown = 0.2f;
         [SerializeField] private int maxJumpCount = 2;
         CharacterGravityModule characterGravityModule;
-        [field: SerializeField] public bool CanJump { get; set; } = true;
 
         // State Variables
         private CountdownTimer jumpCooldownTimer;
@@ -27,7 +27,7 @@ namespace LOGIYGames
         private void InitializeJumpSystem()
         {
             jumpCooldownTimer = new CountdownTimer(jumpCooldown);
-            Character.CharacterTimers.Add(jumpCooldownTimer);
+            TimersManager.RegisterTimer(jumpCooldownTimer);
             currentJumpCount = maxJumpCount;
             characterGravityModule = GetComponent<CharacterGravityModule>();
         }
@@ -50,7 +50,7 @@ namespace LOGIYGames
         }
         private void Update()
         {
-            if (CanJump && currentJumpCount > 0 && Character.JumpPressed && !jumpCooldownTimer.IsRunning)
+            if (currentJumpCount > 0 && Character.JumpPressed && !jumpCooldownTimer.IsRunning)
             {
                 jumpCooldownTimer.Start();
             }
@@ -69,16 +69,6 @@ namespace LOGIYGames
         {
             switch (MotionType)
             {
-                case MotionType.RigidBody:
-                    {
-                        var rb = GetComponent<Rigidbody>();
-                        rb.AddForce(Vector3.up * jumpVerticalImpulse * -2f * Physics.gravity.y, ForceMode.Impulse);
-                        if (MovementInput.magnitude > 0)
-                        {
-                            rb.AddForce((Character.transform.forward * MovementInput.y + Character.transform.right  * MovementInput.x) * Character.TotalSpeedMultiplier * jumpPlanarImpulse, ForceMode.Impulse);
-                        }
-                    }
-                    break;
                 case MotionType.CharacterController:
                     {
                         characterGravityModule.VerticalVelocity = Mathf.Sqrt(jumpVerticalImpulse * -2f * Physics.gravity.y);
@@ -87,12 +77,10 @@ namespace LOGIYGames
                             Vector3 movement = new Vector3(MovementInput.x, 0, MovementInput.y);
 
                             Vector3 cam = Camera.main.transform.forward;
-                            ;
+                            
                             Character.HorizontalVelocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * Character.TotalSpeedMultiplier * jumpPlanarImpulse;
                         }
                     }
-                    break;
-                case MotionType.AnimatorController:
                     break;
                 default:
                     break;

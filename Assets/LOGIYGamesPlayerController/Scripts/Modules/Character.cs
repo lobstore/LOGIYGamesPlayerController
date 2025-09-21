@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-namespace LOGIYGames
+using LOGIYGames.Timers;
+namespace LOGIYGames.CharacterCore
 {
+
     [RequireComponent(typeof(SensorsModule))]
     [RequireComponent(typeof(CharacterController))]
     public class Character : MonoModuleBase, IControllable
@@ -9,11 +11,7 @@ namespace LOGIYGames
 
         [Header("References")]
         [SerializeField] InputReader InputReader;
-        private SensorsModule Sensors = null;
         private CharacterController CController = null;
-        private CharacterGravityModule characterGravityModule = null;
-        private IKBodyModule IKBody = null;
-        public List<Timer> CharacterTimers { get; private set; } = new List<Timer>();
         #region VelocityVariables
 
         /// <summary>
@@ -65,7 +63,6 @@ namespace LOGIYGames
         [field: SerializeField] public Transform CinemachineCameraLookAtTransform { get; set; }
         [field: SerializeField] public Transform CinemachineCameraFollowTransform { get; set; }
 
-
         #region Inputs
         public bool JumpPressed { get; set; }
         public bool EvadePressed { get; set; }
@@ -74,31 +71,27 @@ namespace LOGIYGames
         public bool SprintPressed { get; private set; }
         public bool InteractPressed { get; private set; }
         public bool BlockPressed { get; private set; }
+        public bool FocusPressed { get; private set; }
         public Vector2 MovementInput {  get; private set; }
-        #endregion
 
+        #endregion
+        [field: SerializeField] public Transform Target {  get; private set; }
         private void Awake()
         {
             InputReader.CharacterInputsEnable = true;
             InputReader.CameraInputsEnable = true;
-            characterGravityModule = GetComponent<CharacterGravityModule>();
             CController = GetComponent<CharacterController>();
-            Sensors = GetComponent<SensorsModule>();
-            IKBody = GetComponent<IKBodyModule>();
             Height = CController.height;
-            IKBody.SetIK(IsUnderPlayerControl);
         }
 
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            HandleTimers();
         }
 
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
-            Move();
         }
 
         public override void OnLateUpdate(float deltaTime)
@@ -106,13 +99,6 @@ namespace LOGIYGames
             base.OnLateUpdate(deltaTime);
             SmoothHeightChanging();
 
-        }
-        void HandleTimers()
-        {
-            foreach (var timer in CharacterTimers)
-            {
-                timer.Tick(Time.deltaTime);
-            }
         }
         public void HandleInputs()
         {
@@ -145,7 +131,8 @@ namespace LOGIYGames
         /// <param name="turnSmoothTime">Turn speed, instant turn if 0, if !=0, method should be used in update</param>
         public void RotateToDirection(Vector3 desiredDirection, float turnSmoothTime = 0)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection);
+            desiredDirection.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, Vector3.up);
             Rotate(targetRotation, turnSmoothTime);
         }
         public void RotateToPosition(Vector3 position)
@@ -164,27 +151,6 @@ namespace LOGIYGames
                 transform.rotation = targetRotation;
             }
         }
-
-        private void Move()
-        {
-            Vector3 newVelocity = HandleSteepWalls(horizontalVelocity);
-            CController.Move(newVelocity * Time.deltaTime);
-        }
-
-        private Vector3 HandleSteepWalls(Vector3 velocity)
-        {
-            Vector3 normal = Sensors.BelowHit.normal;
-            bool validAngle = Sensors.IsValidSlope(normal);
-
-            if (!validAngle && characterGravityModule.VerticalVelocity < 0f)
-                velocity = Vector3.ProjectOnPlane(velocity, normal);
-
-            return velocity;
-        }
-
-
-
-
         public void ResetMotion()
         {
             horizontalVelocity = Vector3.zero;
@@ -195,7 +161,6 @@ namespace LOGIYGames
 
         public void OnControlGained()
         {
-            IKBody.SetIK(true);
             IsUnderPlayerControl = true;
         }
 
@@ -207,7 +172,6 @@ namespace LOGIYGames
             BlockPressed = false;
             SprintPressed = false;
             MovementInput = Vector2.zero;
-            IKBody.SetIK(false);
             IsUnderPlayerControl = false;
         }
 

@@ -97,6 +97,7 @@ namespace LOGIYGames
         public bool InteractPressed { get; private set; }
         public bool EvadePressed { get; private set; }
         public bool BlockPressed { get; private set; }
+        public bool FocusPressed { get; private set; }
 
         public InputEvent JumpEvent { get; private set; } = new();
         public InputEvent EvadeEvent { get; private set; } = new();
@@ -318,6 +319,15 @@ namespace LOGIYGames
 
         public void OnFocus(InputAction.CallbackContext context)
         {
+            switch (context.phase)
+            {
+                case InputActionPhase.Performed:
+                    FocusPressed = !FocusPressed;
+                    break;
+                default:
+                    break;
+            }
+  
             FocusingEvent.Invoke(context);
         }
 

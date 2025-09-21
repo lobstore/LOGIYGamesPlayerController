@@ -1,6 +1,7 @@
 using LOGIYGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using LOGIYGames.CharacterCore;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(Character))]

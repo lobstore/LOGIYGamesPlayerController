@@ -9,13 +9,22 @@ namespace LOGIYGames
         ThirdPerson,
         Top_Down
     }
+    public enum CameraFocusingState
+    {
+        FreeLook,
+        LookForward,
+        Focus,
+    }
     public class CameraManager : Singleton<CameraManager>
     {
+       [SerializeField] InputReader InputReader;
         List<CinemachineCameraController> cinemachineCameraControllers = new();
         public CinemachineCameraController CurentCameraController { get; private set; }
         [SerializeField] CinemachineCameraController FPSCameraController;
         [SerializeField] CinemachineCameraController TPSCameraController;
         [SerializeField] CinemachineCameraController TDSCameraController;
+
+        [SerializeField] public CameraFocusingState CameraFocusingState = CameraFocusingState.FreeLook;
         [SerializeField] public CameraPerspectiveType CameraPerspectiveType = CameraPerspectiveType.ThirdPerson;
         protected override void Initialize()
         {
@@ -47,6 +56,14 @@ namespace LOGIYGames
                 {
                     SetTDView();
                 }
+            }
+            if (InputReader.FocusPressed && CameraPerspectiveType != CameraPerspectiveType.FirstPerson)
+            {
+                CameraFocusingState = CameraFocusingState.Focus;
+            }
+            else
+            {
+                CameraFocusingState = CameraFocusingState.FreeLook;
             }
         }
         public void SetTargetTo(Transform Follow, Transform LookAt)
@@ -81,18 +98,21 @@ namespace LOGIYGames
         {
             CurentCameraController = TPSCameraController;
             CameraPerspectiveType = CameraPerspectiveType.ThirdPerson;
+            CameraFocusingState = CameraFocusingState.FreeLook;
             SetPriorVirtualCamera(CurentCameraController);
         }
         public void SetFPView()
         {
             CurentCameraController = FPSCameraController;
             CameraPerspectiveType = CameraPerspectiveType.FirstPerson;
+            CameraFocusingState = CameraFocusingState.Focus;
             SetPriorVirtualCamera(CurentCameraController);
         }
         public void SetTDView()
         {
             CurentCameraController = TDSCameraController;
             CameraPerspectiveType = CameraPerspectiveType.Top_Down;
+            CameraFocusingState = CameraFocusingState.FreeLook;
             SetPriorVirtualCamera(CurentCameraController);
         }
         

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 namespace LOGIYGames
 {
-    public class RollActionContext : ActionContextBase
+    public class RollActionContext : GroundedActionContext
     {
         [field: SerializeField] public bool CanRoll { get; set; } = true;
         public bool IsRolling { get => animator.GetBool(isRollingHash); private set => animator.SetBool(isRollingHash, value); }

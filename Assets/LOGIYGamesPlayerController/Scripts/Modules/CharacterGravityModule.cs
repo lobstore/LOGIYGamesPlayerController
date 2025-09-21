@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using LOGIYGames.CharacterCore;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(CharacterController))]

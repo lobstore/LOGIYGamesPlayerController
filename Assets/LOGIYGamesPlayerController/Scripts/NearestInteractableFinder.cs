@@ -2,6 +2,7 @@
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using LOGIYGames.Timers;
 namespace LOGIYGames
 {
     public class NearestInteractableFinder : MonoBehaviour
@@ -30,21 +31,15 @@ namespace LOGIYGames
             _movingTargetCooldownTimer.Start();
         }
 
-        private void TimerUpdate()
-        {
-            _timer.Tick(Time.deltaTime);
-            _movingTargetCooldownTimer.Tick(Time.deltaTime);
-        }
 
         private void Update()
         {
-            TimerUpdate();
             Tracking();
         }
 
         private void Tracking()
         {
-            if (_timer.GetTime() >= _checkInterval)
+            if (_timer.CurrentTime >= _checkInterval)
             {
                 _timer.Reset();
                 UpdateTarget();
@@ -85,7 +80,7 @@ namespace LOGIYGames
             if (_wasMovingTargetLastCheck && !hasMovingTargets)
             {
                 // Если таймер задержки еще не истек - оставляем текущую цель
-                if (_movingTargetCooldownTimer.GetTime() < _movingTargetCooldown)
+                if (_movingTargetCooldownTimer.CurrentTime < _movingTargetCooldown)
                 {
                     return;
                 }

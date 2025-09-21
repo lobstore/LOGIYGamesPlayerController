@@ -1,6 +1,7 @@
 ﻿using LOGIYGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using LOGIYGames.Timers;
 namespace LOGIYGames
 {
     [DefaultExecutionOrder(-1)]
@@ -43,7 +44,6 @@ namespace LOGIYGames
             base.Awake();
             InitializeComponents();
             slippingTimer = new CountdownTimer(slipTime);
-            Character.CharacterTimers.Add(slippingTimer);
         }
 
         private void InitializeComponents()

@@ -80,7 +80,7 @@
 //        Player.RotateToDirection(-wallNormal);
 //        var desiredVelocity = (wallAlong * Player.CurrentSpeed * HumanoidInput.MovementInput.x + magnit);
 
-//        Player.HorizontalVelocity = Vector3.Lerp(Player.HorizontalVelocity, desiredVelocity, Player.Acceleration * Time.deltaTime);
+//        Player.HorizontalVelocity = Vector3.Lerp(Player.HorizontalVelocity, desiredVelocity, Player.Acceleration * CurrentTime.deltaTime);
 //        Player.VerticalVelocity = 0;
 //    }
 //}

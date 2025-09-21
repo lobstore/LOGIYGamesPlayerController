@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using LOGIYGames.Timers;
 namespace LOGIYGames
 {
     public class IKGrabItem : MonoBehaviour
@@ -31,11 +32,6 @@ namespace LOGIYGames
 
             touchCountdownTimer.Start();
             ResetHandPositions();
-        }
-
-        private void Update()
-        {
-            touchCountdownTimer.Tick(Time.deltaTime);
         }
 
         private void LateUpdate()
@@ -130,7 +126,7 @@ namespace LOGIYGames
 
         private void UpdateHandPositionAndRotation(Transform handTransform, Vector3 targetPosition, Transform targetOrigin)
         {
-            float touchProgress = Mathf.Clamp01(touchCountdownTimer.GetTime() / touchDuration);
+            float touchProgress = Mathf.Clamp01(touchCountdownTimer.CurrentTime / touchDuration);
             float curveValue = animationCurve.Evaluate(touchProgress);
 
             if (targetOrigin != null)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UniVRM10;
+using LOGIYGames.Timers;
 namespace LOGIYGames
 {
     public class Vrm10LookAtModule : MonoModuleBase
@@ -69,12 +70,6 @@ namespace LOGIYGames
             return maxOffsetRadius * curveValue;
         }
 
-        private void TimerUpdate()
-        {
-            turningDurationTimer.Tick(Time.deltaTime);
-            offsetTimer.Tick(Time.deltaTime);
-        }
-
         private void ProcessNystagmus()
         {
             if (offsetTimer.IsFinished)
@@ -116,7 +111,6 @@ namespace LOGIYGames
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            TimerUpdate();
         }
 
         public override void OnLateUpdate(float deltaTime)
@@ -169,7 +163,7 @@ namespace LOGIYGames
 
         void PerformTurningSight(Vector3 target)
         {
-            var sightProgress = Mathf.Clamp01(turningDurationTimer.GetTime() / sightTurningDuration);
+            var sightProgress = Mathf.Clamp01(turningDurationTimer.CurrentTime / sightTurningDuration);
             float curveValue = sightAnimationCurve.Evaluate(sightProgress);
             EyeSight.position = Vector3.Lerp(EyeSight.position, target, curveValue);
 

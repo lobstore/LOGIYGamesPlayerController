@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-
+﻿using System;
+using UnityEngine;
+using LOGIYGames.CharacterCore;
 namespace LOGIYGames
 {
     public abstract class ActionContextBase : MonoBehaviour
@@ -9,7 +10,7 @@ namespace LOGIYGames
         [SerializeField] protected float Acceleration = 0f;
         [SerializeField] protected float Deceleration = 0f;
         [SerializeField] protected float TurnSmoothTime = 10f;
-        [Tooltip("should the character move after the turn, or turn after the movement (if false, then the direction of movement always coincides with transform.forward)")]
+        [Tooltip("Should the character move after the turn, or turn after the movement (if false, then the direction of movement always coincides with transform.forward)")]
         [SerializeField] protected bool moveBeforeRotation;
         protected float InternalSpeedMultiplier = 0f;
         protected const float angleThreshold = 45f;
@@ -17,31 +18,33 @@ namespace LOGIYGames
         protected Character Character;
         protected SensorsModule Sensors;
         protected Animator animator;
-
+        protected CharacterController CController;
+        protected CharacterGravityModule CharacterGravity;
         protected bool isMoving;
         protected float deltaYaw;
         protected Vector3 moveDirection;
         public Vector2 MovementInput => Character.MovementInput;
 
         private float lastYRotation;
-
+        [Tooltip("Should the motion vector move relative to the object, or relative to the object and the surface normal")]
         [SerializeField] protected bool UseProjectionOnPlane = true;
+        [Tooltip("This is how an object should be set in motion")]
         [SerializeField] protected MotionType MotionType;
 
         protected virtual void Awake()
         {
-
             Sensors = GetComponent<SensorsModule>();
             Character = GetComponent<Character>();
             animator = GetComponent<Animator>();
-
+            CController = GetComponent<CharacterController>();
+            CharacterGravity = GetComponent<CharacterGravityModule>();
         }
 
         public virtual void EnterState()
         {
             // if (!IsOwner) return;
 
-            ApplyRootMotion();
+            InitializeMotionSystem();
 
             Character.Acceleration = Acceleration;
             Character.Deceleration = Deceleration;
@@ -49,15 +52,18 @@ namespace LOGIYGames
             UpdateAnimations();
         }
 
-        protected virtual void ApplyRootMotion()
+        protected virtual void InitializeMotionSystem()
         {
-            if (MotionType == MotionType.AnimatorController)
+            switch (MotionType)
             {
-                animator.applyRootMotion = true;
-            }
-            else
-            {
-                animator.applyRootMotion = false;
+                case MotionType.CharacterController:
+                    animator.applyRootMotion = false;
+                    break;
+                case MotionType.AnimatorController:
+                    animator.applyRootMotion = true;
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -83,16 +89,39 @@ namespace LOGIYGames
 
         protected virtual void Move()
         {
-
             GetDeltaAngle();
             GetMovementDirection();
-
-
             DebugDraw.DrawVector(transform.position, Character.HorizontalVelocity, 1, 1, Color.blue, 0);
             ChangeVelocity();
+            ApplyMovement();
             Rotate();
         }
+        protected virtual void ApplyMovement()
+        {
+            switch (MotionType)
+            {
+                case MotionType.CharacterController:
+                    Vector3 newVelocity = HandleSteepWalls(Character.HorizontalVelocity);
+                    CController.Move(newVelocity * Time.deltaTime);
+                    break;
+                case MotionType.AnimatorController:
 
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        private Vector3 HandleSteepWalls(Vector3 velocity)
+        {
+            Vector3 normal = Sensors.BelowHit.normal;
+            bool validAngle = Sensors.IsValidSlope(normal);
+
+            if (!validAngle && CharacterGravity.VerticalVelocity < 0f)
+                velocity = Vector3.ProjectOnPlane(velocity, normal);
+
+            return velocity;
+        }
         protected virtual void ChangeVelocity()
         {
 
@@ -115,13 +144,19 @@ namespace LOGIYGames
 
         protected virtual void GetMovementDirection()
         {
-            if (CameraManager.Instance.CameraPerspectiveType == CameraPerspectiveType.FirstPerson)
+            switch (CameraManager.Instance.CameraFocusingState)
             {
-                moveDirection = GetMovementDirectionAlongCamera();
-            }
-            else
-            {
-                moveDirection = GetMovementDirectionRelativeCamera();
+                case CameraFocusingState.FreeLook:
+                    moveDirection = GetMovementDirectionRelativeCamera();
+                    break;
+                case CameraFocusingState.LookForward:
+                    moveDirection = GetMovementDirectionAlongCamera();
+                    break;
+                case CameraFocusingState.Focus:
+                    moveDirection = GetMovementDirectionAlongCamera();
+                    break;
+                default:
+                    break;
             }
             if (UseProjectionOnPlane)
             {
@@ -132,7 +167,11 @@ namespace LOGIYGames
 
         protected virtual Vector3 GetMovementDirectionAlongCamera()
         {
-            return Character.transform.right * MovementInput.x + Character.transform.forward * MovementInput.y;
+            var fwd = Camera.main.transform.forward;
+            fwd.y=0;
+            var rght = Camera.main.transform.right;
+            rght.y = 0;
+            return rght.normalized * MovementInput.x + fwd.normalized * MovementInput.y;
         }
 
         protected virtual Vector3 GetMovementDirectionRelativeCamera()
@@ -154,14 +193,29 @@ namespace LOGIYGames
         protected virtual void Rotate()
         {
             if (!Character.IsUnderPlayerControl) return;
-            if (CameraManager.Instance.CameraPerspectiveType == CameraPerspectiveType.FirstPerson)
+            switch (CameraManager.Instance.CameraFocusingState)
             {
-                RotateAlongCamera();
+                case CameraFocusingState.FreeLook:
+                    RotateRelativeCamera();
+                    break;
+                case CameraFocusingState.LookForward:
+                    RotateAlongCamera();
+                    break;
+                case CameraFocusingState.Focus:
+                    RotateToTarget();
+                    break;
+                default:
+                    break;
             }
-            else
+        }
+
+        private void RotateToTarget()
+        {
+            if (Character.Target==null)
             {
-                RotateRelativeCamera();
+                return;
             }
+            Character.RotateToPosition(Character.Target.position);
         }
 
         private void RotateRelativeCamera()

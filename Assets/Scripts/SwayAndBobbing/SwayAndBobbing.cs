@@ -91,13 +91,13 @@
 
 //        void CompositePositionRotation()
 //        {
-//            transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition, Time.deltaTime * smooth);
-//            transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), Time.deltaTime * smoothRot);
+//            transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition, CurrentTime.deltaTime * smooth);
+//            transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), CurrentTime.deltaTime * smoothRot);
 //        }
 
 //        void BobOffset()
 //        {
-//            speedCurve += Time.deltaTime * (Player.IsGrounded ? (MovementInput.MovementInput.x + MovementInput.MovementInput.y) * bobExaggeration : 1f) + 0.01f;
+//            speedCurve += CurrentTime.deltaTime * (Player.IsGrounded ? (MovementInput.MovementInput.x + MovementInput.MovementInput.y) * bobExaggeration : 1f) + 0.01f;
 
 //            bobPosition.x = (curveCos * bobLimit.x * (Player.IsGrounded ? 1 : 0)) - (walkInput.x * travelLimit.x);
 //            bobPosition.y = (curveSin * bobLimit.y) - (MovementInput.MovementInput.y * travelLimit.y);
