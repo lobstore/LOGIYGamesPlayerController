@@ -2125,14 +2125,6 @@ BlendTree:
   m_Name: BlendTree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: 0bb6b0fde0a5e2a47b88443c546b83a7, type: 3}
-    m_Threshold: -1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
-    m_CycleOffset: 0.5
-    m_DirectBlendParameter: Speed
-    m_Mirror: 1
-  - serializedVersion: 2
     m_Motion: {fileID: -203655887218126122, guid: f5c532f85a7da334b92fe143cc322bd0, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
@@ -2140,18 +2132,10 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
     m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: 0bb6b0fde0a5e2a47b88443c546b83a7, type: 3}
-    m_Threshold: 1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
-    m_CycleOffset: 0
-    m_DirectBlendParameter: Speed
-    m_Mirror: 0
   m_BlendParameter: Yaw Input
   m_BlendParameterY: Blend
-  m_MinThreshold: -1
-  m_MaxThreshold: 1
+  m_MinThreshold: 0
+  m_MaxThreshold: 0
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
@@ -2816,21 +2800,21 @@ AnimatorStateMachine:
     - {fileID: -3176827979216995322}
     - {fileID: 7382870870819448823}
     - {fileID: 3704943636007337431}
-  - first: {fileID: 2518387403826169624}
+  - first: {fileID: 1255699695766555364}
     second:
-    - {fileID: -8556225358824716510}
-    - {fileID: 1980128554843855417}
-    - {fileID: -5617937570731961479}
+    - {fileID: 3501585314022461350}
+    - {fileID: -6231620174762001772}
   - first: {fileID: 1300231003425257662}
     second:
     - {fileID: -8262818429473420611}
     - {fileID: -7150818219190046792}
     - {fileID: 5012207726023744606}
     - {fileID: 4002551404626391677}
-  - first: {fileID: 1255699695766555364}
+  - first: {fileID: 2518387403826169624}
     second:
-    - {fileID: 3501585314022461350}
-    - {fileID: -6231620174762001772}
+    - {fileID: -8556225358824716510}
+    - {fileID: 1980128554843855417}
+    - {fileID: -5617937570731961479}
   - first: {fileID: -5771468056608768662}
     second:
     - {fileID: -6600459702600143294}
@@ -4250,7 +4234,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ad902c428875a5f43822f8086d5946bb, type: 3}
     m_Threshold: 0.08960117
-    m_Position: {x: -0.75, y: 0.75}
+    m_Position: {x: -0.707, y: 0.707}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
@@ -4258,7 +4242,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 6a077531a4c174841b72cf811d51463b, type: 3}
     m_Threshold: 0.11032195
-    m_Position: {x: 0.75, y: 0.75}
+    m_Position: {x: 0.707, y: 0.707}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
@@ -4266,7 +4250,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: f94bc87aa9cf7ed43907c9f9dcc7a050, type: 3}
     m_Threshold: 0.13104272
-    m_Position: {x: -0.75, y: -0.75}
+    m_Position: {x: -0.707, y: -0.75}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
@@ -4274,7 +4258,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: e1342bc42df134446b15c15e6201ecc0, type: 3}
     m_Threshold: 0.1517635
-    m_Position: {x: 0.75, y: -0.75}
+    m_Position: {x: 0.707, y: -0.707}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
@@ -4346,7 +4330,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 1218271063102575986}
     m_Threshold: 0.33825046
-    m_Position: {x: 0, y: 0.35}
+    m_Position: {x: 0, y: 0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
@@ -4362,7 +4346,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 5105668125940279424}
     m_Threshold: 0.37969202
-    m_Position: {x: 0, y: -0.35}
+    m_Position: {x: 0, y: -0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
@@ -4381,7 +4365,7 @@ BlendTree:
   m_MaxThreshold: 0.4004128
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
-  m_BlendType: 3
+  m_BlendType: 2
 --- !u!1102 &8886407061962802397
 AnimatorState:
   serializedVersion: 6

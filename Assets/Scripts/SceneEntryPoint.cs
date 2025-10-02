@@ -17,7 +17,6 @@ public class SceneEntryPoint : MonoBehaviour
         //{
         //    NetworkManager.Singleton.StartHost();
         //}
-
         if (visibleCursor)
         {
             InputReader.EngageUI();
