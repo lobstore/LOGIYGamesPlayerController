@@ -1,6 +1,5 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Timers;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -15,32 +14,52 @@ namespace LOGIYGames
         string currentState;
         // State Variables
         public CountdownTimer jumpCooldownTimer;
-        [SerializeField] private float jumpCooldown;
+        [SerializeField] private StatesDataSO statesDataSO;
+
+        LocomotionState locomotionState;
+        FallingState fallingState;
+        JumpState jumpState;
+        CrouchState crouchState;
+        RollState rollState;
+        WallrunState wallrunState;
+        ClimbState climbState;
+        WallJumpState wallJumpState;
+        SlideState slideState;
+
+        public float SlideSlopeAngleLimit { get; private set; } = 50;
+
         void Start()
         {
 
-            jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+            jumpCooldownTimer = new CountdownTimer(statesDataSO.jumpCooldownSeconds);
             TimersManager.RegisterTimer(jumpCooldownTimer);
-            jumpCooldownTimer.Reset(jumpCooldown);
+            jumpCooldownTimer.Reset(statesDataSO.jumpCooldownSeconds);
 
             Sensors = GetComponent<SensorsModule>();
             Character = GetComponent<Character>();
             StateMachine = new();
-            var locomotionState = new LocomotionState(this, 7, 4, MotionType.CharacterController);
-            var fallingState = new FallingState(this, 1, 1, 1,  MotionType.CharacterController);
-            var jumpState = new JumpState(this, 5, 5, MotionType.CharacterController);
-            var crouchState = new CrouchState(this, 7, 4, MotionType.CharacterController);
-            var rollState = new RollState(this, MotionType.AnimatorController);
-            var wallrunState= new WallrunState(this, 7, 4, MotionType.CharacterController);
+            locomotionState = new LocomotionState(this,statesDataSO);
+            fallingState = new FallingState(this, statesDataSO);
+            jumpState = new JumpState(this,statesDataSO );
+            crouchState = new CrouchState(this,statesDataSO);
+            rollState = new RollState(this, statesDataSO);
+            wallrunState = new WallrunState(this,statesDataSO);
+            climbState = new ClimbState(this, statesDataSO);
+            wallJumpState = new WallJumpState(this, statesDataSO);
+            slideState = new SlideState(this, statesDataSO);
 
-            StateMachine.AddAnyTransition(fallingState, new FuncPredicate(()=>!Sensors.IsGrounded && !jumpCooldownTimer.IsRunning&&!wallrunState.IsWallrunning) );
+
+            StateMachine.AddAnyTransition(fallingState, new FuncPredicate(() => !Sensors.IsGrounded && !jumpCooldownTimer.IsRunning && !wallrunState.IsWallrunning && !climbState.IsClimbing));
+            StateMachine.AddAnyTransition(slideState, new FuncPredicate(() => Sensors.IsGrounded && Mathf.Abs(Sensors.GroundAngle) > SlideSlopeAngleLimit && !climbState.IsClimbing));
+
             StateMachine.AddTransition(fallingState, locomotionState, new FuncPredicate(() => Sensors.IsGrounded));
+            StateMachine.AddTransition(slideState, locomotionState, new FuncPredicate(() => Sensors.IsGrounded && Mathf.Abs(Sensors.GroundAngle) <= SlideSlopeAngleLimit));
 
-            StateMachine.AddTransition(locomotionState, jumpState, new FuncPredicate(() => Character.JumpPressed && jumpCooldownTimer.IsRunning ));
-            StateMachine.AddTransition(jumpState, fallingState, new FuncPredicate(() => jumpCooldownTimer.IsFinished ));
+            StateMachine.AddTransition(locomotionState, jumpState, new FuncPredicate(() => Character.JumpPressed && jumpCooldownTimer.IsRunning));
+            StateMachine.AddTransition(jumpState, fallingState, new FuncPredicate(() => jumpCooldownTimer.IsFinished));
 
-            StateMachine.AddTransition(locomotionState, crouchState, new FuncPredicate(() => Sensors.IsObstacleAbove||Character.CrouchPressed));
-            StateMachine.AddTransition(crouchState, locomotionState, new FuncPredicate(() => !Sensors.IsObstacleAbove&&!Character.CrouchPressed));
+            StateMachine.AddTransition(locomotionState, crouchState, new FuncPredicate(() => Sensors.IsObstacleAbove || Character.CrouchPressed));
+            StateMachine.AddTransition(crouchState, locomotionState, new FuncPredicate(() => !Sensors.IsObstacleAbove && !Character.CrouchPressed));
 
             StateMachine.AddTransition(locomotionState, rollState, new FuncPredicate(() => Character.EvadePressed));
             StateMachine.AddTransition(rollState, locomotionState, new FuncPredicate(() => !rollState.IsRolling));
@@ -48,8 +67,19 @@ namespace LOGIYGames
             StateMachine.AddTransition(rollState, crouchState, new FuncPredicate(() => !rollState.IsRolling && (Sensors.IsObstacleAbove || Character.CrouchPressed)));
 
 
-            StateMachine.AddTransition(jumpState, wallrunState, new FuncPredicate(() => wallrunState.CanWallRun() ));
-            StateMachine.AddTransition(wallrunState, fallingState, new FuncPredicate(() => !wallrunState.CanWallRun() ));
+            StateMachine.AddTransition(jumpState, wallrunState, new FuncPredicate(() => wallrunState.CanWallRun()));
+            StateMachine.AddTransition(wallJumpState, wallrunState, new FuncPredicate(() => wallrunState.CanWallRun()));
+            StateMachine.AddTransition(wallrunState, fallingState, new FuncPredicate(() => !wallrunState.CanWallRun()));
+
+            StateMachine.AddTransition(jumpState, climbState, new FuncPredicate(() => climbState.CanClimbWall()));
+            StateMachine.AddTransition(climbState, fallingState, new FuncPredicate(() => !climbState.CanClimbWall()));
+
+            StateMachine.AddTransition(climbState, wallJumpState, new FuncPredicate(() => Character.JumpPressed && jumpCooldownTimer.IsRunning));
+            StateMachine.AddTransition(wallrunState, wallJumpState, new FuncPredicate(() => Character.JumpPressed && jumpCooldownTimer.IsRunning));
+
+            
+
+            
 
             StateMachine.SetState(locomotionState);
 
@@ -73,7 +103,7 @@ namespace LOGIYGames
 
         private void OnJump()
         {
-            if (Sensors.IsGrounded && !jumpCooldownTimer.IsRunning)
+            if ((Sensors.IsGrounded || wallrunState.IsWallrunning || climbState.IsClimbing) && !jumpCooldownTimer.IsRunning)
             {
                 jumpCooldownTimer.Start();
             }

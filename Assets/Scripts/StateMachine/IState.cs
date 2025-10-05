@@ -1,4 +1,4 @@
-using LOGIYGames.CharacterCore;
+﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Timers;
 using System;
 using UnityEngine;
@@ -20,16 +20,15 @@ namespace LOGIYGames
         int isGroundedHash = Animator.StringToHash("IsGrounded");
         protected float Acceleration = 0f;
         protected float Deceleration = 0f;
-        protected float TurnSmoothTime = 10f;
+        protected float TurnSmoothingTime = 10f;
         protected bool moveBeforeRotation;
         protected float InternalSpeedMultiplier = 0f;
-        protected const float angleThreshold = 45f;
         protected Character Character;
         protected SensorsModule Sensors;
         protected Animator Animator;
         protected CharacterController CController;
         protected CharacterGravityModule CharacterGravity;
-        protected bool isMoving;
+
         protected float deltaYaw;
         protected Vector3 moveDirection;
         public Vector2 MovementInput => Character.MovementInput;
@@ -119,11 +118,11 @@ namespace LOGIYGames
 
             if (!Sensors.IsValidSlope(normal) && CharacterGravity.VerticalVelocity < 0f)
             {
-                // ����������� �������������� = �������� ������� ���� �� ��������� �����������
+                // Направление соскальзывания = проекция вектора вниз на плоскость поверхности
                 Vector3 slideDir = new Vector3(normal.x, -normal.y, normal.z);
                 slideDir = Vector3.ProjectOnPlane(Vector3.down, normal).normalized;
 
-                // ��������� ��������
+                // добавляем смещение
                 CController.Move(slideDir * -CharacterGravity.VerticalVelocity * Time.deltaTime);
 
             }
@@ -213,10 +212,10 @@ namespace LOGIYGames
         {
             if (MovementInput.magnitude > 0f)
             {
-                // ������������ ���� �������� �� ����������� ��������
+                // Рассчитываем угол поворота по направлению движения
                 var targetAngle = Mathf.Atan2(MovementInput.x, MovementInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                 Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
-                Character.Rotate(targetRotation, TurnSmoothTime);
+                Character.Rotate(targetRotation, TurnSmoothingTime);
             }
         }
 
@@ -224,7 +223,7 @@ namespace LOGIYGames
         {
             var targetAngle = Camera.main.transform.eulerAngles.y;
             Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
-            Character.Rotate(targetRotation, TurnSmoothTime);
+            Character.Rotate(targetRotation, TurnSmoothingTime);
         }
 
         protected virtual void UpdateAnimations()
@@ -239,13 +238,12 @@ namespace LOGIYGames
             lastYRotation = currentYRotation;
         }
     }
-
     public class LocomotionState : GroundedState
     {
         private float smoothTime = 0.3f;
-        protected float walkSpeed = 0.5f;
-        protected float runSpeed = 1f;
-        protected float sprintSpeed = 1.5f;
+        protected float walkSpeed;
+        protected float runSpeed;
+        protected float sprintSpeed;
         private int isMovingHash = Animator.StringToHash("IsMoving");
         private int yawInputHash = Animator.StringToHash("Yaw Input");
         private int speedHash = Animator.StringToHash("Speed");
@@ -256,11 +254,16 @@ namespace LOGIYGames
         public bool IsTurning { get; set; }
         public bool IsSprinting { get; private set; } = false;
 
-        public LocomotionState(MovementStateDriver ctx, float accel, float decel, MotionType motionType) : base(ctx)
+        public LocomotionState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx)
         {
-            Acceleration = accel;
-            Deceleration = decel;
-            MotionType = motionType;
+            walkSpeed = statesDataSO.walkSpeed;
+            runSpeed = statesDataSO.runSpeed;
+            sprintSpeed = statesDataSO.sprintSpeed;
+            Acceleration = statesDataSO.locomotonAcceleration;
+            Deceleration = statesDataSO.locomotonDeceleration;
+            MotionType = statesDataSO.locomotionMotionType;
+            locomotionCurve = statesDataSO.locomotionCurve;
+            TurnSmoothingTime = statesDataSO.turnSmoothingTimeLocomotion;
         }
 
         public override void LogicUpdate()
@@ -293,9 +296,8 @@ namespace LOGIYGames
         {
             base.UpdateAnimations();
             float animatedspeed = 0;
-            //animatedspeed = locomotionCurve.Evaluate(Character.TotalSpeedMultiplier);
-            animatedspeed = Character.TotalSpeedMultiplier;
-            isMoving = MovementInput.magnitude > 0;
+            animatedspeed = locomotionCurve.Evaluate(Character.TotalSpeedMultiplier);
+            bool isMoving = MovementInput.magnitude > 0;
             Animator.SetBool(isMovingHash, isMoving);
             Animator.SetFloat(yawInputHash, Mathf.Clamp(deltaYaw, -1, 1), smoothTime, Time.deltaTime);
             Animator.SetFloat(speedHash, animatedspeed, smoothTime, Time.deltaTime);
@@ -380,6 +382,10 @@ namespace LOGIYGames
         protected GroundedState(MovementStateDriver ctx) : base(ctx)
         {
         }
+        private bool useAutoCalculatedPlayerSpeedMultiplier = true;
+
+        protected float slopeAffectRate = 0.2f;
+        Vector3 projectedVelocity;
         protected override void ChangeVelocity()
         {
             base.ChangeVelocity();
@@ -396,16 +402,43 @@ namespace LOGIYGames
                 Character.InternalSpeedMultiplier = Mathf.Lerp(Character.InternalSpeedMultiplier, 0, Character.Deceleration * Time.deltaTime);
                 Character.HorizontalVelocity = Vector3.Lerp(Character.HorizontalVelocity, Vector3.zero, Character.Deceleration * Time.deltaTime);
             }
+            if (useAutoCalculatedPlayerSpeedMultiplier)
+            {
+                CalculateSlopeSpeedMultiplier();
+            }
+        }
+        private void CalculateSlopeSpeedMultiplier()
+        {
+            projectedVelocity = Vector3.ProjectOnPlane(
+            Vector3.down,
+            Sensors.BelowHit.normal
+            );
+            // Вычисляем косинус угла между направлением движения и направлением склона
+            float dot = Vector3.Dot(moveDirection, projectedVelocity);
+
+            // Теперь множитель скорости зависит от направления движения:
+            // - dot > 0: движение вниз по склону — ускорение
+            // - dot < 0: движение в гору — замедление
+            // - dot ≈ 0: движение перпендикулярно склону — без изменений
+
+
+            // Итоговый множитель скорости:
+            var targetMultiplier = Mathf.Clamp(1f + dot * slopeAffectRate, 0.5f, 1.5f);
+            Character.ExternalSpeedMultiplier = Mathf.Lerp(
+            Character.ExternalSpeedMultiplier,
+            targetMultiplier,
+            Time.deltaTime * Character.Acceleration);
         }
     }
     public class FallingState : AerialState
     {
-        public FallingState(MovementStateDriver ctx, float accel, float decel, float floatspd, MotionType motionType) : base(ctx)
+        public FallingState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx)
         {
-            Acceleration = accel;
-            Deceleration = decel;
-            MotionType = motionType;
-            floatingSpeed = floatspd;
+            Acceleration = statesDataSO.airAcceleration;
+            Deceleration = statesDataSO.airDeceleration;
+            MotionType = statesDataSO.fallingMotionType;
+            floatingSpeed = statesDataSO.airSpeed;
+            TurnSmoothingTime = statesDataSO.turnSmoothingTimeFalling;
             InitializeTimers();
         }
 
@@ -488,18 +521,18 @@ namespace LOGIYGames
     public class JumpState : BaseState
     {
         CharacterGravityModule characterGravityModule;
-        public JumpState(MovementStateDriver ctx, float vertforce, float planforce, MotionType motionType) : base(ctx)
+        public JumpState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx)
         {
             characterGravityModule = ctx.GetComponent<CharacterGravityModule>();
-            MotionType = motionType;
-            jumpVerticalImpulse = vertforce;
-            jumpPlanarImpulse = planforce;
+            MotionType = statesDataSO.jumpMotionType;
+            jumpVerticalImpulse = statesDataSO.verticalJumpForce;
+            jumpPlanarImpulse = statesDataSO.planarJumpForce;
         }
 
         private float jumpVerticalImpulse;
         private float jumpPlanarImpulse;
 
-        private void ExecuteJump()
+        private void Jump()
         {
             switch (MotionType)
             {
@@ -527,21 +560,23 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            ExecuteJump();
+            Jump();
         }
     }
     public class CrouchState : LocomotionState
     {
-        public CrouchState(MovementStateDriver ctx, float accel, float decel, MotionType motionType) : base(ctx, accel, decel, motionType)
+        public CrouchState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx, statesDataSO)
         {
 
-            Acceleration = accel;
-            Deceleration = decel;
-            MotionType = motionType;
+            Acceleration = statesDataSO.crouchAcceleration;
+            Deceleration = statesDataSO.crouchDeceleration;
+            MotionType = statesDataSO.crouchMotionType;
+            crouchSpeed = statesDataSO.crouchSpeed;
+            TurnSmoothingTime = statesDataSO.turnSmoothingTimeCrouch;
             characterController = ctx.GetComponent<CharacterController>();
             InitializeHeightValues();
         }
-        float crouchSpeed = 0.3f;
+        float crouchSpeed;
 
         private float crouchHeightMultiplier = 0.5f;
         private CharacterController characterController;
@@ -571,14 +606,15 @@ namespace LOGIYGames
     }
     public class RollState : BaseState
     {
-        public RollState(MovementStateDriver ctx, MotionType motionType) : base(ctx)
+        public RollState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx)
         {
-            MotionType = motionType;
+            MotionType = statesDataSO.rollMotionType;
+            rollForce = statesDataSO.rollJumpForce;
         }
         public bool IsRolling { get => Animator.GetBool(isRollingHash); private set => Animator.SetBool(isRollingHash, value); }
         int isRollingHash = Animator.StringToHash("IsRolling");
         int RollHash = Animator.StringToHash("Roll");
-
+        float rollForce;
         private void FixedUpdate()
         {
             if (Character.EvadePressed && Sensors.IsGrounded && !IsRolling)
@@ -604,49 +640,23 @@ namespace LOGIYGames
     }
     public class WallrunState : GroundedState
     {
-        public WallrunState(MovementStateDriver ctx, float accel, float decel, MotionType motionType) : base(ctx)
+        public WallrunState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx)
         {
-            Acceleration = accel;
-            Deceleration = decel;
-            MotionType = motionType;
+            Acceleration = statesDataSO.wallrunAcceleration;
+            Deceleration = statesDataSO.wallrunDeceleration;
+            MotionType = statesDataSO.walljumpMotionType;
+            wallRunSpeed = statesDataSO.wallrunSpeed;
+            wallRunGravityMultiplier = statesDataSO.wallrunGravityMultiplier;
+            useWallCliping = statesDataSO.useWallclippingWallrun;
+            MotionType = statesDataSO.wallrunMotionType;
         }
-        private float wallRunGravityMultiplier = 0f;
-        private float wallRunSpeed = 1;
-        private bool useWallCliping = false;
+        private float wallRunGravityMultiplier;
+        private float wallRunSpeed;
+        private bool useWallCliping;
         Vector3 normal;
         Vector3 magnit => -normal;
         public bool IsWallrunning { get; private set; }
-        //private void OnJump()
-        //{
-        //    if (!wallJumpCooldownTimer.IsRunning)
-        //    {
-        //        if ((Sensors.IsObstacleLegsLeft || Sensors.IsObstacleLegsRight) && !Sensors.IsGrounded && MovementInput.y > 0)
-        //        {
-        //            IsJumping = true;
-        //            wallJumpCooldownTimer.Start();
-        //            Character.ExitingWallTimer.Start();
-        //        }
-        //    }
-        //}
-        //TODO Transfer to WalljumpState class
 
-        //public void WallJump()
-        //{
-        //    Vector3 wallNormal;
-        //    if (Sensors.IsObstacleLegsRight)
-        //    {
-        //        wallNormal = Sensors.LegsRightHit.normal;
-        //    }
-        //    else
-        //    {
-        //        wallNormal = Sensors.LegsLeftHit.normal;
-        //    }
-
-        //    CharacterGravity.VerticalVelocity = Mathf.Sqrt(jumpForce * -2 * Physics.gravity.y);
-        //    Character.HorizontalVelocity = wallNormal * wallJumpForce + Character.transform.forward * Character.CurrentSpeed;
-
-        //    Character.RotateToDirection(Character.HorizontalVelocity);
-        //}
         public bool CanWallRun()
         {
             return (Sensors.IsObstacleLegsLeft || Sensors.IsObstacleLegsRight)
@@ -660,7 +670,7 @@ namespace LOGIYGames
 
             normal = Sensors.IsObstacleLegsRight ? Sensors.LegsRightHit.normal : Sensors.LegsLeftHit.normal;
 
-            Vector3 wallAlong = Vector3.Cross(normal, Character.transform.up);
+            Vector3 wallAlong = Vector3.Cross(normal, Character.transform.up).normalized;
             if ((Character.transform.forward - wallAlong).magnitude > (Character.transform.forward + wallAlong).magnitude)
             {
                 wallAlong = -wallAlong;
@@ -695,7 +705,7 @@ namespace LOGIYGames
         }
         protected override void Rotate()
         {
-            Character.RotateToDirection(moveDirection, TurnSmoothTime);
+            Character.RotateToDirection(moveDirection, TurnSmoothingTime);
         }
         public override void Enter()
         {
@@ -707,6 +717,183 @@ namespace LOGIYGames
         {
             base.Exit();
             IsWallrunning = false;
+        }
+
+    }
+    public class ClimbState : GroundedState
+    {
+        public ClimbState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx)
+        {
+            Acceleration = statesDataSO.climbSpeed;
+            Deceleration = statesDataSO.climbDeceleration;
+            MotionType = statesDataSO.climbMotionType;
+            wallClimbSpeed = statesDataSO.climbSpeed;
+
+            useWallCliping = statesDataSO.useWallclippingClimb;
+        }
+        private float wallClimbSpeed;
+        private bool useWallCliping;
+        public bool IsClimbing { get; private set; }
+        Vector3 normal;
+        Vector3 magnit => -normal;
+        private void Magnit()
+        {
+            CController.Move(magnit * Time.deltaTime);
+
+        }
+        protected override void GetMovementDirection()
+        {
+
+            normal = Sensors.LegsFrontHit.normal;
+
+            Vector3 wallAlongUp = Vector3.ProjectOnPlane(Character.transform.up, normal).normalized;
+
+            moveDirection = wallAlongUp;
+        }
+        protected override void Move()
+        {
+            base.Move();
+            if (useWallCliping)
+            {
+                Magnit();
+
+            }
+        }
+        protected override void ChangeVelocity()
+        {
+            base.ChangeVelocity();
+            if (CharacterGravity.VerticalVelocity <= 0)
+            {
+                CharacterGravity.VerticalVelocity = 0;
+
+            }
+        }
+        protected override void Rotate()
+        {
+            Character.RotateToDirection(-Sensors.LegsFrontHit.normal, 0);
+        }
+        public override void Enter()
+        {
+            base.Enter();
+            IsClimbing = true;
+            InternalSpeedMultiplier = wallClimbSpeed;
+            Character.InternalSpeedMultiplier = InternalSpeedMultiplier;
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            IsClimbing = false;
+        }
+        public bool CanClimbWall()
+        {
+            return Sensors.IsObstacleLegsFront
+                        && MovementInput.y > 0;
+            //&& Vector3.Angle(Character.transform.forward, -Sensors.LegsFrontHit.normal) < 60
+            //&& Vector3.Angle(Character.transform.forward, Camera.main.transform.forward) < 30;
+        }
+    }
+    public class WallJumpState : BaseState
+    {
+        public WallJumpState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx)
+        {
+            verticalImpulse = statesDataSO.verticalWallrunJumpForce;
+            planarImpulse = statesDataSO.planarWallrunJumpForce;
+            MotionType = statesDataSO.walljumpMotionType;
+        }
+        bool IsWallJumpBackward;
+        float verticalImpulse;
+        float planarImpulse;
+        public void WallJump()
+        {
+            Vector3 wallNormal;
+
+            if (Sensors.IsObstacleLegsFront)
+            {
+                CharacterGravity.VerticalVelocity = Mathf.Sqrt(verticalImpulse * -2 * Physics.gravity.y);
+                Character.HorizontalVelocity = Sensors.LegsFrontHit.normal * planarImpulse;
+                IsWallJumpBackward = true;
+            }
+            else
+            {
+                if (Sensors.IsObstacleLegsRight)
+                {
+                    wallNormal = Sensors.LegsRightHit.normal;
+                }
+                else
+                {
+                    wallNormal = Sensors.LegsLeftHit.normal;
+                }
+                IsWallJumpBackward = false;
+                CharacterGravity.VerticalVelocity = Mathf.Sqrt(verticalImpulse * -2 * Physics.gravity.y);
+                Character.HorizontalVelocity = wallNormal * planarImpulse + Character.transform.forward * planarImpulse;
+            }
+
+
+
+
+
+        }
+        protected override void Rotate()
+        {
+            if (!IsWallJumpBackward)
+            {
+                //Character.RotateToDirection(Character.HorizontalVelocity);
+
+            }
+            else
+            {
+                Character.RotateToDirection(Sensors.LegsFrontHit.normal);
+            }
+        }
+        public override void Enter()
+        {
+            base.Enter();
+            WallJump();
+        }
+    }
+    public class SlideState : GroundedState
+    {
+        private float requiredSpeedMultiplierToSlip;
+        private float SlideSlopeAngleLimit;
+        int isSlidingHash = Animator.StringToHash("IsSliding");
+        public SlideState(MovementStateDriver ctx, StatesDataSO statesDataSO) : base(ctx)
+        {
+            slideSpeed = statesDataSO.slideSpeed;
+
+        }
+        float slideSpeed;
+        public bool IsSliding { get; set; }
+        protected override void GetMovementDirection()
+        {
+            Vector3 lookDirection = new Vector3(Character.HorizontalVelocity.x, 0f, Character.HorizontalVelocity.z);
+            moveDirection = new Vector3(Sensors.BelowHit.normal.x, 0f, Sensors.BelowHit.normal.z).normalized;
+        }
+        protected override void ChangeVelocity()
+        {
+
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(
+            Vector3.down,
+            Sensors.BelowHit.normal
+                );
+            //Character.InternalSpeedMultiplier = Mathf.Lerp(Character.InternalSpeedMultiplier, InternalSpeedMultiplier, Time.deltaTime * Character.Acceleration);
+            Character.HorizontalVelocity += projectedVelocity.normalized * Time.deltaTime * slideSpeed;
+        }
+        protected override void Rotate()
+        {
+            Character.RotateToDirection(Character.HorizontalVelocity, 8);
+        }
+        public override void Enter()
+        {
+            IsSliding = true;
+            Animator.SetBool(isSlidingHash, IsSliding);
+            Character.HorizontalVelocity = Character.HorizontalVelocity / 2;
+            base.Enter();
+        }
+        public override void Exit()
+        {
+            IsSliding = false;
+            Animator.SetBool(isSlidingHash, IsSliding);
+            base.Exit();
         }
     }
 }
