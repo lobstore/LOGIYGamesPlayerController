@@ -24,13 +24,6 @@ namespace LOGIYGames
             CameraComposer = GetComponent<CinemachinePositionComposer>();
             FollowZoom = GetComponent<CinemachineFollowZoom>();
         }
-        public Quaternion GetCameraLookRotation()
-        {
-            Vector3 directionToCamera = MainCamera.transform.forward;
-            directionToCamera.y = 0;
-            directionToCamera.Normalize();
-            Quaternion targetRotation = Quaternion.LookRotation(directionToCamera);
-            return targetRotation;
-        }
+
     }
 }
