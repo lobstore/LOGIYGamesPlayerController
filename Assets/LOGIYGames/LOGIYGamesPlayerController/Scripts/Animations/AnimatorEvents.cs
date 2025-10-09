@@ -12,7 +12,11 @@ namespace LOGIYGames
         public UnityEvent OnFootR = new UnityEvent();
         public UnityEvent OnFootL = new UnityEvent();
         public UnityEvent OnLand = new UnityEvent();
+        public UnityEvent OnRollEnd = new UnityEvent();
+
+
         public UnityEvent OnWeaponSwitch = new UnityEvent();
+
 
         public AnimatorMoveEvent OnMove = new AnimatorMoveEvent();
 
@@ -36,6 +40,9 @@ namespace LOGIYGames
         public void Land() => OnLand.Invoke();
 
         public void WeaponSwitch() => OnWeaponSwitch.Invoke();
-
+        public void RollEnd(AnimationEvent evt)
+        {
+            OnRollEnd.Invoke();
+        }
     }
 }

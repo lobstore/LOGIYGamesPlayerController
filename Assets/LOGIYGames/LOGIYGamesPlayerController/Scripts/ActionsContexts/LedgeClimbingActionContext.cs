@@ -6,7 +6,7 @@
 //    Sensors Sensors;
 //    PlayerInputsManager HumanoidInput;
 //    CountdownTimer climbJumpCooldownTimer;
-//    CountdownTimer jumpCooldownTimer;
+//    CountdownTimer JumpCooldownTimer;
 
 
 //    private float climbJumpingCooldown = 0.2f;
@@ -21,10 +21,10 @@
 //        Player = GetComponent<Character>();
 //        HumanoidInput = GetComponent<PlayerInputsManager>();
 //        climbJumpCooldownTimer = new CountdownTimer(climbJumpingCooldown);
-//        jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+//        JumpCooldownTimer = new CountdownTimer(jumpCooldown);
 //        HumanoidInput.Jumped.AddListener(OnJump);
 //        Player.CharacterTimers.Add(climbJumpCooldownTimer);
-//        Player.CharacterTimers.Add(jumpCooldownTimer);
+//        Player.CharacterTimers.Add(JumpCooldownTimer);
 //    }
 //    private void OnJump()
 //    {

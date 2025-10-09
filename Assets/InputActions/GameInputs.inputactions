@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "GameInputs",
     "maps": [
         {
@@ -578,7 +579,7 @@
                     "type": "PassThrough",
                     "id": "0754babc-c697-4228-953e-79067941fbad",
                     "expectedControlType": "Double",
-                    "processors": "Clamp(min=-0.1,max=0.1),Invert",
+                    "processors": "Clamp(min=-0.1,max=0.1);Invert",
                     "interactions": "",
                     "initialStateCheck": true
                 },

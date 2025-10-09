@@ -1,94 +1,108 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 namespace LOGIYGames
 {
+    [Serializable]
+    public class StateData
+    {
+        public string StateName = "";
+        public AnimationCurve AnimationCurve = null;
+        public MotionType MotionType;
+        public float TurnSmothTime;
+        public float Acceleration;
+        public float Deceleration;
+        public float Speed;
+    }
+    [Serializable]
+    public class TimedCooldownStateData : StateData
+    {
+        public float ActiveStateTime;
+        public float CooldownStateTime;
+    }
+    [Serializable]
+    public class JumpStateData : TimedCooldownStateData
+    {
+        public float PlanarJumpForce;
+        public float VerticalJumpForce;
+    }
     [CreateAssetMenu(fileName = "StatesDataSO", menuName = "MovementStateMachine/StatesDataSO")]
     public class StatesDataSO : ScriptableObject
     {
         [Header("Locomotion State")]
 
-        public float walkSpeed;
-        public float runSpeed;
-        public float sprintSpeed;
-        public float locomotonAcceleration;
-        public float locomotonDeceleration;
-        public float turnSmoothingTimeLocomotion;
-        public MotionType locomotionMotionType;
-        public AnimationCurve locomotionCurve;
+        public StateData RunStateData;
+
+        [Space]
+        [Header("Sprint State")]
+
+        public StateData SprintStateData;
 
         [Space]
         [Header("Crouch State")]
 
-        public float crouchSpeed;
-        public float crouchAcceleration;
-        public float crouchDeceleration;
-        public float turnSmoothingTimeCrouch;
-        public MotionType crouchMotionType;
+        public StateData CrouchStateData;
 
         [Space]
         [Header("Falling State")]
 
-        public float airSpeed;
-        public float airAcceleration;
-        public float airDeceleration;
-        public float turnSmoothingTimeFalling;
-        public MotionType fallingMotionType;
+        public StateData FallingStateData;
+
+        [Space]
+        [Header("Landing State")]
+
+        public TimedCooldownStateData LandingStateData;
 
         [Space]
         [Header("Wallrun State")]
 
-        public float wallrunSpeed;
-        public float wallrunAcceleration;
-        public float wallrunDeceleration;
-        public float wallrunGravityMultiplier;
-        public bool useWallclippingWallrun;
-        public MotionType wallrunMotionType;
+        public StateData WallrunStateData;
 
         [Space]
         [Header("Climb State")]
 
-        public float climbSpeed;
-        public float climbAcceleration;
-        public float climbDeceleration;
-        public bool useWallclippingClimb;
-        public MotionType climbMotionType;
+        public StateData ClimbStateData;
 
         [Space]
-        [Header("Jump State")]
+        [Header("GroundJump State")]
 
-        public float jumpCooldownSeconds;
-        public float verticalJumpForce;
-        public float planarJumpForce;
-        public MotionType jumpMotionType;
+        public JumpStateData GroundJumpStateData;
 
         [Space]
         [Header("Roll State")]
 
-        public float rollJumpForce;
-        public MotionType rollMotionType;
+        public JumpStateData RollStateData;
 
         [Space]
         [Header("Walljump State")]
 
-        public float verticalWallrunJumpForce;
-        public float planarWallrunJumpForce;
-        public MotionType walljumpMotionType;
+        public JumpStateData WallJumpStateData;
 
         [Space]
         [Header("Slipjump State")]
 
-        public float slipJumpForce;
-        public MotionType slipMotionType;
+        public JumpStateData SlipJumpStateData;
 
         [Space]
         [Header("Slide State")]
 
-        public float slideSpeed;
+        public StateData SlidingStateData;
 
         [Space]
-        [Header("Grounded State")]
-        public float slopeAffectMultiplier;
+        [Header("Dash State")]
 
+        public JumpStateData DashStateData;
+
+        [Space]
+        [Header("Fly State")]
+        public StateData FlyingStateData;
+
+        [Space]
+        [Header("Swim State")]
+        public StateData SwimStateData;
+
+        [Space]
+        [Header("Ledge Hanging State")]
+        public StateData LedgeHangingStateData;
     }
 }

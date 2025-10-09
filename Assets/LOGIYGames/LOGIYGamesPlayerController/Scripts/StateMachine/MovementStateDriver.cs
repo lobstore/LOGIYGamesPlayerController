@@ -1,5 +1,4 @@
 using LOGIYGames.CharacterCore;
-using LOGIYGames.Timers;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -12,87 +11,131 @@ namespace LOGIYGames
         SensorsModule Sensors;
 
         string currentState;
-        // State Variables
-        public CountdownTimer jumpCooldownTimer;
         [SerializeField] private StatesDataSO statesDataSO;
 
-        LocomotionState locomotionState;
+        RunState runState;
+        SprintState sprintState;
         FallingState fallingState;
-        JumpState jumpState;
+        LandingState landingState;
+        GroundJumpState groundJumpState;
         CrouchState crouchState;
         RollState rollState;
         WallrunState wallrunState;
-        ClimbState climbState;
+        ClimbWallState climbState;
         WallJumpState wallJumpState;
         SlideState slideState;
+        SlipState slipState;
+        DashState dashState;
+        FlyState flyState;
+        SwimState swimState;
+        LedgeHangingState ledgeHangingState;
 
         public float SlideSlopeAngleLimit { get; private set; } = 50;
 
         void Start()
         {
-
-            jumpCooldownTimer = new CountdownTimer(statesDataSO.jumpCooldownSeconds);
-            TimersManager.RegisterTimer(jumpCooldownTimer);
-            jumpCooldownTimer.Reset(statesDataSO.jumpCooldownSeconds);
-
             Sensors = GetComponent<SensorsModule>();
             Character = GetComponent<Character>();
             StateMachine = new();
-            locomotionState = new LocomotionState(this,statesDataSO);
-            fallingState = new FallingState(this, statesDataSO);
-            jumpState = new JumpState(this,statesDataSO );
-            crouchState = new CrouchState(this,statesDataSO);
-            rollState = new RollState(this, statesDataSO);
-            wallrunState = new WallrunState(this,statesDataSO);
-            climbState = new ClimbState(this, statesDataSO);
-            wallJumpState = new WallJumpState(this, statesDataSO);
-            slideState = new SlideState(this, statesDataSO);
+            runState = new RunState(this, statesDataSO.RunStateData);
+            sprintState = new SprintState(this, statesDataSO.SprintStateData);
+            fallingState = new FallingState(this, statesDataSO.FallingStateData);
+            landingState = new LandingState(this, statesDataSO.LandingStateData);
+            groundJumpState = new GroundJumpState(this, statesDataSO.GroundJumpStateData);
+            crouchState = new CrouchState(this, statesDataSO.CrouchStateData);
+            rollState = new RollState(this, statesDataSO.RollStateData);
+            wallrunState = new WallrunState(this, statesDataSO.WallrunStateData);
+            climbState = new ClimbWallState(this, statesDataSO.ClimbStateData);
+            wallJumpState = new WallJumpState(this, statesDataSO.WallJumpStateData);
+            slideState = new SlideState(this, statesDataSO.SlidingStateData);
+            slipState = new SlipState(this, statesDataSO.SlipJumpStateData);
+            dashState = new DashState(this, statesDataSO.DashStateData);
+            flyState = new FlyState(this, statesDataSO.FlyingStateData);
+            swimState = new SwimState(this, statesDataSO.SwimStateData);
+            ledgeHangingState = new LedgeHangingState(this, statesDataSO.LedgeHangingStateData);
+
+            StateMachine.AddAnyTransition(fallingState, new FuncPredicate(() => 
+                !Sensors.IsGrounded 
+                && !groundJumpState.IsActiveState
+                && !wallrunState.IsActiveState 
+                && !climbState.IsActiveState 
+                && !flyState.IsActiveState 
+                && !wallJumpState.IsActiveState 
+                && !swimState.IsActiveState
+                && !ledgeHangingState.IsActiveState
+                ));
+
+            StateMachine.AddAnyTransition(slideState, new FuncPredicate(() => 
+            Sensors.IsGrounded 
+            && Mathf.Abs(Sensors.GroundAngle) > SlideSlopeAngleLimit 
+            && !groundJumpState.IsActiveState 
+            && !wallrunState.IsActiveState 
+            && !climbState.IsActiveState 
+            && !flyState.IsActiveState 
+            && !wallJumpState.IsActiveState&& !swimState.IsActiveState)
+                );
+
+            StateMachine.AddAnyTransition(swimState, new FuncPredicate(() => Input.GetKeyDown(KeyCode.Y)));
+            StateMachine.AddTransition(swimState, runState, new FuncPredicate(() => Input.GetKeyUp(KeyCode.Y)));
+
+            StateMachine.AddTransition(fallingState, landingState, new FuncPredicate(() => Sensors.IsGrounded));
+            StateMachine.AddTransition(landingState, runState, new FuncPredicate(() => Sensors.IsGrounded && !landingState.IsActiveState));
+            StateMachine.AddTransition(slideState, runState, new FuncPredicate(() => Sensors.IsGrounded && Mathf.Abs(Sensors.GroundAngle) <= SlideSlopeAngleLimit));
+
+            StateMachine.AddTransition(runState, groundJumpState, new FuncPredicate(() => groundJumpState.CanBeExecuted() && Sensors.IsGrounded && Character.JumpPressed));
+            StateMachine.AddTransition(sprintState, groundJumpState, new FuncPredicate(() => groundJumpState.CanBeExecuted() && Sensors.IsGrounded && Character.JumpPressed));
+            StateMachine.AddTransition(groundJumpState, fallingState, new FuncPredicate(() => !groundJumpState.IsActiveState && !Sensors.IsGrounded));
+            StateMachine.AddTransition(groundJumpState, landingState, new FuncPredicate(() => !groundJumpState.IsActiveState && Sensors.IsGrounded));
 
 
-            StateMachine.AddAnyTransition(fallingState, new FuncPredicate(() => !Sensors.IsGrounded && !jumpCooldownTimer.IsRunning && !wallrunState.IsWallrunning && !climbState.IsClimbing));
-            StateMachine.AddAnyTransition(slideState, new FuncPredicate(() => Sensors.IsGrounded && Mathf.Abs(Sensors.GroundAngle) > SlideSlopeAngleLimit && !climbState.IsClimbing));
+            StateMachine.AddTransition(runState, crouchState, new FuncPredicate(() => (Sensors.IsObstacleAbove || Character.CrouchPressed) && Character.MovementInput.y == 0));
+            StateMachine.AddTransition(crouchState, runState, new FuncPredicate(() => !Sensors.IsObstacleAbove && !Character.CrouchPressed));
 
-            StateMachine.AddTransition(fallingState, locomotionState, new FuncPredicate(() => Sensors.IsGrounded));
-            StateMachine.AddTransition(slideState, locomotionState, new FuncPredicate(() => Sensors.IsGrounded && Mathf.Abs(Sensors.GroundAngle) <= SlideSlopeAngleLimit));
-
-            StateMachine.AddTransition(locomotionState, jumpState, new FuncPredicate(() => Character.JumpPressed && jumpCooldownTimer.IsRunning));
-            StateMachine.AddTransition(jumpState, fallingState, new FuncPredicate(() => jumpCooldownTimer.IsFinished));
-
-            StateMachine.AddTransition(locomotionState, crouchState, new FuncPredicate(() => Sensors.IsObstacleAbove || Character.CrouchPressed));
-            StateMachine.AddTransition(crouchState, locomotionState, new FuncPredicate(() => !Sensors.IsObstacleAbove && !Character.CrouchPressed));
-
-            StateMachine.AddTransition(locomotionState, rollState, new FuncPredicate(() => Character.EvadePressed));
-            StateMachine.AddTransition(rollState, locomotionState, new FuncPredicate(() => !rollState.IsRolling));
+            StateMachine.AddTransition(runState, rollState, new FuncPredicate(() => Character.EvadePressed && rollState.CanBeExecuted()));
+            StateMachine.AddTransition(rollState, runState, new FuncPredicate(() => !rollState.IsActiveState));
             StateMachine.AddTransition(crouchState, rollState, new FuncPredicate(() => Character.EvadePressed));
-            StateMachine.AddTransition(rollState, crouchState, new FuncPredicate(() => !rollState.IsRolling && (Sensors.IsObstacleAbove || Character.CrouchPressed)));
+            StateMachine.AddTransition(rollState, crouchState, new FuncPredicate(() => !rollState.IsActiveState && (Sensors.IsObstacleAbove || Character.CrouchPressed)));
 
 
-            StateMachine.AddTransition(jumpState, wallrunState, new FuncPredicate(() => wallrunState.CanWallRun()));
-            StateMachine.AddTransition(wallJumpState, wallrunState, new FuncPredicate(() => wallrunState.CanWallRun()));
+            StateMachine.AddTransition(groundJumpState, wallrunState, new FuncPredicate(() => wallrunState.CanWallRun()));
+            StateMachine.AddTransition(wallJumpState, wallrunState, new FuncPredicate(() => !wallJumpState.IsActiveState && wallrunState.CanWallRun()));
+            StateMachine.AddTransition(wallJumpState, landingState, new FuncPredicate(() => !wallJumpState.IsActiveState && Sensors.IsGrounded));
             StateMachine.AddTransition(wallrunState, fallingState, new FuncPredicate(() => !wallrunState.CanWallRun()));
 
-            StateMachine.AddTransition(jumpState, climbState, new FuncPredicate(() => climbState.CanClimbWall()));
+            StateMachine.AddTransition(groundJumpState, climbState, new FuncPredicate(() => climbState.CanClimbWall()));
             StateMachine.AddTransition(climbState, fallingState, new FuncPredicate(() => !climbState.CanClimbWall()));
 
-            StateMachine.AddTransition(climbState, wallJumpState, new FuncPredicate(() => Character.JumpPressed && jumpCooldownTimer.IsRunning));
-            StateMachine.AddTransition(wallrunState, wallJumpState, new FuncPredicate(() => Character.JumpPressed && jumpCooldownTimer.IsRunning));
+            StateMachine.AddTransition(climbState, wallJumpState, new FuncPredicate(() => wallJumpState.CanBeExecuted()&&Character.JumpPressed));
+            StateMachine.AddTransition(wallrunState, wallJumpState, new FuncPredicate(() => wallJumpState.CanBeExecuted() && Character.JumpPressed));
 
-            
 
-            
+            StateMachine.AddTransition(runState, dashState, new FuncPredicate(() => dashState.CanBeExecuted()&& Character.SprintPressed && Character.MovementInput.magnitude > 0));
+            StateMachine.AddTransition(dashState, runState, new FuncPredicate(() => !dashState.IsActiveState && (!Character.SprintPressed || Character.MovementInput.magnitude == 0)));
+            StateMachine.AddTransition(dashState, sprintState, new FuncPredicate(() => !dashState.IsActiveState && Character.SprintPressed ));
+            StateMachine.AddTransition(sprintState, runState, new FuncPredicate(() => !Character.SprintPressed || Character.MovementInput.magnitude == 0));
 
-            StateMachine.SetState(locomotionState);
+
+            StateMachine.AddTransition(runState, slipState, new FuncPredicate(() => slipState.CanBeExecuted() && Character.CrouchPressed && Character.MovementInput.y > 0));
+            StateMachine.AddTransition(slipState, runState, new FuncPredicate(() => !slipState.IsActiveState));
+
+
+            StateMachine.AddTransition(runState, flyState, new FuncPredicate(() => Character.BlockPressed));
+            StateMachine.AddTransition(flyState, runState, new FuncPredicate(() => !Character.BlockPressed));
+
+
+            StateMachine.AddTransition(groundJumpState, ledgeHangingState, new FuncPredicate(() => Sensors.ForeheadFrontHit.collider?.tag == "Ledge"));
+            StateMachine.AddTransition(ledgeHangingState, fallingState, new FuncPredicate(() => Character.JumpPressed));
+
+
+
+
+            StateMachine.SetState(runState);
 
         }
-
         // Update is called once per frame
         void Update()
         {
             currentState = StateMachine.CurrentNode.State.ToString();
-            if (Character.JumpPressed)
-            {
-                OnJump();
-            }
 
             StateMachine.Update();
         }
@@ -101,14 +144,6 @@ namespace LOGIYGames
             StateMachine.FixedUpdate();
         }
 
-        private void OnJump()
-        {
-            if ((Sensors.IsGrounded || wallrunState.IsWallrunning || climbState.IsClimbing) && !jumpCooldownTimer.IsRunning)
-            {
-                jumpCooldownTimer.Start();
-            }
-
-        }
 
     }
 }

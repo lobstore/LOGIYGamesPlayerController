@@ -28,6 +28,16 @@ namespace LOGIYGames
         private string belowObstacleName;
 
 
+        public Vector3 headFrontOrigin => new Vector3(
+                characterController.bounds.center.x,
+                characterController.bounds.max.y,
+                characterController.bounds.center.z);
+
+        public Vector3 detectionOrigin => new Vector3(
+                characterController.bounds.center.x,
+                characterController.bounds.min.y + 0.5f,
+                characterController.bounds.center.z);
+
         // Detection Results
         private RaycastHit belowHit;
         private RaycastHit aboveHit;
@@ -88,18 +98,10 @@ namespace LOGIYGames
         }
         private void PerformDetection()
         {
-            Vector3 detectionOrigin = GetDetectionOrigin();
-
             // Wall detection
             IsObstacleLegsRight = Physics.Raycast(detectionOrigin, characterController.transform.right, out legsRightHit, rayDistance, includeLayers);
             IsObstacleLegsLeft = Physics.Raycast(detectionOrigin, -characterController.transform.right, out legsLeftHit, rayDistance, includeLayers);
             IsObstacleLegsFront = Physics.Raycast(detectionOrigin, characterController.transform.forward, out legsFrontHit, rayDistance, includeLayers);
-
-            // Ledge detection
-            Vector3 headFrontOrigin = new Vector3(
-                characterController.bounds.center.x,
-                characterController.bounds.max.y,
-                characterController.bounds.center.z);
 
             IsObstcleHeadFront = Physics.Raycast(
                 headFrontOrigin,
@@ -146,14 +148,6 @@ namespace LOGIYGames
         {
             return IsObstacleBelow && !Physics.Raycast(characterController.transform.position, -characterController.transform.up, rayDistance, includeLayers);
         }
-
-        private Vector3 GetDetectionOrigin()
-        {
-            return new Vector3(
-                characterController.bounds.center.x,
-                characterController.bounds.min.y + 0.5f,
-                characterController.bounds.center.z);
-        }
         private ref RaycastHit GetHitForDirection(Vector3 direction)
         {
             if (direction == characterController.transform.right) return ref legsRightHit;
@@ -175,15 +169,12 @@ namespace LOGIYGames
         {
             if (characterController == null) return;
 
-            Vector3 origin = GetDetectionOrigin();
-
-
 
             // Draw rays
-            DrawDetectionRays(origin);
+            DrawDetectionRays(detectionOrigin);
 
             // Draw sphere casts
-            DrawSphereCasts(origin);
+            DrawSphereCasts(detectionOrigin);
         }
 
         private void DrawDetectionRays(Vector3 origin)
@@ -195,12 +186,7 @@ namespace LOGIYGames
 
 
 
-            Vector3 ledgeOrigin = new Vector3(
-                characterController.bounds.center.x,
-                characterController.bounds.max.y,
-                characterController.bounds.center.z);
-
-            Debug.DrawRay(ledgeOrigin, characterController.transform.forward * rayDistance, IsObstcleHeadFront ? Color.green : Color.red, 0, false);
+            Debug.DrawRay(headFrontOrigin, characterController.transform.forward * rayDistance, IsObstcleHeadFront ? Color.green : Color.red, 0, false);
         }
 
         private void DrawSphereCasts(Vector3 origin)
