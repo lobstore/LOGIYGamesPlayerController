@@ -250,8 +250,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public bool Save(string dataName, bool value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Bool);
@@ -263,8 +263,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public byte Save(string dataName, byte value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Byte);
@@ -276,8 +276,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public char Save(string dataName, char value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Char);
@@ -289,8 +289,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Color Save(string dataName, Color value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Color);
@@ -315,8 +315,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public decimal Save(string dataName, decimal value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Decimal);
@@ -328,8 +328,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public double Save(string dataName, double value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Double);
@@ -341,8 +341,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public float Save(string dataName, float value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Float);
@@ -354,8 +354,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public int Save(string dataName, int value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Int);
@@ -367,8 +367,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public long Save(string dataName, long value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Long);
@@ -380,8 +380,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Quaternion Save(string dataName, Quaternion value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Quaternion);
@@ -393,8 +393,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public sbyte Save(string dataName, sbyte value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Sbyte);
@@ -406,8 +406,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public short Save(string dataName, short value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Short);
@@ -419,8 +419,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public string Save(string dataName, string value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.String);
@@ -445,8 +445,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public uint Save(string dataName, uint value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Uint);
@@ -458,8 +458,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public ulong Save(string dataName, ulong value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Ulong);
@@ -471,8 +471,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public ushort Save(string dataName, ushort value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Ushort);
@@ -484,8 +484,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector2 Save(string dataName, Vector2 value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Vector2);
@@ -497,8 +497,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector2Int Save(string dataName, Vector2Int value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Vector2Int);
@@ -510,8 +510,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector3 Save(string dataName, Vector3 value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Vector3);
@@ -523,8 +523,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector3Int Save(string dataName, Vector3Int value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Vector3Int);
@@ -536,8 +536,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector4 Save(string dataName, Vector4 value)
         {
             string tempFilePath = GetFullFilePath(dataName, DataTypes.Vector4);
@@ -549,8 +549,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public bool[] Save(string dataName, bool[] value)
         {
             AASaver.SaveBoolArray(dataName, value, GetFullFilePath(dataName, DataTypes.BoolArray), encryptData);
@@ -561,8 +561,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public byte[] Save(string dataName, byte[] value)
         {
             AASaver.SaveByteArray(dataName, value, GetFullFilePath(dataName, DataTypes.ByteArray), encryptData);
@@ -573,8 +573,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public char[] Save(string dataName, char[] value)
         {
             AASaver.SaveCharArray(dataName, value, GetFullFilePath(dataName, DataTypes.CharArray), encryptData);
@@ -585,8 +585,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Color[] Save(string dataName, Color[] value)
         {
             AASaver.SaveColorArray(dataName, value, GetFullFilePath(dataName, DataTypes.ColorArray), encryptData);
@@ -597,8 +597,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public DateTime[] Save(string dataName, DateTime[] value)
         {
             AASaver.SaveDateTimeArray(dataName, value, GetFullFilePath(dataName, DataTypes.DateTimeArray), encryptData);
@@ -609,8 +609,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public decimal[] Save(string dataName, decimal[] value)
         {
             AASaver.SaveDecimalArray(dataName, value, GetFullFilePath(dataName, DataTypes.DecimalArray), encryptData);
@@ -621,8 +621,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public double[] Save(string dataName, double[] value)
         {
             AASaver.SaveDoubleArray(dataName, value, GetFullFilePath(dataName, DataTypes.DoubleArray), encryptData);
@@ -633,8 +633,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public float[] Save(string dataName, float[] value)
         {
             AASaver.SaveFloatArray(dataName, value, GetFullFilePath(dataName, DataTypes.FloatArray), encryptData);
@@ -645,8 +645,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public int[] Save(string dataName, int[] value)
         {
             AASaver.SaveIntArray(dataName, value, GetFullFilePath(dataName, DataTypes.IntArray), encryptData);
@@ -657,8 +657,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public long[] Save(string dataName, long[] value)
         {
             AASaver.SaveLongArray(dataName, value, GetFullFilePath(dataName, DataTypes.LongArray), encryptData);
@@ -669,8 +669,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Quaternion[] Save(string dataName, Quaternion[] value)
         {
             AASaver.SaveQuaternionArray(dataName, value, GetFullFilePath(dataName, DataTypes.QuaternionArray), encryptData);
@@ -681,8 +681,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public sbyte[] Save(string dataName, sbyte[] value)
         {
             AASaver.SaveSbyteArray(dataName, value, GetFullFilePath(dataName, DataTypes.SbyteArray), encryptData);
@@ -693,8 +693,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public short[] Save(string dataName, short[] value)
         {
             AASaver.SaveShortArray(dataName, value, GetFullFilePath(dataName, DataTypes.ShortArray), encryptData);
@@ -705,8 +705,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public string[] Save(string dataName, string[] value)
         {
             AASaver.SaveStringArray(dataName, value, GetFullFilePath(dataName, DataTypes.StringArray), encryptData);
@@ -717,8 +717,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public TimeSpan[] Save(string dataName, TimeSpan[] value)
         {
             AASaver.SaveTimeSpanArray(dataName, value, GetFullFilePath(dataName, DataTypes.TimeSpanArray), encryptData);
@@ -729,8 +729,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public uint[] Save(string dataName, uint[] value)
         {
             AASaver.SaveUintArray(dataName, value, GetFullFilePath(dataName, DataTypes.UintArray), encryptData);
@@ -741,8 +741,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public ulong[] Save(string dataName, ulong[] value)
         {
             AASaver.SaveUlongArray(dataName, value, GetFullFilePath(dataName, DataTypes.UlongArray), encryptData);
@@ -753,8 +753,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public ushort[] Save(string dataName, ushort[] value)
         {
             AASaver.SaveUshortArray(dataName, value, GetFullFilePath(dataName, DataTypes.UshortArray), encryptData);
@@ -765,8 +765,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector2[] Save(string dataName, Vector2[] value)
         {
             AASaver.SaveVector2Array(dataName, value, GetFullFilePath(dataName, DataTypes.Vector2Array), encryptData);
@@ -777,8 +777,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector2Int[] Save(string dataName, Vector2Int[] value)
         {
             AASaver.SaveVector2IntArray(dataName, value, GetFullFilePath(dataName, DataTypes.Vector2IntArray), encryptData);
@@ -789,8 +789,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector3[] Save(string dataName, Vector3[] value)
         {
             AASaver.SaveVector3Array(dataName, value, GetFullFilePath(dataName, DataTypes.Vector3Array), encryptData);
@@ -801,8 +801,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector3Int[] Save(string dataName, Vector3Int[] value)
         {
             AASaver.SaveVector3IntArray(dataName, value, GetFullFilePath(dataName, DataTypes.Vector3IntArray), encryptData);
@@ -813,8 +813,8 @@ namespace AASave
         /// Saves the game data to the player's device and returns the value of the game data. If the save file for the game data exists, it overrides it. If the save file for the game data does not exists, it creates a new save file and writes the data on it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
-        /// <returns>Value of the game data.</returns>
+        /// <param name="value">CurrentValue of the game data.</param>
+        /// <returns>CurrentValue of the game data.</returns>
         public Vector4[] Save(string dataName, Vector4[] value)
         {
             AASaver.SaveVector4Array(dataName, value, GetFullFilePath(dataName, DataTypes.Vector4Array), encryptData);
@@ -825,7 +825,7 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. This method returns the data as a string. You can use .AsX methods to get the data in the requested data type.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <returns>Value of the game data as a string. If the game data with the given name doesn't exists, it returns an empty string.</returns>
+        /// <returns>CurrentValue of the game data as a string. If the game data with the given name doesn't exists, it returns an empty string.</returns>
         public string Load(string dataName)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1138,8 +1138,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as boolean. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as boolean. If the game data doesn't exists, it will return the default value.</returns>
         public bool Load(string dataName, bool backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1182,8 +1182,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as byte. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as byte. If the game data doesn't exists, it will return the default value.</returns>
         public byte Load(string dataName, byte backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1221,8 +1221,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as char. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as char. If the game data doesn't exists, it will return the default value.</returns>
         public char Load(string dataName, char backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1260,8 +1260,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as color. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as color. If the game data doesn't exists, it will return the default value.</returns>
         public Color Load(string dataName, Color backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1299,8 +1299,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as DateTime. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as DateTime. If the game data doesn't exists, it will return the default value.</returns>
         public DateTime Load(string dataName, DateTime backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1338,8 +1338,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as decimal. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as decimal. If the game data doesn't exists, it will return the default value.</returns>
         public decimal Load(string dataName, decimal backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1377,8 +1377,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as double. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as double. If the game data doesn't exists, it will return the default value.</returns>
         public double Load(string dataName, double backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1416,8 +1416,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as float. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as float. If the game data doesn't exists, it will return the default value.</returns>
         public float Load(string dataName, float backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1455,8 +1455,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as int. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as int. If the game data doesn't exists, it will return the default value.</returns>
         public int Load(string dataName, int backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1494,8 +1494,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as long. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as long. If the game data doesn't exists, it will return the default value.</returns>
         public long Load(string dataName, long backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1533,8 +1533,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as quaternion. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as quaternion. If the game data doesn't exists, it will return the default value.</returns>
         public Quaternion Load(string dataName, Quaternion backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1572,8 +1572,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as sbyte. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as sbyte. If the game data doesn't exists, it will return the default value.</returns>
         public sbyte Load(string dataName, sbyte backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1611,8 +1611,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as short. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as short. If the game data doesn't exists, it will return the default value.</returns>
         public short Load(string dataName, short backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1650,8 +1650,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as string. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as string. If the game data doesn't exists, it will return the default value.</returns>
         public string Load(string dataName, string backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1689,8 +1689,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as TimeSpan. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as TimeSpan. If the game data doesn't exists, it will return the default value.</returns>
         public TimeSpan Load(string dataName, TimeSpan backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1728,8 +1728,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as uint. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as uint. If the game data doesn't exists, it will return the default value.</returns>
         public uint Load(string dataName, uint backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1767,8 +1767,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as ulong. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as ulong. If the game data doesn't exists, it will return the default value.</returns>
         public ulong Load(string dataName, ulong backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1806,8 +1806,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as ushort. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as ushort. If the game data doesn't exists, it will return the default value.</returns>
         public ushort Load(string dataName, ushort backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1845,8 +1845,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as Vector2. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as Vector2. If the game data doesn't exists, it will return the default value.</returns>
         public Vector2 Load(string dataName, Vector2 backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1884,8 +1884,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as Vector2Int. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as Vector2Int. If the game data doesn't exists, it will return the default value.</returns>
         public Vector2Int Load(string dataName, Vector2Int backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1923,8 +1923,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as Vector3. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as Vector3. If the game data doesn't exists, it will return the default value.</returns>
         public Vector3 Load(string dataName, Vector3 backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -1962,8 +1962,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as Vector3Int. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as Vector3Int. If the game data doesn't exists, it will return the default value.</returns>
         public Vector3Int Load(string dataName, Vector3Int backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2001,8 +2001,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as Vector4. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as Vector4. If the game data doesn't exists, it will return the default value.</returns>
         public Vector4 Load(string dataName, Vector4 backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2040,7 +2040,7 @@ namespace AASave
         /// Reads the save file for the given game data returns the value of it. This method returns the data as a string. You can use .AsXArray methods to get the data in the requested data type.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <returns>Value of the game data as a string array. If the game data with the given name doesn't exists, it returns an empty string array.</returns>
+        /// <returns>CurrentValue of the game data as a string array. If the game data with the given name doesn't exists, it returns an empty string array.</returns>
         public string[] LoadArray(string dataName)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2353,8 +2353,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a boolean array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a boolean array. If the game data doesn't exists, it will return the default value.</returns>
         public bool[] LoadArray(string dataName, bool[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2392,8 +2392,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a byte array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a byte array. If the game data doesn't exists, it will return the default value.</returns>
         public byte[] LoadArray(string dataName, byte[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2431,8 +2431,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a char array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a char array. If the game data doesn't exists, it will return the default value.</returns>
         public char[] LoadArray(string dataName, char[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2470,8 +2470,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a Color array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a Color array. If the game data doesn't exists, it will return the default value.</returns>
         public Color[] LoadArray(string dataName, Color[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2509,8 +2509,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a DateTime array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a DateTime array. If the game data doesn't exists, it will return the default value.</returns>
         public DateTime[] LoadArray(string dataName, DateTime[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2548,8 +2548,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a decimal array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a decimal array. If the game data doesn't exists, it will return the default value.</returns>
         public decimal[] LoadArray(string dataName, decimal[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2587,8 +2587,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a double array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a double array. If the game data doesn't exists, it will return the default value.</returns>
         public double[] LoadArray(string dataName, double[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2626,8 +2626,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a float array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a float array. If the game data doesn't exists, it will return the default value.</returns>
         public float[] LoadArray(string dataName, float[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2665,8 +2665,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as an integer array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as an integer array. If the game data doesn't exists, it will return the default value.</returns>
         public int[] LoadArray(string dataName, int[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2704,8 +2704,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a long array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a long array. If the game data doesn't exists, it will return the default value.</returns>
         public long[] LoadArray(string dataName, long[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2743,8 +2743,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a Quaternion array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a Quaternion array. If the game data doesn't exists, it will return the default value.</returns>
         public Quaternion[] LoadArray(string dataName, Quaternion[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2782,8 +2782,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as an sbyte array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as an sbyte array. If the game data doesn't exists, it will return the default value.</returns>
         public sbyte[] LoadArray(string dataName, sbyte[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2821,8 +2821,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a short array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a short array. If the game data doesn't exists, it will return the default value.</returns>
         public short[] LoadArray(string dataName, short[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2860,8 +2860,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a string array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a string array. If the game data doesn't exists, it will return the default value.</returns>
         public string[] LoadArray(string dataName, string[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2899,8 +2899,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a TimeSpan array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a TimeSpan array. If the game data doesn't exists, it will return the default value.</returns>
         public TimeSpan[] LoadArray(string dataName, TimeSpan[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2938,8 +2938,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as an uint array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as an uint array. If the game data doesn't exists, it will return the default value.</returns>
         public uint[] LoadArray(string dataName, uint[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -2977,8 +2977,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as an ulong array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as an ulong array. If the game data doesn't exists, it will return the default value.</returns>
         public ulong[] LoadArray(string dataName, ulong[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -3016,8 +3016,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as an ushort array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as an ushort array. If the game data doesn't exists, it will return the default value.</returns>
         public ushort[] LoadArray(string dataName, ushort[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -3055,8 +3055,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a Vector2 array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a Vector2 array. If the game data doesn't exists, it will return the default value.</returns>
         public Vector2[] LoadArray(string dataName, Vector2[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -3094,8 +3094,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a Vector2Int array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a Vector2Int array. If the game data doesn't exists, it will return the default value.</returns>
         public Vector2Int[] LoadArray(string dataName, Vector2Int[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -3133,8 +3133,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a Vector3 array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a Vector3 array. If the game data doesn't exists, it will return the default value.</returns>
         public Vector3[] LoadArray(string dataName, Vector3[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -3172,8 +3172,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a Vector3Int array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a Vector3Int array. If the game data doesn't exists, it will return the default value.</returns>
         public Vector3Int[] LoadArray(string dataName, Vector3Int[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());
@@ -3211,8 +3211,8 @@ namespace AASave
         /// Reads the save file for the given game data and returns the value of it. If the game data doesn't exists, it will save the backupValue parameter and return it.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="backupValue">Value to be saved and returned if the given game data does not exists.</param>
-        /// <returns>Value of the game data as a Vector4 array. If the game data doesn't exists, it will return the default value.</returns>
+        /// <param name="backupValue">CurrentValue to be saved and returned if the given game data does not exists.</param>
+        /// <returns>CurrentValue of the game data as a Vector4 array. If the game data doesn't exists, it will return the default value.</returns>
         public Vector4[] LoadArray(string dataName, Vector4[] backupValue)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(GetSaveLocation());

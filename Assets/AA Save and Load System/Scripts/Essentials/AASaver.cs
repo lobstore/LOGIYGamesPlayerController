@@ -15,7 +15,7 @@ namespace AASave
         /// Saves a game data in the boolean data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveBool(string dataName, bool value, string filePath, bool encryptData)
@@ -85,7 +85,7 @@ namespace AASave
         /// Saves a game data in the byte data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveByte(string dataName, byte value, string filePath, bool encryptData)
@@ -142,7 +142,7 @@ namespace AASave
         /// Saves a game data in the char data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveChar(string dataName, char value, string filePath, bool encryptData)
@@ -324,7 +324,7 @@ namespace AASave
         /// Saves a game data in the decimal data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveDecimal(string dataName, decimal value, string filePath, bool encryptData)
@@ -382,7 +382,7 @@ namespace AASave
         /// Saves a game data in the double data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveDouble(string dataName, double value, string filePath, bool encryptData)
@@ -438,7 +438,7 @@ namespace AASave
         /// Saves a game data in the float data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveFloat(string dataName, float value, string filePath, bool encryptData)
@@ -494,7 +494,7 @@ namespace AASave
         /// Saves a game data in the integer data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will encrypted.</param>
         public static void SaveInt(string dataName, int value, string filePath, bool encryptData)
@@ -550,7 +550,7 @@ namespace AASave
         /// Saves a game data in the long data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveLong(string dataName, long value, string filePath, bool encryptData)
@@ -670,7 +670,7 @@ namespace AASave
         /// Saves a game data in the sbyte data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveSbyte(string dataName, sbyte value, string filePath, bool encryptData)
@@ -728,7 +728,7 @@ namespace AASave
         /// Saves a game data in the short data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveShort(string dataName, short value, string filePath, bool encryptData)
@@ -786,7 +786,7 @@ namespace AASave
         /// Saves a game data in the string data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveString(string dataName, string value, string filePath, bool encryptData)
@@ -842,7 +842,7 @@ namespace AASave
         /// Saves a game data in the TimeSpan data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveTimeSpan(string dataName, TimeSpan value, string filePath, bool encryptData)
@@ -900,7 +900,7 @@ namespace AASave
         /// Saves a game data in the uint data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveUint(string dataName, uint value, string filePath, bool encryptData)
@@ -958,7 +958,7 @@ namespace AASave
         /// Saves a game data in the ulong data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveUlong(string dataName, ulong value, string filePath, bool encryptData)
@@ -1016,7 +1016,7 @@ namespace AASave
         /// Saves a game data in the ushort data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveUshort(string dataName, ushort value, string filePath, bool encryptData)
@@ -1372,7 +1372,7 @@ namespace AASave
         /// Saves a game data in the boolean array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveBoolArray(string dataName, bool[] value, string filePath, bool encryptData)
@@ -1408,7 +1408,7 @@ namespace AASave
         /// Saves a game data in the byte array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveByteArray(string dataName, byte[] value, string filePath, bool encryptData)
@@ -1444,7 +1444,7 @@ namespace AASave
         /// Saves a game data in the char array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveCharArray(string dataName, char[] value, string filePath, bool encryptData)
@@ -1480,7 +1480,7 @@ namespace AASave
         /// Saves a game data in the color array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveColorArray(string dataName, Color[] value, string filePath, bool encryptData)
@@ -1516,7 +1516,7 @@ namespace AASave
         /// Saves a game data in the DateTime Array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data.</param>
+        /// <param name="value">CurrentValue of the game data.</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveDateTimeArray(string dataName, DateTime[] value, string filePath, bool encryptData)
@@ -1552,7 +1552,7 @@ namespace AASave
         /// Saves a game data in the decimal array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveDecimalArray(string dataName, decimal[] value, string filePath, bool encryptData)
@@ -1588,7 +1588,7 @@ namespace AASave
         /// Saves a game data in the double array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveDoubleArray(string dataName, double[] value, string filePath, bool encryptData)
@@ -1624,7 +1624,7 @@ namespace AASave
         /// Saves a game data in the float array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveFloatArray(string dataName, float[] value, string filePath, bool encryptData)
@@ -1660,7 +1660,7 @@ namespace AASave
         /// Saves a game data in the int array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveIntArray(string dataName, int[] value, string filePath, bool encryptData)
@@ -1696,7 +1696,7 @@ namespace AASave
         /// Saves a game data in the long array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveLongArray(string dataName, long[] value, string filePath, bool encryptData)
@@ -1732,7 +1732,7 @@ namespace AASave
         /// Saves a game data in the quaternion array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveQuaternionArray(string dataName, Quaternion[] value, string filePath, bool encryptData)
@@ -1768,7 +1768,7 @@ namespace AASave
         /// Saves a game data in the sbyte array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveSbyteArray(string dataName, sbyte[] value, string filePath, bool encryptData)
@@ -1804,7 +1804,7 @@ namespace AASave
         /// Saves a game data in the short array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveShortArray(string dataName, short[] value, string filePath, bool encryptData)
@@ -1840,7 +1840,7 @@ namespace AASave
         /// Saves a game data in the string array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveStringArray(string dataName, string[] value, string filePath, bool encryptData)
@@ -1876,7 +1876,7 @@ namespace AASave
         /// Saves a game data in the TimeSpan array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveTimeSpanArray(string dataName, TimeSpan[] value, string filePath, bool encryptData)
@@ -1912,7 +1912,7 @@ namespace AASave
         /// Saves a game data in the uint array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveUintArray(string dataName, uint[] value, string filePath, bool encryptData)
@@ -1948,7 +1948,7 @@ namespace AASave
         /// Saves a game data in the ulong array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="dataName">If true, the game data will be encrypted.</param>
         public static void SaveUlongArray(string dataName, ulong[] value, string filePath, bool encryptData)
@@ -1984,7 +1984,7 @@ namespace AASave
         /// Saves a game data in the ushort array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveUshortArray(string dataName, ushort[] value, string filePath, bool encryptData)
@@ -2020,7 +2020,7 @@ namespace AASave
         /// Saves a game data in the Vector2 array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveVector2Array(string dataName, Vector2[] value, string filePath, bool encryptData)
@@ -2056,7 +2056,7 @@ namespace AASave
         /// Saves a game data in the Vector2Int array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveVector2IntArray(string dataName, Vector2Int[] value, string filePath, bool encryptData)
@@ -2092,7 +2092,7 @@ namespace AASave
         /// Saves a game data in the Vector3 array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveVector3Array(string dataName, Vector3[] value, string filePath, bool encryptData)
@@ -2128,7 +2128,7 @@ namespace AASave
         /// Saves a game data in the Vector3Int array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveVector3IntArray(string dataName, Vector3Int[] value, string filePath, bool encryptData)
@@ -2164,7 +2164,7 @@ namespace AASave
         /// Saves a game data in the Vector4 array data type. Do not use this method directly. Use the Save methods in the Save System class instead.
         /// </summary>
         /// <param name="dataName">Name of the game data.</param>
-        /// <param name="value">Value of the game data</param>
+        /// <param name="value">CurrentValue of the game data</param>
         /// <param name="filePath">Full path to the save file.</param>
         /// <param name="encryptData">If true, the game data will be encrypted.</param>
         public static void SaveVector4Array(string dataName, Vector4[] value, string filePath, bool encryptData)

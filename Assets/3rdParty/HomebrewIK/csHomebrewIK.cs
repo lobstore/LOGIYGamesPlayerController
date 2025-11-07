@@ -10,8 +10,8 @@
 
 
 using System;       // Convert
-using UnityEngine;  // Monobehaviour
 using UnityEditor;  // Handles
+using UnityEngine;  // Monobehaviour
 
 
 
@@ -22,7 +22,9 @@ namespace FischlWorks
 
     public class csHomebrewIK : MonoBehaviour
     {
-        private Animator playerAnimator = null;
+        [SerializeField] private Animator playerAnimator = null;
+
+        [SerializeField] private Transform bodyTransform;
 
         private Transform leftFootTransform = null;
         private Transform rightFootTransform = null;
@@ -32,24 +34,30 @@ namespace FischlWorks
 
         private Vector3 initialForwardVector = new Vector3();
 
-        public float _LengthFromHeelToToes {
+        public float _LengthFromHeelToToes
+        {
             get { return lengthFromHeelToToes; }
         }
 
-        public float _RaySphereRadius {
+        public float _RaySphereRadius
+        {
             get { return raySphereRadius; }
         }
 
-        public float _LeftFootProjectedAngle {
+        public float _LeftFootProjectedAngle
+        {
             get { return leftFootProjectedAngle; }
         }
 
-        public float _RightFootProjectedAngle {
+        public float _RightFootProjectedAngle
+        {
             get { return rightFootProjectedAngle; }
         }
 
-        public Vector3 _LeftFootIKPositionTarget {
-            get {
+        public Vector3 _LeftFootIKPositionTarget
+        {
+            get
+            {
                 if (Application.isPlaying == true)
                 {
                     return leftFootIKPositionTarget;
@@ -62,8 +70,10 @@ namespace FischlWorks
             }
         }
 
-        public Vector3 _RightFootIKPositionTarget {
-            get {
+        public Vector3 _RightFootIKPositionTarget
+        {
+            get
+            {
                 if (Application.isPlaying == true)
                 {
                     return rightFootIKPositionTarget;
@@ -76,14 +86,18 @@ namespace FischlWorks
             }
         }
 
-        public float _AnkleHeightOffset {
-            get {
+        public float _AnkleHeightOffset
+        {
+            get
+            {
                 return ankleHeightOffset;
             }
         }
 
-        public float _WorldHeightOffset {
-            get {
+        public float _WorldHeightOffset
+        {
+            get
+            {
                 if (giveWorldHeightOffset == true)
                 {
                     return worldHeightOffset;
@@ -259,7 +273,20 @@ namespace FischlWorks
 
         private void InitializeVariables()
         {
-            playerAnimator = GetComponent<Animator>();
+            if (playerAnimator == null)
+            {
+                playerAnimator = GetComponent<Animator>();
+
+            }
+            if (bodyTransform == null)
+            {
+                bodyTransform = transform;
+            }
+            if (playerAnimator == null)
+            {
+                Debug.LogWarning("CsIK: NotFoundAnimator");
+            }
+
 
             leftFootTransform = playerAnimator.GetBoneTransform(HumanBodyBones.LeftFoot);
             rightFootTransform = playerAnimator.GetBoneTransform(HumanBodyBones.RightFoot);
@@ -271,11 +298,11 @@ namespace FischlWorks
             }
 
             // This is needed in order to wrangle with quaternions to get the final direction vector of each foot later
-            initialForwardVector = transform.forward;
+            initialForwardVector = bodyTransform.forward;
 
             // Initial value is given to make the first frames of lerping look natural, rotations should not need these
-            leftFootIKPositionBuffer.y = transform.position.y + GetAnkleHeight();
-            rightFootIKPositionBuffer.y = transform.position.y + GetAnkleHeight();
+            leftFootIKPositionBuffer.y = bodyTransform.position.y + GetAnkleHeight();
+            rightFootIKPositionBuffer.y = bodyTransform.position.y + GetAnkleHeight();
 
             // This is being done here due to internal unity reasons
             helperTextStyle = new GUIStyle()
@@ -329,8 +356,8 @@ namespace FischlWorks
 
             /* World space based vector defines are used here for the representation of floor orientation */
 
-            leftFootProjectionVector = Vector3.ProjectOnPlane(leftFootDirectionVector, Vector3.up);
-            rightFootProjectionVector = Vector3.ProjectOnPlane(rightFootDirectionVector, Vector3.up);
+            leftFootProjectionVector = Vector3.ProjectOnPlane(leftFootDirectionVector, bodyTransform.up);
+            rightFootProjectionVector = Vector3.ProjectOnPlane(rightFootDirectionVector, bodyTransform.up);
 
             /* Cross is done in this order because we want the underground angle to be positive */
 
@@ -367,7 +394,7 @@ namespace FischlWorks
             Physics.SphereCast(
                 leftFootRayStartPosition,
                 raySphereRadius,
-                Vector3.up * -1,
+                bodyTransform.up * -1,
                 out leftFootRayHitInfo, rayCastRange, groundLayers,
                 (QueryTriggerInteraction)(2 - Convert.ToInt32(ignoreTriggers)));
 
@@ -375,7 +402,7 @@ namespace FischlWorks
             Physics.SphereCast(
                 rightFootRayStartPosition,
                 raySphereRadius,
-                Vector3.up * -1,
+                bodyTransform.up * -1,
                 out rightFootRayHitInfo, rayCastRange, groundLayers,
                 (QueryTriggerInteraction)(2 - Convert.ToInt32(ignoreTriggers)));
 
@@ -393,11 +420,11 @@ namespace FischlWorks
 
                 leftFootRayHitProjectedAngle = Vector3.Angle(
                     leftFootRayHitProjectionVector,
-                    Vector3.up);
+                    bodyTransform.up);
             }
             else
             {
-                leftFootRayHitHeight = transform.position.y;
+                leftFootRayHitHeight = bodyTransform.position.y;
             }
 
             // Right Foot Ray Handling
@@ -414,11 +441,11 @@ namespace FischlWorks
 
                 rightFootRayHitProjectedAngle = Vector3.Angle(
                     rightFootRayHitProjectionVector,
-                    Vector3.up);
+                    bodyTransform.up);
             }
             else
             {
-                rightFootRayHitHeight = transform.position.y;
+                rightFootRayHitHeight = bodyTransform.position.y;
             }
         }
 
@@ -484,29 +511,29 @@ namespace FischlWorks
             if (leftFootRayHitInfo.collider != null)
             {
                 leftFootIKRotationTarget = Vector3.Slerp(
-                    transform.up,
+                    bodyTransform.up,
                     leftFootRayHitInfo.normal,
-                    Mathf.Clamp(Vector3.Angle(transform.up, leftFootRayHitInfo.normal), 0, maxRotationAngle) /
+                    Mathf.Clamp(Vector3.Angle(bodyTransform.up, leftFootRayHitInfo.normal), 0, maxRotationAngle) /
                     // Addition of 1 is to prevent division by zero, not a perfect solution but somehow works
-                    (Vector3.Angle(transform.up, leftFootRayHitInfo.normal) + 1));
+                    (Vector3.Angle(bodyTransform.up, leftFootRayHitInfo.normal) + 1));
             }
             else
             {
-                leftFootIKRotationTarget = transform.up;
+                leftFootIKRotationTarget = bodyTransform.up;
             }
 
             if (rightFootRayHitInfo.collider != null)
             {
                 rightFootIKRotationTarget = Vector3.Slerp(
-                    transform.up,
+                    bodyTransform.up,
                     rightFootRayHitInfo.normal,
-                    Mathf.Clamp(Vector3.Angle(transform.up, rightFootRayHitInfo.normal), 0, maxRotationAngle) /
+                    Mathf.Clamp(Vector3.Angle(bodyTransform.up, rightFootRayHitInfo.normal), 0, maxRotationAngle) /
                     // Addition of 1 is to prevent division by zero, not a perfect solution but somehow works
-                    (Vector3.Angle(transform.up, rightFootRayHitInfo.normal) + 1));
+                    (Vector3.Angle(bodyTransform.up, rightFootRayHitInfo.normal) + 1));
             }
             else
             {
-                rightFootIKRotationTarget = transform.up;
+                rightFootIKRotationTarget = bodyTransform.up;
             }
         }
 
@@ -526,7 +553,7 @@ namespace FischlWorks
                     ref leftFootHeightLerpVelocity,
                     smoothTime);
             }
-            else 
+            else
             {
                 leftFootIKPositionBuffer.y = Mathf.SmoothDamp(
                     leftFootIKPositionBuffer.y,
@@ -534,7 +561,7 @@ namespace FischlWorks
                     ref leftFootHeightLerpVelocity,
                     smoothTime);
             }
-            
+
             if (enableFootLifting == true &&
                 playerAnimator.GetIKPosition(AvatarIKGoal.RightFoot).y >=
                 rightFootIKPositionTarget.y + floorRange)
@@ -545,7 +572,7 @@ namespace FischlWorks
                     ref rightFootHeightLerpVelocity,
                     smoothTime);
             }
-            else 
+            else
             {
                 rightFootIKPositionBuffer.y = Mathf.SmoothDamp(
                     rightFootIKPositionBuffer.y,
@@ -575,7 +602,7 @@ namespace FischlWorks
 
             playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, globalWeight * leftFootWeight);
             playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightFoot, globalWeight * rightFootWeight);
-            
+
             playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, globalWeight * leftFootWeight);
             playerAnimator.SetIKRotationWeight(AvatarIKGoal.RightFoot, globalWeight * rightFootWeight);
 
@@ -599,12 +626,12 @@ namespace FischlWorks
 
             // FromToRotation is used because we need the delta, not the final target orientation
             Quaternion leftFootRotation =
-                Quaternion.FromToRotation(transform.up, leftFootIKRotationBuffer) *
+                Quaternion.FromToRotation(bodyTransform.up, leftFootIKRotationBuffer) *
                 playerAnimator.GetIKRotation(AvatarIKGoal.LeftFoot);
 
             // FromToRotation is used because we need the delta, not the final target orientation
             Quaternion rightFootRotation =
-                Quaternion.FromToRotation(transform.up, rightFootIKRotationBuffer) *
+                Quaternion.FromToRotation(bodyTransform.up, rightFootIKRotationBuffer) *
                 playerAnimator.GetIKRotation(AvatarIKGoal.RightFoot);
 
             if (enableIKRotating == true)
@@ -632,7 +659,7 @@ namespace FischlWorks
             playerAnimator.bodyPosition = new Vector3(
             playerAnimator.bodyPosition.x,
             playerAnimator.bodyPosition.y +
-            LimitValueByRange(minFootHeight - transform.position.y, 0),
+            LimitValueByRange(minFootHeight - bodyTransform.position.y, 0),
             playerAnimator.bodyPosition.z);
         }
 
@@ -711,12 +738,12 @@ namespace FischlWorks
                 Handles.color = Color.green;
                 Handles.DrawWireDisc(
                     leftFootRayHitInfo.point,
-                    transform.up, 0.25f);
+                    bodyTransform.up, 0.25f);
 
                 Gizmos.color = Color.green;
 
                 Gizmos.DrawSphere(
-                    leftFootRayHitInfo.point + transform.up * raySphereRadius,
+                    leftFootRayHitInfo.point + bodyTransform.up * raySphereRadius,
                     raySphereRadius);
             }
             else
@@ -736,7 +763,7 @@ namespace FischlWorks
             // Foot height correction related debug draws
             Handles.DrawWireDisc(
                 leftFootTransform.position,
-                leftFootOrientationReference.rotation * transform.up,
+                leftFootOrientationReference.rotation * bodyTransform.up,
                 0.15f);
             Handles.DrawSolidArc(
                 leftFootTransform.position,
@@ -756,7 +783,7 @@ namespace FischlWorks
                 0.1f);
             Gizmos.DrawLine(
                 leftFootRayStartPosition,
-                leftFootRayStartPosition - rayCastRange * Vector3.up);
+                leftFootRayStartPosition - rayCastRange * bodyTransform.up);
 
             // Indicator text
             Handles.Label(leftFootTransform.position, "L", helperTextStyle);
@@ -781,12 +808,12 @@ namespace FischlWorks
                 Handles.color = Color.green;
                 Handles.DrawWireDisc(
                     rightFootRayHitInfo.point,
-                    transform.up, 0.25f);
+                    bodyTransform.up, 0.25f);
 
                 Gizmos.color = Color.green;
 
                 Gizmos.DrawSphere(
-                    rightFootRayHitInfo.point + transform.up * raySphereRadius,
+                    rightFootRayHitInfo.point + bodyTransform.up * raySphereRadius,
                     raySphereRadius);
             }
             else
@@ -806,7 +833,7 @@ namespace FischlWorks
             // Foot height correction related debug draws
             Handles.DrawWireDisc(
                 rightFootTransform.position,
-                rightFootOrientationReference.rotation * transform.up,
+                rightFootOrientationReference.rotation * bodyTransform.up,
                 0.15f);
             Handles.DrawSolidArc(
                 rightFootTransform.position,
@@ -826,7 +853,7 @@ namespace FischlWorks
                 0.1f);
             Gizmos.DrawLine(
                 rightFootRayStartPosition,
-                rightFootRayStartPosition - rayCastRange * Vector3.up);
+                rightFootRayStartPosition - rayCastRange * bodyTransform.up);
 
             // Indicator text
             Handles.Label(rightFootTransform.position, "R", helperTextStyle);
@@ -839,7 +866,8 @@ namespace FischlWorks
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
     public class ShowIfAttribute : PropertyAttribute
     {
-        public string _BaseCondition {
+        public string _BaseCondition
+        {
             get { return mBaseCondition; }
         }
 
@@ -856,7 +884,8 @@ namespace FischlWorks
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
     public class BigHeaderAttribute : PropertyAttribute
     {
-        public string _Text {
+        public string _Text
+        {
             get { return mText; }
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // ------------------------- Setup Requirement ------------------------------------
-// In MouseDelta Manager, the nth axis on joystick should be named as "Axis n"
+// In MouseDelta WeaponManager, the nth axis on joystick should be named as "Axis n"
 //   For Example: X anis is named "Axis 1" and 4th axis is named "Axis 4"
 // All axes' Sensitivity should be set to 1. (Default is 0.1)
 // Alternatively, ingore the requirement and change the code
@@ -150,16 +150,16 @@ public class GamepadOldInput : MonoBehaviour
 public class AnalogStick
 {
     //-------------------------------------------------------------------------------------------
-    // For MouseDelta Manager:
+    // For MouseDelta WeaponManager:
     // Each Analog Stck has 2 different axis associated with it
     // One is control by the stick's movement in X direction; the other is controled by Y.
     //-------------------------------------------------------------------------------------------
 
     private Transform stick;            // The moving part of the analog stick. It is the child object named "Stick";
     private string name;                // The name for the Transform Stick. It should make sense for the CController used, such as "Left_Stick" for Xbox CController.
-    private string x_axis_name;         // The Axis controlled through the stick's movement in X direction. The name is set in MouseDelta Manager.
-    private string y_axis_name;         // The Axis controlled through the stick's movement in Y direction. The name is set in MouseDelta Manager.
-    private bool is_y_reversed = false; // In case the Y axis is reversed, like for MouseDelta Manager.
+    private string x_axis_name;         // The Axis controlled through the stick's movement in X direction. The name is set in MouseDelta WeaponManager.
+    private string y_axis_name;         // The Axis controlled through the stick's movement in Y direction. The name is set in MouseDelta WeaponManager.
+    private bool is_y_reversed = false; // In case the Y axis is reversed, like for MouseDelta WeaponManager.
     private bool is_x_reversed = false; // In case the X axis is reversed. Probably not useful.
 
     private float max_move_distance;    // The distance of the transform can move in each direction
@@ -182,7 +182,7 @@ public class AnalogStick
         }
     }
 
-    // For MouseDelta Manager Initialization
+    // For MouseDelta WeaponManager Initialization
     public AnalogStick(Transform stck, string XName, string YName, Text posText = null, float maxDistance = 0.5f, bool isYReversed = false)
     {
         x_axis_name = XName;
@@ -216,7 +216,7 @@ public class AnalogButton
 {
     protected Transform button;       // The Transform for the button
     protected string name;            // Name of the Transform. It should make sense for the context, such as "Left_Trigger" for xbox CController.
-    protected string axis_name;       // The name of the axis it associated with. This is set in MouseDelta Manager.
+    protected string axis_name;       // The name of the axis it associated with. This is set in MouseDelta WeaponManager.
 
     // It may take a pair of buttons to complete the whole axis.
     // For example: D-Pad on Windows are represented as Axis 6 and 7.

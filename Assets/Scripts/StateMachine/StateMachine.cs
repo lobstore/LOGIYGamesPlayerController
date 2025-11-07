@@ -12,7 +12,7 @@ namespace LOGIYGames
         public void Update()
         {
             var transition = GetTransition();
-            if (transition != null)
+            if (transition != null )
                 ChangeState(transition.To);
 
             CurrentNode.State?.LogicUpdate();
@@ -21,6 +21,11 @@ namespace LOGIYGames
         public void FixedUpdate()
         {
             CurrentNode.State?.PhysicsUpdate();
+        }
+
+        public void LateUpdate()
+        {
+            CurrentNode.State?.LateUpdate();
         }
 
         public void SetState(IState state)

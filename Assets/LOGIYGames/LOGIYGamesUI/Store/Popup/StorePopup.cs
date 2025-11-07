@@ -12,7 +12,8 @@ namespace LOGIYGames
         List<ProductModel> productModels;
         protected override void Start()
         {
-            productModels = GameManager.Instance.StoreProductRepository.GetAll().ToList();
+            //TODO Find New Database Provider
+            //productModels = GameManager.Instance.StoreProductRepository.GetAll().ToList();
             CreateProducts();
             base.Start();
         }

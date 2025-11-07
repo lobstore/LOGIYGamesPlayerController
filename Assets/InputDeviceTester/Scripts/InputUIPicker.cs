@@ -32,7 +32,7 @@ public class InputUIPicker : MonoBehaviour
 
     void Update()
     {
-        // !!!!!TEMPORARY: Only Shortcut for Old MouseDelta Manager
+        // !!!!!TEMPORARY: Only Shortcut for Old MouseDelta WeaponManager
         if (InputSystem.GetDevice<Keyboard>() == null) return;
 
         Keyboard currentKeyboard = InputSystem.GetDevice<Keyboard>();

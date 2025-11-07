@@ -571,7 +571,7 @@ namespace BayatGames.SaveGameFree
         /// Loads data using identifier.
         /// </summary>
         /// <param name="identifier">Identifier.</param>
-        /// <param name="defaultValue">Default Value.</param>
+        /// <param name="defaultValue">Default CurrentValue.</param>
         /// <param name="encode">Load encrypted data? (set it to true if you have used encryption in save)</param>
         /// <param name="password">Encryption Password.</param>
         /// <param name="serializer">Serializer.</param>

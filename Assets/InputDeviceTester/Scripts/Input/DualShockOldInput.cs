@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // ------------------------- Setup Requirement ------------------------------------
-// In MouseDelta Manager, the nth axis on joystick should be named as "Axis n"
+// In MouseDelta WeaponManager, the nth axis on joystick should be named as "Axis n"
 //   For Example: X anis is named "Axis 1" and 4th axis is named "Axis 4"
 // All axes' Sensitivity should be set to 1. (Default is 0.1)
 // Alternatively, ingore the requirement and change the code

@@ -7,10 +7,13 @@ namespace LOGIYGames
     {
         [Header("Physics")]
         [SerializeField] bool useGravity;
-        [SerializeField] float gravityMultiplier;
         [SerializeField] private float groundMagnit;
-        public float VerticalVelocity { get => verticalVelocity; set => verticalVelocity = value; }
-        private float verticalVelocity;
+        public Vector3 GravityDirection { get => gravityDirection.normalized; set => value = gravityDirection; }
+        [SerializeField] Vector3 gravityDirection = new Vector3(0, -1,0);
+        public float BaseGravityForce = 9.84f;
+        public float CurrentGravityForce;
+        public Vector3 Velocity { get => velocity; set => velocity = value; }
+        private Vector3 velocity;
         public bool UseGravity { get => useGravity; set => useGravity = value; }
         [Header("References")]
         private CharacterController controller = null;
@@ -28,20 +31,27 @@ namespace LOGIYGames
             base.OnFixedUpdate(fixedDeltaTime);
             ApplyGravity(fixedDeltaTime);
         }
-
-        private void ApplyGravity(float fixedDeltaTime)
+        public override void OnUpdate(float deltaTime)
         {
-            if (!useGravity) { return; }
+            base.OnUpdate(deltaTime);
+            if (!useGravity) { CurrentGravityForce = 0; return; }
             if (Sensors.IsGrounded
-                && VerticalVelocity < 0)
+                && Velocity.y < 0
+                && Sensors.IsValidSlope())
             {
-                VerticalVelocity = -groundMagnit;
+                CurrentGravityForce = groundMagnit;
             }
             else
             {
-                VerticalVelocity += Physics.gravity.y * fixedDeltaTime * gravityMultiplier;
+                CurrentGravityForce = BaseGravityForce;
             }
-            controller.Move(new Vector3(0, VerticalVelocity, 0) * fixedDeltaTime);
         }
+
+        private void ApplyGravity(float fixedDeltaTime)
+        {
+            Velocity = Vector3.Lerp(Velocity, GravityDirection.normalized * CurrentGravityForce, fixedDeltaTime);
+            controller.Move(Velocity * fixedDeltaTime);
+        }
+
     }
 }

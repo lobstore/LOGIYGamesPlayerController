@@ -1,3 +1,4 @@
+using LOGIYGames.Timers;
 using UnityEngine;
 namespace LOGIYGames
 {
@@ -5,10 +6,6 @@ namespace LOGIYGames
     {
         [SerializeField] InputReader InputReader;
         public static GameManager Instance { get; private set; }
-
-        [SerializeField] string productPath;
-        [SerializeField] string settingsPath;
-        public StoreProductRepository StoreProductRepository { get; private set; }
         private void Awake()
         {
             if (Instance == null)
@@ -19,6 +16,10 @@ namespace LOGIYGames
             }
             else { Destroy(gameObject); }
             InputReader.GameControlInputsEnable = true;
+        }
+        private void Update()
+        {
+            TimersManager.UpdateTimers();
         }
     }
 }

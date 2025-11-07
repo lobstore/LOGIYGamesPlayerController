@@ -6,36 +6,44 @@ namespace LOGIYGames
     public enum CameraPerspectiveType
     {
         FirstPerson,
-        ThirdPerson,
+        ThirdPersonFreeLook,
+        ThirdPersonLookForward,
         Top_Down
     }
-    public enum CameraFocusingState
-    {
-        FreeLook,
-        LookForward,
-        Focus,
-    }
+
     public class CameraManager : Singleton<CameraManager>
     {
         [SerializeField] InputReader InputReader;
+        [SerializeField] DragPointerHandler MobileInputReader;
         [SerializeField] List<CinemachineCameraController> cinemachineCameraControllers = new();
         public CinemachineCameraController CurentCameraController { get; private set; }
-        [SerializeField] CinemachineCameraController FPSCameraController;
-        [SerializeField] CinemachineCameraController TPSCameraController;
-        [SerializeField] CinemachineCameraController TDSCameraController;
+        [SerializeField] CinemachineCameraController FirstPersonCameraController;
+        [SerializeField] CinemachineCameraController ThirdPersonCameraController;
+        [SerializeField] CinemachineCameraController TopDownCameraController;
 
-        [SerializeField] public CameraFocusingState CameraFocusingState = CameraFocusingState.FreeLook;
-        [SerializeField] public CameraPerspectiveType CameraPerspectiveType = CameraPerspectiveType.ThirdPerson;
+        CinemachineCameraController instance_FirstPersonCameraController;
+        CinemachineCameraController instance_ThirdPersonCameraController;
+        CinemachineCameraController instance_TopDownCameraController;
+
+        [SerializeField] public CameraPerspectiveType CameraPerspectiveType;
         protected override void Initialize()
         {
-            cinemachineCameraControllers.Add(FPSCameraController);
-            cinemachineCameraControllers.Add(TPSCameraController);
-            cinemachineCameraControllers.Add(TDSCameraController);
 
+            instance_FirstPersonCameraController = Instantiate(FirstPersonCameraController, null);
+            instance_ThirdPersonCameraController = Instantiate(ThirdPersonCameraController, null);
+            instance_TopDownCameraController = Instantiate(TopDownCameraController, null);
+            cinemachineCameraControllers.Add(instance_FirstPersonCameraController);
+            cinemachineCameraControllers.Add(instance_ThirdPersonCameraController);
+            cinemachineCameraControllers.Add(instance_TopDownCameraController);
+
+            foreach (var cam in cinemachineCameraControllers)
+            {
+                GetComponent<CinemachineMobileInputCotroller>()?.Controllers.ForEach(x=>x.Input.DragInput = MobileInputReader);
+            }
         }
         private void Start()
         {
-            SetTPView();
+            Set3rdFreeLookView();
         }
         int index = 0;
         private void Update()
@@ -46,29 +54,21 @@ namespace LOGIYGames
                 index = index % cinemachineCameraControllers.Count;
                 if (index == 0)
                 {
-                    SetTPView();
+                    Set3rdFreeLookView();
                 }
                 else if (index == 1)
                 {
-                    SetFPView();
+                    Set1stView();
                 }
                 else if (index == 2)
                 {
-                    SetTDView();
+                    SetTopDownView();
+                }else if (index == 3)
+                {
+                    Set3rdLookForwardView();
                 }
             }
-            if (InputReader.FocusPressed && CameraPerspectiveType != CameraPerspectiveType.FirstPerson)
-            {
-                CameraFocusingState = CameraFocusingState.Focus;
-            }
-            else if (CameraPerspectiveType == CameraPerspectiveType.FirstPerson)
-            {
-                CameraFocusingState = CameraFocusingState.LookForward;
-            }
-            else
-            {
-                CameraFocusingState = CameraFocusingState.FreeLook;
-            }
+
         }
         public void SetTargetTo(Transform Follow, Transform LookAt)
         {
@@ -98,25 +98,28 @@ namespace LOGIYGames
             }
 
         }
-        public void SetTPView()
+        public void Set3rdFreeLookView()
         {
-            CurentCameraController = TPSCameraController;
-            CameraPerspectiveType = CameraPerspectiveType.ThirdPerson;
-            CameraFocusingState = CameraFocusingState.FreeLook;
+            CurentCameraController = instance_ThirdPersonCameraController;
+            CameraPerspectiveType = CameraPerspectiveType.ThirdPersonFreeLook;
             SetPriorVirtualCamera(CurentCameraController);
         }
-        public void SetFPView()
+        public void Set1stView()
         {
-            CurentCameraController = FPSCameraController;
+            CurentCameraController = instance_FirstPersonCameraController;
             CameraPerspectiveType = CameraPerspectiveType.FirstPerson;
-            CameraFocusingState = CameraFocusingState.LookForward;
             SetPriorVirtualCamera(CurentCameraController);
         }
-        public void SetTDView()
+        public void SetTopDownView()
         {
-            CurentCameraController = TDSCameraController;
+            CurentCameraController = instance_TopDownCameraController;
             CameraPerspectiveType = CameraPerspectiveType.Top_Down;
-            CameraFocusingState = CameraFocusingState.FreeLook;
+            SetPriorVirtualCamera(CurentCameraController);
+        }
+        public void Set3rdLookForwardView()
+        {
+            CurentCameraController = instance_ThirdPersonCameraController;
+            CameraPerspectiveType = CameraPerspectiveType.ThirdPersonLookForward;
             SetPriorVirtualCamera(CurentCameraController);
         }
 

@@ -6,7 +6,8 @@ public class SceneEntryPoint : MonoBehaviour
 {
     [SerializeField] InputReader InputReader;
     [SerializeField] bool visibleCursor;
-    void Start()
+    [SerializeField] int targetFramerate = 30;
+    void Awake()
     {
 
         //if (LobbyManager.Instance.JoinedLobby != null && !LobbyManager.Instance.IsHost)
@@ -25,9 +26,8 @@ public class SceneEntryPoint : MonoBehaviour
         {
             InputReader.DisengageUI();
         }
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = targetFramerate;
     }
-    private void Update()
-    {
-        TimersManager.UpdateTimers();
-    }
+
 }

@@ -8,8 +8,6 @@ namespace LOGIYGames.CharacterCore
     {
         Transform CinemachineCameraLookAtTransform { get; set; }
         Transform CinemachineCameraFollowTransform { get; set; }
-        void EnableControl();
-        void DisableControl();
         void OnControlGained();
         void OnControlLost();
         void HandleInputs();
@@ -46,8 +44,6 @@ namespace LOGIYGames.CharacterCore
             {
                 return;
             }
-            print("SetCharacterControl");
-            CurrentControllable?.DisableControl();
             CurrentControllable?.OnControlLost();
             CurrentControllable = ccontrollable;
 
@@ -56,7 +52,6 @@ namespace LOGIYGames.CharacterCore
             CurrentControllable.CinemachineCameraLookAtTransform
             );
 
-            CurrentControllable.EnableControl();
             CurrentControllable.OnControlGained();
         }
 

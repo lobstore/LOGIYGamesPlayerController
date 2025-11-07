@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: dc845f58f04193147815e2c07f78d1e8
+AssetOrigin:
+  serializedVersion: 1
+  productId: 291284
+  packageName: MC Sample - Believable 3D Animations by MoCap Central
+  packageVersion: 1.1.0
+  assetPath: Assets/MoCapCentral/MC_Sample/Animations/OrcHammer/MCU_am_OrcHammer_Loco_Walk_Fwd_NoRM.FBX
+  uploadId: 680140
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -15,9 +22,7 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
-    motionNodeName: root
-    rigImportErrors: 
-    rigImportWarnings: 
+    motionNodeName: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -51,7 +56,7 @@ ModelImporter:
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -87,6 +92,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -1034,8 +1042,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 5958d20394757cd4092feaf67ab80b97,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 5958d20394757cd4092feaf67ab80b97, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
@@ -1047,10 +1054,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 291284
-  packageName: MC Sample - Believable 3D Animations by MoCap Central
-  packageVersion: 1.1.0
-  assetPath: Assets/MoCapCentral/MC_Sample/Animations/OrcHammer/MCU_am_OrcHammer_Loco_Walk_Fwd_NoRM.FBX
-  uploadId: 680140

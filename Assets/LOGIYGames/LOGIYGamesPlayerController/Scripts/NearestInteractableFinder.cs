@@ -7,14 +7,14 @@ namespace LOGIYGames
 {
     public class NearestInteractableFinder : MonoBehaviour
     {
-        [SerializeField] Vrm10LookAtModule lookAt;
+
         [SerializeField] Transform Head;
         [SerializeField] private float _checkInterval = 0.2f; // Интервал проверки в секундах
         [SerializeField] private float _movingTargetCooldown = 1.0f; // Задержка после потери движущейся цели
         [SerializeField] private int maxTrackedObjectNumber;
 
-        private HashSet<Interactable> _trackablesInRange = new HashSet<Interactable>();
-        public Interactable CurrentTarget { get; private set; }
+        [SerializeField] private List<Interactable> _trackablesInRange = new();
+        [field:SerializeField] public Interactable CurrentTarget { get; private set; }
         private StopwatchTimer _timer;
         private StopwatchTimer _movingTargetCooldownTimer;
         private bool _wasMovingTargetLastCheck = false;
@@ -43,13 +43,12 @@ namespace LOGIYGames
             {
                 _timer.Reset();
                 UpdateTarget();
-                lookAt.TargetTransform = CurrentTarget?.transform;
+
             }
         }
 
         private void UpdateTarget()
         {
-            // Фильтруем объекты: только видимые, активные и с IsVisible = true
             var validTargets = _trackablesInRange
                 .Where(t => t != null &&
                            t.gameObject.activeInHierarchy &&
@@ -112,7 +111,6 @@ namespace LOGIYGames
 
             return closest;
         }
-
         private void OnTriggerEnter(Collider other)
         {
             var trackable = other.GetComponent<Interactable>();
@@ -137,12 +135,7 @@ namespace LOGIYGames
                 }
             }
         }
-
-        public Interactable GetCurrentTarget()
-        {
-            return CurrentTarget;
-        }
-
+        
         private void OnDrawGizmosSelected()
         {
             if (TryGetComponent<Collider>(out var collider))

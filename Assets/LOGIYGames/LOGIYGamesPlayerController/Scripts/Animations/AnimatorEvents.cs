@@ -7,42 +7,34 @@ namespace LOGIYGames
     public class AnimatorEvents : MonoBehaviour
     {
         [SerializeField] private Animator animator;
-        public UnityEvent OnHit = new UnityEvent();
-        public UnityEvent OnShoot = new UnityEvent();
         public UnityEvent OnFootR = new UnityEvent();
         public UnityEvent OnFootL = new UnityEvent();
         public UnityEvent OnLand = new UnityEvent();
-        public UnityEvent OnRollEnd = new UnityEvent();
+        UnityControllerWrapper RootMotionApplicator;
+        Animator Animator;
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
+            RootMotionApplicator = GetComponent<UnityControllerWrapper>();
+        }
 
-
-        public UnityEvent OnWeaponSwitch = new UnityEvent();
-
-
-        public AnimatorMoveEvent OnMove = new AnimatorMoveEvent();
-
-
-        public void Hit() => OnHit.Invoke();
-        public void Shoot() => OnShoot.Invoke();
         public void FootR(AnimationEvent evt)
         {
-            if (evt.animatorClipInfo.weight > 0.5)
+            if (evt.animatorClipInfo.weight > 0.35)
             {
                 OnFootR.Invoke();
             }
         }
         public void FootL(AnimationEvent evt)
         {
-            if (evt.animatorClipInfo.weight > 0.5)
+            if (evt.animatorClipInfo.weight > 0.35)
             {
                 OnFootL.Invoke();
             }
         }
-        public void Land() => OnLand.Invoke();
-
-        public void WeaponSwitch() => OnWeaponSwitch.Invoke();
-        public void RollEnd(AnimationEvent evt)
+        private void OnAnimatorMove()
         {
-            OnRollEnd.Invoke();
+            
         }
     }
 }

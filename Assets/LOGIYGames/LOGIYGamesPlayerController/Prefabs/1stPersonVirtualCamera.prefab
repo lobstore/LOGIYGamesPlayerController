@@ -63,7 +63,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.17
     FarClipPlane: 1000
@@ -102,7 +102,7 @@ MonoBehaviour:
       Enabled: 1
       Size: {x: 0, y: 0}
     HardLimits:
-      Enabled: 0
+      Enabled: 1
       Size: {x: 1, y: 1}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
@@ -192,7 +192,7 @@ MonoBehaviour:
   PivotOffset: {x: 0, y: 0, z: 0}
   AmplitudeGain: 0.3
   FrequencyGain: 0.5
-  m_NoiseOffsets: {x: 0, y: 0, z: 0}
+  m_NoiseOffsets: {x: -575.432, y: -385.04184, z: -756.2384}
 --- !u!114 &8149182025060742599
 MonoBehaviour:
   m_ObjectHideFlags: 0

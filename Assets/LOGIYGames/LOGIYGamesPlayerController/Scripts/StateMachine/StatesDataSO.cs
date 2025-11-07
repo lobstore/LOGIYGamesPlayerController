@@ -7,12 +7,20 @@ namespace LOGIYGames
     public class StateData
     {
         public string StateName = "";
-        public AnimationCurve AnimationCurve = null;
-        public MotionType MotionType;
-        public float TurnSmothTime;
-        public float Acceleration;
-        public float Deceleration;
+        [Space]
+        public float TurnSmothTime = 2;
+        public float Acceleration = 6;
+        public float Deceleration = 6;
         public float Speed;
+        [Space]
+        public float StaminaCost;
+        [Space]
+        public MotionType MotionType;
+        public AnimationCurve AnimationCurve = null;
+        [Space]
+        public bool RotateByRootMotionOnly = false;
+        public bool HandlingSlope = true;
+        public bool UseProjectionOnPlane = true;
     }
     [Serializable]
     public class TimedCooldownStateData : StateData
@@ -29,7 +37,15 @@ namespace LOGIYGames
     [CreateAssetMenu(fileName = "StatesDataSO", menuName = "MovementStateMachine/StatesDataSO")]
     public class StatesDataSO : ScriptableObject
     {
-        [Header("Locomotion State")]
+        [Header("Idle State")]
+
+        public StateData IdleStateData;
+
+        [Header("Walk State")]
+
+        public StateData WalkStateData;
+
+        [Header("Run State")]
 
         public StateData RunStateData;
 
@@ -104,5 +120,17 @@ namespace LOGIYGames
         [Space]
         [Header("Ledge Hanging State")]
         public StateData LedgeHangingStateData;
+
+        [Space]
+        [Header("HangUp State")]
+        public TimedCooldownStateData LedgeHangUpStateData;
+
+        [Space]
+        [Header("Jump Down State")]
+        public JumpStateData JumpDownStateData;
+
+        [Space]
+        [Header("Jump Down State")]
+        public StateData AimStateData;
     }
 }

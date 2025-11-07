@@ -4,9 +4,10 @@ using UnityEngine;
 using RandomUnity = UnityEngine.Random;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 public static class DebugDraw
 {
-	public static void DrawMarker(Vector3 position, float size, Color color, float duration, bool depthTest = true)
+	public static void DrawMarker(Vector3 position, float size, Color color, float duration = 0, bool depthTest = false)
 	{
 		Vector3 line1PosA = position + Vector3.up * size * 0.5f;
 		Vector3 line1PosB = position - Vector3.up * size * 0.5f;
@@ -23,7 +24,7 @@ public static class DebugDraw
 	}
 
 
-	public static void DrawPlane(Vector3 position, Vector3 normal, float size, Color color, float duration, bool depthTest = true)
+	public static void DrawPlane(Vector3 position, Vector3 normal, float size, Color color, float duration = 0, bool depthTest = false)
 	{
 		Vector3 v3;
 
@@ -47,13 +48,31 @@ public static class DebugDraw
 		Debug.DrawRay(position, normal * size, color, duration, depthTest);
 	}
 
-	public static void DrawVector(Vector3 position, Vector3 direction, float raySizeScale, float markerSize, Color color, float duration, bool depthTest = true)
+	public static void DrawVector(Vector3 position, Vector3 direction, float raySizeScale, float markerSize, Color color, float duration = 0, bool depthTest = false)
 	{
-		Debug.DrawRay(position, direction * raySizeScale, color, duration, false);
-		DebugDraw.DrawMarker(position + direction * raySizeScale, markerSize, color, duration, false);
+		Debug.DrawRay(position, direction * raySizeScale, color, duration, depthTest);
+		DebugDraw.DrawMarker(position + direction * raySizeScale, markerSize, color, duration, depthTest);
 	}
+    public static void DrawArrow(Vector3 position, Vector3 direction, Color color, float duration = 0, float headLength = 0.5f, bool depthTest = false, float headAngle = 20f)
+    {
+        // Основная часть стрелки
+        Debug.DrawRay(position, direction, color, duration, depthTest);
 
-	public static void DrawTriangle(Vector3 a, Vector3 b, Vector3 c, Color color)
+        // Конечная точка стрелки
+        Vector3 end = position + direction;
+
+        // Рассчитываем поворот для "ушек" стрелки
+        Quaternion rot = Quaternion.LookRotation(direction);
+
+        // Векторы для двух боковых лучей
+        Vector3 right = rot * Quaternion.Euler(0, 180 + headAngle, 0) * Vector3.forward;
+        Vector3 left = rot * Quaternion.Euler(0, 180 - headAngle, 0) * Vector3.forward;
+
+        // Рисуем ушки через DrawRay
+        Debug.DrawRay(end, right * headLength, color, duration, depthTest);
+        Debug.DrawRay(end, left * headLength, color, duration, depthTest);
+    }
+    public static void DrawTriangle(Vector3 a, Vector3 b, Vector3 c, Color color)
 	{
 		Debug.DrawLine(a, b, color);
 		Debug.DrawLine(b, c, color);

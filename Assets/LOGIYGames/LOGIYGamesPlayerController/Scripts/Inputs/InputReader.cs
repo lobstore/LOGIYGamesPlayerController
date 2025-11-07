@@ -113,7 +113,7 @@ namespace LOGIYGames
         public InputEvent MoveEvent { get; private set; } = new();
         public UnityEvent UIEngaged { get; private set; } = new();
         public UnityEvent UIDisengaged { get; private set; } = new();
-
+        public event UnityAction<RaycastHit> Click = delegate { };
         private void OnEnable()
         {
 
@@ -193,8 +193,6 @@ namespace LOGIYGames
             var uiModule = evetnSystem.GetComponent<InputSystemUIInputModule>();
             uiModule.actionsAsset.Disable();
         }
-        public bool IsMouseDevice { get; private set; }
-        bool IsMouse(InputAction.CallbackContext context) => IsMouseDevice = context.control.device is Mouse;
 
         public bool IsUIEngaged { get; private set; }
         public void EngageUI()
@@ -250,6 +248,19 @@ namespace LOGIYGames
             if (!context.performed) return;
             switch (context.phase)
             {
+                case InputActionPhase.Started:
+                    if (context.phase == InputActionPhase.Started)
+                    {
+                        if (IsDeviceMouse(context))
+                        {
+                            var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                            if (Physics.Raycast(ray.origin, ray.direction, out var hit, 100))
+                            {
+                                Click.Invoke(hit);
+                            }
+                        }
+                    }
+                    break;
                 case InputActionPhase.Performed:
                     AttackPressed = true;
                     break;
@@ -260,10 +271,14 @@ namespace LOGIYGames
                     break;
             }
             var pointer = Pointer.current;
-            if (pointer != null && IsPointerOverUI(pointer.position.ReadValue())) { Debug.Log("Hover UI"); return; }
+            //if (pointer != null && IsPointerOverUI(pointer.position.ReadValue())) { Debug.Log("Hover UI"); return; }
             AttackEvent.Invoke(context);
         }
-
+        bool IsDeviceMouse(InputAction.CallbackContext context)
+        {
+            // Debug.Log($"Device name: {context.control.device.name}");
+            return context.control.device.name == "Mouse";
+        }
         public void OnBlock(InputAction.CallbackContext context)
         {
             switch (context.phase)
@@ -361,7 +376,7 @@ namespace LOGIYGames
                     break;
             }
             JumpEvent.Invoke(context);
-            IsMouse(context);
+            IsDeviceMouse(context);
         }
 
         public void OnLook(InputAction.CallbackContext context)

@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4839103491531204712}
   - component: {fileID: 9043036403964964748}
   - component: {fileID: 1480133464791474050}
-  - component: {fileID: 5035548604906105481}
   m_Layer: 0
   m_Name: TopDownPersonVirtualCamera
   m_TagString: Untagged
@@ -30,13 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7261505452651263688}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.70090926, y: 0, z: 0, w: 0.71325046}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 89, y: 0, z: 0}
 --- !u!114 &6987533314664215049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50,11 +49,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Priority:
-    Enabled: 0
+    Enabled: 1
     m_Value: 0
   OutputChannel: 1
   StandbyUpdate: 1
-  m_StreamingVersion: 20170927
+  m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
     TrackingTarget: {fileID: 0}
@@ -92,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraDistance: 6
+  CameraDistance: 4
   DeadZoneDepth: 0
   Composition:
     ScreenPosition: {x: 0, y: 0}
@@ -152,26 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3a67c76897d5e4abc768d717859af8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: f77cc949c839d9441a1d6528a83920c8, type: 2}
+  Input: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
   defaultDistance: 6
   minimumDistance: 4
   maximumDistance: 10
   smoothing: 4
   zoomSensitivity: 1
---- !u!114 &5035548604906105481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7261505452651263688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 0.3
-  FrequencyGain: 0.5
-  m_NoiseOffsets: {x: 0, y: 0, z: 0}

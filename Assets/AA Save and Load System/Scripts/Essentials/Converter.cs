@@ -67,8 +67,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a boolean. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string. Load method returns the data value as a string.</param>
-        /// <returns>Value of the game data as a boolean.</returns>
+        /// <param name="value">CurrentValue of the game data as a string. Load method returns the data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a boolean.</returns>
         public static bool AsBool(this string value)
         {
             return value.Equals("true");
@@ -77,8 +77,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a byte. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a byte.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a byte.</returns>
         public static byte AsByte(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -94,8 +94,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a char. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a char.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a char.</returns>
         public static char AsChar(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -111,8 +111,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a Color. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a Color.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a Color.</returns>
         public static Color AsColor(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -129,8 +129,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a DateTime. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string. Load method returns the data value as a string.</param>
-        /// <returns>Value of the game data as a DateTime.</returns>
+        /// <param name="value">CurrentValue of the game data as a string. Load method returns the data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a DateTime.</returns>
         public static DateTime AsDateTime(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -147,8 +147,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a decimal. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a decimal.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a decimal.</returns>
         public static decimal AsDecimal(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -164,8 +164,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a double. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a double.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a double.</returns>
         public static double AsDouble(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -181,8 +181,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a float. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a float.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a float.</returns>
         public static float AsFloat(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -198,8 +198,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an integer. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as an integer.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as an integer.</returns>
         public static int AsInt(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -215,8 +215,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a long. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a long.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a long.</returns>
         public static long AsLong(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -232,8 +232,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a Quaternion. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a Quaternion.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a Quaternion.</returns>
         public static Quaternion AsQuaternion(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -250,8 +250,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a sbyte. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a sbyte.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a sbyte.</returns>
         public static sbyte AsSbyte(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -267,8 +267,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a short. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a short.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a short.</returns>
         public static short AsShort(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -284,8 +284,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a string. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a string.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a string.</returns>
         public static string AsString(this string value)
         {
             return value;
@@ -294,8 +294,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a TimeSpan. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string. Load method returns the data value as a string.</param>
-        /// <returns>Value of the game data as a TimeSpan.</returns>
+        /// <param name="value">CurrentValue of the game data as a string. Load method returns the data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a TimeSpan.</returns>
         public static TimeSpan AsTimeSpan(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -311,8 +311,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an uint. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as an uint.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as an uint.</returns>
         public static uint AsUint(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -328,8 +328,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an ulong. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as an ulong.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as an ulong.</returns>
         public static ulong AsUlong(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -345,8 +345,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an ushort. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as an ushort.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as an ushort.</returns>
         public static ushort AsUshort(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -362,8 +362,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a Vector 2. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a Vector 2.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a Vector 2.</returns>
         public static Vector2 AsVector2(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -380,8 +380,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a Vector 2 Int. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a Vector 2 Int.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a Vector 2 Int.</returns>
         public static Vector2Int AsVector2Int(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -398,8 +398,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a Vector 3. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a Vector 3.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a Vector 3.</returns>
         public static Vector3 AsVector3(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -416,8 +416,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a Vector 3 Int. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a Vector 3 Int.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a Vector 3 Int.</returns>
         public static Vector3Int AsVector3Int(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -434,8 +434,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to a Vector 4. Use this method after the Load method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string because the Load method returns the game data value as a string.</param>
-        /// <returns>Value of the game data as a Vector 4.</returns>
+        /// <param name="value">CurrentValue of the game data as a string because the Load method returns the game data value as a string.</param>
+        /// <returns>CurrentValue of the game data as a Vector 4.</returns>
         public static Vector4 AsVector4(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -452,8 +452,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of booleans. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of booleans.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of booleans.</returns>
         public static bool[] AsBoolArray(this string[] value)
         {
             bool[] result = new bool[value.Length];
@@ -469,8 +469,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of bytes. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of bytes.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of bytes.</returns>
         public static byte[] AsByteArray(this string[] value)
         {
             byte[] result = new byte[value.Length];
@@ -493,8 +493,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of chars. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of chars.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of chars.</returns>
         public static char[] AsCharArray(this string[] value)
         {
             char[] result = new char[value.Length];
@@ -517,8 +517,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of colors. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of colors.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of colors.</returns>
         public static Color[] AsColorArray(this string[] value)
         {
             Color[] result = new Color[value.Length];
@@ -543,8 +543,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of DateTime. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of DateTime.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of DateTime.</returns>
         public static DateTime[] AsDateTimeArray(this string[] value)
         {
             DateTime[] result = new DateTime[value.Length];
@@ -569,8 +569,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of decimals. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of decimals.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of decimals.</returns>
         public static decimal[] AsDecimalArray(this string[] value)
         {
             decimal[] result = new decimal[value.Length];
@@ -593,8 +593,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of doubles. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of doubles.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of doubles.</returns>
         public static double[] AsDoubleArray(this string[] value)
         {
             double[] result = new double[value.Length];
@@ -617,8 +617,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of floats. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of floats.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of floats.</returns>
         public static float[] AsFloatArray(this string[] value)
         {
             float[] result = new float[value.Length];
@@ -641,8 +641,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of integers. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of integers.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of integers.</returns>
         public static int[] AsIntArray(this string[] value)
         {
             int[] result = new int[value.Length];
@@ -665,8 +665,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of longs. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of longs.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of longs.</returns>
         public static long[] AsLongArray(this string[] value)
         {
             long[] result = new long[value.Length];
@@ -689,8 +689,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of Quaternions. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of Quaternions.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of Quaternions.</returns>
         public static Quaternion[] AsQuaternionArray(this string[] value)
         {
             Quaternion[] result = new Quaternion[value.Length];
@@ -715,8 +715,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of sbytes. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of sbytes.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of sbytes.</returns>
         public static sbyte[] AsSbyteArray(this string[] value)
         {
             sbyte[] result = new sbyte[value.Length];
@@ -739,8 +739,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of shorts. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of shorts.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of shorts.</returns>
         public static short[] AsShortArray(this string[] value)
         {
             short[] result = new short[value.Length];
@@ -763,8 +763,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of string. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of strings.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of strings.</returns>
         public static string[] AsStringArray(this string[] value)
         {
             return value;
@@ -773,8 +773,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of TimeSpan. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the data as a TimeSpan array. LoadArray method returns the data value as a string array.</param>
-        /// <returns>Value of the game data as an array of TimeSpans.</returns>
+        /// <param name="value">CurrentValue of the data as a TimeSpan array. LoadArray method returns the data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of TimeSpans.</returns>
         public static TimeSpan[] AsTimeSpanArray(this string[] value)
         {
             TimeSpan[] result = new TimeSpan[value.Length];
@@ -797,8 +797,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of uints. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of uints.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of uints.</returns>
         public static uint[] AsUintArray(this string[] value)
         {
             uint[] result = new uint[value.Length];
@@ -821,8 +821,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of ulongs. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of ulongs.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of ulongs.</returns>
         public static ulong[] AsUlongArray(this string[] value)
         {
             ulong[] result = new ulong[value.Length];
@@ -845,8 +845,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of ushorts. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of ushorts.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of ushorts.</returns>
         public static ushort[] AsUshortArray(this string[] value)
         {
             ushort[] result = new ushort[value.Length];
@@ -869,8 +869,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of Vector2. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of Vector2.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of Vector2.</returns>
         public static Vector2[] AsVector2Array(this string[] value)
         {
             Vector2[] result = new Vector2[value.Length];
@@ -895,8 +895,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of Vector2Int. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of Vector2Int.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of Vector2Int.</returns>
         public static Vector2Int[] AsVector2IntArray(this string[] value)
         {
             Vector2Int[] result = new Vector2Int[value.Length];
@@ -921,8 +921,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of Vector3. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of Vector3.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of Vector3.</returns>
         public static Vector3[] AsVector3Array(this string[] value)
         {
             Vector3[] result = new Vector3[value.Length];
@@ -947,8 +947,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of Vector3Int. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of Vector3Int.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of Vector3Int.</returns>
         public static Vector3Int[] AsVector3IntArray(this string[] value)
         {
             Vector3Int[] result = new Vector3Int[value.Length];
@@ -973,8 +973,8 @@ namespace AASave
         /// <summary>
         /// Converts the value of the game data to an array of Vector4. Use this method after the LoadArray method.
         /// </summary>
-        /// <param name="value">Value of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
-        /// <returns>Value of the game data as an array of Vector4.</returns>
+        /// <param name="value">CurrentValue of the game data as a string array because the LoadArray method returns the game data value as a string array.</param>
+        /// <returns>CurrentValue of the game data as an array of Vector4.</returns>
         public static Vector4[] AsVector4Array(this string[] value)
         {
             Vector4[] result = new Vector4[value.Length];
