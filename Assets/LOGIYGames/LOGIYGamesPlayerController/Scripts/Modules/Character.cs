@@ -8,6 +8,7 @@ namespace LOGIYGames.CharacterCore
         [Header("References")]
         [SerializeField] InputReader InputReader;
         private CharacterController CController = null;
+        public FocusingState FocusingState;
         #region VelocityVariables
 
         /// <summary>

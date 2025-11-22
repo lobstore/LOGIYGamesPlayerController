@@ -601,7 +601,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
   <ModulePriority>k__BackingField: 0
   InputReader: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
-  <BaseSpeed>k__BackingField: 4
+  FocusingState: 0
+  <BaseSpeed>k__BackingField: 3
   <Height>k__BackingField: 1.67
   <CinemachineCameraLookAtTransform>k__BackingField: {fileID: 2640723071682425344}
   <CinemachineCameraFollowTransform>k__BackingField: {fileID: 4734613552037350644}
@@ -1652,7 +1653,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7687229682003114012
 Transform:
   m_ObjectHideFlags: 0
@@ -3902,7 +3903,6 @@ GameObject:
   - component: {fileID: 67664284063630142}
   - component: {fileID: 2457485137617571349}
   - component: {fileID: 6858564146689010408}
-  - component: {fileID: 2819264666818705232}
   - component: {fileID: 3018604451586928069}
   - component: {fileID: 5458466949644757279}
   m_Layer: 10
@@ -4465,7 +4465,7 @@ Animator:
   m_GameObject: {fileID: 2787143992442695444}
   m_Enabled: 1
   m_Avatar: {fileID: -7015762578403652589, guid: 84eae5ce6c2238f41b556e702b08d5bc, type: 3}
-  m_Controller: {fileID: 9100000, guid: 8eccf9a92ff353147a77f36f4eaef42b, type: 2}
+  m_Controller: {fileID: 22100000, guid: f76201a2336d8ca41a77f7bb19846345, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 1
   m_ApplyRootMotion: 0
@@ -4854,44 +4854,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2819264666818705232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2787143992442695444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 726325959c0cb064597e2f1bd5eb6b21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FischlWorks.csHomebrewIK
-  playerAnimator: {fileID: 0}
-  bodyTransform: {fileID: 0}
-  lengthFromHeelToToes: 0.1
-  maxRotationAngle: 45
-  ankleHeightOffset: 0.0708
-  enableIKPositioning: 1
-  enableIKRotating: 1
-  globalWeight: 1
-  leftFootWeight: 1
-  rightFootWeight: 1
-  smoothTime: 0.075
-  raySphereRadius: 0.05
-  rayCastRange: 2
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 65
-  ignoreTriggers: 1
-  leftFootRayStartHeight: 0.5
-  rightFootRayStartHeight: 0.5
-  enableFootLifting: 1
-  floorRange: 0.2
-  enableBodyPositioning: 1
-  crouchRange: 0.25
-  stretchRange: -0.1
-  giveWorldHeightOffset: 0
-  worldHeightOffset: 0
 --- !u!114 &3018604451586928069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5152,7 +5114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9187145913640661466
 Transform:
   m_ObjectHideFlags: 0
@@ -9030,7 +8992,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5062022173701397037
 Transform:
   m_ObjectHideFlags: 0

@@ -30,11 +30,12 @@ namespace LOGIYGames
 
         public void SetState(IState state)
         {
+
             CurrentNode = nodes[state.GetType()];
             CurrentNode.State?.Enter();
         }
 
-        void ChangeState(IState state)
+        public void ChangeState(IState state)
         {
             if (state == CurrentNode.State) return;
 

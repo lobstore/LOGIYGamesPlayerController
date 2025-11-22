@@ -69,7 +69,7 @@ namespace LOGIYGames
         private RaycastHit headAboveFrontHit;
         private RaycastHit legsFrontHit;
         private RaycastHit kneesFrontHit;
-        private RaycastHit legsFrontDownHit;
+        private RaycastHit kneesFrontDownHit;
         private RaycastHit legsRightHit;
         private RaycastHit legsLeftHit;
 
@@ -92,7 +92,7 @@ namespace LOGIYGames
         public bool IsObstacleLegsRight { get; private set; }
         public bool IsObstacleLegsFront { get; private set; }
         public bool IsObstacleKneesFront { get; private set; }
-        public bool IsObstacleLegsFrontDown { get; private set; }
+        public bool IsObstacleKneesFrontDown { get; private set; }
         public bool IsObstacleHeadFront { get; private set; }
         public bool IsObstacleRightHeadFront { get; private set; }
         public bool IsObstacleLeftHeadFront { get; private set; }
@@ -101,7 +101,7 @@ namespace LOGIYGames
         public bool IsOnEdge { get; private set; }
         public bool IsOnSlope { get; private set; }
         public bool IsGrounded {  get; private set; }
-        public bool IsStepAhead {  get; private set; }
+        public bool IsStepUpAhead {  get; private set; }
         public float GroundAngle { get; private set; }
 
         [Range(0, 90)]
@@ -150,7 +150,7 @@ namespace LOGIYGames
             IsObstacleLegsLeft = Physics.Raycast(detectionOrigin, -characterController.transform.right, out legsLeftHit, rayDistance, includeLayers);
             IsObstacleLegsFront = Physics.Raycast(detectionOrigin, characterController.transform.forward, out legsFrontHit, rayDistance, includeLayers);
             IsObstacleKneesFront = Physics.Raycast(characterController.transform.position+ characterController.stepOffset* characterController.transform.up, characterController.transform.forward, out kneesFrontHit, rayDistance, includeLayers);
-            IsObstacleLegsFrontDown = Physics.Raycast(detectionOrigin + characterController.transform.forward * rayDistance, -characterController.transform.up, out legsFrontDownHit, forwardDownRayDistance, includeLayers);
+            IsObstacleKneesFrontDown = Physics.Raycast(characterController.transform.position+ characterController.stepOffset* characterController.transform.up + characterController.transform.forward * rayDistance, -characterController.transform.up, out kneesFrontDownHit, forwardDownRayDistance, includeLayers);
             IsObstacleHeadFront = Physics.Raycast(headFrontOrigin, characterController.transform.forward, out headFrontHit, rayDistance, includeLayers);
             IsObstacleRightHeadFront = Physics.Raycast(headRightFrontOrigin, characterController.transform.forward, out headRightFrontHit, rayDistance, includeLayers);
             IsObstacleLeftHeadFront = Physics.Raycast(headLeftFrontOrigin, characterController.transform.forward, out headLeftFrontHit, rayDistance, includeLayers);
@@ -163,7 +163,14 @@ namespace LOGIYGames
 
             GroundAngle = Vector3.SignedAngle(characterController.transform.up, belowHit.normal, characterController.transform.right);
             IsOnSlope = GroundAngle == 0 ? false : true;
-            IsStepAhead = !IsObstacleKneesFront && IsObstacleLegsFront && IsObstacleBelow;
+            IsStepUpAhead = IsObstacleKneesFrontDown
+                && IsObstacleBelow
+                && (kneesFrontDownHit.point.y - characterController.transform.position.y)<=characterController.stepOffset-detectionOriginYOffset
+                && (kneesFrontDownHit.point.y - characterController.transform.position.y)>=0.2f
+                && Mathf.Abs( Vector3.Angle(characterController.transform.up, kneesFrontDownHit.normal)) <= MaxStableSlopeAngle;
+
+            print(kneesFrontDownHit.point.y - characterController.transform.position.y);
+            print(characterController.stepOffset - detectionOriginYOffset);
             EdgeDetection();
         }
 
@@ -183,7 +190,7 @@ namespace LOGIYGames
             legsLeftObstacleName = LegsLeftHit.transform?.name;
             legsRightObstacleName = LegsRightHit.transform?.name;
             legsFrontObstacleName = LegsFrontHit.transform?.name;
-            legsFrontDownObstacleName = legsFrontDownHit.transform?.name;
+            legsFrontDownObstacleName = kneesFrontDownHit.transform?.name;
             headFrontObstacleName = ForeheadFrontHit.transform?.name;
             headAboveFrontObstacleName = ForeheadAboveFrontHit.transform?.name;
             headRightFrontObstacleName = ForeheadRightFrontHit.transform?.name;
@@ -216,7 +223,7 @@ namespace LOGIYGames
             Debug.DrawRay(origin, characterController.transform.forward * rayDistance, IsObstacleLegsFront ? Color.green : Color.red, 0, false);
             Debug.DrawRay(characterController.transform.position+characterController.stepOffset*characterController.transform.up, characterController.transform.forward * rayDistance, IsObstacleKneesFront ? Color.green : Color.red, 0, false);
             
-            Debug.DrawRay(origin + characterController.transform.forward * rayDistance, -characterController.transform.up * forwardDownRayDistance, IsObstacleLegsFrontDown ? Color.green : Color.red, 0, false);
+            Debug.DrawRay(characterController.transform.position + characterController.stepOffset * characterController.transform.up + characterController.transform.forward * rayDistance, -characterController.transform.up * forwardDownRayDistance, IsObstacleKneesFrontDown ? Color.green : Color.red, 0, false);
 
             Debug.DrawRay(headLeftFrontOrigin, characterController.transform.forward * rayDistance, IsObstacleLeftHeadFront ? Color.green : Color.red, 0, false);
             Debug.DrawRay(headRightFrontOrigin, characterController.transform.forward * rayDistance, IsObstacleRightHeadFront ? Color.green : Color.red, 0, false);

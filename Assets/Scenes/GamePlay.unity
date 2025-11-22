@@ -44827,12 +44827,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7712943640855282820, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: MaxSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7712943640855282820, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: MinSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7712943640855282820, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: BaseGravityForce
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: <BaseSpeed>k__BackingField
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2819264666818705232, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

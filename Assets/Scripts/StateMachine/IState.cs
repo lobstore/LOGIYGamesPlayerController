@@ -39,7 +39,6 @@ namespace LOGIYGames
         protected SensorsModule Sensors;
         protected Animator Animator;
         protected GenericControllerWrapper CController;
-        protected RootMotionApplicator rootMotion;
         protected CharacterGravityModule CharacterGravity;
         protected StaminaModel Stamina;
         protected float StaminaCost;
@@ -53,7 +52,7 @@ namespace LOGIYGames
         private float lastYRotation;
         protected bool UseProjectionOnPlane = true;
         protected MotionType MotionType;
-        public FocusingState FocusingState;
+
 
         protected int isMovingHash = Animator.StringToHash("IsMoving");
         protected int yawInputHash = Animator.StringToHash("Yaw Signed Angle");
@@ -62,16 +61,17 @@ namespace LOGIYGames
         protected int animationSpeedHash = Animator.StringToHash("AnimationSpeed");
         protected int SpeedHash = Animator.StringToHash("Speed");
         protected int IsStairsUpHash = Animator.StringToHash("IsOnStair");
-
+        protected int isAimingHash = Animator.StringToHash("IsAiming");
 
         protected int verticalSpeedHash = Animator.StringToHash("VerticalSpeed");
         protected int horizontalSpeedHash = Animator.StringToHash("HorizontalSpeed");
-        protected AnimationCurve locomotionCurve;
         protected float m_speed;
         protected bool RotateByRootMotionOnly;
         private bool isDebugDraw = true;
         private bool HandlingSlope = true;
 
+        //private StateMachine SubStateMachine = new();
+        //private IState defaultState;
         protected BaseState(MovementStateDriver ctx, StateData stateData)
         {
             Acceleration = stateData.Acceleration;
@@ -84,7 +84,6 @@ namespace LOGIYGames
             RotateByRootMotionOnly = stateData.RotateByRootMotionOnly;
             UseProjectionOnPlane = stateData.UseProjectionOnPlane;
 
-            locomotionCurve = stateData.AnimationCurve;
             StaminaCost = stateData.StaminaCost;
             Sensors = ctx.Sensors;
             Character = ctx.Character;
@@ -92,8 +91,10 @@ namespace LOGIYGames
             CController = ctx.ControllerWrapper;
             CharacterGravity = ctx.GravityModule;
             Stamina = ctx.StaminaModel;
-        }
 
+            
+            
+        }
         public virtual void Enter()
         {
             InitializeMotionSystem();
@@ -101,14 +102,40 @@ namespace LOGIYGames
             Character.Deceleration = Deceleration;
             StateInternalSpeedMultiplier = m_speed;
         }
-
-
+        public void SetDefaultSubState(IState state)
+        {
+            ///defaultState = state;
+            //SubStateMachine.SetState(defaultState);
+        }
+        public void AddSubstateTransition(IState from, IState to, IPredicate contidion)
+        {
+            //SubStateMachine.AddTransition(from, to, contidion);
+        }
+        public void AddAnySubstateTransition(IState to, IPredicate contidion)
+        {
+            //SubStateMachine.AddAnyTransition(to, contidion);
+        }
         public virtual void Exit()
         {
+            //SubStateMachine.ChangeState(defaultState);
         }
+        protected virtual void Aim()
+        {
+            if (Character.BlockPressed)
+            {
+                Animator.SetBool(isAimingHash, true);
+                CameraManager.Instance.CurentCameraController.FOV = Mathf.Lerp(CameraManager.Instance.CurentCameraController.FOV, 40f, Time.deltaTime*5);
+            }
+            else
+            {
+                CameraManager.Instance.CurentCameraController.FOV = Mathf.Lerp(CameraManager.Instance.CurentCameraController.FOV, 60f, Time.deltaTime*5);
+                Animator.SetBool(isAimingHash, false);
 
+            }
+        }
         public virtual void LogicUpdate()
         {
+            //SubStateMachine.Update();
             if (Character.TotalSpeedMultiplier > 1.5)
             {
                 MotionSpeed = 1 + Character.TotalSpeedMultiplier - 1.5f;
@@ -121,16 +148,16 @@ namespace LOGIYGames
             switch (CameraManager.Instance.CameraPerspectiveType)
             {
                 case CameraPerspectiveType.FirstPerson:
-                    FocusingState = FocusingState.Focus;
+                    Character.FocusingState = FocusingState.Focus;
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
-                    FocusingState = Character.FocusPressed ? FocusingState.Focus : FocusingState.FreeLook;
+                    Character.FocusingState = Character.FocusPressed || Character.BlockPressed ? FocusingState.Focus : FocusingState.FreeLook;
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
-                    FocusingState = FocusingState.Focus;
+                    Character.FocusingState = FocusingState.Focus;
                     break;
                 case CameraPerspectiveType.Top_Down:
-                    FocusingState = Character.FocusPressed ? FocusingState.Focus : FocusingState.FreeLook;
+                    Character.FocusingState = Character.FocusPressed || Character.BlockPressed ? FocusingState.Focus : FocusingState.FreeLook;
                     RotateByRootMotionOnly = false;
                     break;
                 default:
@@ -140,7 +167,9 @@ namespace LOGIYGames
 
         public virtual void LateUpdate()
         {
+            //SubStateMachine.LateUpdate();
             UpdateAnimations();
+            Aim();
             if (isDebugDraw)
             {
                 Debug();
@@ -158,8 +187,7 @@ namespace LOGIYGames
 
         public virtual void PhysicsUpdate()
         {
-
-
+            //SubStateMachine.FixedUpdate();
             ChangeVelocity();
             GetDeltaAngle();
             GetMovementDirection();
@@ -236,16 +264,15 @@ namespace LOGIYGames
                 Vector3 normal = Sensors.BelowHit.normal;
                 // Направление соскальзывания = проекция вектора вниз на плоскость поверхности
                 Vector3 slideDir = Vector3.zero;
-
-                //slideDir = Vector3.ProjectOnPlane(new Vector3(CharacterGravity.Velocity.x + Character.Velocity.x, CharacterGravity.Velocity.y + Character.Velocity.y, CharacterGravity.Velocity.z + Character.Velocity.z), normal);
-                //Character.Velocity = Vector3.Lerp(Character.Velocity, slideDir, Time.deltaTime * 2);
-                if (Character.transform.InverseTransformDirection(CharacterGravity.Velocity).y < 0)
+                if (Character.transform.InverseTransformDirection(CharacterGravity.Velocity).y <= 0)
                 {
                     var absAngle = Mathf.Abs(Sensors.GroundAngle);
                     float slideModifier = absAngle >= 90 ? 1f : Mathf.InverseLerp(0f, 90, absAngle);
 
-                    slideDir = Vector3.ProjectOnPlane(Character.Velocity + CharacterGravity.Velocity, normal);
-                    Character.Velocity = Vector3.Lerp(Character.Velocity, slideDir, Time.deltaTime * slideModifier * 8);
+                    //slideDir = Vector3.ProjectOnPlane(Character.Velocity + CharacterGravity.Velocity, normal);
+                    slideDir = Vector3.ProjectOnPlane(CharacterGravity.Velocity, normal);
+                    //Character.Velocity = Vector3.Lerp(Character.Velocity, slideDir, Time.deltaTime * slideModifier * 5);
+                    CController.Move(slideDir *Time.deltaTime);
                 }
             }
         }
@@ -269,7 +296,7 @@ namespace LOGIYGames
 
         protected virtual void GetMovementDirection()
         {
-            switch (FocusingState)
+            switch (Character.FocusingState)
             {
                 case FocusingState.FreeLook:
                     moveDirection = GetMovementDirectionRelativeCamera();
@@ -330,7 +357,7 @@ namespace LOGIYGames
             if (!Character.IsUnderPlayerControl) return;
             if (CameraManager.Instance.CameraPerspectiveType != CameraPerspectiveType.Top_Down)
             {
-                switch (FocusingState)
+                switch (Character.FocusingState)
                 {
                     case FocusingState.FreeLook:
                         RotateRelativeCamera();
@@ -344,7 +371,7 @@ namespace LOGIYGames
             }
             else
             {
-                switch (FocusingState)
+                switch (Character.FocusingState)
                 {
                     case FocusingState.FreeLook:
                         RotateRelativeCamera();
@@ -414,8 +441,8 @@ namespace LOGIYGames
             Animator.SetFloat(SpeedHash, Character.TotalSpeedMultiplier, smoothTime, Time.deltaTime);
             Animator.SetFloat(yawAbsHash, Mathf.Abs(deltaYaw));
             Animator.SetFloat(animationSpeedHash, MotionSpeed, smoothTime, Time.deltaTime);
-            Animator.SetBool(IsStairsUpHash, Sensors.IsStepAhead);
-            switch (FocusingState)
+            Animator.SetBool(IsStairsUpHash, Sensors.IsStepUpAhead);
+            switch (Character.FocusingState)
             {
                 case FocusingState.FreeLook:
                     {
@@ -436,7 +463,7 @@ namespace LOGIYGames
 
         protected virtual void GetDeltaAngle()
         {
-            if (FocusingState == FocusingState.FreeLook && CameraManager.Instance.CameraPerspectiveType != CameraPerspectiveType.Top_Down)
+            if (Character.FocusingState == FocusingState.FreeLook && CameraManager.Instance.CameraPerspectiveType != CameraPerspectiveType.Top_Down)
             {
 
                 float turnInput = Vector3.SignedAngle(Character.transform.forward, moveDirection, Vector3.up);
@@ -601,46 +628,6 @@ namespace LOGIYGames
             return base.CanBeExecuted() && Character.SprintPressed && Character.MovementInput.magnitude > 0;
         }
     }
-    //public abstract class GroundedState : BaseState
-    //{
-    //    protected GroundedState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData)
-    //    {
-    //    }
-    //    private bool useAutoCalculatedPlayerSpeedMultiplier = true;
-
-    //    protected float slopeAffectRate = 0.2f;
-    //    Vector3 projectedVelocity;
-    //    protected override void ChangeVelocity()
-    //    {
-    //        base.ChangeVelocity();
-    //        if (useAutoCalculatedPlayerSpeedMultiplier)
-    //        {
-    //            CalculateSlopeSpeedMultiplier();
-    //        }
-    //    }
-    //    private void CalculateSlopeSpeedMultiplier()
-    //    {
-    //        projectedVelocity = Vector3.ProjectOnPlane(
-    //        Vector3.down,
-    //        Sensors.BelowHit.normal
-    //        );
-    //        // Вычисляем косинус угла между направлением движения и направлением склона
-    //        float dot = Vector3.Dot(moveDirection, projectedVelocity);
-
-    //        // Теперь множитель скорости зависит от направления движения:
-    //        // - dot > 0: движение вниз по склону — ускорение
-    //        // - dot < 0: движение в гору — замедление
-    //        // - dot ≈ 0: движение перпендикулярно склону — без изменений
-
-
-    //        // Итоговый множитель скорости:
-    //        var targetMultiplier = Mathf.Clamp(1f + dot * slopeAffectRate, 0.5f, 1.5f);
-    //        Character.ExternalSpeedMultiplier = Mathf.Lerp(
-    //        Character.ExternalSpeedMultiplier,
-    //        targetMultiplier,
-    //        Time.deltaTime * Character.Acceleration);
-    //    }
-    //}
     public class FallingState : ContinuousState
     {
         public FallingState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData)
@@ -675,7 +662,12 @@ namespace LOGIYGames
         public override bool CanBeExecuted()
         {
             return base.CanBeExecuted()
-                && Sensors.IsGrounded;
+                && Sensors.IsGrounded && CharacterGravity.Velocity.y<3;
+        }
+        protected override void ChangeVelocity()
+        {
+            Character.InternalSpeedMultiplier = Mathf.Lerp(Character.InternalSpeedMultiplier, 0, Character.Deceleration * Time.deltaTime);
+            Character.Velocity = Vector3.Lerp(Character.Velocity, Vector3.zero, Character.Deceleration * Time.deltaTime);
         }
     }
     public class GroundJumpState : JumpState
@@ -720,6 +712,7 @@ namespace LOGIYGames
             return base.CanBeExecuted()
                 && Character.JumpPressed;
         }
+
     }
     public class CrouchState : ContinuousState
     {
@@ -742,6 +735,22 @@ namespace LOGIYGames
             base.Enter();
             Character.Height = CrouchHeight;
             Animator.SetBool(isCrouchingHash, true);
+        }
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+        }
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+        }
+        protected override void UpdateAnimations()
+        {
+            base.UpdateAnimations();
+        }
+        public override void LateUpdate()
+        {
+            base.LateUpdate();
         }
         public override void Exit()
         {
@@ -939,9 +948,6 @@ namespace LOGIYGames
             bool hasDownWall = Sensors.LegsFrontHit.collider != null &&
                                Sensors.LegsFrontHit.collider.CompareTag("ClimbableWall");
 
-
-            var animatedspeed = locomotionCurve.Evaluate(Character.TotalSpeedMultiplier);
-
             // Получаем локальную скорость
             Vector3 localVelocity = Character.transform.InverseTransformDirection(Character.Velocity);
 
@@ -959,8 +965,8 @@ namespace LOGIYGames
             else if (vertical < 0f && !hasDownWall)
                 vertical = 0f;
             // Применяем к Animator
-            Animator.SetFloat(horizontalSpeedHash, horizontal * animatedspeed, 0.1f, Time.deltaTime);
-            Animator.SetFloat(verticalSpeedHash, vertical * animatedspeed, 0.1f, Time.deltaTime);
+            Animator.SetFloat(horizontalSpeedHash, horizontal * Character.TotalSpeedMultiplier, 0.1f, Time.deltaTime);
+            Animator.SetFloat(verticalSpeedHash, vertical * Character.TotalSpeedMultiplier, 0.1f, Time.deltaTime);
         }
         protected override void Rotate()
         {
@@ -969,7 +975,7 @@ namespace LOGIYGames
         public override bool CanBeExecuted()
         {
 
-            if (FocusingState == FocusingState.Focus)
+            if (Character.FocusingState == FocusingState.Focus)
             {
                 return base.CanBeExecuted() && Sensors.LegsFrontHit.collider?.tag == "ClimbableWall"
                     && Vector3.Angle(Character.transform.forward, -Sensors.LegsFrontHit.normal) < 60
@@ -1168,11 +1174,11 @@ namespace LOGIYGames
             Vector3 localDir = Character.transform.InverseTransformDirection(worldDir).normalized;
 
             // --- Выбираем анимацию ---
-            if (FocusingState == FocusingState.FreeLook)
+            if (Character.FocusingState == FocusingState.FreeLook)
             {
                 Animator.CrossFade(StandingDodgeForward, 0.05f);
             }
-            else if (FocusingState is FocusingState.Focus or FocusingState.Focus)
+            else if (Character.FocusingState is FocusingState.Focus or FocusingState.Focus)
             {
                 float forwardDot = Vector3.Dot(localDir, Vector3.forward);
                 float rightDot = Vector3.Dot(localDir, Vector3.right);
@@ -1388,7 +1394,6 @@ namespace LOGIYGames
         }
         protected override void UpdateAnimations()
         {
-            var animatedspeed = locomotionCurve.Evaluate(Character.TotalSpeedMultiplier);
 
             // Получаем локальную скорость
             Vector3 localVelocity = Character.transform.InverseTransformDirection(Character.Velocity);
@@ -1401,7 +1406,7 @@ namespace LOGIYGames
             else if (horizontal < 0f && !hasLeftWall)
                 horizontal = 0f;
             // Применяем к Animator
-            Animator.SetFloat(horizontalSpeedHash, horizontal * animatedspeed, 0.1f, Time.deltaTime);
+            Animator.SetFloat(horizontalSpeedHash, horizontal * Character.TotalSpeedMultiplier, 0.1f, Time.deltaTime);
             Animator.SetFloat(verticalSpeedHash, 0, 0.1f, Time.deltaTime);
         }
         public override void LogicUpdate()
@@ -1531,33 +1536,48 @@ namespace LOGIYGames
         public override bool CanBeExecuted()
         {
             return base.CanBeExecuted()
-                && !Sensors.IsObstacleLegsFrontDown
+                && !Sensors.IsObstacleKneesFrontDown
                 && !Sensors.IsObstacleLegsFront;
         }
     }
-    public class AimState : ContinuousState
+    public class AimState :IState
     {
-        public AimState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData)
+        int isAimingHash = Animator.StringToHash("IsAiming");
+
+        public AimState(MovementStateDriver ctx)
         {
+            Animator = ctx.Animator;
+            Character = ctx.Character;
+        }
+        Animator Animator;
+        Character Character;
+        public void LogicUpdate()
+        {
+            Character.FocusingState = FocusingState.Focus;
+            Animator.SetBool(isAimingHash, true);
         }
 
-        public override void LogicUpdate()
+        public void Enter()
         {
-            base.LogicUpdate();
-            FocusingState = FocusingState.Focus;
+            Animator.SetBool(isAimingHash, true);
+        }
+        public void Exit()
+        {
+            Animator.SetBool(isAimingHash, false);
+        }
+        public bool CanBeExecuted()
+        {
+            return Character.BlockPressed;
         }
 
-        public override void Enter()
+        public void LateUpdate()
         {
-            base.Enter();
+           
         }
-        public override void Exit()
+
+        public void PhysicsUpdate()
         {
-            base.Exit();
-        }
-        public override bool CanBeExecuted()
-        {
-            return base.CanBeExecuted() && Character.BlockPressed;
+ 
         }
     }
 }

@@ -49,7 +49,7 @@ namespace LOGIYGames
 
         private void ApplyGravity(float fixedDeltaTime)
         {
-            Velocity = Vector3.Lerp(Velocity, GravityDirection.normalized * CurrentGravityForce, fixedDeltaTime);
+            Velocity = Vector3.Lerp(Velocity, GravityDirection.normalized * CurrentGravityForce, fixedDeltaTime * 2);
             controller.Move(Velocity * fixedDeltaTime);
         }
 
