@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 namespace LOGIYGames
 {
@@ -8,7 +9,7 @@ namespace LOGIYGames
         public StateNode CurrentNode { get; private set; }
         Dictionary<Type, StateNode> nodes = new();
         HashSet<ITransition> anyTransitions = new();
-
+        public string LastTransition { get; private set; } = "";
         public void Update()
         {
             var transition = GetTransition();
@@ -44,6 +45,8 @@ namespace LOGIYGames
 
             previousState?.Exit();
             nextState?.Enter();
+            new StringBuilder();
+            LastTransition =previousState.GetType()+" -> "+nextState.GetType();
             CurrentNode = nodes[state.GetType()];
         }
 

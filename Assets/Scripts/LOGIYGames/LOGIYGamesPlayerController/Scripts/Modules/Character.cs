@@ -1,0 +1,175 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+namespace LOGIYGames.CharacterCore
+{
+    public class Character : MonoModuleBase, IControllable
+    {
+
+
+        [Header("References")]
+        [SerializeField] InputReader InputReader;
+
+        public Vector2 MovementInput {  get; private set; }
+
+        private GenericControllerWrapper CController = null;
+        #region VelocityVariables
+
+        /// <summary>
+        /// Gets or sets the deceleration value.
+        /// </summary>
+        /// <remarks>
+        /// Deceleration does not work if the <see cref="useInertia"/> variable is set to <c>false</c>.
+        /// </remarks>
+        public float Deceleration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the acceleration value.
+        /// </summary>
+        /// <remarks>
+        /// Acceleration does not work if the <see cref="useInertia"/> variable is set to <c>false</c>.
+        /// </remarks>
+        public float Acceleration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the internal speed multiplier.
+        /// </summary>
+        /// <remarks>
+        /// This multiplier can be used to adjust the movement speed in base conditions, such as when moving walk or sprint.
+        /// </remarks>
+        public float SpeedMultiplier { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// 
+
+        public float TurnSmoothTime { get; set; }
+        [field: SerializeField] public float BaseSpeed { get; set; }
+        public float CurrentSpeed => SpeedMultiplier * BaseSpeed * MovementInput.magnitude;
+
+        public Vector3 Velocity { get => velocity; set => velocity = value; }
+
+        public float JumpVerticalForce {  get; set; }
+        public float JumpPlanarForce {  get; set; }
+
+
+        private Vector3 velocity;
+        #endregion
+        [field: SerializeField] public float Height { get; set; }
+        public float HeightChangingSmoothTime { get; private set; } = 4f;
+
+        [field: SerializeField] public Transform CinemachineCameraLookAtTransform { get; set; }
+        [field: SerializeField] public Transform CinemachineCameraFollowTransform { get; set; }
+
+        private void Awake()
+        {
+            InputReader.CharacterInputsEnable = true;
+            InputReader.CameraInputsEnable = true;
+            CController = GetComponent<GenericControllerWrapper>();
+            CController.Height = Height;
+            CController.Center = new Vector3(0, Height / 2.0f, 0);
+
+
+        }
+        public override void OnUpdate(float deltaTime)
+        {
+            base.OnUpdate(deltaTime);
+
+        }
+
+        public override void OnFixedUpdate(float fixedDeltaTime)
+        {
+            base.OnFixedUpdate(fixedDeltaTime);
+        }
+
+        public override void OnLateUpdate(float deltaTime)
+        {
+            base.OnLateUpdate(deltaTime);
+            SmoothHeightChanging();
+
+        }
+        private void SmoothHeightChanging()
+        {
+            if (Height == CController.Height && CController.Center.y == Height) return;
+            if (!Mathf.Approximately(CController.Height, Height) || !Mathf.Approximately(CController.Center.y, Height / 2.0f))
+            {
+                CController.Height = Mathf.Lerp(CController.Height, Height, HeightChangingSmoothTime * Time.deltaTime);
+                CController.Center = Vector3.Lerp(CController.Center, new Vector3(0, Height / 2.0f, 0), HeightChangingSmoothTime * Time.deltaTime);
+            }
+            else
+            {
+                CController.Height = Height;
+                CController.Center = new Vector3(0, Height / 2.0f, 0);
+            }
+
+        }
+
+        public void RotateToDirection(Vector3 desiredDirection, float turnSmoothTime = 0)
+        {
+            desiredDirection.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, Vector3.up);
+            Rotate(targetRotation, turnSmoothTime);
+        }
+        public void RotateToPosition(Vector3 position, float turnSmoothTime = 0)
+        {
+            Vector3 desiredDirection = position - transform.position;
+            RotateToDirection(desiredDirection.normalized, turnSmoothTime);
+        }
+        public void Rotate(Quaternion targetRotation, float turnSmoothTime = 0)
+        {
+            if (turnSmoothTime != 0)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * turnSmoothTime);
+            }
+            else
+            {
+                transform.rotation = targetRotation;
+            }
+        }
+        public void Move(Vector3 moveDirection)
+        {
+            if (MovementInput.magnitude>0)
+            {
+                Velocity = Vector3.Lerp(Velocity, moveDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
+
+            }
+            else
+            {
+                Velocity = Vector3.Lerp(Velocity, Vector3.zero, Deceleration * Time.deltaTime);
+            }
+            CController.Move(Velocity);
+        }
+        public void Jump()
+        {
+            if (MovementInput.magnitude > 0)
+            {
+                Vector3 movement = new Vector3(MovementInput.x, 0, MovementInput.y);
+
+                Vector3 cam = Camera.main.transform.forward;
+
+                Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * JumpPlanarForce;
+            }
+            CController.Jump(JumpVerticalForce);
+        }
+
+        public void Roll()
+        {
+            Jump();
+            Velocity += transform.forward * JumpPlanarForce;
+        }
+
+        public void OnControlGained()
+        {
+
+        }
+
+        public void OnControlLost()
+        {
+
+        }
+
+        public void HandleInputs()
+        {
+            MovementInput = InputReader.MovementInput;
+        }
+    }
+}
