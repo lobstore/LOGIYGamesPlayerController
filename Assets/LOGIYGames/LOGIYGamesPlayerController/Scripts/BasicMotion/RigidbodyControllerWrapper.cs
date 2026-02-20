@@ -147,9 +147,9 @@ namespace LOGIYGames
                 }
                 else
                 {
-                    // Use MovePosition for kinematic-style movement
-                    Vector3 targetPosition = m_rigidbody.position + m_cachedMoveDelta;
-                    m_rigidbody.MovePosition(targetPosition);
+
+                    m_rigidbody.linearVelocity = new Vector3(a_move.x, m_rigidbody.linearVelocity.y, a_move.z);
+
                 }
             }
             else
@@ -198,8 +198,6 @@ namespace LOGIYGames
         public override void Jump(float force)
         {
             m_rigidbody.AddForce(Vector3.up * Mathf.Sqrt(force * -2f * Physics.gravity.y), ForceMode.Impulse);
-                // Direct velocity application if no gravity module
-                //m_rigidbody.linearVelocity = Vector3.up * Mathf.Sqrt(force * -2f * Physics.gravity.y);
         }
         
         #endregion
