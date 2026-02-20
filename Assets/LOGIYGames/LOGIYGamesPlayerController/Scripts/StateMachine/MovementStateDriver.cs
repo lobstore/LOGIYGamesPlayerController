@@ -1,4 +1,5 @@
 using LOGIYGames.CharacterCore;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ namespace LOGIYGames
         #region States
 
         private IdleState _idleState;
+        private WalkState _walkState;
         private RunState _runState;
         private SprintState _sprintState;
         private FallingState _fallingState;
@@ -35,8 +37,6 @@ namespace LOGIYGames
 
         #region Debug
 
-        [Header("Debug")]
-        [SerializeField] private bool showDebugInfo = true;
         private string _currentStateName;
         private string _lastTransition;
 
@@ -55,12 +55,16 @@ namespace LOGIYGames
             InitializeStates();
 
             // Set initial state
+
+            // Configure all transitions
+            ConfigureTransitions();
             _stateMachine.SetState(_idleState);
         }
 
         private void InitializeStates()
         {
             _idleState = new IdleState(this, statesDataSO.IdleStateData);
+            _walkState = new WalkState(this, statesDataSO.WalkStateData);
             _runState = new RunState(this, statesDataSO.RunStateData);
             _sprintState = new SprintState(this, statesDataSO.SprintStateData);
             _fallingState = new FallingState(this, statesDataSO.FallingStateData);
@@ -71,8 +75,147 @@ namespace LOGIYGames
             _rollState = new RollState(this, statesDataSO.RollStateData);
         }
 
+        /// <summary>
+        /// Configures all state transitions based on the transition table
+        /// Transitions are organized by source state to avoid duplicates
+        /// </summary>
+        private void ConfigureTransitions()
+        {
+            // ============================================
+            // TRANSITION TABLE
+            // ============================================
+            // From State     | To State      | Condition
+            // --------------------------------------------
+            // Idle           | Walk          | Movement input > 0
+            // Idle           | Jump          | Jump pressed & grounded
+            // Idle           | Crouch        | Crouch pressed
+            // Idle           | Roll          | Evade pressed
+            // Idle           | Falling       | Not grounded
+            // --------------------------------------------
+            // Walk           | Idle          | Movement input = 0
+            // Walk           | Run           | Movement input > threshold & not sprinting
+            // Walk           | Jump          | Jump pressed & grounded
+            // Walk           | Crouch        | Crouch pressed
+            // Walk           | Roll          | Evade pressed
+            // Walk           | Falling       | Not grounded
+            // --------------------------------------------
+            // Run            | Idle          | Movement input = 0
+            // Run            | Walk          | Movement input < threshold
+            // Run            | Sprint        | Sprint pressed
+            // Run            | Jump          | Jump pressed & grounded
+            // Run            | Crouch        | Crouch pressed
+            // Run            | Roll          | Evade pressed
+            // Run            | Falling       | Not grounded
+            // --------------------------------------------
+            // Sprint         | Idle          | Movement input = 0
+            // Sprint         | Run           | Sprint released
+            // Sprint         | Jump          | Jump pressed & grounded
+            // Sprint         | Crouch        | Crouch pressed
+            // Sprint         | Roll          | Evade pressed
+            // Sprint         | Falling       | Not grounded
+            // --------------------------------------------
+            // Crouch         | Idle          | Crouch released & grounded
+            // Crouch         | Walk          | Movement input & crouch released
+            // Crouch         | Roll          | Evade pressed
+            // Crouch         | Falling       | Not grounded
+            // --------------------------------------------
+            // Jump           | Falling       | Jump duration elapsed & not grounded
+            // Jump           | Landing       | Jump duration elapsed & grounded
+            // --------------------------------------------
+            // Falling        | Landing       | Grounded
+            // --------------------------------------------
+            // Landing        | Idle          | Landing duration elapsed & no input
+            // Landing        | Walk          | Landing duration elapsed & movement input
+            // Landing        | Roll          | Evade pressed
+            // --------------------------------------------
+            // Roll           | Idle          | Roll duration elapsed & no input
+            // Roll           | Walk          | Roll duration elapsed & movement input
+            // Roll           | Falling       | Roll duration elapsed & not grounded
+            // =============================================
+            AddAnyTransition(_fallingState, () => 
+            !Sensors.IsGrounded 
+            && !_groundJumpState.IsDurationTimerRunning
+            && !_rollState.IsDurationTimerRunning
+            );
+            // ----- Idle State Transitions -----
+            AddTransition(_idleState, _walkState, () => HasMovementInput() && IsGrounded());
+            AddTransition(_idleState, _groundJumpState, () => InputReader.JumpPressed && IsGrounded());
+            AddTransition(_idleState, _crouchState, () => InputReader.CrouchPressed);
+            AddTransition(_idleState, _rollState, () => InputReader.EvadePressed);
+
+            // ----- Walk State Transitions -----
+            AddTransition(_walkState, _idleState, () => !HasMovementInput() && IsGrounded());
+            AddTransition(_walkState, _runState, () => HasStrongMovementInput() && !IsSprinting());
+            AddTransition(_walkState, _groundJumpState, () => InputReader.JumpPressed && IsGrounded());
+            AddTransition(_walkState, _crouchState, () => InputReader.CrouchPressed);
+            AddTransition(_walkState, _rollState, () => InputReader.EvadePressed);
+
+            // ----- Run State Transitions -----
+            AddTransition(_runState, _idleState, () => !HasMovementInput() && IsGrounded());
+            AddTransition(_runState, _walkState, () => HasMovementInput() && !HasStrongMovementInput());
+            AddTransition(_runState, _sprintState, () => InputReader.SprintPressed && HasStrongMovementInput());
+            AddTransition(_runState, _groundJumpState, () => InputReader.JumpPressed && IsGrounded());
+            AddTransition(_runState, _crouchState, () => InputReader.CrouchPressed);
+            AddTransition(_runState, _rollState, () => InputReader.EvadePressed);
+
+            // ----- Sprint State Transitions -----
+            AddTransition(_sprintState, _idleState, () => !HasMovementInput() && IsGrounded());
+            AddTransition(_sprintState, _runState, () => !InputReader.SprintPressed);
+            AddTransition(_sprintState, _groundJumpState, () => InputReader.JumpPressed && IsGrounded());
+            AddTransition(_sprintState, _crouchState, () => InputReader.CrouchPressed);
+            AddTransition(_sprintState, _rollState, () => InputReader.EvadePressed);
+
+            // ----- Crouch State Transitions -----
+            AddTransition(_crouchState, _idleState, () => !InputReader.CrouchPressed && IsGrounded() && !HasMovementInput());
+            AddTransition(_crouchState, _walkState, () => !InputReader.CrouchPressed && HasMovementInput());
+            AddTransition(_crouchState, _rollState, () => InputReader.EvadePressed);
+
+            // ----- Jump State Transitions -----
+            AddTransition(_groundJumpState, _landingState, () =>IsGrounded() && _groundJumpState.IsDurationTimerElapsed);
+
+            // ----- Falling State Transitions -----
+            AddTransition(_fallingState, _landingState, () => IsGrounded());
+
+            // ----- Landing State Transitions -----
+            AddTransition(_landingState, _idleState, () => _landingState.IsDurationTimerElapsed && !HasMovementInput());
+            AddTransition(_landingState, _walkState, () => _landingState.IsDurationTimerElapsed && HasMovementInput());
+            AddTransition(_landingState, _rollState, () => InputReader.EvadePressed);
+
+            // ----- Roll State Transitions -----
+            AddTransition(_rollState, _idleState, () => _rollState.IsDurationTimerElapsed && !HasMovementInput() && IsGrounded());
+            AddTransition(_rollState, _walkState, () => _rollState.IsDurationTimerElapsed && HasMovementInput());
+
+        }
+
+        /// <summary>
+        /// Helper method to add transition with inline predicate
+        /// </summary>
+        private void AddTransition(IState from, IState to, Func<bool> condition)
+        {
+            _stateMachine.AddTransition(from, to, new FuncPredicate(condition));
+        }
+
+        private void AddAnyTransition(IState to, Func<bool> condition)
+        {
+            _stateMachine.AddAnyTransition(to, new FuncPredicate(condition));
+        }
+
+        #region Condition Helpers
+
+        private bool HasMovementInput() => InputReader.MovementInput.magnitude > 0.1f;
+
+        private bool HasStrongMovementInput() => InputReader.MovementInput.magnitude > 0.6f;
+
+        private bool IsGrounded() => Sensors.IsGrounded;
+
+        private bool IsSprinting() => InputReader.SprintPressed;
+
+        #endregion
+
         private void Update()
         {
+            _currentStateName = _stateMachine.CurrentNode.State.ToString();
+            _lastTransition = _stateMachine.LastTransition;
             _stateMachine.Update();
         }
 

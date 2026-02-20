@@ -43806,6 +43806,10 @@ PrefabInstance:
       propertyPath: <BaseSpeed>k__BackingField
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 9160473370093739834, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: InputReader
+      value: 
+      objectReference: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
     m_RemovedComponents:
     - {fileID: 5846482891433110660, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
     - {fileID: 8830182772938691044, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}

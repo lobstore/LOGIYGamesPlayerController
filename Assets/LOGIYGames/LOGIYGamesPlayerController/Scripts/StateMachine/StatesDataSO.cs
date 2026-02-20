@@ -44,6 +44,11 @@ namespace LOGIYGames
         public float VerticalForce = 2f;
     }
 
+    [Serializable]
+    public class LandingStateData : TimedStateData
+    {
+    }
+
     [CreateAssetMenu(fileName = "StatesDataSO", menuName = "MovementStateMachine/StatesDataSO")]
     public class StatesDataSO : ScriptableObject
     {
@@ -68,7 +73,7 @@ namespace LOGIYGames
 
         [Space]
         [Header("Landing State")]
-        public StateData LandingStateData;
+        public LandingStateData LandingStateData;
 
         [Space]
         [Header("Roll State")]

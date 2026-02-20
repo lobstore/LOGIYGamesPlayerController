@@ -157,29 +157,14 @@ namespace LOGIYGames
             }
             return true;
         }
-
-        /// <summary>
-        /// Check if duration timer has elapsed (can exit state)
-        /// </summary>
-        public bool IsDurationElapsed()
-        {
-            return _durationTimer == null || _durationTimer.IsFinished;
-        }
-
-        /// <summary>
-        /// Check if cooldown timer has elapsed (can re-enter state)
-        /// </summary>
-        public bool IsCooldownElapsed()
-        {
-            return _cooldownTimer == null || _cooldownTimer.IsFinished;
-        }
-
-        public bool IsTimerRunning => _durationTimer?.IsRunning == true;
-        public bool IsCooldownRunning => _cooldownTimer?.IsRunning == true;
-        public float TimerProgress => _durationTimer?.Progress ?? 0f;
-        public float CooldownProgress => _cooldownTimer?.Progress ?? 0f;
-        public float TimerRemaining => _durationTimer?.CurrentTime ?? 0f;
-        public float CooldownRemaining => _cooldownTimer?.CurrentTime ?? 0f;
+        public bool IsDurationTimerElapsed => _durationTimer?.IsFinished == true;
+        public bool IsCooldownTimerElapsed => _cooldownTimer?.IsFinished == true;
+        public bool IsDurationTimerRunning => _durationTimer?.IsRunning == true;
+        public bool IsCooldownTimerRunning => _cooldownTimer?.IsRunning == true;
+        public float DurationTimerProgress => _durationTimer?.Progress ?? 0f;
+        public float CooldownTimerProgress => _cooldownTimer?.Progress ?? 0f;
+        public float DurationTimerRemaining => _durationTimer?.CurrentTime ?? 0f;
+        public float CooldownTimerRemaining => _cooldownTimer?.CurrentTime ?? 0f;
     }
 
     #region Basic States
@@ -239,9 +224,9 @@ namespace LOGIYGames
         public FallingState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData) { }
     }
 
-    public class LandingState : BaseState
+    public class LandingState : TimedState
     {
-        public LandingState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData) { }
+        public LandingState(MovementStateDriver ctx, TimedStateData stateData) : base(ctx, stateData) { }
     }
 
     #endregion
