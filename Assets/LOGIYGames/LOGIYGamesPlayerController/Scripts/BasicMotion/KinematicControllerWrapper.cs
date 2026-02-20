@@ -24,10 +24,6 @@ namespace LOGIYGames
         private Vector3 m_cachedMoveDelta = Vector3.zero;
         private Quaternion m_cachedRotDelta = Quaternion.identity;
         
-        // Rotation management for external rotation requests
-        private Quaternion m_pendingRotation = Quaternion.identity;
-        private bool m_hasPendingRotation = false;
-        
         // Cached values for properties
         private float m_cachedHeight;
         private float m_cachedRadius;
@@ -129,29 +125,13 @@ namespace LOGIYGames
             {
                 m_kinematicMotor.Transform.Translate(a_move * Time.deltaTime, Space.World);
             }
-        }
+        }  
         
-        public override void MoveAndRotate(Vector3 a_move, Quaternion a_rotDelta)
+        public override void Rotate(Quaternion a_targetRotation)
         {
-            m_kinematicMotor.Transform.rotation *= a_rotDelta;
-            m_cachedRotDelta = a_rotDelta;
-            
-            if (m_collisionEnabled)
-            {
-                m_cachedMoveDelta = a_move * Time.deltaTime;
-                m_kinematicMotor.SetPosition(m_kinematicMotor.TransientPosition + m_cachedMoveDelta);
-            }
-            else
-            {
-                m_kinematicMotor.Transform.Translate(a_move * Time.deltaTime, Space.World);
-            }
-        }
-        
-        public override void Rotate(Quaternion a_rotDelta)
-        {
-            // Store pending rotation to be applied in UpdateRotation
-            m_pendingRotation = a_rotDelta;
-            m_hasPendingRotation = true;
+            // Apply target rotation directly
+            m_kinematicMotor.Transform.rotation = a_targetRotation;
+            m_cachedRotDelta = a_targetRotation * Quaternion.Inverse(transform.rotation);
         }
         
         #endregion
@@ -237,17 +217,12 @@ namespace LOGIYGames
         
         /// <summary>
         /// Called when the motor wants to know what its rotation should be.
-        /// Applies any pending rotation from external rotation requests.
+        /// KinematicCharacterController handles rotation internally.
         /// </summary>
         public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
         {
-            if (m_hasPendingRotation)
-            {
-                // Apply pending rotation delta
-                currentRotation = currentRotation * m_pendingRotation;
-                m_hasPendingRotation = false;
-                m_pendingRotation = Quaternion.identity;
-            }
+            // Rotation is handled directly in Rotate() method
+            // No additional processing needed here
         }
         
         public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)

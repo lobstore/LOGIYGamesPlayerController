@@ -91,27 +91,10 @@ namespace LOGIYGames
             }
         }
 
-        public override void MoveAndRotate(Vector3 a_move, Quaternion a_rotDelta)
+        public override void Rotate(Quaternion a_targetRotation)
         {
-            m_characterController.transform.rotation *= a_rotDelta;
-            m_cachedRotDelta = a_rotDelta;
-
-            if (m_enableCollision)
-            {
-                m_cachedMoveDelta = a_move * Time.deltaTime;
-                m_characterController.Move(m_cachedMoveDelta);
-            }
-            else
-            {
-                m_characterController.transform.Translate(a_move * Time.deltaTime, Space.World);
-                m_cachedMoveDelta = a_move * Time.deltaTime;
-            }
-        }
-
-        public override void Rotate(Quaternion a_rotDelta)
-        {
-            m_characterController.transform.rotation *= a_rotDelta;
-            m_cachedRotDelta = a_rotDelta;
+            m_characterController.transform.rotation = a_targetRotation;
+            m_cachedRotDelta = a_targetRotation * Quaternion.Inverse(transform.rotation);
         }
 
         #endregion

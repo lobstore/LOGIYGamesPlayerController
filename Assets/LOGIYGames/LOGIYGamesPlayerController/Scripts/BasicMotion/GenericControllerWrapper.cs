@@ -19,8 +19,7 @@ namespace LOGIYGames
         
         // Movement methods
         public abstract void Move(Vector3 a_move);
-        public abstract void MoveAndRotate(Vector3 a_move, Quaternion a_rotDelta);
-        public abstract void Rotate(Quaternion a_rotDelta);
+        public abstract void Rotate(Quaternion a_targetRotation);
         
         // Capsule collider properties (both controllers use capsule collision)
         public abstract float MaxStepHeight { get; set; }
@@ -51,11 +50,24 @@ namespace LOGIYGames
         /// Returns the underlying collider component (CharacterController or CapsuleCollider)
         /// </summary>
         public abstract Collider GetCollider();
-        
+
         /// <summary>
         /// Returns the transform of the character
         /// </summary>
         public new Transform transform { get { return base.transform; } }
         
+        /// <summary>
+        /// Gets the ground normal from the controller's ground detection.
+        /// Returns Vector3.up if no ground detection is available.
+        /// Can be overridden by derived classes.
+        /// </summary>
+        public virtual Vector3 GetGroundNormal() => Vector3.up;
+        
+        /// <summary>
+        /// Gets the ground hit information from the controller's ground detection.
+        /// Returns empty RaycastHit if no ground detection is available.
+        /// Can be overridden by derived classes.
+        /// </summary>
+        public virtual RaycastHit GetGroundHit() => new RaycastHit();
     }
 }

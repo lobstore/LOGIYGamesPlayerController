@@ -2,213 +2,178 @@
 
 ## Project Overview
 
-This is a **Unity character controller framework** designed for 3D games. It provides a modular, extensible architecture for player character control with support for:
+This is a **Unity C# player controller framework** designed for 3D character movement and camera control. The project provides a modular, state-machine-driven architecture for handling character movement, camera perspectives, and input management.
 
-- **Multiple character management** - Switch control between different characters
-- **Cinemachine integration** - Camera system using Unity Cinachine
-- **Input System** - Built on Unity's new Input System package
-- **State Machine** - Flexible state machine for character states
-- **Module System** - Composable modules for character behaviors
-- **Event Channels** - ScriptableObject-based event system for decoupled communication
-- **VRM Support** - Modules for VRM character models (look-at, lip sync, IK)
+### Key Features
+
+- **State Machine System**: A robust state machine (`StateMachine.cs`) drives character movement states (Idle, Walk, Run, Sprint, Jump, Fall, Landing, Crouch, Roll)
+- **Multiple Controller Wrappers**: Support for different character controller implementations:
+  - `UnityControllerWrapper` - Unity's built-in `CharacterController`
+  - `KinematicControllerWrapper` - For kinematic character controller integration
+  - `RigidbodyControllerWrapper` - For physics-based movement
+  - `GenericControllerWrapper` - Base interface for controller abstraction
+- **Camera System**: Cinemachine-based camera management with multiple perspectives:
+  - First Person
+  - Third Person Free Look
+  - Third Person Look Forward
+  - Top Down
+- **Input System**: Uses Unity's new Input System package with `InputReader` ScriptableObject for centralized input handling
+- **Module Architecture**: Extensible module system (`MonoModuleBase`, `IModule`) for adding character behaviors
+- **Event Channels**: Decoupled event communication system for game events
 
 ## Directory Structure
 
 ```
 Assets/LOGIYGames/
-├── LOGIYGamesPlayerController/    # Main controller package
-│   ├── Another/                   # Additional modules (IK, VRM, interactions)
-│   ├── Camera/                    # Cinemachine camera utilities
-│   ├── Demo/                      # Demo scene and setup
-│   ├── Inputs/                    # Input System assets and handlers
-│   ├── Managers/                  # Singleton managers (Character, Camera)
-│   ├── Prefabs/                   # Pre-configured prefabs
-│   └── Scripts/                   # Core controller scripts
-│       ├── Animations/            # Animator utilities
-│       ├── BasicMotion/           # Movement and rotation strategies
-│       ├── Modules/               # Character module system
-│       └── StateMachine/          # State machine implementation
-└── Shared/                        # Shared utilities
-    ├── EventChannel/              # ScriptableObject event system
-    ├── StateMachine/              # Generic state machine
-    └── Tools/                     # Utilities (timers, debug, extensions)
+├── LOGIYGamesPlayerController/
+│   ├── Another/              # Additional modules (IK, VRM, eye tracking, etc.)
+│   ├── Camera/               # Camera controllers and Cinemachine presets
+│   ├── Demo/                 # Demo scene
+│   ├── Inputs/               # Input System assets and handlers
+│   ├── Managers/             # Singleton managers (CameraManager, CharacterManager)
+│   ├── Prefabs/              # Prefabs including VRM character
+│   └── Scripts/
+│       ├── Animations/       # Animation-related scripts
+│       ├── BasicMotion/      # Controller wrappers and movement strategies
+│       ├── Debug/            # Debug utilities
+│       ├── Modules/          # Character modules (gravity, sensors)
+│       └── StateMachine/     # Movement state definitions
+└── Shared/
+    ├── EventChannel/         # Event channel system for decoupled communication
+    ├── StateMachine/         # Reusable state machine components
+    ├── Tools/                # Utility classes (timers, etc.)
+    └── Singleton.cs          # Generic Singleton base class
 ```
 
-## Key Components
+## Core Components
 
-### Character System
+### Character Controller (`Character.cs`)
 
-- **`Character`** - Main character component implementing `IControllable`
-  - Handles movement input, velocity, acceleration/deceleration
-  - Integrates with `GenericControllerWrapper` for physics
-  - Supports jumping, rolling, and directional movement
+The main character component that handles:
+- Movement input processing
+- Velocity-based movement with acceleration/deceleration
+- Rotation smoothing
+- Jump and roll mechanics
+- Height changing (crouching)
+- Integration with controller wrappers
 
-- **`CharacterManager`** - Singleton managing active character control
-  - Switches between multiple characters
-  - Coordinates camera target assignment
+### Movement State Driver (`MovementStateDriver.cs`)
 
-### Input System
+Drives the character state machine with timed transitions between states:
+- **Idle** → Walk, Jump, Crouch, Roll, Falling
+- **Walk** → Idle, Run, Jump, Crouch, Roll, Falling
+- **Run** → Idle, Walk, Sprint, Jump, Crouch, Roll, Falling
+- **Sprint** → Idle, Run, Jump, Crouch, Roll, Falling
+- **Crouch** → Idle, Walk, Roll, Falling
+- **Jump** → Landing, Falling
+- **Falling** → Landing
+- **Landing** → Idle, Walk, Roll
+- **Roll** → Idle, Walk, Falling
 
-- **`InputReader`** - ScriptableObject-based input handler
-  - Implements generated `GameInputs` interfaces
-  - Provides events for all input actions
-  - Manages UI engagement state (cursor lock, input mode switching)
+### Input System (`InputReader.cs`)
 
-### Camera System
+A ScriptableObject-based input handler that provides:
+- Movement input (2D vector)
+- Look input (2D vector)
+- Action buttons (Jump, Crouch, Sprint, Attack, Block, Evade, Interact)
+- UI engagement/disengagement
+- Event-based input notifications
 
-- **`CinemachineCameraController`** - Wrapper for Cinemachine cameras
-- **`CameraManager`** - Singleton managing camera targets
+### Camera System (`CameraManager.cs`)
 
-### Module Architecture
-
-- **`IModule`** - Base interface for character modules
-- **`MonoModuleBase`** - MonoBehaviour base with lifecycle methods:
-  - `Initialize()`, `OnUpdate()`, `OnFixedUpdate()`, `OnLateUpdate()`
-- **`ModulesController`** - Manages module execution order via priorities
-
-### State Machine
-
-- **`StateMachine`** - Generic state machine with transitions
-  - Supports `IState` interface with `Enter()`, `Exit()`, `LogicUpdate()`, `PhysicsUpdate()`
-  - Conditional transitions via `IPredicate`
-  - Any-state transitions supported
-
-### Movement State Machine
-
-The `MovementStateDriver` manages character movement states with the following transition table:
-
-#### State Transition Table
-
-| From State | To State   | Condition                                      |
-|------------|------------|------------------------------------------------|
-| Idle       | Walk       | Movement input > 0.1 & grounded                |
-| Idle       | Jump       | Jump pressed & grounded                        |
-| Idle       | Crouch     | Crouch pressed                                 |
-| Idle       | Roll       | Evade pressed                                  |
-| Idle       | Falling    | Not grounded                                   |
-| Walk       | Idle       | No movement input & grounded                   |
-| Walk       | Run        | Strong input (>0.6) & not sprinting            |
-| Walk       | Jump       | Jump pressed & grounded                        |
-| Walk       | Crouch     | Crouch pressed                                 |
-| Walk       | Roll       | Evade pressed                                  |
-| Walk       | Falling    | Not grounded                                   |
-| Run        | Idle       | No movement input & grounded                   |
-| Run        | Walk       | Weak input (<0.6)                              |
-| Run        | Sprint     | Sprint pressed & strong input                  |
-| Run        | Jump       | Jump pressed & grounded                        |
-| Run        | Crouch     | Crouch pressed                                 |
-| Run        | Roll       | Evade pressed                                  |
-| Run        | Falling    | Not grounded                                   |
-| Sprint     | Idle       | No movement input & grounded                   |
-| Sprint     | Run        | Sprint released                                |
-| Sprint     | Jump       | Jump pressed & grounded                        |
-| Sprint     | Crouch     | Crouch pressed                                 |
-| Sprint     | Roll       | Evade pressed                                  |
-| Sprint     | Falling    | Not grounded                                   |
-| Crouch     | Idle       | Crouch released & grounded & no input          |
-| Crouch     | Walk       | Crouch released & has movement input           |
-| Crouch     | Roll       | Evade pressed                                  |
-| Crouch     | Falling    | Not grounded                                   |
-| Jump       | Falling    | Jump duration elapsed & not grounded           |
-| Jump       | Landing    | Jump duration elapsed & grounded               |
-| Falling    | Landing    | Grounded                                       |
-| Landing    | Idle       | Landing duration elapsed & no input            |
-| Landing    | Walk       | Landing duration elapsed & has movement input  |
-| Landing    | Roll       | Evade pressed                                  |
-| Roll       | Idle       | Roll duration elapsed & no input & grounded    |
-| Roll       | Walk       | Roll duration elapsed & has movement input     |
-| Roll       | Falling    | Roll duration elapsed & not grounded           |
-
-#### State Types
-
-- **Base States**: `IdleState`, `WalkState`, `RunState`, `SprintState`, `StopState`, `FallingState`, `LandingState`, `CrouchState`
-- **Timed States**: `JumpState`, `RollState` (have duration and cooldown timers)
-
-#### Transition Configuration
-
-Transitions are configured in `MovementStateDriver.ConfigureTransitions()` using the `AddTransition()` helper method:
-
-```csharp
-private void AddTransition(IState from, IState to, Func<bool> condition)
-{
-    _stateMachine.AddTransition(from, to, new FuncPredicate(condition));
-}
-```
-
-Condition helpers:
-- `HasMovementInput()` - Input magnitude > 0.1
-- `HasStrongMovementInput()` - Input magnitude > 0.6
-- `IsGrounded()` - Sensor module ground detection
-- `IsSprinting()` - Sprint input pressed
-
-### Movement Strategies
-
-- **Motion Strategies** (`IMovementStrategy`):
-  - `CameraRelativeMovement` - Movement relative to camera direction
-  - `CameraAlongMovement` - Camera aligns with movement direction
-
-- **Rotation Strategies** (`IRotationStrategy`):
-  - `CameraRelativeRotation` - Rotation relative to camera
-  - `CameraAlongRotation` - Rotation along movement
-  - `ToMousePointRotation` - Rotate towards mouse cursor
-
-### Shared Utilities
-
-- **`Singleton<T>`** - Generic singleton pattern for MonoBehaviours
-- **`EventChannel<T>`** - ScriptableObject event system for decoupled communication
-- **Timers** - `CountdownTimer`, `StopwatchTimer`, `IntervalTimer`, `TimersManager`
+Manages camera perspectives using Cinemachine:
+- Priority-based virtual camera switching
+- Mobile input support via `DragPointerHandler`
+- Perspective type enumeration for state tracking
 
 ## Building and Running
 
 ### Prerequisites
 
-- Unity (version compatible with Cinemachine and Input System packages)
-- Unity Input System package
-- Unity Cinemachine package
-- VRM packages (for VRM character support)
+- **Unity**: Version compatible with the project (check `ProjectSettings/ProjectVersion.txt`)
+- **Unity Input System**: Package required for input handling
+- **Cinemachine**: Package required for camera system
+- **VRM Support**: If using VRM characters, ensure VRM packages are installed
 
-### Setup
+### Setup Steps
 
 1. Open the Unity project containing this asset
-2. Navigate to `Assets/LOGIYGames/LOGIYGamesPlayerController/Demo/` for the demo scene
-3. The demo scene showcases the controller with a VRM character model
+2. Ensure required packages are installed via Package Manager:
+   - Input System
+   - Cinemachine
+3. Open the demo scene at `LOGIYGamesPlayerController/Demo/Demo.unity`
+4. Press Play to test the controller
 
-### Configuration
+### Key Configuration
 
-1. **Input Setup**: Configure input bindings via the `InputReader` asset
-2. **Character Setup**: Add `Character` component with required references
-3. **Camera Setup**: Use provided camera prefabs or configure Cinemachine cameras
+- **Input Actions**: Configure in `Inputs/InputReader.asset`
+- **State Data**: Configure movement parameters in `StateMachine/StatesDataSO.asset`
+- **Camera Presets**: Adjust in `Camera/CinemachinePresets/`
 
 ## Development Conventions
 
-### Naming Conventions
-
-- **Interfaces**: Prefix with `I` (e.g., `IControllable`, `IModule`)
-- **ScriptableObjects**: Use descriptive names, often with "SO" suffix for data containers
-- **Managers**: Singleton classes suffixed with "Manager"
-
 ### Architecture Patterns
 
-- **Strategy Pattern**: Used for movement and rotation behaviors
-- **Observer Pattern**: Event channels for decoupled communication
-- **State Pattern**: State machine for character states
-- **Module Pattern**: Composable character behaviors with priority-based execution
+1. **Strategy Pattern**: Used for movement and rotation strategies (`IMovementStrategy`, `IRotationStrategy`)
+2. **State Pattern**: All movement states implement `IState` interface
+3. **Singleton Pattern**: Used for managers (`CameraManager`, `TimersManager`)
+4. **ScriptableObject Pattern**: Used for input configuration and state data
 
-### Code Style
+### Coding Style
 
-- Properties with `{ get; private set; }` for encapsulation
-- `[SerializeField]` for Unity Inspector exposure
-- XML documentation comments on public APIs
-- Region directives for organizing related fields
+- **Naming**: PascalCase for public members, camelCase for private fields with `m_` prefix in some legacy code
+- **Regions**: Used to organize code sections (e.g., `#region Movement Methods`)
+- **XML Documentation**: Extensive use of XML comments for public APIs
+- **Serialization**: `[SerializeField]` for private serialized fields, `[field: SerializeField]` for auto-properties
 
-## Dependencies
+### Timer System
 
-- **Unity Input System** - Input handling
-- **Unity Cinemachine** - Camera system
-- **VRM** (optional) - VRM character model support
+The project includes a timer system in `Shared/Tools/`:
+- `Timer` - Base timer class
+- `CountdownTimer` - Countdown timer implementation
+- `IntervalTimer` - Repeating interval timer
+- `StopwatchTimer` - Stopwatch functionality
+- `TimersManager` - Singleton that updates all registered timers
+
+### Event System
+
+Decoupled communication via `Shared/EventChannel/`:
+- `EventChannel<T>` - Generic event channel
+- `EventListener<T>` - Event listener component
+- Specialized channels for `float` and `int` types
+
+## Key Interfaces
+
+```csharp
+// IState - Base interface for all states
+public interface IState
+{
+    void Enter();
+    void Exit();
+    void LogicUpdate();
+    void LateUpdate();
+    void PhysicsUpdate();
+}
+
+// IModule - Base interface for modules
+public interface IModule
+{
+    int ModulePriority { get; }
+    void Initialize();
+}
+
+// IControllable - Interface for controllable entities
+public interface IControllable
+{
+    void OnControlGained();
+    void OnControlLost();
+    void HandleInputs();
+}
+```
 
 ## Notes
 
-- The project uses `.meta` files indicating Unity asset database tracking
-- Some source files contain Cyrillic comments (Russian language)
-- The controller supports both kinematic and dynamic character movement via wrapper classes
+- The project supports VRM characters (see `Prefabs/CatgirlBattle.vrm`)
+- Mobile input support is available via `DragPointerHandler` and `CinemachineMobileInputController`
+- The state machine supports timed transitions with duration and cooldown timers
+- Some code comments are in Russian (e.g., `Singleton.cs`)

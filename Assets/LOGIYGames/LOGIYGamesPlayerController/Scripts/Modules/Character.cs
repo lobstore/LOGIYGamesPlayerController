@@ -141,14 +141,11 @@ namespace LOGIYGames.CharacterCore
             {
                 // Smooth rotation using Slerp
                 Quaternion smoothedRotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime * Time.fixedDeltaTime);
-                Quaternion deltaRotation = smoothedRotation * Quaternion.Inverse(transform.rotation);
-                CController.Rotate(deltaRotation);
+                CController.Rotate(smoothedRotation);
             }
             else
             {
-                // Instant rotation
-                Quaternion deltaRotation = targetRotation * Quaternion.Inverse(transform.rotation);
-                CController.Rotate(deltaRotation);
+                CController.Rotate(targetRotation);
             }
         }
         
