@@ -16,7 +16,7 @@ namespace LOGIYGames
         [SerializeField] InputReader InputReader;
         [SerializeField] DragPointerHandler MobileInputReader;
         [SerializeField] List<CinemachineCameraController> cinemachineCameraControllers = new();
-        public CinemachineCameraController CurentCameraController { get; private set; }
+        public CinemachineCameraController CurrentCameraController { get; private set; }
         [SerializeField] CinemachineCameraController FirstPersonCameraController;
         [SerializeField] CinemachineCameraController ThirdPersonCameraController;
         [SerializeField] CinemachineCameraController TopDownCameraController;
@@ -100,27 +100,27 @@ namespace LOGIYGames
         }
         public void Set3rdFreeLookView()
         {
-            CurentCameraController = instance_ThirdPersonCameraController;
+            CurrentCameraController = instance_ThirdPersonCameraController;
             CameraPerspectiveType = CameraPerspectiveType.ThirdPersonFreeLook;
-            SetPriorVirtualCamera(CurentCameraController);
+            SetPriorVirtualCamera(CurrentCameraController);
         }
         public void Set1stView()
         {
-            CurentCameraController = instance_FirstPersonCameraController;
+            CurrentCameraController = instance_FirstPersonCameraController;
             CameraPerspectiveType = CameraPerspectiveType.FirstPerson;
-            SetPriorVirtualCamera(CurentCameraController);
+            SetPriorVirtualCamera(CurrentCameraController);
         }
         public void SetTopDownView()
         {
-            CurentCameraController = instance_TopDownCameraController;
+            CurrentCameraController = instance_TopDownCameraController;
             CameraPerspectiveType = CameraPerspectiveType.Top_Down;
-            SetPriorVirtualCamera(CurentCameraController);
+            SetPriorVirtualCamera(CurrentCameraController);
         }
         public void Set3rdLookForwardView()
         {
-            CurentCameraController = instance_ThirdPersonCameraController;
+            CurrentCameraController = instance_ThirdPersonCameraController;
             CameraPerspectiveType = CameraPerspectiveType.ThirdPersonLookForward;
-            SetPriorVirtualCamera(CurentCameraController);
+            SetPriorVirtualCamera(CurrentCameraController);
         }
 
     }
