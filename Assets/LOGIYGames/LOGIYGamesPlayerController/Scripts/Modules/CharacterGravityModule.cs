@@ -1,43 +1,65 @@
 using UnityEngine;
 using LOGIYGames.CharacterCore;
+
 namespace LOGIYGames
 {
-    [RequireComponent(typeof(CharacterController))]
+    /// <summary>
+    /// Handles gravity for characters using either Unity CharacterController or KinematicCharacterController.
+    /// Works with GenericControllerWrapper for seamless controller swapping.
+    /// </summary>
+    [RequireComponent(typeof(GenericControllerWrapper))]
     public class CharacterGravityModule : MonoModuleBase
     {
         [Header("Physics")]
         [SerializeField] bool useGravity;
         [SerializeField] private float groundMagnit;
-        public Vector3 GravityDirection { get => gravityDirection.normalized; set => value = gravityDirection; }
-        [SerializeField] Vector3 gravityDirection = new Vector3(0, -1,0);
+        
+        public Vector3 GravityDirection { get => gravityDirection.normalized; set => gravityDirection = value; }
+        [SerializeField] Vector3 gravityDirection = new Vector3(0, -1, 0);
+        
         public float BaseGravityForce = 9.84f;
         public float CurrentGravityForce;
+        
         public Vector3 Velocity { get => velocity; set => velocity = value; }
         private Vector3 velocity;
+        
         public bool UseGravity { get => useGravity; set => useGravity = value; }
+        
         [Header("References")]
-        private CharacterController controller = null;
-        private SensorsModule Sensors = null;
-        private Character character = null;
+        private GenericControllerWrapper m_controllerWrapper;
+        private SensorsModule m_sensors;
+        private Character m_character;
+        
         private void Awake()
         {
-
-            controller = GetComponent<CharacterController>();
-            Sensors = GetComponent<SensorsModule>();
-            character = GetComponent<Character>();
+            m_controllerWrapper = GetComponent<GenericControllerWrapper>();
+            m_sensors = GetComponent<SensorsModule>();
+            m_character = GetComponent<Character>();
+            
+            Debug.Assert(m_controllerWrapper != null, "Error (CharacterGravityModule): Could not find GenericControllerWrapper component");
         }
+        
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
-            ApplyGravity(fixedDeltaTime);
+            ApplyGravity();
         }
+        
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            if (!useGravity) { CurrentGravityForce = 0; return; }
-            if (Sensors.IsGrounded
-                && Velocity.y < 0
-                && Sensors.IsValidSlope())
+            
+            if (!useGravity) 
+            { 
+                CurrentGravityForce = 0; 
+                return; 
+            }
+            
+            // Check if grounded and on valid slope
+            if (m_sensors != null && 
+                m_sensors.IsGrounded &&
+                Velocity.y < 0 &&
+                m_sensors.IsValidSlope())
             {
                 CurrentGravityForce = groundMagnit;
                 Velocity = CurrentGravityForce * gravityDirection.normalized;
@@ -47,16 +69,18 @@ namespace LOGIYGames
                 CurrentGravityForce = BaseGravityForce;
                 Velocity += CurrentGravityForce * gravityDirection.normalized * Time.deltaTime;
             }
-            if (Sensors.AboveHit.collider!=null)
+            
+            // Check for overhead obstacles
+            if (m_sensors != null && m_sensors.AboveHit.collider != null)
             {
                 Velocity = GravityDirection.normalized * 0.5f;
             }
         }
 
-        private void ApplyGravity(float fixedDeltaTime)
+        private void ApplyGravity()
         {
-            controller.Move(Velocity * fixedDeltaTime);
+            // Use the controller wrapper's Move method for consistent behavior
+            m_controllerWrapper.Move(Velocity);
         }
-
     }
 }

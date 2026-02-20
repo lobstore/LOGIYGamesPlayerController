@@ -1,50 +1,69 @@
 using UnityEngine;
+
 namespace LOGIYGames
 {
-    [RequireComponent(typeof(CharacterController))]
+    /// <summary>
+    /// Handles sensor detection for characters using either Unity CharacterController or KinematicCharacterController.
+    /// Works with GenericControllerWrapper for seamless controller swapping.
+    /// </summary>
+    [RequireComponent(typeof(GenericControllerWrapper))]
     public class SensorsModule : MonoModuleBase
     {
-
         [Header("Component References")]
-        [SerializeField] private CharacterController characterController;
+        [SerializeField] private GenericControllerWrapper m_controllerWrapper;
 
         [Header("Detection Settings")]
-        [SerializeField] private float upCheckDistance = 0.8f;
-        [SerializeField] private float groundCheckDistance = 0.8f;
-        [SerializeField] private float belowCheckDistance = 0.8f;
-        [SerializeField] private float castUpSphereRadius = 0.2f;
-        [SerializeField] private float castDownSphereRadius = 0.2f;        
-        [SerializeField] private float detectionOriginYOffset = 0f; 
+        [SerializeField] private float m_upCheckDistance = 0.8f;
+        [SerializeField] private float m_groundCheckDistance = 0.8f;
+        [SerializeField] private float m_belowCheckDistance = 0.8f;
+        [SerializeField] private float m_castUpSphereRadius = 0.2f;
+        [SerializeField] private float m_castDownSphereRadius = 0.2f;
+        [SerializeField] private float m_detectionOriginYOffset = 0f;
 
 
         [Header("Layer Masks")]
-        [SerializeField] private LayerMask includeLayers;
-        [SerializeField] private LayerMask groundLayers;
+        [SerializeField] private LayerMask m_includeLayers;
+        [SerializeField] private LayerMask m_groundLayers;
 
         [Header("Debug Info")]
-        [SerializeField] private bool showDebugInfo = true;
-        private string aboveObstacleName;
-        private string belowObstacleName;
+        [SerializeField] private bool m_showDebugInfo = true;
+        private string m_aboveObstacleName;
+        private string m_belowObstacleName;
 
-        public Vector3 detectionOrigin => new Vector3(
-                characterController.bounds.center.x,
-                characterController.bounds.center.y + detectionOriginYOffset,
-                characterController.bounds.center.z);
+        // Detection origin calculated from capsule bounds
+        public Vector3 DetectionOrigin
+        {
+            get
+            {
+                if (m_controllerWrapper == null) return transform.position;
+                
+                Collider col = m_controllerWrapper.GetCollider();
+                if (col != null)
+                {
+                    return new Vector3(
+                        col.bounds.center.x,
+                        col.bounds.center.y + m_detectionOriginYOffset,
+                        col.bounds.center.z
+                    );
+                }
+                return transform.position;
+            }
+        }
 
         // Detection Results
-        private RaycastHit belowHit;
-        private RaycastHit groundHit;
-        private RaycastHit aboveHit;
+        private RaycastHit m_belowHit;
+        private RaycastHit m_groundHit;
+        private RaycastHit m_aboveHit;
 
         // Public Properties
-        public RaycastHit BelowHit => belowHit;
-        public RaycastHit GroundHit => groundHit;
-        public RaycastHit AboveHit => aboveHit;
+        public RaycastHit BelowHit => m_belowHit;
+        public RaycastHit GroundHit => m_groundHit;
+        public RaycastHit AboveHit => m_aboveHit;
 
         public bool IsObstacleBelow { get; private set; }
         public bool IsObstacleAbove { get; private set; }
         public bool IsOnSlope { get; private set; }
-        public bool IsGrounded {  get; private set; }
+        public bool IsGrounded { get; private set; }
         public float GroundAngle { get; private set; }
 
         [Range(0, 90)]
@@ -52,94 +71,122 @@ namespace LOGIYGames
 
         private void Awake()
         {
-            if (characterController == null)
+            if (m_controllerWrapper == null)
             {
-                characterController = GetComponent<CharacterController>();
+                m_controllerWrapper = GetComponent<GenericControllerWrapper>();
             }
-
+            
+            Debug.Assert(m_controllerWrapper != null, "Error (SensorsModule): Could not find GenericControllerWrapper component");
         }
+        
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
             PerformDetection();
         }
+        
         public override void OnLateUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
-            if (showDebugInfo)
+            if (m_showDebugInfo)
             {
                 UpdateDebugInfo();
             }
         }
+        
         public bool IsValidSlope()
         {
-            float angle = Vector3.Angle(BelowHit.normal, characterController.transform.up);
+            if (m_controllerWrapper == null) return false;
+            
+            float angle = Vector3.Angle(m_belowHit.normal, m_controllerWrapper.transform.up);
             bool validAngle = Mathf.Abs(angle) <= MaxStableSlopeAngle;
             return validAngle;
         }
+
         private void PerformDetection()
         {
             AboveObstaclesDetection();
             BelowObstaclesDetection();
 
-            IsGrounded = Physics.SphereCast(detectionOrigin, castDownSphereRadius, -characterController.transform.up, out groundHit, groundCheckDistance, groundLayers);
+            IsGrounded = Physics.SphereCast(
+                DetectionOrigin, 
+                m_castDownSphereRadius, 
+                -m_controllerWrapper.transform.up, 
+                out m_groundHit, 
+                m_groundCheckDistance, 
+                m_groundLayers
+            );
 
-
-            GroundAngle = Vector3.SignedAngle(characterController.transform.up, belowHit.normal, characterController.transform.right);
+            GroundAngle = Vector3.SignedAngle(
+                m_controllerWrapper.transform.up, 
+                m_belowHit.normal, 
+                m_controllerWrapper.transform.right
+            );
             IsOnSlope = GroundAngle == 0 ? false : true;
-
         }
 
         private void BelowObstaclesDetection()
         {
-            IsObstacleBelow = Physics.SphereCast(detectionOrigin, castDownSphereRadius, -characterController.transform.up, out belowHit, belowCheckDistance, includeLayers);
+            IsObstacleBelow = Physics.SphereCast(
+                DetectionOrigin, 
+                m_castDownSphereRadius, 
+                -m_controllerWrapper.transform.up, 
+                out m_belowHit, 
+                m_belowCheckDistance, 
+                m_includeLayers
+            );
         }
 
         private void AboveObstaclesDetection()
         {
-            IsObstacleAbove = Physics.SphereCast(detectionOrigin, castUpSphereRadius, characterController.transform.up, out aboveHit, upCheckDistance, includeLayers);
+            IsObstacleAbove = Physics.SphereCast(
+                DetectionOrigin, 
+                m_castUpSphereRadius, 
+                m_controllerWrapper.transform.up, 
+                out m_aboveHit, 
+                m_upCheckDistance, 
+                m_includeLayers
+            );
         }
 
         private void UpdateDebugInfo()
         {
-            aboveObstacleName = AboveHit.transform?.name;
-            belowObstacleName = BelowHit.transform?.name;
+            m_aboveObstacleName = m_aboveHit.transform?.name;
+            m_belowObstacleName = m_belowHit.transform?.name;
         }
 
         private void OnDrawGizmos()
         {
-            if (characterController == null) return;
+            if (m_controllerWrapper == null) return;
 
-            if (!showDebugInfo) return;
+            if (!m_showDebugInfo) return;
 
             // Draw sphere casts
-            DrawSphereCasts(detectionOrigin);
+            DrawSphereCasts(DetectionOrigin);
             DrawBelowPlane();
         }
+        
         private void DrawBelowPlane()
         {
-            DebugDraw.DrawPlane(belowHit.point,belowHit.normal,1, Color.green);
+            DebugDraw.DrawPlane(m_belowHit.point, m_belowHit.normal, 1, Color.green);
         }
 
         private void DrawSphereCasts(Vector3 origin)
         {
-
             Gizmos.color = IsObstacleAbove ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(origin + characterController.transform.up * upCheckDistance, castUpSphereRadius);
+            Gizmos.DrawWireSphere(origin + m_controllerWrapper.transform.up * m_upCheckDistance, m_castUpSphereRadius);
 
             Gizmos.color = IsObstacleBelow ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(origin + -characterController.transform.up * belowCheckDistance, castDownSphereRadius);
+            Gizmos.DrawWireSphere(origin + -m_controllerWrapper.transform.up * m_belowCheckDistance, m_castDownSphereRadius);
 
             Gizmos.color = IsGrounded ? Color.green : Color.yellow;
-            Gizmos.DrawWireSphere(origin + -characterController.transform.up * groundCheckDistance, castDownSphereRadius);
+            Gizmos.DrawWireSphere(origin + -m_controllerWrapper.transform.up * m_groundCheckDistance, m_castDownSphereRadius);
 
             if (IsObstacleBelow)
             {
-
                 Gizmos.color = Color.blue;
-                Gizmos.DrawWireSphere(belowHit.point, castDownSphereRadius);
+                Gizmos.DrawWireSphere(m_belowHit.point, m_castDownSphereRadius);
             }
-
         }
     }
 }

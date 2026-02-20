@@ -78,7 +78,14 @@ namespace LOGIYGames
 
         public virtual void PhysicsUpdate()
         {
-            _character.Rotate(CurrentRotationStrategy.GetRotation(), _character.TurnSmoothTime);
+            // Get target rotation from rotation strategy
+            Quaternion targetRotation = CurrentRotationStrategy.GetRotation();
+            
+            // Apply rotation through Character (which uses wrapper's rotation system)
+            // This ensures proper integration with KinematicCharacterController
+            _character.Rotate(targetRotation, _character.TurnSmoothTime);
+            
+            // Apply movement
             _character.Move(CurrentMovementStrategy.GetMovementDirection());
         }
     }
