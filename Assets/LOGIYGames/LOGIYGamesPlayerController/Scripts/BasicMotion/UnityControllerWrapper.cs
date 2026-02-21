@@ -1,3 +1,4 @@
+using LOGIYGames.CharacterCore;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -17,14 +18,15 @@ namespace LOGIYGames
 
         private CharacterController m_characterController;
         private CharacterGravityModule m_characterGravityModule;
+        private Character m_character;
+        private SensorsModule m_sensors;
 
         private bool m_enableCollision = true;
-        private Vector3 m_cachedMoveDelta = Vector3.zero;
-        private Quaternion m_cachedRotDelta = Quaternion.identity;
+        private Vector3 targetVelocity;
 
         #region Public Properties
 
-        public override bool IsGrounded { get { return m_characterController.isGrounded; } }
+        public override bool IsGrounded { get { return m_sensors.IsGrounded; } }
         
         public override bool ApplyGravityWhenGrounded { get { return m_applyGravityWhenGrounded; } }
         
@@ -66,11 +68,18 @@ namespace LOGIYGames
 
         private void Awake()
         {
+            m_sensors = GetComponent<SensorsModule>();
+            m_character = GetComponent<Character>();
             m_characterController = GetComponent<CharacterController>();
             m_characterGravityModule = GetComponent<CharacterGravityModule>();
             Assert.IsNotNull(m_characterController, "Error (UnityControllerWrapper): Could not find CharacterController component");
 
             m_characterController.enableOverlapRecovery = true;
+        }
+
+        private void LateUpdate()
+        {
+            DebugDraw.DrawArrow(transform.position,targetVelocity,Color.green);
         }
 
         #endregion
@@ -79,22 +88,45 @@ namespace LOGIYGames
 
         public override void Move(Vector3 a_move)
         {
-            if (m_enableCollision)
+            Vector3 totalVelocity = a_move + m_characterGravityModule.Velocity;
+            if (m_sensors.IsValidSlope())
             {
-                m_cachedMoveDelta = a_move * Time.deltaTime;
-                m_characterController.Move(m_cachedMoveDelta);
+                if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.MovementInput.magnitude > 0)
+                {
+                    ProjectVelocity(totalVelocity);
+
+                }
+                else
+                {
+                    targetVelocity = totalVelocity;
+                }
             }
             else
             {
-                m_characterController.transform.Translate(a_move * Time.deltaTime, Space.World);
-                m_cachedMoveDelta = a_move * Time.deltaTime;
+                ProjectVelocity(totalVelocity);
             }
+            
+
+            if (m_enableCollision)
+            {
+
+                m_characterController.Move(targetVelocity * Time.deltaTime);
+            }
+            else
+            {
+
+                m_characterController.transform.Translate(targetVelocity * Time.deltaTime, Space.World);
+            }
+        }
+
+        private void ProjectVelocity(Vector3 totalVelocity)
+        {
+            targetVelocity = Vector3.ProjectOnPlane(totalVelocity, m_sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up, m_sensors.BelowHit.normal);
         }
 
         public override void Rotate(Quaternion a_targetRotation)
         {
             m_characterController.transform.rotation = a_targetRotation;
-            m_cachedRotDelta = a_targetRotation * Quaternion.Inverse(transform.rotation);
         }
 
         #endregion
@@ -116,9 +148,15 @@ namespace LOGIYGames
             transform.SetPositionAndRotation(a_position, a_rotation);
         }
 
-        public override Vector3 GetCachedMoveDelta() => m_cachedMoveDelta;
+        public override Vector3 GetCachedMoveDelta()
+        {
+            return Velocity*Time.deltaTime;
+        }
         
-        public override Quaternion GetCachedRotDelta() => m_cachedRotDelta;
+        public override Quaternion GetCachedRotDelta()
+        {
+            return transform.rotation;
+        }
 
         #endregion
 
@@ -178,5 +216,7 @@ namespace LOGIYGames
         }
 
         #endregion
+
+
     }
 }

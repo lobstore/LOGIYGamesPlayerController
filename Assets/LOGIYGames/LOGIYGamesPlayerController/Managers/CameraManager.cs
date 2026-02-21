@@ -13,7 +13,6 @@ namespace LOGIYGames
 
     public class CameraManager : Singleton<CameraManager>
     {
-        [SerializeField] InputReader InputReader;
         [SerializeField] DragPointerHandler MobileInputReader;
         [SerializeField] List<CinemachineCameraController> cinemachineCameraControllers = new();
         public CinemachineCameraController CurrentCameraController { get; private set; }

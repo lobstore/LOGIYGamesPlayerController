@@ -7,7 +7,6 @@ namespace LOGIYGames
     /// Handles gravity for characters using either Unity CharacterController or KinematicCharacterController.
     /// Works with GenericControllerWrapper for seamless controller swapping.
     /// </summary>
-    [RequireComponent(typeof(GenericControllerWrapper))]
     public class CharacterGravityModule : MonoModuleBase
     {
         [Header("Physics")]
@@ -42,7 +41,6 @@ namespace LOGIYGames
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
-            ApplyGravity();
         }
         
         public override void OnUpdate(float deltaTime)
@@ -75,12 +73,6 @@ namespace LOGIYGames
             {
                 Velocity = GravityDirection.normalized * 0.5f;
             }
-        }
-
-        private void ApplyGravity()
-        {
-            // Use the controller wrapper's Move method for consistent behavior
-            m_controllerWrapper.Move(Velocity);
         }
     }
 }

@@ -6,7 +6,6 @@ namespace LOGIYGames
     /// Handles sensor detection for characters using either Unity CharacterController or KinematicCharacterController.
     /// Works with GenericControllerWrapper for seamless controller swapping.
     /// </summary>
-    [RequireComponent(typeof(GenericControllerWrapper))]
     public class SensorsModule : MonoModuleBase
     {
         [Header("Component References")]
