@@ -11,7 +11,8 @@ namespace LOGIYGames.CharacterCore
         public Vector2 MovementInput { get; private set; }
 
         private GenericControllerWrapper CController = null;
-        
+
+
         #region VelocityVariables
 
         /// <summary>
@@ -63,7 +64,12 @@ namespace LOGIYGames.CharacterCore
 
         [field: SerializeField] public Transform CinemachineCameraLookAtTransform { get; set; }
         [field: SerializeField] public Transform CinemachineCameraFollowTransform { get; set; }
-        
+        public bool JumpPressed { get; internal set; }
+        public bool CrouchPressed { get; internal set; }
+        public bool EvadePressed { get; internal set; }
+        public bool SprintPressed { get; internal set; }
+        public bool BlockPressed { get; internal set; }
+
         #endregion
 
         private void Awake()
@@ -198,6 +204,11 @@ namespace LOGIYGames.CharacterCore
         public void HandleInputs()
         {
             MovementInput = InputReader.MovementInput;
+            JumpPressed = InputReader.JumpPressed;
+            EvadePressed = InputReader.EvadePressed;
+            BlockPressed = InputReader.BlockPressed;
+            SprintPressed = InputReader.SprintPressed;
+            CrouchPressed = InputReader.CrouchPressed;
         }
         
         #endregion

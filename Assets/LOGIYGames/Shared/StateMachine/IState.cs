@@ -31,13 +31,11 @@ namespace LOGIYGames
 
         protected Character _character;
         protected StateData _data;
-        protected InputReader _input;
 
         protected BaseState(MovementStateDriver ctx, StateData stateData)
         {
             _data = new();
             _character = ctx.Character;
-            _input = ctx.InputReader;
             _data.StateName = stateData.StateName;
             _data.Acceleration = stateData.Acceleration;
             _data.Deceleration = stateData.Deceleration;
@@ -64,14 +62,6 @@ namespace LOGIYGames
 
         public virtual void LogicUpdate()
         {
-            if (_input.BlockPressed || CameraManager.Instance.CameraPerspectiveType == CameraPerspectiveType.FirstPerson)
-            {
-                CurrentRotationStrategy = _cameraAlongRotation;
-            }
-            else if (!_input.BlockPressed)
-            {
-                CurrentRotationStrategy = _cameraRelativeRotation;
-            }
         }
 
         public virtual void LateUpdate() { }
