@@ -5,12 +5,14 @@ namespace LOGIYGames.CharacterCore
 {
     public class Character : MonoModuleBase
     {
+        // TODO Make IInputReader Abstraction to change between AI/Player
         [Header("References")]
         [SerializeField] InputReader InputReader;
 
         public Vector2 MovementInput { get; private set; }
 
         public ControllerWrapperBase CController { get; set; }
+        // TODO Make Builder
         public IMovementStrategy CurrentMovementStrategy { get; set; }
         public IRotationStrategy CurrentRotationStrategy { get; set; }
 
@@ -76,6 +78,7 @@ namespace LOGIYGames.CharacterCore
 
         private void Start()
         {
+            // TODO Make IViewable abstraction to change follow target
             CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
             InputReader.CharacterInputsEnable = true;
             InputReader.CameraInputsEnable = true;

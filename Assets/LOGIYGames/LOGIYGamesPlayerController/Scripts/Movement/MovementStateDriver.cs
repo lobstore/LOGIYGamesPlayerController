@@ -43,6 +43,7 @@ namespace LOGIYGames.Movement
 
         private void Awake()
         {
+            //TODO Make ControllerWrapperManager
             Character.CController = GetComponent<CharacterControllerWrapper>();
             InitializeStateMachine();
         }
