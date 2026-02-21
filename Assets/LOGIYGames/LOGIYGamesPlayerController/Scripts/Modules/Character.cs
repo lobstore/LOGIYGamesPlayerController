@@ -78,7 +78,7 @@ namespace LOGIYGames.CharacterCore
 
         private void Start()
         {
-            // TODO Make IViewable abstraction to change follow target
+            // TODO Make ICBFollowable abstraction to change follow target
             CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
             InputReader.CharacterInputsEnable = true;
             InputReader.CameraInputsEnable = true;

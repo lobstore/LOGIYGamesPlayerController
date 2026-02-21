@@ -17,9 +17,9 @@ namespace LOGIYGames.Movement
         protected CameraAlongRotation _cameraAlongRotation;
 
         protected Character _character;
-        protected StateData _data;
+        protected MovementStateData _data;
 
-        protected BaseState(MovementStateDriver ctx, StateData stateData)
+        protected BaseState(MovementStateDriver ctx, MovementStateData stateData)
         {
             _data = new();
             _character = ctx.Character;

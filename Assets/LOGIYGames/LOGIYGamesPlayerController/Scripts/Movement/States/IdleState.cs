@@ -2,6 +2,6 @@
 {
     public class IdleState : BaseState
     {
-        public IdleState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData) { }
+        public IdleState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData) { }
     }
 }

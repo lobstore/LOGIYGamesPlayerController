@@ -49,6 +49,7 @@ namespace LOGIYGames.AI
         public AIInputReader AIInput => aiInput;
         public Transform Target => target;
         public Transform[] PatrolPoints => patrolPoints;
+        //TODO Move to AIStateDataSO like MovementStateDataSO
         public float DetectionRange => detectionRange;
         public float AttackRange => attackRange;
         public StateMachine StateMachine => _stateMachine;

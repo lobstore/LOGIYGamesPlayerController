@@ -2,7 +2,7 @@
 {
     public class LandingState : TimedState
     {
-        public LandingState(MovementStateDriver ctx, TimedStateData stateData) : base(ctx, stateData) { }
+        public LandingState(MovementStateDriver ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
     }
 
 }

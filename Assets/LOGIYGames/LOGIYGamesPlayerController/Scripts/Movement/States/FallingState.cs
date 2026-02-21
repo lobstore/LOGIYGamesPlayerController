@@ -2,7 +2,7 @@
 {
     public class FallingState : BaseState
     {
-        public FallingState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData) { }
+        public FallingState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData) { }
     }
 
 }

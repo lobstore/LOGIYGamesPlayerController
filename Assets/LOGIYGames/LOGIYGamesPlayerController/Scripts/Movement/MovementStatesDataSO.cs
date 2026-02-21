@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LOGIYGames
 {
     [Serializable]
-    public class StateData
+    public class MovementStateData
     {
         public string StateName;
         [Space]
@@ -18,7 +18,7 @@ namespace LOGIYGames
     /// Base class for states with timer support (duration + cooldown)
     /// </summary>
     [Serializable]
-    public class TimedStateData : StateData
+    public class TimedMovementStateData : MovementStateData
     {
         [Header("Timing")]
         [Tooltip("Minimum duration in this state before can transition out")]
@@ -29,7 +29,7 @@ namespace LOGIYGames
     }
 
     [Serializable]
-    public class JumpStateData : TimedStateData
+    public class JumpStateData : TimedMovementStateData
     {
         [Header("Jump Forces")]
         public float PlanarJumpForce = 5f;
@@ -37,7 +37,7 @@ namespace LOGIYGames
     }
 
     [Serializable]
-    public class RollStateData : TimedStateData
+    public class RollStateData : TimedMovementStateData
     {
         [Header("Roll Forces")]
         public float PlanarForce = 5f;
@@ -45,31 +45,31 @@ namespace LOGIYGames
     }
 
     [Serializable]
-    public class LandingStateData : TimedStateData
+    public class LandingStateData : TimedMovementStateData
     {
     }
 
     [CreateAssetMenu(fileName = "StatesDataSO", menuName = "MovementStateMachine/StatesDataSO")]
-    public class StatesDataSO : ScriptableObject
+    public class MovementStatesDataSO : ScriptableObject
     {
         [Header("Idle State")]
-        public StateData IdleStateData;
+        public MovementStateData IdleStateData;
 
         [Space]
         [Header("Walk State")]
-        public StateData WalkStateData;
+        public MovementStateData WalkStateData;
 
         [Space]
         [Header("Run State")]
-        public StateData RunStateData;
+        public MovementStateData RunStateData;
 
         [Space]
         [Header("Crouch State")]
-        public StateData CrouchStateData;
+        public MovementStateData CrouchStateData;
 
         [Space]
         [Header("Falling State")]
-        public StateData FallingStateData;
+        public MovementStateData FallingStateData;
 
         [Space]
         [Header("Landing State")]
@@ -85,10 +85,10 @@ namespace LOGIYGames
 
         [Space]
         [Header("Sprint State")]
-        public StateData SprintStateData;
+        public MovementStateData SprintStateData;
 
         [Space]
         [Header("Stopping State")]
-        public StateData StoppingStateData;
+        public MovementStateData StoppingStateData;
     }
 }

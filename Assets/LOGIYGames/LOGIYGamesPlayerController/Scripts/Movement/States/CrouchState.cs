@@ -11,7 +11,7 @@
         protected float StandingHeight;
         protected float CrouchHeight;
 
-        public CrouchState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData)
+        public CrouchState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData)
         {
             StandingHeight = _character.Height;
             CrouchHeight = StandingHeight * 0.5f;

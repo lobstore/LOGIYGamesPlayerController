@@ -12,7 +12,7 @@ namespace LOGIYGames.Movement
         protected CountdownTimer _durationTimer;
         protected CountdownTimer _cooldownTimer;
 
-        protected TimedState(MovementStateDriver ctx, TimedStateData stateData) : base(ctx, stateData)
+        protected TimedState(MovementStateDriver ctx, TimedMovementStateData stateData) : base(ctx, stateData)
         {
             // Create timers from data
             if (stateData.Duration > 0)

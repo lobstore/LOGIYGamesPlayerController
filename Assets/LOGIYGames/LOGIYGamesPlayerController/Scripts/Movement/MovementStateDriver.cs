@@ -15,7 +15,7 @@ namespace LOGIYGames.Movement
         public StateMachine StateMachine => _stateMachine;
 
         [Header("State Machine Configuration")]
-        [SerializeField] private StatesDataSO statesDataSO;
+        [SerializeField] private MovementStatesDataSO statesDataSO;
 
         private StateMachine _stateMachine;
 

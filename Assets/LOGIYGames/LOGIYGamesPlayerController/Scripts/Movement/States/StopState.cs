@@ -2,7 +2,7 @@
 {
     public class StopState : BaseState
     {
-        public StopState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData) { }
+        public StopState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData) { }
     }
 
 }
