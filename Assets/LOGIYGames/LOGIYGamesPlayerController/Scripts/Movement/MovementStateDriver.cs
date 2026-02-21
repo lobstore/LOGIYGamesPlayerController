@@ -41,8 +41,9 @@ namespace LOGIYGames.Movement
 
         #endregion
 
-        private void Start()
+        private void Awake()
         {
+            Character.CController = GetComponent<CharacterControllerWrapper>();
             InitializeStateMachine();
         }
 

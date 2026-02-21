@@ -3,40 +3,24 @@ using UnityEngine;
 namespace LOGIYGames.AI
 {
     /// <summary>
-    /// AI Patrol state - AI moves between predefined patrol points
-    /// Transitions to Chase when target is detected
+    /// AI Patrol state - AI moves to a random patrol point
+    /// Transitions back to Idle when reaching the point
     /// </summary>
     public class AIPatrolState : AIBaseState
     {
         /// <summary>
-        /// Current patrol point index
+        /// Current target patrol point
         /// </summary>
-        private int _currentPatrolIndex;
+        private Transform _currentPatrolPoint;
 
         /// <summary>
-        /// Wait time at each patrol point
+        /// Distance threshold to consider patrol point reached
         /// </summary>
-        private float _waitTime = 1f;
+        private float _arrivalThreshold = 0.5f;
 
-        /// <summary>
-        /// Current wait timer at patrol point
-        /// </summary>
-        private float _waitTimer;
-
-        /// <summary>
-        /// Whether AI is currently waiting at a patrol point
-        /// </summary>
-        private bool _isWaiting;
-
-        /// <summary>
-        /// Patrol movement speed multiplier
-        /// </summary>
-        private float _patrolSpeed = 0.6f;
-
-        public AIPatrolState(AIBrain brain, float waitTime = 1f, float patrolSpeed = 0.6f) : base(brain)
+        public AIPatrolState(AIBrain brain, float arrivalThreshold = 0.5f) : base(brain)
         {
-            _waitTime = waitTime;
-            _patrolSpeed = patrolSpeed;
+            _arrivalThreshold = arrivalThreshold;
             DetectionRange = brain.DetectionRange;
             AttackRange = brain.AttackRange;
         }
@@ -44,14 +28,7 @@ namespace LOGIYGames.AI
         public override void Enter()
         {
             base.Enter();
-            _waitTimer = 0f;
-            _isWaiting = false;
-            
-            // Find closest patrol point if not set
-            if (Brain.PatrolPoints != null && Brain.PatrolPoints.Length > 0)
-            {
-                _currentPatrolIndex = FindClosestPatrolPoint();
-            }
+            SelectRandomPatrolPoint();
         }
 
         public override void Exit()
@@ -69,23 +46,17 @@ namespace LOGIYGames.AI
                 return;
             }
 
-            // Handle patrol behavior
+            // Check if patrol points exist
             if (Brain.PatrolPoints == null || Brain.PatrolPoints.Length == 0)
             {
-                // No patrol points, stay idle
-                AIInput.SetMovementInput(Vector2.zero);
+                // No patrol points, transition to Idle
                 return;
             }
 
-            if (_isWaiting)
+            // Check if reached patrol point - transition to Idle
+            if (_currentPatrolPoint == null || IsAtPatrolPoint())
             {
-                _waitTimer += Time.deltaTime;
-                if (_waitTimer >= _waitTime)
-                {
-                    _isWaiting = false;
-                    _waitTimer = 0f;
-                    AdvanceToNextPatrolPoint();
-                }
+                // Signal that patrol is complete (transition handled by AIBrain predicates)
             }
         }
 
@@ -99,26 +70,10 @@ namespace LOGIYGames.AI
                 return;
             }
 
-            if (!_isWaiting)
+            if (_currentPatrolPoint != null && !IsAtPatrolPoint())
             {
-                Transform currentPoint = Brain.PatrolPoints[_currentPatrolIndex];
-                
-                if (currentPoint != null)
-                {
-                    float distanceToPoint = Vector3.Distance(AITransform.position, currentPoint.position);
-                    
-                    if (distanceToPoint <= 0.5f)
-                    {
-                        // Reached patrol point, start waiting
-                        _isWaiting = true;
-                        AIInput.SetMovementInput(Vector2.zero);
-                    }
-                    else
-                    {
-                        // Move towards patrol point
-                        MoveTowardsPosition(currentPoint.position);
-                    }
-                }
+                // Move towards patrol point
+                MoveTowardsPosition(_currentPatrolPoint.position);
             }
             else
             {
@@ -127,58 +82,45 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Finds the closest patrol point to current position
+        /// Selects a random patrol point from available points
         /// </summary>
-        private int FindClosestPatrolPoint()
+        private void SelectRandomPatrolPoint()
         {
-            int closestIndex = 0;
-            float closestDistance = float.MaxValue;
-
-            for (int i = 0; i < Brain.PatrolPoints.Length; i++)
+            if (Brain.PatrolPoints == null || Brain.PatrolPoints.Length == 0)
             {
-                if (Brain.PatrolPoints[i] == null) continue;
-
-                float distance = Vector3.Distance(AITransform.position, Brain.PatrolPoints[i].position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestIndex = i;
-                }
+                _currentPatrolPoint = null;
+                return;
             }
 
-            return closestIndex;
+            int randomIndex = Random.Range(0, Brain.PatrolPoints.Length);
+            _currentPatrolPoint = Brain.PatrolPoints[randomIndex];
         }
 
         /// <summary>
-        /// Advances to the next patrol point in the loop
+        /// Checks if AI has reached the current patrol point
         /// </summary>
-        private void AdvanceToNextPatrolPoint()
+        private bool IsAtPatrolPoint()
         {
-            _currentPatrolIndex = (_currentPatrolIndex + 1) % Brain.PatrolPoints.Length;
+            if (_currentPatrolPoint == null) return true;
+
+            float distance = Vector3.Distance(AITransform.position, _currentPatrolPoint.position);
+            return distance <= _arrivalThreshold;
         }
 
         /// <summary>
-        /// Sets the wait time at patrol points
+        /// Gets the current target patrol point
         /// </summary>
-        public void SetWaitTime(float waitTime)
+        public Transform GetCurrentPatrolPoint()
         {
-            _waitTime = waitTime;
+            return _currentPatrolPoint;
         }
 
         /// <summary>
-        /// Sets the patrol speed multiplier
+        /// Sets the arrival threshold distance
         /// </summary>
-        public void SetPatrolSpeed(float speed)
+        public void SetArrivalThreshold(float threshold)
         {
-            _patrolSpeed = Mathf.Clamp01(speed);
-        }
-
-        /// <summary>
-        /// Gets current patrol point index
-        /// </summary>
-        public int GetCurrentPatrolIndex()
-        {
-            return _currentPatrolIndex;
+            _arrivalThreshold = Mathf.Max(0.1f, threshold);
         }
 
         /// <summary>
@@ -189,13 +131,21 @@ namespace LOGIYGames.AI
             if (Brain.Target == null) return false;
 
             float distance = GetDistanceToTarget(Brain.Target);
-            
+
             if (distance <= DetectionRange)
             {
                 return HasLineOfSight(Brain.Target, DetectionRange);
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Checks if AI has reached the current patrol point
+        /// </summary>
+        public bool HasReachedPatrolPoint()
+        {
+            return _currentPatrolPoint == null || IsAtPatrolPoint();
         }
     }
 }

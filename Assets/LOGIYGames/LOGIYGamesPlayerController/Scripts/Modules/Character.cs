@@ -10,8 +10,9 @@ namespace LOGIYGames.CharacterCore
 
         public Vector2 MovementInput { get; private set; }
 
-        private GenericControllerWrapper CController = null;
-
+        public ControllerWrapperBase CController { get; set; }
+        public IMovementStrategy CurrentMovementStrategy { get; set; }
+        public IRotationStrategy CurrentRotationStrategy { get; set; }
 
         #region VelocityVariables
 
@@ -72,18 +73,14 @@ namespace LOGIYGames.CharacterCore
 
         #endregion
 
-        private void Awake()
-        {
-            InputReader.CharacterInputsEnable = true;
-            InputReader.CameraInputsEnable = true;
-            CController = GetComponent<GenericControllerWrapper>();
-            CController.Height = Height;
-            CController.Center = new Vector3(0, Height / 2.0f, 0);
-        }
 
         private void Start()
         {
             CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
+            InputReader.CharacterInputsEnable = true;
+            InputReader.CameraInputsEnable = true;
+            CController.Height = Height;
+            CController.Center = new Vector3(0, Height / 2.0f, 0);
         }
 
         public override void OnUpdate(float deltaTime)

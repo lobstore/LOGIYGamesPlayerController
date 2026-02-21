@@ -25,13 +25,13 @@ namespace LOGIYGames
         public bool UseGravity { get => useGravity; set => useGravity = value; }
         
         [Header("References")]
-        private GenericControllerWrapper m_controllerWrapper;
+        private ControllerWrapperBase m_controllerWrapper;
         private SensorsModule m_sensors;
         private Character m_character;
         
         private void Awake()
         {
-            m_controllerWrapper = GetComponent<GenericControllerWrapper>();
+            m_controllerWrapper = GetComponent<ControllerWrapperBase>();
             m_sensors = GetComponent<SensorsModule>();
             m_character = GetComponent<Character>();
             

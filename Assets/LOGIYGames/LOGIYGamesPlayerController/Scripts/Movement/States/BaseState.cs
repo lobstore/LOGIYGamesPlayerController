@@ -10,8 +10,7 @@ namespace LOGIYGames.Movement
     [Serializable]
     public abstract class BaseState : IState
     {
-        public IMovementStrategy CurrentMovementStrategy;
-        public IRotationStrategy CurrentRotationStrategy;
+
 
         protected CameraAlongMovement _cameraAlongMovement;
         protected CameraRelativeRotation _cameraRelativeRotation;
@@ -34,8 +33,8 @@ namespace LOGIYGames.Movement
             _cameraRelativeRotation = new(_character);
             _cameraAlongRotation = new(_character);
 
-            CurrentMovementStrategy = _cameraAlongMovement;
-            CurrentRotationStrategy = _cameraRelativeRotation;
+            _character.CurrentMovementStrategy = _cameraAlongMovement;
+            _character.CurrentRotationStrategy = _cameraRelativeRotation;
         }
 
         public virtual void Enter()
@@ -57,11 +56,11 @@ namespace LOGIYGames.Movement
         public virtual void PhysicsUpdate()
         {
             // Get target rotation from rotation strategy
-            Quaternion targetRotation = CurrentRotationStrategy.GetRotation();
+            Quaternion targetRotation = _character.CurrentRotationStrategy.GetRotation();
             _character.Rotate(targetRotation, _character.TurnSmoothTime);
 
             // Apply movement
-            Vector3 dir = CurrentMovementStrategy.GetMovementDirection();
+            Vector3 dir = _character.CurrentMovementStrategy.GetMovementDirection();
             _character.Move(dir);
         }
     }

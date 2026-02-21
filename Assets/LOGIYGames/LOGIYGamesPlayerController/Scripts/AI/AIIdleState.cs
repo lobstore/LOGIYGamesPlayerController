@@ -1,26 +1,34 @@
+using LOGIYGames.Timers;
 using UnityEngine;
 
 namespace LOGIYGames.AI
 {
     /// <summary>
-    /// AI Idle state - AI stays in place and observes surroundings
-    /// Transitions to Patrol or Chase when conditions are met
+    /// AI Idle state - AI stays in place for a random duration
+    /// Transitions to Patrol when idle timer completes
     /// </summary>
     public class AIIdleState : AIBaseState
     {
         /// <summary>
-        /// How long AI should stay idle before switching to patrol
+        /// Min and max idle duration before switching to patrol
         /// </summary>
-        private float _idleDuration = 3f;
+        private float _minIdleDuration = 2f;
+        private float _maxIdleDuration = 5f;
 
         /// <summary>
-        /// Random idle look around timer
+        /// Timer for idle duration
         /// </summary>
-        private float _lookAroundTimer;
+        private CountdownTimer _idleTimer;
 
-        public AIIdleState(AIBrain brain, float idleDuration = 3f) : base(brain)
+        /// <summary>
+        /// Current idle duration (randomized on each enter)
+        /// </summary>
+        private float _currentIdleDuration;
+
+        public AIIdleState(AIBrain brain, float minIdleDuration = 2f, float maxIdleDuration = 5f) : base(brain)
         {
-            _idleDuration = idleDuration;
+            _minIdleDuration = minIdleDuration;
+            _maxIdleDuration = maxIdleDuration;
             DetectionRange = brain.DetectionRange;
             AttackRange = brain.AttackRange;
         }
@@ -29,12 +37,20 @@ namespace LOGIYGames.AI
         {
             base.Enter();
             AIInput.ClearAllInputs();
-            _lookAroundTimer = 0f;
+            
+            // Randomize idle duration
+            _currentIdleDuration = Random.Range(_minIdleDuration, _maxIdleDuration);
+            
+            // Setup and start idle timer
+            _idleTimer?.Dispose();
+            _idleTimer = new CountdownTimer(_currentIdleDuration);
+            _idleTimer.Start();
         }
 
         public override void Exit()
         {
             base.Exit();
+            _idleTimer?.Stop();
         }
 
         public override void LogicUpdate()
@@ -47,18 +63,10 @@ namespace LOGIYGames.AI
                 return;
             }
 
-            // Random look around behavior
-            _lookAroundTimer += Time.deltaTime;
-            if (_lookAroundTimer > 2f)
+            // Check if idle timer completed - ready to transition to Patrol
+            if (_idleTimer != null && _idleTimer.IsFinished)
             {
-                _lookAroundTimer = 0f;
-                // Could add head rotation logic here
-            }
-
-            // If idle for too long, may transition to Patrol
-            if (StateTime > _idleDuration && Brain.PatrolPoints != null && Brain.PatrolPoints.Length > 0)
-            {
-                // Signal that idle is complete (transition handled by AIBrain predicates)
+                // Transition handled by AIBrain predicates
             }
         }
 
@@ -77,7 +85,7 @@ namespace LOGIYGames.AI
             if (Brain.Target == null) return false;
 
             float distance = GetDistanceToTarget(Brain.Target);
-            
+
             if (distance <= DetectionRange)
             {
                 return HasLineOfSight(Brain.Target, DetectionRange);
@@ -87,19 +95,36 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Gets the current idle duration
+        /// Gets the remaining idle time
         /// </summary>
-        public float GetIdleDuration()
+        public float GetRemainingIdleTime()
         {
-            return _idleDuration;
+            return _idleTimer?.CurrentTime ?? 0f;
         }
 
         /// <summary>
-        /// Sets a new idle duration
+        /// Gets the current idle duration
         /// </summary>
-        public void SetIdleDuration(float duration)
+        public float GetCurrentIdleDuration()
         {
-            _idleDuration = duration;
+            return _currentIdleDuration;
+        }
+
+        /// <summary>
+        /// Sets the min and max idle duration range
+        /// </summary>
+        public void SetIdleDurationRange(float min, float max)
+        {
+            _minIdleDuration = Mathf.Min(min, max);
+            _maxIdleDuration = Mathf.Max(min, max);
+        }
+
+        /// <summary>
+        /// Checks if idle timer has completed
+        /// </summary>
+        public bool IsIdleComplete()
+        {
+            return _idleTimer != null && _idleTimer.IsFinished;
         }
     }
 }

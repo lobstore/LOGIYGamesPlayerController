@@ -10,7 +10,7 @@ namespace LOGIYGames
     /// </summary>
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(KinematicCharacterMotor))]
-    public class KinematicControllerWrapper : GenericControllerWrapper, ICharacterController
+    public class KinematicControllerWrapper : ControllerWrapperBase, ICharacterController
     {
         [Header("Kinematic Controller Settings")]
         [SerializeField] private bool m_applyGravityWhenGrounded = false;

@@ -10,7 +10,7 @@ namespace LOGIYGames
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
-    public class RigidbodyControllerWrapper : GenericControllerWrapper
+    public class RigidbodyControllerWrapper : ControllerWrapperBase
     {
         [Header("Rigidbody Controller Settings")]
         [SerializeField] private bool m_applyGravityWhenGrounded = false;

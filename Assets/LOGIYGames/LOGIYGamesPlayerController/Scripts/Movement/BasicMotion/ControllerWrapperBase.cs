@@ -6,7 +6,7 @@ namespace LOGIYGames
     /// Abstract base class for character controller wrappers.
     /// Provides a unified interface for both Unity CharacterController and KinematicCharacterController.
     /// </summary>
-    public abstract class GenericControllerWrapper : MonoBehaviour
+    public abstract class ControllerWrapperBase : MonoBehaviour
     {
         // Ground detection
         public abstract bool IsGrounded { get; }

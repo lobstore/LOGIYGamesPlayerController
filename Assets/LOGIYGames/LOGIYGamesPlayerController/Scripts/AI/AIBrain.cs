@@ -26,13 +26,15 @@ namespace LOGIYGames.AI
 
         [Header("Patrol Settings")]
         [SerializeField] private Transform[] patrolPoints;
-        [SerializeField] private float patrolWaitTime = 2f;
+        [SerializeField] private float minIdleDuration = 2f;
+        [SerializeField] private float maxIdleDuration = 5f;
+        [SerializeField] private float patrolArrivalThreshold = 0.5f;
 
         [Header("Target")]
         [SerializeField] private Transform target;
 
         [Header("Debug")]
-        [SerializeField] private bool debugMode = true;
+        [SerializeField] private bool debugDraw = true;
         private string currentStateName;
 
         // State Machine
@@ -72,8 +74,8 @@ namespace LOGIYGames.AI
             _stateMachine = new StateMachine();
 
             // Initialize all states
-            _idleState = new AIIdleState(this);
-            _patrolState = new AIPatrolState(this, patrolWaitTime);
+            _idleState = new AIIdleState(this, minIdleDuration, maxIdleDuration);
+            _patrolState = new AIPatrolState(this, patrolArrivalThreshold);
             _chaseState = new AIChaseState(this, lostTargetTimeout);
             _attackState = new AIAttackState(this);
 
@@ -83,7 +85,7 @@ namespace LOGIYGames.AI
             // Set initial state
             if (patrolPoints != null && patrolPoints.Length > 0)
             {
-                _stateMachine.SetState(_patrolState);
+                _stateMachine.SetState(_idleState);
             }
             else
             {
@@ -101,10 +103,10 @@ namespace LOGIYGames.AI
             // ============================================
             // From State     | To State      | Condition
             // --------------------------------------------
-            // Idle           | Patrol        | Has patrol points & idle timeout
+            // Idle           | Patrol        | Idle timer finished & has patrol points
             // Idle           | Chase         | Target detected
             // --------------------------------------------
-            // Patrol         | Idle          | No patrol points or manual switch
+            // Patrol         | Idle          | Reached patrol point
             // Patrol         | Chase         | Target detected
             // --------------------------------------------
             // Chase          | Attack        | Target in attack range
@@ -117,31 +119,31 @@ namespace LOGIYGames.AI
             // ============================================
 
             // ----- Idle State Transitions -----
-            AddTransition(_idleState, _patrolState, () => 
-                patrolPoints != null && patrolPoints.Length > 0 && _idleState.GetIdleDuration() > 0);
-            AddTransition(_idleState, _chaseState, () => 
+            AddTransition(_idleState, _patrolState, () =>
+                patrolPoints != null && patrolPoints.Length > 0 && _idleState.IsIdleComplete());
+            AddTransition(_idleState, _chaseState, () =>
                 target != null && IsTargetDetected());
 
             // ----- Patrol State Transitions -----
-            AddTransition(_patrolState, _idleState, () => 
-                patrolPoints == null || patrolPoints.Length == 0);
-            AddTransition(_patrolState, _chaseState, () => 
+            AddTransition(_patrolState, _idleState, () =>
+                _patrolState.HasReachedPatrolPoint());
+            AddTransition(_patrolState, _chaseState, () =>
                 target != null && IsTargetDetected());
 
             // ----- Chase State Transitions -----
-            AddTransition(_chaseState, _attackState, () => 
+            AddTransition(_chaseState, _attackState, () =>
                 target != null && IsTargetInAttackRange());
-            AddTransition(_chaseState, _patrolState, () => 
+            AddTransition(_chaseState, _patrolState, () =>
                 HasLostTarget() && patrolPoints != null && patrolPoints.Length > 0);
-            AddTransition(_chaseState, _idleState, () => 
+            AddTransition(_chaseState, _idleState, () =>
                 HasLostTarget() && (patrolPoints == null || patrolPoints.Length == 0));
 
             // ----- Attack State Transitions -----
-            AddTransition(_attackState, _chaseState, () => 
+            AddTransition(_attackState, _chaseState, () =>
                 target != null && !IsTargetInAttackRange());
-            AddTransition(_attackState, _patrolState, () => 
+            AddTransition(_attackState, _patrolState, () =>
                 HasLostTarget() && patrolPoints != null && patrolPoints.Length > 0);
-            AddTransition(_attackState, _idleState, () => 
+            AddTransition(_attackState, _idleState, () =>
                 HasLostTarget() && (patrolPoints == null || patrolPoints.Length == 0));
         }
 
@@ -333,6 +335,10 @@ namespace LOGIYGames.AI
         /// </summary>
         private void OnDrawGizmosSelected()
         {
+            if (!debugDraw)
+            {
+                return;
+            }
             // Draw detection range
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, detectionRange);

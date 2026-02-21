@@ -9,7 +9,7 @@ namespace LOGIYGames
     public class SensorsModule : MonoModuleBase
     {
         [Header("Component References")]
-        [SerializeField] private GenericControllerWrapper m_controllerWrapper;
+        [SerializeField] private ControllerWrapperBase m_controllerWrapper;
 
         [Header("Detection Settings")]
         [SerializeField] private float m_upCheckDistance = 0.8f;
@@ -72,7 +72,7 @@ namespace LOGIYGames
         {
             if (m_controllerWrapper == null)
             {
-                m_controllerWrapper = GetComponent<GenericControllerWrapper>();
+                m_controllerWrapper = GetComponent<ControllerWrapperBase>();
             }
             
             Debug.Assert(m_controllerWrapper != null, "Error (SensorsModule): Could not find GenericControllerWrapper component");

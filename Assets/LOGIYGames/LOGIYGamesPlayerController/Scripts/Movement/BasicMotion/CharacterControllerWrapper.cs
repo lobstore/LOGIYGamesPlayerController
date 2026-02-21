@@ -10,7 +10,7 @@ namespace LOGIYGames
     /// with KinematicControllerWrapper.
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
-    public class UnityControllerWrapper : GenericControllerWrapper
+    public class CharacterControllerWrapper : ControllerWrapperBase
     {
         [Header("Unity Controller Settings")]
         [SerializeField]
@@ -71,8 +71,11 @@ namespace LOGIYGames
             m_sensors = GetComponent<SensorsModule>();
             m_character = GetComponent<Character>();
             m_characterController = GetComponent<CharacterController>();
+            if (m_characterController == null)
+            {
+                m_characterController = gameObject.AddComponent<CharacterController>();
+            }
             m_characterGravityModule = GetComponent<CharacterGravityModule>();
-            Assert.IsNotNull(m_characterController, "Error (UnityControllerWrapper): Could not find CharacterController component");
 
             m_characterController.enableOverlapRecovery = true;
         }
