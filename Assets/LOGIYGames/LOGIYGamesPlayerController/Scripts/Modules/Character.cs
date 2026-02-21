@@ -80,7 +80,12 @@ namespace LOGIYGames.CharacterCore
             CController.Height = Height;
             CController.Center = new Vector3(0, Height / 2.0f, 0);
         }
-        
+
+        private void Start()
+        {
+            CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
+        }
+
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);

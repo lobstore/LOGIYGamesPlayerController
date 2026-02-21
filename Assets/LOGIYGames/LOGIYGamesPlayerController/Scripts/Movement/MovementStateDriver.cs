@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LOGIYGames
+namespace LOGIYGames.Movement
 {
     /// <summary>
     /// Drives the character movement state machine with support for timed transitions
