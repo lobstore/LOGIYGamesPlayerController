@@ -72,8 +72,8 @@ namespace LOGIYGames.AI
 
             if (_currentPatrolPoint != null && !IsAtPatrolPoint())
             {
-                // Move towards patrol point
-                MoveTowardsPosition(_currentPatrolPoint.position);
+                // Move towards patrol point using NavMesh pathfinding
+                MoveAlongNavMeshPath(_currentPatrolPoint.position, _arrivalThreshold);
             }
             else
             {

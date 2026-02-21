@@ -1,12 +1,13 @@
 using LOGIYGames.Movement;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace LOGIYGames.AI
 {
     /// <summary>
     /// AI Brain component that manages AI behavior state machine
     /// Similar to MovementStateDriver but for AI behavior states
-    /// 
+    ///
     /// State Transitions:
     /// - Idle <-> Patrol (based on configuration and time)
     /// - Idle/Patrol -> Chase (when target detected)
@@ -18,6 +19,7 @@ namespace LOGIYGames.AI
     {
         [Header("References")]
         [SerializeField] private AIInputReader aiInput;
+        [SerializeField] private NavMeshAgent navMeshAgent;
 
         [Header("Detection Settings")]
         [SerializeField] private float detectionRange = 15f;
@@ -37,6 +39,23 @@ namespace LOGIYGames.AI
         [SerializeField] private bool debugDraw = true;
         private string currentStateName;
 
+        // Pathfinding
+        private Vector3 _lastDestination = Vector3.zero;
+        private Vector3 _currentDestination = Vector3.zero;
+        private NavMeshPath _cachedPath;
+        private float _pathRecalculateTimer = 0f;
+        private const float PATH_RECALCULATE_INTERVAL = 0.5f;
+        
+        // Stuck detection
+        private Vector3 _lastPosition = Vector3.zero;
+        private float _stuckTimer = 0f;
+        private const float STUCK_THRESHOLD = 0.1f;
+        private const float STUCK_TIMEOUT = 2f;
+
+        // Airborne state (jump/fall)
+        private bool _wasGrounded = true;
+        private Vector3 _airborneDestination = Vector3.zero;
+
         // State Machine
         private StateMachine _stateMachine;
 
@@ -49,6 +68,7 @@ namespace LOGIYGames.AI
         public AIInputReader AIInput => aiInput;
         public Transform Target => target;
         public Transform[] PatrolPoints => patrolPoints;
+        public NavMeshAgent NavMeshAgent => navMeshAgent;
         //TODO Move to AIStateDataSO like MovementStateDataSO
         public float DetectionRange => detectionRange;
         public float AttackRange => attackRange;
@@ -56,6 +76,29 @@ namespace LOGIYGames.AI
 
         private void Awake()
         {
+            if (navMeshAgent == null)
+            {
+                navMeshAgent = GetComponent<NavMeshAgent>();
+            }
+            if (navMeshAgent == null)
+            {
+                Debug.LogError("AIBrain requires NavMeshAgent component");
+                enabled = false;
+                return;
+            }
+
+            navMeshAgent.updateRotation = false;
+            navMeshAgent.updateUpAxis = false;
+            navMeshAgent.acceleration = 9999;
+            navMeshAgent.angularSpeed = 9999;
+            navMeshAgent.speed = 9999;
+            navMeshAgent.updatePosition = false;
+            navMeshAgent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            navMeshAgent.autoTraverseOffMeshLink = false;
+            navMeshAgent.autoBraking = false;
+            
+            // Cache NavMesh path for manual calculation
+            _cachedPath = new NavMeshPath();
 
             if (aiInput == null)
             {
@@ -67,6 +110,7 @@ namespace LOGIYGames.AI
 
         private void Start()
         {
+            _lastPosition = transform.position;
             InitializeStateMachine();
         }
 
@@ -228,6 +272,9 @@ namespace LOGIYGames.AI
         {
             if (_stateMachine == null) return;
 
+            // NavMeshAgent position is now updated automatically
+            // We use it only for path calculation, movement is handled by CharacterController
+
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
             _stateMachine.Update();
 
@@ -243,6 +290,14 @@ namespace LOGIYGames.AI
         {
             if (_stateMachine == null) return;
             _stateMachine.LateUpdate();
+
+            // Reset position change from NavMeshAgent (we handle movement via CharacterController)
+            // But keep the agent at our position for path calculation
+            if (navMeshAgent != null && navMeshAgent.updatePosition)
+            {
+                // NavMeshAgent moves the transform, we need to use its velocity for input
+                // but not let it actually move us
+            }
         }
 
         /// <summary>
@@ -330,7 +385,111 @@ namespace LOGIYGames.AI
         {
             return currentStateName;
         }
- 
+
+        /// <summary>
+        /// Updates NavMesh path to destination
+        /// </summary>
+        public void UpdatePath(Vector3 newDestination, bool isGrounded = true)
+        {
+            _currentDestination = newDestination;
+            
+            // Store destination for when we land
+            _airborneDestination = newDestination;
+            
+            // Don't recalculate path while airborne (jumping/falling)
+            if (!isGrounded)
+            {
+                _wasGrounded = false;
+                return;
+            }
+            
+            // Just landed - recalculate path immediately
+            if (!_wasGrounded)
+            {
+                _wasGrounded = true;
+                _pathRecalculateTimer = PATH_RECALCULATE_INTERVAL;
+            }
+            
+            // Recalculate path with throttling
+            _pathRecalculateTimer += Time.deltaTime;
+            if (_pathRecalculateTimer >= PATH_RECALCULATE_INTERVAL)
+            {
+                _pathRecalculateTimer = 0f;
+                
+                if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
+                {
+                    // Calculate path manually using NavMesh
+                    NavMesh.CalculatePath(transform.position, newDestination, NavMesh.AllAreas, _cachedPath);
+                    
+                    // Also update NavMeshAgent for visualization and fallback
+                    navMeshAgent.Warp(transform.position);
+                    navMeshAgent.SetDestination(newDestination);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets direction from current NavMesh path
+        /// </summary>
+        public Vector3 GetPathDirection()
+        {
+            // Use cached path first
+            if (_cachedPath != null && _cachedPath.corners != null && _cachedPath.corners.Length > 1)
+            {
+                // Find the next waypoint ahead of us
+                Vector3 nextWaypoint = _cachedPath.corners[1];
+                Vector3 direction = nextWaypoint - transform.position;
+                direction.y = 0;
+                
+                if (direction.magnitude > 0.01f)
+                {
+                    return direction.normalized;
+                }
+            }
+            
+            // Fallback to NavMeshAgent path
+            if (navMeshAgent != null && navMeshAgent.isOnNavMesh && navMeshAgent.hasPath && !navMeshAgent.pathPending)
+            {
+                if (navMeshAgent.path.corners != null && navMeshAgent.path.corners.Length > 1)
+                {
+                    Vector3 nextWaypoint = navMeshAgent.path.corners[1];
+                    Vector3 direction = nextWaypoint - transform.position;
+                    direction.y = 0;
+                    return direction.normalized;
+                }
+            }
+            
+            return Vector3.zero;
+        }
+
+        /// <summary>
+        /// Checks if AI is stuck and tries to recover
+        /// </summary>
+        public bool IsStuck()
+        {
+            float moveDistance = Vector3.Distance(transform.position, _lastPosition);
+            
+            if (moveDistance < STUCK_THRESHOLD)
+            {
+                _stuckTimer += Time.deltaTime;
+                return _stuckTimer >= STUCK_TIMEOUT;
+            }
+            else
+            {
+                _stuckTimer = 0f;
+                _lastPosition = transform.position;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Recalculates path immediately (used when stuck)
+        /// </summary>
+        public void RecalculatePath()
+        {
+            _pathRecalculateTimer = PATH_RECALCULATE_INTERVAL;
+        }
+
         /// <summary>
         /// Draws gizmos for AI visualization in editor
         /// </summary>
@@ -340,6 +499,25 @@ namespace LOGIYGames.AI
             {
                 return;
             }
+
+            // Draw NavMesh path (from cached path)
+            if (_cachedPath != null && _cachedPath.corners != null && _cachedPath.corners.Length > 1)
+            {
+                Gizmos.color = Color.cyan;
+                Vector3[] corners = _cachedPath.corners;
+                for (int i = 0; i < corners.Length - 1; i++)
+                {
+                    Gizmos.DrawLine(corners[i], corners[i + 1]);
+                }
+
+                // Draw waypoints
+                Gizmos.color = Color.yellow;
+                for (int i = 0; i < corners.Length; i++)
+                {
+                    Gizmos.DrawWireSphere(corners[i], 0.2f);
+                }
+            }
+
             // Draw detection range
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, detectionRange);

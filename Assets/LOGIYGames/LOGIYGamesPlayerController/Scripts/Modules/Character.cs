@@ -1,3 +1,4 @@
+using LOGIYGames.AI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,7 +8,7 @@ namespace LOGIYGames.CharacterCore
     {
         // TODO Make IInputReader Abstraction to change between AI/Player
         [Header("References")]
-        [SerializeField] InputReader InputReader;
+        [SerializeField] AIInputReader InputReader;
 
         public Vector2 MovementInput { get; private set; }
 
@@ -80,8 +81,8 @@ namespace LOGIYGames.CharacterCore
         {
             // TODO Make ICBFollowable abstraction to change follow target
             CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
-            InputReader.CharacterInputsEnable = true;
-            InputReader.CameraInputsEnable = true;
+            //InputReader.CharacterInputsEnable = true;
+            //InputReader.CameraInputsEnable = true;
             CController.Height = Height;
             CController.Center = new Vector3(0, Height / 2.0f, 0);
         }

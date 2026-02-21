@@ -1,5 +1,6 @@
 using LOGIYGames.CharacterCore;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace LOGIYGames.AI
 {
@@ -35,12 +36,21 @@ namespace LOGIYGames.AI
             Brain = brain;
             AIInput = brain.AIInput;
             AITransform = brain.transform;
+            Character = brain.GetComponent<Character>();
+            Sensors = brain.GetComponent<SensorsModule>();
         }
 
         public virtual void Enter()
         {
             StateTime = 0f;
             AIInput.ClearAllInputs();
+            
+            // Set AI-specific movement and rotation strategies (world-space, no camera influence)
+            if (Character != null)
+            {
+                Character.CurrentMovementStrategy = new AIWorldMovement(Character);
+                Character.CurrentRotationStrategy = new AIMovementRotation(Character);
+            }
         }
 
         public virtual void Exit()
@@ -74,7 +84,88 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Sets movement input towards a target position
+        /// Calculates movement direction from NavMesh path and applies it to input
+        /// Uses NavMeshAgent to calculate path and extracts direction from current waypoint
+        /// </summary>
+        /// <param name="targetPosition">Target position to move towards</param>
+        /// <param name="arrivalThreshold">Distance threshold to consider arrival</param>
+        /// <returns>True if path is calculated and direction is set, false if arrived or no path</returns>
+        protected bool MoveAlongNavMeshPath(Vector3 targetPosition, float arrivalThreshold = 0.5f)
+        {
+            if (Brain.NavMeshAgent == null || !Brain.NavMeshAgent.isOnNavMesh)
+            {
+                // Fallback to direct movement if NavMesh not available
+                MoveTowardsPosition(targetPosition);
+                return true;
+            }
+
+            // Update path (with throttling to avoid excessive recalculations)
+            // Pass grounded state - pathfinding only works when grounded
+            Brain.UpdatePath(targetPosition, IsGrounded());
+
+            // Check if we've reached the destination
+            float distanceToTarget = Vector3.Distance(AITransform.position, targetPosition);
+            if (distanceToTarget <= arrivalThreshold)
+            {
+                AIInput.SetMovementInput(Vector2.zero);
+                return false;
+            }
+
+            // While airborne, don't use pathfinding - use direct movement or no movement
+            if (!IsGrounded())
+            {
+                // In air - no movement input (let gravity/physics handle it)
+                AIInput.SetMovementInput(Vector2.zero);
+                return true;
+            }
+
+            // Check if stuck and force path recalculation
+            if (Brain.IsStuck())
+            {
+                Brain.RecalculatePath();
+            }
+
+            // Get direction from NavMesh path
+            Vector3 direction = Brain.GetPathDirection();
+
+            if (direction.magnitude > 0.01f)
+            {
+                SetMovementDirection(direction);
+                return true;
+            }
+
+            // Fallback to direct movement if no path
+            MoveTowardsPosition(targetPosition);
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the next waypoint position from the current NavMesh path
+        /// </summary>
+        /// <returns>Next waypoint position or Vector3.zero if no path</returns>
+        protected Vector3 GetNextPathWaypoint()
+        {
+            if (Brain.NavMeshAgent == null || !Brain.NavMeshAgent.isOnNavMesh || !Brain.NavMeshAgent.hasPath)
+            {
+                return Vector3.zero;
+            }
+
+            if (Brain.NavMeshAgent.pathPending)
+            {
+                return Vector3.zero;
+            }
+
+            if (Brain.NavMeshAgent.path.corners != null && Brain.NavMeshAgent.path.corners.Length > 1)
+            {
+                // Return the next corner after current position
+                return Brain.NavMeshAgent.path.corners[1];
+            }
+
+            return Vector3.zero;
+        }
+
+        /// <summary>
+        /// Sets movement input towards a target position using NavMesh pathfinding
         /// </summary>
         protected void MoveTowardsPosition(Vector3 targetPosition)
         {

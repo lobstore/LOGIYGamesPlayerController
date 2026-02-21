@@ -115,8 +115,8 @@ namespace LOGIYGames.AI
                 return;
             }
 
-            // Move towards target
-            MoveTowardsPosition(Brain.Target.position);
+            // Move towards target using NavMesh pathfinding
+            MoveAlongNavMeshPath(Brain.Target.position, AttackRange * 0.5f);
         }
 
         /// <summary>
