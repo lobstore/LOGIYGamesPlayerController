@@ -7368,11 +7368,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4756003171135936, guid: 64b9fdd8926ce144fbdc31c4044b55f1, type: 3}
   m_PrefabInstance: {fileID: 728918708}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &216556863 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4734613552037350644, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &225039100 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4286209532176036, guid: bb94340bd6b78c044b8b6f772e321649, type: 3}
@@ -23791,11 +23786,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca912bd141882634db3d55535e27b2fc, type: 3}
---- !u!4 &1591399403 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2640723071682425344, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1601101945
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43680,28 +43670,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: InputReader
-      value: 
-      objectReference: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <CinemachineCameraFollowTransform>k__BackingField
-      value: 
-      objectReference: {fileID: 216556863}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <CinemachineCameraLookAtTransform>k__BackingField
-      value: 
-      objectReference: {fileID: 1591399403}
-    - target: {fileID: 9160473370093739834, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: InputReader
-      value: 
-      objectReference: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
-    - target: {fileID: 9160473370093739834, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: inputProvider
-      value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3695182667429486516, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

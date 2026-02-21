@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace LOGIYGames.CharacterCore
 {
-    public class Character : MonoModuleBase, IControllable
+    public class Character : MonoModuleBase
     {
         [Header("References")]
         [SerializeField] InputReader InputReader;
@@ -84,6 +84,12 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+            MovementInput = InputReader.MovementInput;
+            JumpPressed = InputReader.JumpPressed;
+            EvadePressed = InputReader.EvadePressed;
+            BlockPressed = InputReader.BlockPressed;
+            SprintPressed = InputReader.SprintPressed;
+            CrouchPressed = InputReader.CrouchPressed;
         }
 
         public override void OnFixedUpdate(float fixedDeltaTime)
@@ -191,26 +197,5 @@ namespace LOGIYGames.CharacterCore
         
         #endregion
 
-        #region IControllable Implementation
-
-        public void OnControlGained()
-        {
-        }
-
-        public void OnControlLost()
-        {
-        }
-
-        public void HandleInputs()
-        {
-            MovementInput = InputReader.MovementInput;
-            JumpPressed = InputReader.JumpPressed;
-            EvadePressed = InputReader.EvadePressed;
-            BlockPressed = InputReader.BlockPressed;
-            SprintPressed = InputReader.SprintPressed;
-            CrouchPressed = InputReader.CrouchPressed;
-        }
-        
-        #endregion
     }
 }

@@ -547,7 +547,6 @@ GameObject:
   - component: {fileID: 6657963720063885413}
   - component: {fileID: 518779057354795907}
   - component: {fileID: 2605798501068234886}
-  - component: {fileID: 3695182667429486516}
   m_Layer: 10
   m_Name: Character
   m_TagString: Player
@@ -569,7 +568,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 507906360614569168}
-  - {fileID: 7018197123516498884}
   - {fileID: 2640723071682425344}
   - {fileID: 4734613552037350644}
   m_Father: {fileID: 0}
@@ -599,10 +597,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
   <ModulePriority>k__BackingField: 0
-  cinemachineCameraLookAtTransform: {fileID: 2640723071682425344}
-  cinemachineCameraFollowTransform: {fileID: 4734613552037350644}
+  InputReader: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
   <BaseSpeed>k__BackingField: 4
   <Height>k__BackingField: 1.67
+  <CinemachineCameraLookAtTransform>k__BackingField: {fileID: 2640723071682425344}
+  <CinemachineCameraFollowTransform>k__BackingField: {fileID: 4734613552037350644}
 --- !u!114 &2268543539570239712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,10 +644,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.MovementStateDriver
   Character: {fileID: 8334357512040222824}
   Sensors: {fileID: 2268543539570239712}
-  inputProvider: {fileID: 3695182667429486516}
   statesDataSO: {fileID: 11400000, guid: 93cbb583a4180814798e78a3ba00bb0d, type: 2}
-  _currentStateName: 
-  _lastTransition: 
 --- !u!143 &6657963720063885413
 CharacterController:
   m_ObjectHideFlags: 0
@@ -705,19 +701,6 @@ MonoBehaviour:
   gravityDirection: {x: 0, y: -1, z: 0}
   BaseGravityForce: 9.84
   CurrentGravityForce: 0
---- !u!114 &3695182667429486516
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.PlayerInputProvider
-  inputReader: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0
@@ -3540,7 +3523,6 @@ GameObject:
   - component: {fileID: 6186406791908379824}
   - component: {fileID: 1283272730193767307}
   - component: {fileID: 4665650652985215719}
-  - component: {fileID: 67664284063630142}
   m_Layer: 10
   m_Name: CatgirlBattle
   m_TagString: Player
@@ -4105,76 +4087,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &67664284063630142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2787143992442695444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f4ccdc5966f7a143a7f5579a6e85602, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 4665650652985215719}
-  OnFootR:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2117553838898429866}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnFootL:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5643126270386110751}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnLand:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5643126270386110751}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2117553838898429866}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &2821727274983031063
 GameObject:
   m_ObjectHideFlags: 0
@@ -10879,106 +10791,6 @@ MonoBehaviour:
   m_gravityDir: {x: -0, y: -1, z: 0}
   m_dragForce: 0.8
   m_jointRadius: 0.014195766
---- !u!1 &9071201822881049368
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7018197123516498884}
-  - component: {fileID: 7517888186224655040}
-  - component: {fileID: 2127828318165000259}
-  - component: {fileID: 2890674286843511691}
-  m_Layer: 10
-  m_Name: NearestTrackableFinder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &7018197123516498884
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9071201822881049368}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.026, z: 1.3999996}
-  m_LocalScale: {x: 2.7293818, y: 2.0552585, z: 2.5255632}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3732176754581607695}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7517888186224655040
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9071201822881049368}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2127828318165000259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9071201822881049368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9235fd46d18e58c4eac39ff11ca1b9a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Head: {fileID: 1833083733447526842}
-  _checkInterval: 0.2
-  _movingTargetCooldown: 1
-  maxTrackedObjectNumber: 4
-  _trackablesInRange: []
-  <CurrentTarget>k__BackingField: {fileID: 0}
---- !u!54 &2890674286843511691
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9071201822881049368}
-  serializedVersion: 5
-  m_Mass: 0.0000001
-  m_LinearDamping: 0
-  m_AngularDamping: 0
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1 &9129087885033209333
 GameObject:
   m_ObjectHideFlags: 0
