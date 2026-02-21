@@ -44079,7 +44079,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 6
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -44128,8 +44128,6 @@ MonoBehaviour:
   patrolArrivalThreshold: 0.5
   target: {fileID: 0}
   debugDraw: 1
-  isFlying: 0
-  flightHeightOffset: 2
 --- !u!114 &6718191764129459947
 MonoBehaviour:
   m_ObjectHideFlags: 0

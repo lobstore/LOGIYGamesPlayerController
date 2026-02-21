@@ -44,8 +44,9 @@ namespace LOGIYGames.AI
         {
             StateTime = 0f;
             AIInput.ClearAllInputs();
-            
+
             // Set AI-specific movement and rotation strategies (world-space, no camera influence)
+            // Speed is controlled by MovementStateDriver via MovementStateDataSO
             if (Character != null)
             {
                 Character.CurrentMovementStrategy = new AIWorldMovement(Character);

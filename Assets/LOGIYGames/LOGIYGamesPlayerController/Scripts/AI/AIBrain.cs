@@ -40,12 +40,9 @@ namespace LOGIYGames.AI
         private string currentStateName;
 
         // Pathfinding
-        private Vector3 _lastDestination = Vector3.zero;
-        private Vector3 _currentDestination = Vector3.zero;
-        private NavMeshPath _cachedPath;
         private float _pathRecalculateTimer = 0f;
-        private const float PATH_RECALCULATE_INTERVAL = 0.5f;
-        
+        private const float PATH_RECALCULATE_INTERVAL = 0.3f;
+
         // Stuck detection
         private Vector3 _lastPosition = Vector3.zero;
         private float _stuckTimer = 0f;
@@ -54,7 +51,6 @@ namespace LOGIYGames.AI
 
         // Airborne state (jump/fall)
         private bool _wasGrounded = true;
-        private Vector3 _airborneDestination = Vector3.zero;
 
         // State Machine
         private StateMachine _stateMachine;
@@ -69,7 +65,6 @@ namespace LOGIYGames.AI
         public Transform Target => target;
         public Transform[] PatrolPoints => patrolPoints;
         public NavMeshAgent NavMeshAgent => navMeshAgent;
-        //TODO Move to AIStateDataSO like MovementStateDataSO
         public float DetectionRange => detectionRange;
         public float AttackRange => attackRange;
         public StateMachine StateMachine => _stateMachine;
@@ -87,18 +82,16 @@ namespace LOGIYGames.AI
                 return;
             }
 
+            // NavMeshAgent is used for pathfinding only, not for movement
             navMeshAgent.updateRotation = false;
             navMeshAgent.updateUpAxis = false;
+            navMeshAgent.updatePosition = true;
             navMeshAgent.acceleration = 9999;
             navMeshAgent.angularSpeed = 9999;
-            navMeshAgent.speed = 9999;
-            navMeshAgent.updatePosition = false;
+            navMeshAgent.speed = 0; // Speed is controlled via Character.SpeedMultiplier, not NavMeshAgent
             navMeshAgent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.autoTraverseOffMeshLink = false;
             navMeshAgent.autoBraking = false;
-            
-            // Cache NavMesh path for manual calculation
-            _cachedPath = new NavMeshPath();
 
             if (aiInput == null)
             {
@@ -389,41 +382,31 @@ namespace LOGIYGames.AI
         /// <summary>
         /// Updates NavMesh path to destination
         /// </summary>
-        public void UpdatePath(Vector3 newDestination, bool isGrounded = true)
+        public void UpdatePath(Vector3 destination, bool isGrounded = true)
         {
-            _currentDestination = newDestination;
-            
-            // Store destination for when we land
-            _airborneDestination = newDestination;
-            
-            // Don't recalculate path while airborne (jumping/falling)
+            // Don't recalculate path while airborne
             if (!isGrounded)
             {
                 _wasGrounded = false;
                 return;
             }
-            
-            // Just landed - recalculate path immediately
+
+            // Recalculate path immediately when just landed
             if (!_wasGrounded)
             {
                 _wasGrounded = true;
                 _pathRecalculateTimer = PATH_RECALCULATE_INTERVAL;
             }
-            
+
             // Recalculate path with throttling
             _pathRecalculateTimer += Time.deltaTime;
             if (_pathRecalculateTimer >= PATH_RECALCULATE_INTERVAL)
             {
                 _pathRecalculateTimer = 0f;
-                
+
                 if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
                 {
-                    // Calculate path manually using NavMesh
-                    NavMesh.CalculatePath(transform.position, newDestination, NavMesh.AllAreas, _cachedPath);
-                    
-                    // Also update NavMeshAgent for visualization and fallback
-                    navMeshAgent.Warp(transform.position);
-                    navMeshAgent.SetDestination(newDestination);
+                    navMeshAgent.SetDestination(destination);
                 }
             }
         }
@@ -433,21 +416,6 @@ namespace LOGIYGames.AI
         /// </summary>
         public Vector3 GetPathDirection()
         {
-            // Use cached path first
-            if (_cachedPath != null && _cachedPath.corners != null && _cachedPath.corners.Length > 1)
-            {
-                // Find the next waypoint ahead of us
-                Vector3 nextWaypoint = _cachedPath.corners[1];
-                Vector3 direction = nextWaypoint - transform.position;
-                direction.y = 0;
-                
-                if (direction.magnitude > 0.01f)
-                {
-                    return direction.normalized;
-                }
-            }
-            
-            // Fallback to NavMeshAgent path
             if (navMeshAgent != null && navMeshAgent.isOnNavMesh && navMeshAgent.hasPath && !navMeshAgent.pathPending)
             {
                 if (navMeshAgent.path.corners != null && navMeshAgent.path.corners.Length > 1)
@@ -458,7 +426,7 @@ namespace LOGIYGames.AI
                     return direction.normalized;
                 }
             }
-            
+
             return Vector3.zero;
         }
 
@@ -500,21 +468,24 @@ namespace LOGIYGames.AI
                 return;
             }
 
-            // Draw NavMesh path (from cached path)
-            if (_cachedPath != null && _cachedPath.corners != null && _cachedPath.corners.Length > 1)
+            // Draw NavMesh path
+            if (navMeshAgent != null && navMeshAgent.isOnNavMesh && navMeshAgent.hasPath && !navMeshAgent.pathPending)
             {
-                Gizmos.color = Color.cyan;
-                Vector3[] corners = _cachedPath.corners;
-                for (int i = 0; i < corners.Length - 1; i++)
+                if (navMeshAgent.path.corners != null && navMeshAgent.path.corners.Length > 1)
                 {
-                    Gizmos.DrawLine(corners[i], corners[i + 1]);
-                }
+                    Gizmos.color = Color.cyan;
+                    Vector3[] corners = navMeshAgent.path.corners;
+                    for (int i = 0; i < corners.Length - 1; i++)
+                    {
+                        Gizmos.DrawLine(corners[i], corners[i + 1]);
+                    }
 
-                // Draw waypoints
-                Gizmos.color = Color.yellow;
-                for (int i = 0; i < corners.Length; i++)
-                {
-                    Gizmos.DrawWireSphere(corners[i], 0.2f);
+                    // Draw waypoints
+                    Gizmos.color = Color.yellow;
+                    for (int i = 0; i < corners.Length; i++)
+                    {
+                        Gizmos.DrawWireSphere(corners[i], 0.2f);
+                    }
                 }
             }
 
