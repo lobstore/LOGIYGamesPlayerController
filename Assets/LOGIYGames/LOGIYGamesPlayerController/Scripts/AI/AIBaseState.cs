@@ -1,3 +1,4 @@
+using LOGIYGames.CharacterCore;
 using UnityEngine;
 
 namespace LOGIYGames.AI
@@ -8,7 +9,8 @@ namespace LOGIYGames.AI
     public abstract class AIBaseState : IState
     {
         protected AIBrain Brain { get; private set; }
-        protected Transform AITransform { get; private set; }
+        protected Character Character { get; private set; }
+        protected Transform CharacterTransform { get; private set; }
 
         /// <summary>
         /// Detection range for this AI state
@@ -28,13 +30,20 @@ namespace LOGIYGames.AI
         protected AIBaseState(AIBrain brain)
         {
             Brain = brain;
-            AITransform = brain.transform;
+            CharacterTransform = brain.transform;
+            Character = brain.GetComponent<Character>();
         }
 
         public virtual void Enter()
         {
             StateTime = 0f;
-            Brain.Resume();
+
+            // Set AI-specific movement and rotation strategies (world-space, no camera influence)
+            if (Character != null)
+            {
+                Character.CurrentMovementStrategy = new AIWorldMovement(Character);
+                Character.CurrentRotationStrategy = new AIMovementRotation(Character);
+            }
         }
 
         public virtual void Exit()
@@ -63,11 +72,11 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Stops the agent
+        /// Clears destination (stops movement)
         /// </summary>
         protected void Stop()
         {
-            Brain.Stop();
+            Brain.ClearDestination();
         }
 
         /// <summary>
@@ -75,7 +84,7 @@ namespace LOGIYGames.AI
         /// </summary>
         protected bool IsTargetInRange(Transform target, float range)
         {
-            return target != null && Vector3.Distance(AITransform.position, target.position) <= range;
+            return target != null && Vector3.Distance(CharacterTransform.position, target.position) <= range;
         }
 
         /// <summary>
@@ -93,14 +102,14 @@ namespace LOGIYGames.AI
         {
             if (target == null) return false;
 
-            Vector3 direction = target.position - AITransform.position;
+            Vector3 direction = target.position - CharacterTransform.position;
             float distance = direction.magnitude;
 
             if (distance > maxDistance) return false;
 
             direction.Normalize();
 
-            if (Physics.Raycast(AITransform.position + Vector3.up * 0.5f, direction, out RaycastHit hit, distance))
+            if (Physics.Raycast(CharacterTransform.position + Vector3.up * 0.5f, direction, out RaycastHit hit, distance))
             {
                 return hit.transform == target || hit.transform.IsChildOf(target);
             }
@@ -113,7 +122,7 @@ namespace LOGIYGames.AI
         /// </summary>
         protected float GetDistanceToTarget(Transform target)
         {
-            return target == null ? float.MaxValue : Vector3.Distance(AITransform.position, target.position);
+            return target == null ? float.MaxValue : Vector3.Distance(CharacterTransform.position, target.position);
         }
 
         /// <summary>
@@ -121,9 +130,9 @@ namespace LOGIYGames.AI
         /// </summary>
         protected Vector3 GetDirectionToTarget(Transform target)
         {
-            if (target == null) return AITransform.forward;
+            if (target == null) return CharacterTransform.forward;
 
-            Vector3 direction = target.position - AITransform.position;
+            Vector3 direction = target.position - CharacterTransform.position;
             direction.y = 0;
             return direction.normalized;
         }

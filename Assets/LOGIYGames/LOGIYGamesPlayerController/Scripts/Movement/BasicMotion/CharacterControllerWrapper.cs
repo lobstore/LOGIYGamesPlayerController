@@ -94,7 +94,7 @@ namespace LOGIYGames
             Vector3 totalVelocity = a_move + m_characterGravityModule.Velocity;
             if (m_sensors.IsValidSlope())
             {
-                if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.MovementInput.magnitude > 0)
+                if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.InputProvider.MovementInput.magnitude > 0)
                 {
                     ProjectVelocity(totalVelocity);
 

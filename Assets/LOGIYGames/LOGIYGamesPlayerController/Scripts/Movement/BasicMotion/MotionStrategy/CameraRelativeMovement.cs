@@ -12,7 +12,7 @@ namespace LOGIYGames
         }
         public Vector3 GetMovementDirection()
         {
-            Vector3 movement = new Vector3(Character.MovementInput.x, 0, Character.MovementInput.y);
+            Vector3 movement = new Vector3(Character.InputProvider.MovementInput.x, 0, Character.InputProvider.MovementInput.y);
 
             Transform cam = Camera.main.transform;
 

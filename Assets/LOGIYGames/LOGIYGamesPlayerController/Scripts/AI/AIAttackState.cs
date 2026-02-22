@@ -83,14 +83,14 @@ namespace LOGIYGames.AI
             Vector3 directionToTarget = Brain.GetDirectionToTarget();
             if (directionToTarget.magnitude > 0.1f)
             {
-                AITransform.rotation = Quaternion.LookRotation(directionToTarget);
+                CharacterTransform.rotation = Quaternion.LookRotation(directionToTarget);
             }
 
             // Strafe movement
             if (_shouldStrafe && IsTargetInAttackRange(Brain.Target))
             {
-                Vector3 right = AITransform.right;
-                Vector3 strafePosition = AITransform.position + right * _strafeDirection * 2f;
+                Vector3 right = CharacterTransform.right;
+                Vector3 strafePosition = CharacterTransform.position + right * _strafeDirection * 2f;
                 MoveToPosition(strafePosition);
             }
             else
@@ -103,7 +103,7 @@ namespace LOGIYGames.AI
                 }
                 else if (distance < AttackRange * 0.3f)
                 {
-                    Vector3 backAwayPosition = AITransform.position - directionToTarget * 2f;
+                    Vector3 backAwayPosition = CharacterTransform.position - directionToTarget * 2f;
                     MoveToPosition(backAwayPosition);
                 }
                 else

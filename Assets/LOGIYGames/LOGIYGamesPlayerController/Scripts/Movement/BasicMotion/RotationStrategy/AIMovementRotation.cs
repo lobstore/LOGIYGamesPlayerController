@@ -20,9 +20,9 @@ namespace LOGIYGames
         public Quaternion GetRotation()
         {
             // If there's movement input, rotate to face movement direction
-            if (_character.MovementInput.magnitude > 0.01f)
+            if (_character.InputProvider.MovementInput.magnitude > 0.01f)
             {
-                Vector3 direction = new Vector3(_character.MovementInput.x, 0, _character.MovementInput.y);
+                Vector3 direction = new Vector3(_character.InputProvider.MovementInput.x, 0, _character.InputProvider.MovementInput.y);
                 if (direction.magnitude > 0.01f)
                 {
                     return Quaternion.LookRotation(direction.normalized, Vector3.up);

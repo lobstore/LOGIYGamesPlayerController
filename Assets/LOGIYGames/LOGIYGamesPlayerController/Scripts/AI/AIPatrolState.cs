@@ -80,7 +80,7 @@ namespace LOGIYGames.AI
         private bool IsAtPatrolPoint()
         {
             return _currentPatrolPoint == null ||
-                   Vector3.Distance(AITransform.position, _currentPatrolPoint.position) <= _arrivalThreshold;
+                   Vector3.Distance(CharacterTransform.position, _currentPatrolPoint.position) <= _arrivalThreshold;
         }
 
         /// <summary>

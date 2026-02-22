@@ -27,11 +27,11 @@ namespace LOGIYGames
                 return Quaternion.Euler(0f, currentAngleY, 0f);
             }
             
-            if (_character.MovementInput.magnitude > 0.01f)
+            if (_character.InputProvider.MovementInput.magnitude > 0.01f)
             {
                 // Calculate target angle from movement input
                 // Atan2 returns angle in radians, convert to degrees
-                float targetAngleY = Mathf.Atan2(_character.MovementInput.x, _character.MovementInput.y) * Mathf.Rad2Deg;
+                float targetAngleY = Mathf.Atan2(_character.InputProvider.MovementInput.x, _character.InputProvider.MovementInput.y) * Mathf.Rad2Deg;
                 
                 // Add camera's Y rotation to make it camera-relative
                 targetAngleY += cam.transform.eulerAngles.y;

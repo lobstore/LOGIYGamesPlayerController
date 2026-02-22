@@ -66,11 +66,14 @@ namespace LOGIYGames.AI
                 character = GetComponent<Character>();
             }
 
-            // Configure NavMeshAgent for direct movement
+
+            // Configure NavMeshAgent for pathfinding only (no position/rotation update)
             navMeshAgent.updateRotation = false;
             navMeshAgent.updateUpAxis = false;
+            navMeshAgent.updatePosition = true;
             navMeshAgent.acceleration = 9999;
-            navMeshAgent.angularSpeed = 120f;
+            navMeshAgent.angularSpeed = 9999;
+            navMeshAgent.speed = 0;
             navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.autoTraverseOffMeshLink = false;
         }
@@ -214,58 +217,51 @@ namespace LOGIYGames.AI
         private void Update()
         {
             if (_stateMachine == null) return;
-
-            // Sync speed with Character (from MovementStateDataSO via SpeedMultiplier)
-            UpdateAgentSpeed();
-
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
             _stateMachine.Update();
+            // Get desired velocity from NavMeshAgent and convert to movement input
+            // This allows NavMeshAgent to calculate direction while Character handles actual movement
+            if (navMeshAgent != null && navMeshAgent.hasPath && !navMeshAgent.pathPending)
+            {
+                Vector3 desiredDirection = navMeshAgent.path.corners[1] - transform.position;
+                desiredDirection.y = 0;
+                character.InputProvider.MovementInput = new Vector2(desiredDirection.x,desiredDirection.z).normalized;
+
+            }
+            else
+            {
+                character.InputProvider.MovementInput = Vector2.zero;
+            }
         }
 
         private void FixedUpdate()
         {
             if (_stateMachine == null) return;
             _stateMachine.FixedUpdate();
+
+
         }
 
-        private void UpdateAgentSpeed()
-        {
-            if (character != null)
-            {
-                navMeshAgent.speed = character.BaseSpeed * character.SpeedMultiplier;
-            }
-        }
 
         /// <summary>
         /// Sets destination for NavMeshAgent
         /// </summary>
         public void SetDestination(Vector3 destination)
         {
-            if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
+            if (navMeshAgent != null && navMeshAgent.isOnNavMesh && navMeshAgent.destination != destination)
             {
                 navMeshAgent.SetDestination(destination);
             }
         }
 
         /// <summary>
-        /// Stops the agent
+        /// Clears destination (resets desired velocity to zero)
         /// </summary>
-        public void Stop()
+        public void ClearDestination()
         {
-            if (navMeshAgent != null)
+            if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
             {
-                navMeshAgent.isStopped = true;
-            }
-        }
-
-        /// <summary>
-        /// Resumes the agent
-        /// </summary>
-        public void Resume()
-        {
-            if (navMeshAgent != null)
-            {
-                navMeshAgent.isStopped = false;
+                navMeshAgent.ResetPath();
             }
         }
 

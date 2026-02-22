@@ -8,9 +8,7 @@ namespace LOGIYGames.CharacterCore
     {
         // TODO Make IInputReader Abstraction to change between AI/Player
         [Header("References")]
-        [SerializeField] AIInputReader InputReader;
-
-        public Vector2 MovementInput { get; private set; }
+        public InputProvider InputProvider {  get; set; }
 
         public ControllerWrapperBase CController { get; set; }
         // TODO Make Builder
@@ -46,7 +44,7 @@ namespace LOGIYGames.CharacterCore
         public float TurnSmoothTime { get; set; } = 5f;
         
         [field: SerializeField] public float BaseSpeed { get; set; }
-        public float CurrentSpeed => SpeedMultiplier * BaseSpeed * MovementInput.magnitude;
+        public float CurrentSpeed => SpeedMultiplier * BaseSpeed * InputProvider.MovementInput.magnitude;
 
         public Vector3 Velocity { get => velocity; set => velocity = value; }
 
@@ -68,21 +66,17 @@ namespace LOGIYGames.CharacterCore
 
         [field: SerializeField] public Transform CinemachineCameraLookAtTransform { get; set; }
         [field: SerializeField] public Transform CinemachineCameraFollowTransform { get; set; }
-        public bool JumpPressed { get; internal set; }
-        public bool CrouchPressed { get; internal set; }
-        public bool EvadePressed { get; internal set; }
-        public bool SprintPressed { get; internal set; }
-        public bool BlockPressed { get; internal set; }
 
         #endregion
 
-
+        private void Awake()
+        {
+            InputProvider = new();
+        }
         private void Start()
         {
             // TODO Make ICBFollowable abstraction to change follow target
             CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
-            //InputReader.CharacterInputsEnable = true;
-            //InputReader.CameraInputsEnable = true;
             CController.Height = Height;
             CController.Center = new Vector3(0, Height / 2.0f, 0);
         }
@@ -90,12 +84,6 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            MovementInput = InputReader.MovementInput;
-            JumpPressed = InputReader.JumpPressed;
-            EvadePressed = InputReader.EvadePressed;
-            BlockPressed = InputReader.BlockPressed;
-            SprintPressed = InputReader.SprintPressed;
-            CrouchPressed = InputReader.CrouchPressed;
         }
 
         public override void OnFixedUpdate(float fixedDeltaTime)
@@ -173,7 +161,7 @@ namespace LOGIYGames.CharacterCore
 
         public void Move(Vector3 moveDirection)
         {
-            if (MovementInput.magnitude > 0)
+            if (InputProvider. MovementInput.magnitude > 0)
             {
                 Velocity = Vector3.Lerp(Velocity, moveDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
             }
@@ -186,9 +174,9 @@ namespace LOGIYGames.CharacterCore
         
         public void Jump()
         {
-            if (MovementInput.magnitude > 0)
+            if (InputProvider.MovementInput.magnitude > 0)
             {
-                Vector3 movement = new Vector3(MovementInput.x, 0, MovementInput.y);
+                Vector3 movement = new Vector3(InputProvider.MovementInput.x, 0, InputProvider.MovementInput.y);
                 Vector3 cam = Camera.main.transform.forward;
                 Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * JumpPlanarForce;
             }

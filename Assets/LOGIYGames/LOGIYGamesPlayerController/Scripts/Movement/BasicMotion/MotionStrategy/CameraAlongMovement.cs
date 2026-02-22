@@ -16,7 +16,7 @@ namespace LOGIYGames
             fwd.y = 0;
             var rght = Camera.main.transform.right;
             rght.y = 0;
-            return rght.normalized * Character.MovementInput.x + fwd.normalized * Character.MovementInput.y;
+            return rght.normalized * Character.InputProvider.MovementInput.x + fwd.normalized * Character.InputProvider.MovementInput.y;
         }
     }
 

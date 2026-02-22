@@ -21,7 +21,7 @@ namespace LOGIYGames
         {
             // Input is already in world space from AI
             // Just flatten and normalize
-            Vector3 direction = new Vector3(_character.MovementInput.x, 0, _character.MovementInput.y);
+            Vector3 direction = new Vector3(_character.InputProvider.MovementInput.x, 0, _character.InputProvider.MovementInput.y);
             return direction.normalized;
         }
     }
