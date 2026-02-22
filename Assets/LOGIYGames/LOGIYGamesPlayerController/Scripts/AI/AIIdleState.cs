@@ -5,12 +5,11 @@ namespace LOGIYGames.AI
 {
     /// <summary>
     /// AI Idle state - AI stays in place for a random duration
-    /// Transitions to Patrol when idle timer completes
     /// </summary>
     public class AIIdleState : AIBaseState
     {
-        private float _minIdleDuration;
-        private float _maxIdleDuration;
+        private readonly float _minIdleDuration;
+        private readonly float _maxIdleDuration;
         private CountdownTimer _idleTimer;
         private float _currentIdleDuration;
 
@@ -25,7 +24,7 @@ namespace LOGIYGames.AI
         public override void Enter()
         {
             base.Enter();
-            AIInput.ClearAllInputs();
+            Stop();
 
             // Randomize idle duration
             _currentIdleDuration = Random.Range(_minIdleDuration, _maxIdleDuration);
@@ -53,35 +52,12 @@ namespace LOGIYGames.AI
             }
         }
 
-        public override void PhysicsUpdate()
-        {
-            base.PhysicsUpdate();
-            AIInput.SetMovementInput(Vector2.zero);
-        }
-
         /// <summary>
         /// Checks if idle timer has completed
         /// </summary>
         public bool IsIdleComplete()
         {
             return _idleTimer != null && _idleTimer.IsFinished;
-        }
-
-        /// <summary>
-        /// Gets the remaining idle time
-        /// </summary>
-        public float GetRemainingIdleTime()
-        {
-            return _idleTimer?.CurrentTime ?? 0f;
-        }
-
-        /// <summary>
-        /// Sets the min and max idle duration range
-        /// </summary>
-        public void SetIdleDurationRange(float min, float max)
-        {
-            _minIdleDuration = Mathf.Min(min, max);
-            _maxIdleDuration = Mathf.Max(min, max);
         }
     }
 }

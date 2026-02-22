@@ -4,11 +4,10 @@ namespace LOGIYGames.AI
 {
     /// <summary>
     /// AI Chase state - AI pursues the target
-    /// Transitions to Attack when in range, or to Patrol/Idle when target is lost
     /// </summary>
     public class AIChaseState : AIBaseState
     {
-        private float _lostChaseDuration;
+        private readonly float _lostChaseDuration;
         private float _lostTimer;
         private bool _wasTargetVisible;
 
@@ -24,11 +23,6 @@ namespace LOGIYGames.AI
             base.Enter();
             _lostTimer = 0f;
             _wasTargetVisible = false;
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
         }
 
         public override void LogicUpdate()
@@ -60,37 +54,21 @@ namespace LOGIYGames.AI
 
             if (Brain.Target == null)
             {
-                AIInput.SetMovementInput(Vector2.zero);
+                Stop();
                 return;
             }
 
             float distanceToTarget = Brain.GetDistanceToTarget();
 
-            // If too close, stop or back away
+            // If too close, stop
             if (distanceToTarget <= AttackRange * 0.5f)
             {
-                AIInput.SetMovementInput(Vector2.zero);
+                Stop();
                 return;
             }
 
-            // Move towards target using NavMesh pathfinding
-            MoveAlongNavMeshPath(Brain.Target.position, AttackRange * 0.5f);
-        }
-
-        /// <summary>
-        /// Gets how long target has been lost
-        /// </summary>
-        public float GetLostTimer()
-        {
-            return _lostTimer;
-        }
-
-        /// <summary>
-        /// Sets the duration AI will chase after losing target
-        /// </summary>
-        public void SetLostChaseDuration(float duration)
-        {
-            _lostChaseDuration = duration;
+            // Move towards target
+            MoveToPosition(Brain.Target.position);
         }
     }
 }

@@ -5,12 +5,11 @@ namespace LOGIYGames.AI
 {
     /// <summary>
     /// AI Attack state - AI attacks the target when in range
-    /// Transitions back to Chase when target moves out of range
     /// </summary>
     public class AIAttackState : AIBaseState
     {
-        private float _attackCooldown;
-        private bool _shouldStrafe;
+        private readonly float _attackCooldown;
+        private readonly bool _shouldStrafe;
         private float _attackTimer;
         private float _strafeDirection = 1f;
         private float _strafeChangeTimer;
@@ -30,11 +29,6 @@ namespace LOGIYGames.AI
             base.Enter();
             _attackTimer = _attackCooldown;
             _strafeChangeTimer = 0f;
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
         }
 
         public override void LogicUpdate()
@@ -81,7 +75,7 @@ namespace LOGIYGames.AI
 
             if (Brain.Target == null)
             {
-                AIInput.SetMovementInput(Vector2.zero);
+                Stop();
                 return;
             }
 
@@ -89,14 +83,15 @@ namespace LOGIYGames.AI
             Vector3 directionToTarget = Brain.GetDirectionToTarget();
             if (directionToTarget.magnitude > 0.1f)
             {
-                Character.RotateToDirection(directionToTarget);
+                AITransform.rotation = Quaternion.LookRotation(directionToTarget);
             }
 
             // Strafe movement
             if (_shouldStrafe && IsTargetInAttackRange(Brain.Target))
             {
                 Vector3 right = AITransform.right;
-                SetMovementDirection(right * _strafeDirection);
+                Vector3 strafePosition = AITransform.position + right * _strafeDirection * 2f;
+                MoveToPosition(strafePosition);
             }
             else
             {
@@ -104,15 +99,16 @@ namespace LOGIYGames.AI
 
                 if (distance > AttackRange * 0.8f)
                 {
-                    MoveTowardsPosition(Brain.Target.position);
+                    MoveToPosition(Brain.Target.position);
                 }
                 else if (distance < AttackRange * 0.3f)
                 {
-                    MoveTowardsPosition(AITransform.position - directionToTarget * 2f);
+                    Vector3 backAwayPosition = AITransform.position - directionToTarget * 2f;
+                    MoveToPosition(backAwayPosition);
                 }
                 else
                 {
-                    AIInput.SetMovementInput(Vector2.zero);
+                    Stop();
                 }
             }
         }
@@ -122,34 +118,7 @@ namespace LOGIYGames.AI
         /// </summary>
         private void PerformAttack()
         {
-            AIInput.PressAttack();
             OnAttackPerformed?.Invoke();
-            ReleaseAttackAfterDelay(0.2f);
-        }
-
-        /// <summary>
-        /// Releases attack after a delay
-        /// </summary>
-        private async void ReleaseAttackAfterDelay(float delay)
-        {
-            await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(delay));
-            AIInput.ReleaseAttack();
-        }
-
-        /// <summary>
-        /// Sets the attack cooldown time
-        /// </summary>
-        public void SetAttackCooldown(float cooldown)
-        {
-            _attackCooldown = cooldown;
-        }
-
-        /// <summary>
-        /// Enables or disables strafing
-        /// </summary>
-        public void SetStrafingEnabled(bool enabled)
-        {
-            _shouldStrafe = enabled;
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-using LOGIYGames.Movement;
+using LOGIYGames.CharacterCore;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,20 +6,13 @@ namespace LOGIYGames.AI
 {
     /// <summary>
     /// AI Brain component that manages AI behavior state machine
-    /// Similar to MovementStateDriver but for AI behavior states
-    ///
-    /// State Transitions:
-    /// - Idle <-> Patrol (based on configuration and time)
-    /// - Idle/Patrol -> Chase (when target detected)
-    /// - Chase -> Attack (when target in attack range)
-    /// - Chase -> Idle/Patrol (when target lost)
-    /// - Attack -> Chase (when target out of range)
+    /// Uses NavMeshAgent directly for movement
     /// </summary>
     public class AIBrain : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private AIInputReader aiInput;
         [SerializeField] private NavMeshAgent navMeshAgent;
+        [SerializeField] private Character character;
 
         [Header("Detection Settings")]
         [SerializeField] private float detectionRange = 15f;
@@ -39,11 +32,6 @@ namespace LOGIYGames.AI
         [SerializeField] private bool debugDraw = true;
         private string currentStateName;
 
-        // Helpers
-        private AIPathfinder _pathfinder;
-        private AIDetector _detector;
-        private AIStuckDetector _stuckDetector;
-
         // State Machine
         private StateMachine _stateMachine;
 
@@ -53,7 +41,6 @@ namespace LOGIYGames.AI
         private AIChaseState _chaseState;
         private AIAttackState _attackState;
 
-        public AIInputReader AIInput => aiInput;
         public Transform Target => target;
         public Transform[] PatrolPoints => patrolPoints;
         public NavMeshAgent NavMeshAgent => navMeshAgent;
@@ -74,28 +61,18 @@ namespace LOGIYGames.AI
                 return;
             }
 
-            // NavMeshAgent is used for pathfinding only, not for movement
-            navMeshAgent.updateRotation = false;
-            navMeshAgent.updateUpAxis = false;
-            navMeshAgent.updatePosition = true;
-            navMeshAgent.acceleration = 9999;
-            navMeshAgent.angularSpeed = 9999;
-            navMeshAgent.speed = 0f;
-            navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-            navMeshAgent.autoTraverseOffMeshLink = false;
-            navMeshAgent.autoBraking = false;
-
-            if (aiInput == null)
+            if (character == null)
             {
-                Debug.LogError("AIBrain requires AIInputReader component");
-                enabled = false;
-                return;
+                character = GetComponent<Character>();
             }
 
-            // Initialize helpers
-            _pathfinder = new AIPathfinder(navMeshAgent, transform);
-            _detector = new AIDetector(transform, detectionRange, attackRange);
-            _stuckDetector = new AIStuckDetector();
+            // Configure NavMeshAgent for direct movement
+            navMeshAgent.updateRotation = false;
+            navMeshAgent.updateUpAxis = false;
+            navMeshAgent.acceleration = 9999;
+            navMeshAgent.angularSpeed = 120f;
+            navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            navMeshAgent.autoTraverseOffMeshLink = false;
         }
 
         private void Start()
@@ -117,7 +94,7 @@ namespace LOGIYGames.AI
             ConfigureTransitions();
 
             // Set initial state
-            _stateMachine.SetState(patrolPoints != null && patrolPoints.Length > 0 ? _idleState : _idleState);
+            _stateMachine.SetState(_idleState);
         }
 
         /// <summary>
@@ -125,53 +102,33 @@ namespace LOGIYGames.AI
         /// </summary>
         private void ConfigureTransitions()
         {
-            // ============================================
-            // AI BEHAVIOR TRANSITION TABLE
-            // ============================================
-            // From State     | To State      | Condition
-            // --------------------------------------------
-            // Idle           | Patrol        | Idle timer finished & has patrol points
-            // Idle           | Chase         | Target detected
-            // --------------------------------------------
-            // Patrol         | Idle          | Reached patrol point
-            // Patrol         | Chase         | Target detected
-            // --------------------------------------------
-            // Chase          | Attack        | Target in attack range
-            // Chase          | Idle          | Target lost (no patrol points)
-            // Chase          | Patrol        | Target lost (has patrol points)
-            // --------------------------------------------
-            // Attack         | Chase         | Target out of attack range
-            // Attack         | Idle          | Target lost (no patrol points)
-            // Attack         | Patrol        | Target lost (has patrol points)
-            // ============================================
-
             // ----- Idle State Transitions -----
             AddTransition(_idleState, _patrolState, () =>
                 patrolPoints != null && patrolPoints.Length > 0 && _idleState.IsIdleComplete());
             AddTransition(_idleState, _chaseState, () =>
-                target != null && _detector.IsTargetDetected(target));
+                target != null && IsTargetDetected(target));
 
             // ----- Patrol State Transitions -----
             AddTransition(_patrolState, _idleState, () =>
                 _patrolState.HasReachedPatrolPoint());
             AddTransition(_patrolState, _chaseState, () =>
-                target != null && _detector.IsTargetDetected(target));
+                target != null && IsTargetDetected(target));
 
             // ----- Chase State Transitions -----
             AddTransition(_chaseState, _attackState, () =>
-                target != null && _detector.IsTargetInAttackRange(target));
+                target != null && IsTargetInAttackRange(target));
             AddTransition(_chaseState, _patrolState, () =>
-                _detector.HasLostTarget(target) && patrolPoints != null && patrolPoints.Length > 0);
+                HasLostTarget(target) && patrolPoints != null && patrolPoints.Length > 0);
             AddTransition(_chaseState, _idleState, () =>
-                _detector.HasLostTarget(target) && (patrolPoints == null || patrolPoints.Length == 0));
+                HasLostTarget(target) && (patrolPoints == null || patrolPoints.Length == 0));
 
             // ----- Attack State Transitions -----
             AddTransition(_attackState, _chaseState, () =>
-                target != null && !_detector.IsTargetInAttackRange(target));
+                target != null && !IsTargetInAttackRange(target));
             AddTransition(_attackState, _patrolState, () =>
-                _detector.HasLostTarget(target) && patrolPoints != null && patrolPoints.Length > 0);
+                HasLostTarget(target) && patrolPoints != null && patrolPoints.Length > 0);
             AddTransition(_attackState, _idleState, () =>
-                _detector.HasLostTarget(target) && (patrolPoints == null || patrolPoints.Length == 0));
+                HasLostTarget(target) && (patrolPoints == null || patrolPoints.Length == 0));
         }
 
         /// <summary>
@@ -187,12 +144,79 @@ namespace LOGIYGames.AI
         /// </summary>
         public bool HasLineOfSight()
         {
-            return _detector.HasLineOfSight(target, detectionRange);
+            if (target == null) return false;
+
+            Vector3 direction = target.position - transform.position;
+            float distance = direction.magnitude;
+
+            if (distance > detectionRange) return false;
+
+            direction.Normalize();
+
+            if (Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, out RaycastHit hit, distance))
+            {
+                return hit.transform == target || hit.transform.IsChildOf(target);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if target is detected (in range and line of sight)
+        /// </summary>
+        private bool IsTargetDetected(Transform target)
+        {
+            if (target == null) return false;
+
+            float distance = Vector3.Distance(transform.position, target.position);
+            if (distance > detectionRange) return false;
+
+            return HasLineOfSight();
+        }
+
+        /// <summary>
+        /// Checks if target is in attack range
+        /// </summary>
+        private bool IsTargetInAttackRange(Transform target)
+        {
+            return target != null && Vector3.Distance(transform.position, target.position) <= attackRange;
+        }
+
+        /// <summary>
+        /// Checks if target has been lost
+        /// </summary>
+        private bool HasLostTarget(Transform target)
+        {
+            if (target == null) return true;
+            return Vector3.Distance(transform.position, target.position) > detectionRange * 1.5f;
+        }
+
+        /// <summary>
+        /// Gets distance to target
+        /// </summary>
+        public float GetDistanceToTarget()
+        {
+            return target == null ? float.MaxValue : Vector3.Distance(transform.position, target.position);
+        }
+
+        /// <summary>
+        /// Gets direction to target
+        /// </summary>
+        public Vector3 GetDirectionToTarget()
+        {
+            if (target == null) return transform.forward;
+
+            Vector3 direction = target.position - transform.position;
+            direction.y = 0;
+            return direction.normalized;
         }
 
         private void Update()
         {
             if (_stateMachine == null) return;
+
+            // Sync speed with Character (from MovementStateDataSO via SpeedMultiplier)
+            UpdateAgentSpeed();
 
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
             _stateMachine.Update();
@@ -204,14 +228,49 @@ namespace LOGIYGames.AI
             _stateMachine.FixedUpdate();
         }
 
-        private void LateUpdate()
+        private void UpdateAgentSpeed()
         {
-            if (_stateMachine == null) return;
-            _stateMachine.LateUpdate();
+            if (character != null)
+            {
+                navMeshAgent.speed = character.BaseSpeed * character.SpeedMultiplier;
+            }
         }
 
         /// <summary>
-        /// Sets a new target for the AI to chase/attack
+        /// Sets destination for NavMeshAgent
+        /// </summary>
+        public void SetDestination(Vector3 destination)
+        {
+            if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
+            {
+                navMeshAgent.SetDestination(destination);
+            }
+        }
+
+        /// <summary>
+        /// Stops the agent
+        /// </summary>
+        public void Stop()
+        {
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.isStopped = true;
+            }
+        }
+
+        /// <summary>
+        /// Resumes the agent
+        /// </summary>
+        public void Resume()
+        {
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.isStopped = false;
+            }
+        }
+
+        /// <summary>
+        /// Sets a new target
         /// </summary>
         public void SetTarget(Transform newTarget)
         {
@@ -224,14 +283,6 @@ namespace LOGIYGames.AI
         public void ClearTarget()
         {
             target = null;
-        }
-
-        /// <summary>
-        /// Sets patrol points for the AI
-        /// </summary>
-        public void SetPatrolPoints(Transform[] points)
-        {
-            patrolPoints = points;
         }
 
         /// <summary>
@@ -278,7 +329,7 @@ namespace LOGIYGames.AI
         /// </summary>
         public void GoToAttack()
         {
-            if (target != null && _detector.IsTargetInAttackRange(target))
+            if (target != null && IsTargetInAttackRange(target))
             {
                 _stateMachine.ChangeState(_attackState);
             }
@@ -289,7 +340,7 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Gets the current behavior state name
+        /// Gets the current state name
         /// </summary>
         public string GetCurrentStateName()
         {
@@ -297,56 +348,7 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Updates NavMesh path to destination
-        /// </summary>
-        public void UpdatePath(Vector3 destination, bool isGrounded = true)
-        {
-            _pathfinder.UpdatePath(destination, isGrounded);
-        }
-
-        /// <summary>
-        /// Gets direction from current NavMesh path
-        /// </summary>
-        public Vector3 GetPathDirection()
-        {
-            return _pathfinder.GetDirection();
-        }
-
-        /// <summary>
-        /// Checks if AI is stuck and tries to recover
-        /// </summary>
-        public bool IsStuck()
-        {
-            return _stuckDetector.IsStuck(transform.position);
-        }
-
-        /// <summary>
-        /// Recalculates path immediately (used when stuck)
-        /// </summary>
-        public void RecalculatePath()
-        {
-            _pathfinder.Recalculate();
-            _stuckDetector.Reset();
-        }
-
-        /// <summary>
-        /// Gets distance to target
-        /// </summary>
-        public float GetDistanceToTarget()
-        {
-            return _detector.GetDistanceToTarget(target);
-        }
-
-        /// <summary>
-        /// Gets direction to target
-        /// </summary>
-        public Vector3 GetDirectionToTarget()
-        {
-            return _detector.GetDirectionToTarget(target);
-        }
-
-        /// <summary>
-        /// Draws gizmos for AI visualization in editor
+        /// Draws gizmos for AI visualization
         /// </summary>
         private void OnDrawGizmosSelected()
         {

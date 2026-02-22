@@ -4,12 +4,11 @@ namespace LOGIYGames.AI
 {
     /// <summary>
     /// AI Patrol state - AI moves between patrol points
-    /// Transitions back to Idle when reaching a point
     /// </summary>
     public class AIPatrolState : AIBaseState
     {
         private Transform _currentPatrolPoint;
-        private float _arrivalThreshold;
+        private readonly float _arrivalThreshold;
 
         public AIPatrolState(AIBrain brain, float arrivalThreshold = 0.5f) : base(brain)
         {
@@ -22,11 +21,6 @@ namespace LOGIYGames.AI
         {
             base.Enter();
             SelectRandomPatrolPoint();
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
         }
 
         public override void LogicUpdate()
@@ -52,17 +46,17 @@ namespace LOGIYGames.AI
 
             if (Brain.PatrolPoints == null || Brain.PatrolPoints.Length == 0)
             {
-                AIInput.SetMovementInput(Vector2.zero);
+                Stop();
                 return;
             }
 
             if (_currentPatrolPoint != null && !IsAtPatrolPoint())
             {
-                MoveAlongNavMeshPath(_currentPatrolPoint.position, _arrivalThreshold);
+                MoveToPosition(_currentPatrolPoint.position);
             }
             else
             {
-                AIInput.SetMovementInput(Vector2.zero);
+                Stop();
             }
         }
 
@@ -95,14 +89,6 @@ namespace LOGIYGames.AI
         public bool HasReachedPatrolPoint()
         {
             return _currentPatrolPoint == null || IsAtPatrolPoint();
-        }
-
-        /// <summary>
-        /// Sets the arrival threshold distance
-        /// </summary>
-        public void SetArrivalThreshold(float threshold)
-        {
-            _arrivalThreshold = Mathf.Max(0.1f, threshold);
         }
     }
 }
