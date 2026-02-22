@@ -39,18 +39,10 @@ namespace LOGIYGames.AI
         [SerializeField] private bool debugDraw = true;
         private string currentStateName;
 
-        // Pathfinding
-        private float _pathRecalculateTimer = 0f;
-        private const float PATH_RECALCULATE_INTERVAL = 0.3f;
-
-        // Stuck detection
-        private Vector3 _lastPosition = Vector3.zero;
-        private float _stuckTimer = 0f;
-        private const float STUCK_THRESHOLD = 0.1f;
-        private const float STUCK_TIMEOUT = 2f;
-
-        // Airborne state (jump/fall)
-        private bool _wasGrounded = true;
+        // Helpers
+        private AIPathfinder _pathfinder;
+        private AIDetector _detector;
+        private AIStuckDetector _stuckDetector;
 
         // State Machine
         private StateMachine _stateMachine;
@@ -88,8 +80,8 @@ namespace LOGIYGames.AI
             navMeshAgent.updatePosition = true;
             navMeshAgent.acceleration = 9999;
             navMeshAgent.angularSpeed = 9999;
-            navMeshAgent.speed = 0; // Speed is controlled via Character.SpeedMultiplier, not NavMeshAgent
-            navMeshAgent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            navMeshAgent.speed = 0f;
+            navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.autoTraverseOffMeshLink = false;
             navMeshAgent.autoBraking = false;
 
@@ -99,11 +91,15 @@ namespace LOGIYGames.AI
                 enabled = false;
                 return;
             }
+
+            // Initialize helpers
+            _pathfinder = new AIPathfinder(navMeshAgent, transform);
+            _detector = new AIDetector(transform, detectionRange, attackRange);
+            _stuckDetector = new AIStuckDetector();
         }
 
         private void Start()
         {
-            _lastPosition = transform.position;
             InitializeStateMachine();
         }
 
@@ -121,14 +117,7 @@ namespace LOGIYGames.AI
             ConfigureTransitions();
 
             // Set initial state
-            if (patrolPoints != null && patrolPoints.Length > 0)
-            {
-                _stateMachine.SetState(_idleState);
-            }
-            else
-            {
-                _stateMachine.SetState(_idleState);
-            }
+            _stateMachine.SetState(patrolPoints != null && patrolPoints.Length > 0 ? _idleState : _idleState);
         }
 
         /// <summary>
@@ -160,29 +149,29 @@ namespace LOGIYGames.AI
             AddTransition(_idleState, _patrolState, () =>
                 patrolPoints != null && patrolPoints.Length > 0 && _idleState.IsIdleComplete());
             AddTransition(_idleState, _chaseState, () =>
-                target != null && IsTargetDetected());
+                target != null && _detector.IsTargetDetected(target));
 
             // ----- Patrol State Transitions -----
             AddTransition(_patrolState, _idleState, () =>
                 _patrolState.HasReachedPatrolPoint());
             AddTransition(_patrolState, _chaseState, () =>
-                target != null && IsTargetDetected());
+                target != null && _detector.IsTargetDetected(target));
 
             // ----- Chase State Transitions -----
             AddTransition(_chaseState, _attackState, () =>
-                target != null && IsTargetInAttackRange());
+                target != null && _detector.IsTargetInAttackRange(target));
             AddTransition(_chaseState, _patrolState, () =>
-                HasLostTarget() && patrolPoints != null && patrolPoints.Length > 0);
+                _detector.HasLostTarget(target) && patrolPoints != null && patrolPoints.Length > 0);
             AddTransition(_chaseState, _idleState, () =>
-                HasLostTarget() && (patrolPoints == null || patrolPoints.Length == 0));
+                _detector.HasLostTarget(target) && (patrolPoints == null || patrolPoints.Length == 0));
 
             // ----- Attack State Transitions -----
             AddTransition(_attackState, _chaseState, () =>
-                target != null && !IsTargetInAttackRange());
+                target != null && !_detector.IsTargetInAttackRange(target));
             AddTransition(_attackState, _patrolState, () =>
-                HasLostTarget() && patrolPoints != null && patrolPoints.Length > 0);
+                _detector.HasLostTarget(target) && patrolPoints != null && patrolPoints.Length > 0);
             AddTransition(_attackState, _idleState, () =>
-                HasLostTarget() && (patrolPoints == null || patrolPoints.Length == 0));
+                _detector.HasLostTarget(target) && (patrolPoints == null || patrolPoints.Length == 0));
         }
 
         /// <summary>
@@ -194,83 +183,19 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Checks if target is detected (in range and line of sight)
-        /// </summary>
-        private bool IsTargetDetected()
-        {
-            if (target == null) return false;
-
-            float distance = Vector3.Distance(transform.position, target.position);
-            
-            if (distance <= detectionRange)
-            {
-                return HasLineOfSight();
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Checks if target is in attack range
-        /// </summary>
-        private bool IsTargetInAttackRange()
-        {
-            if (target == null) return false;
-
-            float distance = Vector3.Distance(transform.position, target.position);
-            return distance <= attackRange;
-        }
-
-        /// <summary>
         /// Checks if AI has line of sight to target
         /// </summary>
-        private bool HasLineOfSight()
+        public bool HasLineOfSight()
         {
-            if (target == null) return false;
-
-            Vector3 direction = target.position - transform.position;
-            float distance = direction.magnitude;
-
-            if (distance > detectionRange) return false;
-
-            direction.Normalize();
-
-            if (Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, out RaycastHit hit, distance))
-            {
-                return hit.transform == target || hit.transform.IsChildOf(target);
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Checks if target has been lost (timeout exceeded)
-        /// </summary>
-        private bool HasLostTarget()
-        {
-            if (target == null) return true;
-            
-            // Check if we can still detect target
-            float distance = Vector3.Distance(transform.position, target.position);
-            
-            if (distance > detectionRange * 1.5f)
-            {
-                return true;
-            }
-
-            return false;
+            return _detector.HasLineOfSight(target, detectionRange);
         }
 
         private void Update()
         {
             if (_stateMachine == null) return;
 
-            // NavMeshAgent position is now updated automatically
-            // We use it only for path calculation, movement is handled by CharacterController
-
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
             _stateMachine.Update();
-
         }
 
         private void FixedUpdate()
@@ -283,14 +208,6 @@ namespace LOGIYGames.AI
         {
             if (_stateMachine == null) return;
             _stateMachine.LateUpdate();
-
-            // Reset position change from NavMeshAgent (we handle movement via CharacterController)
-            // But keep the agent at our position for path calculation
-            if (navMeshAgent != null && navMeshAgent.updatePosition)
-            {
-                // NavMeshAgent moves the transform, we need to use its velocity for input
-                // but not let it actually move us
-            }
         }
 
         /// <summary>
@@ -361,7 +278,7 @@ namespace LOGIYGames.AI
         /// </summary>
         public void GoToAttack()
         {
-            if (target != null && IsTargetInAttackRange())
+            if (target != null && _detector.IsTargetInAttackRange(target))
             {
                 _stateMachine.ChangeState(_attackState);
             }
@@ -384,31 +301,7 @@ namespace LOGIYGames.AI
         /// </summary>
         public void UpdatePath(Vector3 destination, bool isGrounded = true)
         {
-            // Don't recalculate path while airborne
-            if (!isGrounded)
-            {
-                _wasGrounded = false;
-                return;
-            }
-
-            // Recalculate path immediately when just landed
-            if (!_wasGrounded)
-            {
-                _wasGrounded = true;
-                _pathRecalculateTimer = PATH_RECALCULATE_INTERVAL;
-            }
-
-            // Recalculate path with throttling
-            _pathRecalculateTimer += Time.deltaTime;
-            if (_pathRecalculateTimer >= PATH_RECALCULATE_INTERVAL)
-            {
-                _pathRecalculateTimer = 0f;
-
-                if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
-                {
-                    navMeshAgent.SetDestination(destination);
-                }
-            }
+            _pathfinder.UpdatePath(destination, isGrounded);
         }
 
         /// <summary>
@@ -416,18 +309,7 @@ namespace LOGIYGames.AI
         /// </summary>
         public Vector3 GetPathDirection()
         {
-            if (navMeshAgent != null && navMeshAgent.isOnNavMesh && navMeshAgent.hasPath && !navMeshAgent.pathPending)
-            {
-                if (navMeshAgent.path.corners != null && navMeshAgent.path.corners.Length > 1)
-                {
-                    Vector3 nextWaypoint = navMeshAgent.path.corners[1];
-                    Vector3 direction = nextWaypoint - transform.position;
-                    direction.y = 0;
-                    return direction.normalized;
-                }
-            }
-
-            return Vector3.zero;
+            return _pathfinder.GetDirection();
         }
 
         /// <summary>
@@ -435,19 +317,7 @@ namespace LOGIYGames.AI
         /// </summary>
         public bool IsStuck()
         {
-            float moveDistance = Vector3.Distance(transform.position, _lastPosition);
-            
-            if (moveDistance < STUCK_THRESHOLD)
-            {
-                _stuckTimer += Time.deltaTime;
-                return _stuckTimer >= STUCK_TIMEOUT;
-            }
-            else
-            {
-                _stuckTimer = 0f;
-                _lastPosition = transform.position;
-                return false;
-            }
+            return _stuckDetector.IsStuck(transform.position);
         }
 
         /// <summary>
@@ -455,7 +325,24 @@ namespace LOGIYGames.AI
         /// </summary>
         public void RecalculatePath()
         {
-            _pathRecalculateTimer = PATH_RECALCULATE_INTERVAL;
+            _pathfinder.Recalculate();
+            _stuckDetector.Reset();
+        }
+
+        /// <summary>
+        /// Gets distance to target
+        /// </summary>
+        public float GetDistanceToTarget()
+        {
+            return _detector.GetDistanceToTarget(target);
+        }
+
+        /// <summary>
+        /// Gets direction to target
+        /// </summary>
+        public Vector3 GetDirectionToTarget()
+        {
+            return _detector.GetDirectionToTarget(target);
         }
 
         /// <summary>
@@ -463,29 +350,22 @@ namespace LOGIYGames.AI
         /// </summary>
         private void OnDrawGizmosSelected()
         {
-            if (!debugDraw)
-            {
-                return;
-            }
+            if (!debugDraw) return;
 
             // Draw NavMesh path
             if (navMeshAgent != null && navMeshAgent.isOnNavMesh && navMeshAgent.hasPath && !navMeshAgent.pathPending)
             {
-                if (navMeshAgent.path.corners != null && navMeshAgent.path.corners.Length > 1)
+                Gizmos.color = Color.cyan;
+                Vector3[] corners = navMeshAgent.path.corners;
+                for (int i = 0; i < corners.Length - 1; i++)
                 {
-                    Gizmos.color = Color.cyan;
-                    Vector3[] corners = navMeshAgent.path.corners;
-                    for (int i = 0; i < corners.Length - 1; i++)
-                    {
-                        Gizmos.DrawLine(corners[i], corners[i + 1]);
-                    }
+                    Gizmos.DrawLine(corners[i], corners[i + 1]);
+                }
 
-                    // Draw waypoints
-                    Gizmos.color = Color.yellow;
-                    for (int i = 0; i < corners.Length; i++)
-                    {
-                        Gizmos.DrawWireSphere(corners[i], 0.2f);
-                    }
+                Gizmos.color = Color.yellow;
+                for (int i = 0; i < corners.Length; i++)
+                {
+                    Gizmos.DrawWireSphere(corners[i], 0.2f);
                 }
             }
 

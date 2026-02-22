@@ -9,20 +9,9 @@ namespace LOGIYGames.AI
     /// </summary>
     public class AIIdleState : AIBaseState
     {
-        /// <summary>
-        /// Min and max idle duration before switching to patrol
-        /// </summary>
-        private float _minIdleDuration = 2f;
-        private float _maxIdleDuration = 5f;
-
-        /// <summary>
-        /// Timer for idle duration
-        /// </summary>
+        private float _minIdleDuration;
+        private float _maxIdleDuration;
         private CountdownTimer _idleTimer;
-
-        /// <summary>
-        /// Current idle duration (randomized on each enter)
-        /// </summary>
         private float _currentIdleDuration;
 
         public AIIdleState(AIBrain brain, float minIdleDuration = 2f, float maxIdleDuration = 5f) : base(brain)
@@ -37,10 +26,10 @@ namespace LOGIYGames.AI
         {
             base.Enter();
             AIInput.ClearAllInputs();
-            
+
             // Randomize idle duration
             _currentIdleDuration = Random.Range(_minIdleDuration, _maxIdleDuration);
-            
+
             // Setup and start idle timer
             _idleTimer?.Dispose();
             _idleTimer = new CountdownTimer(_currentIdleDuration);
@@ -57,41 +46,25 @@ namespace LOGIYGames.AI
         {
             base.LogicUpdate();
 
-            // Check if target is detected - transition to Chase
-            if (Brain.Target != null && CanDetectTarget())
+            // Check if target detected - transition to Chase
+            if (Brain.Target != null && Brain.HasLineOfSight())
             {
                 return;
-            }
-
-            // Check if idle timer completed - ready to transition to Patrol
-            if (_idleTimer != null && _idleTimer.IsFinished)
-            {
-                // Transition handled by AIBrain predicates
             }
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-            // No movement in idle state
             AIInput.SetMovementInput(Vector2.zero);
         }
 
         /// <summary>
-        /// Checks if target can be detected (in range and line of sight)
+        /// Checks if idle timer has completed
         /// </summary>
-        private bool CanDetectTarget()
+        public bool IsIdleComplete()
         {
-            if (Brain.Target == null) return false;
-
-            float distance = GetDistanceToTarget(Brain.Target);
-
-            if (distance <= DetectionRange)
-            {
-                return HasLineOfSight(Brain.Target, DetectionRange);
-            }
-
-            return false;
+            return _idleTimer != null && _idleTimer.IsFinished;
         }
 
         /// <summary>
@@ -103,28 +76,12 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Gets the current idle duration
-        /// </summary>
-        public float GetCurrentIdleDuration()
-        {
-            return _currentIdleDuration;
-        }
-
-        /// <summary>
         /// Sets the min and max idle duration range
         /// </summary>
         public void SetIdleDurationRange(float min, float max)
         {
             _minIdleDuration = Mathf.Min(min, max);
             _maxIdleDuration = Mathf.Max(min, max);
-        }
-
-        /// <summary>
-        /// Checks if idle timer has completed
-        /// </summary>
-        public bool IsIdleComplete()
-        {
-            return _idleTimer != null && _idleTimer.IsFinished;
         }
     }
 }

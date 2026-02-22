@@ -1,6 +1,5 @@
 using LOGIYGames.CharacterCore;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace LOGIYGames.AI
 {
@@ -76,17 +75,14 @@ namespace LOGIYGames.AI
         /// <summary>
         /// Sets movement input direction for the AI
         /// </summary>
-        /// <param name="direction">Movement direction in world space</param>
         protected void SetMovementDirection(Vector3 direction)
         {
-            // Convert world direction to local input (relative to camera or character)
             Vector3 flattenedDirection = new Vector3(direction.x, 0, direction.z).normalized;
             AIInput.SetMovementInput(flattenedDirection);
         }
 
         /// <summary>
         /// Calculates movement direction from NavMesh path and applies it to input
-        /// Uses NavMeshAgent to calculate path and extracts direction from current waypoint
         /// </summary>
         /// <param name="targetPosition">Target position to move towards</param>
         /// <param name="arrivalThreshold">Distance threshold to consider arrival</param>
@@ -95,13 +91,11 @@ namespace LOGIYGames.AI
         {
             if (Brain.NavMeshAgent == null || !Brain.NavMeshAgent.isOnNavMesh)
             {
-                // Fallback to direct movement if NavMesh not available
                 MoveTowardsPosition(targetPosition);
                 return true;
             }
 
-            // Update path (with throttling to avoid excessive recalculations)
-            // Pass grounded state - pathfinding only works when grounded
+            // Update path with throttling
             Brain.UpdatePath(targetPosition, IsGrounded());
 
             // Check if we've reached the destination
@@ -112,15 +106,14 @@ namespace LOGIYGames.AI
                 return false;
             }
 
-            // While airborne, don't use pathfinding - use direct movement or no movement
+            // No movement input while airborne
             if (!IsGrounded())
             {
-                // In air - no movement input (let gravity/physics handle it)
                 AIInput.SetMovementInput(Vector2.zero);
                 return true;
             }
 
-            // Check if stuck and force path recalculation
+            // Recalculate path if stuck
             if (Brain.IsStuck())
             {
                 Brain.RecalculatePath();
@@ -135,38 +128,13 @@ namespace LOGIYGames.AI
                 return true;
             }
 
-            // Fallback to direct movement if no path
+            // Fallback to direct movement
             MoveTowardsPosition(targetPosition);
             return true;
         }
 
         /// <summary>
-        /// Gets the next waypoint position from the current NavMesh path
-        /// </summary>
-        /// <returns>Next waypoint position or Vector3.zero if no path</returns>
-        protected Vector3 GetNextPathWaypoint()
-        {
-            if (Brain.NavMeshAgent == null || !Brain.NavMeshAgent.isOnNavMesh || !Brain.NavMeshAgent.hasPath)
-            {
-                return Vector3.zero;
-            }
-
-            if (Brain.NavMeshAgent.pathPending)
-            {
-                return Vector3.zero;
-            }
-
-            if (Brain.NavMeshAgent.path.corners != null && Brain.NavMeshAgent.path.corners.Length > 1)
-            {
-                // Return the next corner after current position
-                return Brain.NavMeshAgent.path.corners[1];
-            }
-
-            return Vector3.zero;
-        }
-
-        /// <summary>
-        /// Sets movement input towards a target position using NavMesh pathfinding
+        /// Sets movement input towards a target position
         /// </summary>
         protected void MoveTowardsPosition(Vector3 targetPosition)
         {
@@ -184,14 +152,11 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Checks if target is within detection range
+        /// Checks if target is within range
         /// </summary>
         protected bool IsTargetInRange(Transform target, float range)
         {
-            if (target == null) return false;
-
-            float distance = Vector3.Distance(AITransform.position, target.position);
-            return distance <= range;
+            return target != null && Vector3.Distance(AITransform.position, target.position) <= range;
         }
 
         /// <summary>
@@ -221,11 +186,19 @@ namespace LOGIYGames.AI
                 return hit.transform == target || hit.transform.IsChildOf(target);
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
-        /// Gets the direction to target
+        /// Gets distance to target
+        /// </summary>
+        protected float GetDistanceToTarget(Transform target)
+        {
+            return target == null ? float.MaxValue : Vector3.Distance(AITransform.position, target.position);
+        }
+
+        /// <summary>
+        /// Gets direction to target (flattened)
         /// </summary>
         protected Vector3 GetDirectionToTarget(Transform target)
         {
@@ -234,15 +207,6 @@ namespace LOGIYGames.AI
             Vector3 direction = target.position - AITransform.position;
             direction.y = 0;
             return direction.normalized;
-        }
-
-        /// <summary>
-        /// Gets distance to target
-        /// </summary>
-        protected float GetDistanceToTarget(Transform target)
-        {
-            if (target == null) return float.MaxValue;
-            return Vector3.Distance(AITransform.position, target.position);
         }
 
         /// <summary>

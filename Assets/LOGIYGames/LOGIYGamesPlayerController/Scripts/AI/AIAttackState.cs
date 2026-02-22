@@ -9,35 +9,13 @@ namespace LOGIYGames.AI
     /// </summary>
     public class AIAttackState : AIBaseState
     {
-        /// <summary>
-        /// Time between attacks
-        /// </summary>
-        private float _attackCooldown = 1f;
-
-        /// <summary>
-        /// Timer for attack cooldown
-        /// </summary>
+        private float _attackCooldown;
+        private bool _shouldStrafe;
         private float _attackTimer;
-
-        /// <summary>
-        /// Action invoked when AI performs an attack
-        /// </summary>
-        public Action OnAttackPerformed;
-
-        /// <summary>
-        /// Whether AI should strafe during attack
-        /// </summary>
-        private bool _shouldStrafe = true;
-
-        /// <summary>
-        /// Strafe direction (1 = right, -1 = left)
-        /// </summary>
         private float _strafeDirection = 1f;
-
-        /// <summary>
-        /// Time before changing strafe direction
-        /// </summary>
         private float _strafeChangeTimer;
+
+        public Action OnAttackPerformed;
 
         public AIAttackState(AIBrain brain, float attackCooldown = 1f, bool shouldStrafe = true) : base(brain)
         {
@@ -50,7 +28,7 @@ namespace LOGIYGames.AI
         public override void Enter()
         {
             base.Enter();
-            _attackTimer = _attackCooldown; // Allow immediate first attack
+            _attackTimer = _attackCooldown;
             _strafeChangeTimer = 0f;
         }
 
@@ -63,14 +41,14 @@ namespace LOGIYGames.AI
         {
             base.LogicUpdate();
 
-            // Check if target is null or out of range - transition to Chase
+            // Check if target is null or out of range
             if (Brain.Target == null || !IsTargetInAttackRange(Brain.Target))
             {
                 return;
             }
 
             // Check line of sight
-            if (!HasLineOfSight(Brain.Target, AttackRange))
+            if (!Brain.HasLineOfSight())
             {
                 return;
             }
@@ -85,7 +63,7 @@ namespace LOGIYGames.AI
                 _attackTimer = 0f;
             }
 
-            // Handle strafing behavior
+            // Handle strafing
             if (_shouldStrafe)
             {
                 _strafeChangeTimer += Time.deltaTime;
@@ -108,31 +86,28 @@ namespace LOGIYGames.AI
             }
 
             // Face the target
-            Vector3 directionToTarget = GetDirectionToTarget(Brain.Target);
+            Vector3 directionToTarget = Brain.GetDirectionToTarget();
             if (directionToTarget.magnitude > 0.1f)
             {
                 Character.RotateToDirection(directionToTarget);
             }
 
-            // Strafe movement (optional)
+            // Strafe movement
             if (_shouldStrafe && IsTargetInAttackRange(Brain.Target))
             {
                 Vector3 right = AITransform.right;
-                Vector3 strafeDirection = right * _strafeDirection;
-                SetMovementDirection(strafeDirection);
+                SetMovementDirection(right * _strafeDirection);
             }
             else
             {
-                // Small adjustments to stay in attack range
-                float distance = GetDistanceToTarget(Brain.Target);
-                
+                float distance = Brain.GetDistanceToTarget();
+
                 if (distance > AttackRange * 0.8f)
                 {
                     MoveTowardsPosition(Brain.Target.position);
                 }
                 else if (distance < AttackRange * 0.3f)
                 {
-                    // Back away slightly
                     MoveTowardsPosition(AITransform.position - directionToTarget * 2f);
                 }
                 else
@@ -149,9 +124,6 @@ namespace LOGIYGames.AI
         {
             AIInput.PressAttack();
             OnAttackPerformed?.Invoke();
-            
-            // Release attack after a short delay
-            // In a real implementation, this would be tied to animation events
             ReleaseAttackAfterDelay(0.2f);
         }
 
@@ -173,27 +145,11 @@ namespace LOGIYGames.AI
         }
 
         /// <summary>
-        /// Enables or disables strafing behavior
+        /// Enables or disables strafing
         /// </summary>
         public void SetStrafingEnabled(bool enabled)
         {
             _shouldStrafe = enabled;
-        }
-
-        /// <summary>
-        /// Gets the current attack cooldown timer
-        /// </summary>
-        public float GetAttackTimer()
-        {
-            return _attackTimer;
-        }
-
-        /// <summary>
-        /// Gets the attack cooldown duration
-        /// </summary>
-        public float GetAttackCooldown()
-        {
-            return _attackCooldown;
         }
 
         /// <summary>
