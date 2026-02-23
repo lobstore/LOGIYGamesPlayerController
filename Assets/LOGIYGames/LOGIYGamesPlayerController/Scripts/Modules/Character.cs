@@ -1,15 +1,16 @@
 using LOGIYGames.AI;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 namespace LOGIYGames.CharacterCore
 {
-    public class Character : MonoModuleBase
+    public class Character : MonoModuleBase, IControllable
     {
         // TODO Make IInputReader Abstraction to change between AI/Player
         [Header("References")]
-        public InputProvider InputProvider {  get; set; }
-
+        public IInputReader Input { get; set; }
+        public Transform Target;
         public ControllerWrapperBase CController { get; set; }
         // TODO Make Builder
         public IMovementStrategy CurrentMovementStrategy { get; set; }
@@ -40,11 +41,11 @@ namespace LOGIYGames.CharacterCore
         /// This multiplier can be used to adjust the movement speed in base conditions, such as when moving walk or sprint.
         /// </remarks>
         public float SpeedMultiplier { get; set; }
-        
+
         public float TurnSmoothTime { get; set; } = 5f;
-        
+
         [field: SerializeField] public float BaseSpeed { get; set; }
-        public float CurrentSpeed => SpeedMultiplier * BaseSpeed * InputProvider.MovementInput.magnitude;
+        public float CurrentSpeed => SpeedMultiplier * BaseSpeed * Input.MovementInput.magnitude;
 
         public Vector3 Velocity { get => velocity; set => velocity = value; }
 
@@ -52,16 +53,16 @@ namespace LOGIYGames.CharacterCore
         public float JumpPlanarForce { get; set; }
 
         private Vector3 velocity;
-        
+
         #endregion
-        
+
         #region Height Properties
-        
+
         [field: SerializeField] public float Height { get; set; }
         public float HeightChangingSmoothTime { get; private set; } = 4f;
-        
+
         #endregion
-        
+
         #region Camera References
 
         [field: SerializeField] public Transform CinemachineCameraLookAtTransform { get; set; }
@@ -69,10 +70,6 @@ namespace LOGIYGames.CharacterCore
 
         #endregion
 
-        private void Awake()
-        {
-            InputProvider = new();
-        }
         private void Start()
         {
             // TODO Make ICBFollowable abstraction to change follow target
@@ -81,22 +78,12 @@ namespace LOGIYGames.CharacterCore
             CController.Center = new Vector3(0, Height / 2.0f, 0);
         }
 
-        public override void OnUpdate(float deltaTime)
-        {
-            base.OnUpdate(deltaTime);
-        }
-
-        public override void OnFixedUpdate(float fixedDeltaTime)
-        {
-            base.OnFixedUpdate(fixedDeltaTime);
-        }
-
         public override void OnLateUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
             SmoothHeightChanging();
         }
-        
+
         private void SmoothHeightChanging()
         {
             if (Height == CController.Height && CController.Center.y == Height) return;
@@ -121,11 +108,11 @@ namespace LOGIYGames.CharacterCore
         {
             desiredDirection.y = 0;
             if (desiredDirection.sqrMagnitude < 0.001f) return;
-            
+
             Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, Vector3.up);
             Rotate(targetRotation, turnSmoothTime);
         }
-        
+
         /// <summary>
         /// Rotates character to face a position.
         /// </summary>
@@ -134,7 +121,7 @@ namespace LOGIYGames.CharacterCore
             Vector3 desiredDirection = position - transform.position;
             RotateToDirection(desiredDirection.normalized, turnSmoothTime);
         }
-        
+
         /// <summary>
         /// Rotates character to a target rotation.
         /// Delegates to controller wrapper for proper KinematicCharacterController integration.
@@ -142,7 +129,7 @@ namespace LOGIYGames.CharacterCore
         public void Rotate(Quaternion targetRotation, float turnSmoothTime = 0)
         {
             float smoothTime = turnSmoothTime > 0 ? turnSmoothTime : TurnSmoothTime;
-            
+
             if (smoothTime > 0f)
             {
                 // Smooth rotation using Slerp
@@ -154,14 +141,14 @@ namespace LOGIYGames.CharacterCore
                 CController.Rotate(targetRotation);
             }
         }
-        
+
         #endregion
 
         #region Movement Methods
 
         public void Move(Vector3 moveDirection)
         {
-            if (InputProvider. MovementInput.magnitude > 0)
+            if (Input.MovementInput.magnitude > 0)
             {
                 Velocity = Vector3.Lerp(Velocity, moveDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
             }
@@ -171,12 +158,12 @@ namespace LOGIYGames.CharacterCore
             }
             CController.Move(Velocity);
         }
-        
+
         public void Jump()
         {
-            if (InputProvider.MovementInput.magnitude > 0)
+            if (Input.MovementInput.magnitude > 0)
             {
-                Vector3 movement = new Vector3(InputProvider.MovementInput.x, 0, InputProvider.MovementInput.y);
+                Vector3 movement = new Vector3(Input.MovementInput.x, 0, Input.MovementInput.y);
                 Vector3 cam = Camera.main.transform.forward;
                 Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * JumpPlanarForce;
             }
@@ -188,8 +175,24 @@ namespace LOGIYGames.CharacterCore
             Jump();
             Velocity += transform.forward * JumpPlanarForce;
         }
-        
         #endregion
 
+
+        public void TakeControl()
+        {
+            Input = PlayerManager.Instance.InputReader;
+            CurrentMovementStrategy = new CameraRelativeMovement(this);
+            CurrentRotationStrategy = new CameraRelativeRotation(this);
+
+            GetComponent<NavMeshAgent>().enabled = false;
+        }
+
+        public void ReleaseControl()
+        {
+            Input = GetComponent<AIBrainStateDriver>().Output;
+            GetComponent<NavMeshAgent>().enabled = true;
+            CurrentMovementStrategy = new InputRelativeMovement(this);
+            CurrentRotationStrategy = new InputRelativeRotation(this);
+        }
     }
 }

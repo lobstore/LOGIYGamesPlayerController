@@ -8,7 +8,7 @@ namespace LOGIYGames.AI
     /// </summary>
     public abstract class AIBaseState : IState
     {
-        protected AIBrain Brain { get; private set; }
+        protected AIBrainStateDriver Brain { get; private set; }
         protected Character Character { get; private set; }
         protected Transform CharacterTransform { get; private set; }
 
@@ -27,7 +27,7 @@ namespace LOGIYGames.AI
         /// </summary>
         protected float StateTime { get; private set; }
 
-        protected AIBaseState(AIBrain brain)
+        protected AIBaseState(AIBrainStateDriver brain)
         {
             Brain = brain;
             CharacterTransform = brain.transform;
@@ -37,13 +37,6 @@ namespace LOGIYGames.AI
         public virtual void Enter()
         {
             StateTime = 0f;
-
-            // Set AI-specific movement and rotation strategies (world-space, no camera influence)
-            if (Character != null)
-            {
-                Character.CurrentMovementStrategy = new AIWorldMovement(Character);
-                Character.CurrentRotationStrategy = new AIMovementRotation(Character);
-            }
         }
 
         public virtual void Exit()

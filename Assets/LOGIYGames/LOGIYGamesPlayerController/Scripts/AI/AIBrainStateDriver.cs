@@ -1,4 +1,5 @@
 using LOGIYGames.CharacterCore;
+using LOGIYGames.Scripts.AI;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,11 +9,11 @@ namespace LOGIYGames.AI
     /// AI Brain component that manages AI behavior state machine
     /// Uses NavMeshAgent directly for movement
     /// </summary>
-    public class AIBrain : MonoBehaviour
+    public class AIBrainStateDriver : MonoModuleBase
     {
         [Header("References")]
         [SerializeField] private NavMeshAgent navMeshAgent;
-        [SerializeField] private Character character;
+        public AIInputReader Output {  get; private set; }
 
         [Header("Detection Settings")]
         [SerializeField] private float detectionRange = 15f;
@@ -36,6 +37,7 @@ namespace LOGIYGames.AI
         private StateMachine _stateMachine;
 
         // AI States
+        // TODO Make Builder for AI Archetypes and AI configuration
         private AIIdleState _idleState;
         private AIPatrolState _patrolState;
         private AIChaseState _chaseState;
@@ -60,12 +62,10 @@ namespace LOGIYGames.AI
                 enabled = false;
                 return;
             }
-
-            if (character == null)
+            if (Output==null)
             {
-                character = GetComponent<Character>();
+                Output = new AIInputReader();
             }
-
 
             // Configure NavMeshAgent for pathfinding only (no position/rotation update)
             navMeshAgent.updateRotation = false;
@@ -213,9 +213,9 @@ namespace LOGIYGames.AI
             direction.y = 0;
             return direction.normalized;
         }
-
-        private void Update()
+        public override void OnUpdate(float deltaTime)
         {
+            base.OnUpdate(deltaTime);
             if (_stateMachine == null) return;
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
             _stateMachine.Update();
@@ -225,17 +225,17 @@ namespace LOGIYGames.AI
             {
                 Vector3 desiredDirection = navMeshAgent.path.corners[1] - transform.position;
                 desiredDirection.y = 0;
-                character.InputProvider.MovementInput = new Vector2(desiredDirection.x,desiredDirection.z).normalized;
+                Output.SetMovementInput(new Vector2(desiredDirection.x,desiredDirection.z).normalized);
 
             }
             else
             {
-                character.InputProvider.MovementInput = Vector2.zero;
+                Output.SetMovementInput(Vector2.zero);
             }
         }
-
-        private void FixedUpdate()
+        public override void OnFixedUpdate(float fixedDeltaTime)
         {
+            base.OnFixedUpdate(fixedDeltaTime);
             if (_stateMachine == null) return;
             _stateMachine.FixedUpdate();
 

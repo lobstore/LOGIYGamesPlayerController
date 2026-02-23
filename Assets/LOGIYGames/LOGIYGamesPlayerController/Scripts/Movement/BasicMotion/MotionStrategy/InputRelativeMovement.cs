@@ -8,11 +8,11 @@ namespace LOGIYGames
     /// without camera influence. Used for AI characters.
     /// Input direction is treated as world-space direction.
     /// </summary>
-    public class AIWorldMovement : IMovementStrategy
+    public class InputRelativeMovement : IMovementStrategy
     {
         private Character _character;
 
-        public AIWorldMovement(Character character)
+        public InputRelativeMovement(Character character)
         {
             _character = character;
         }
@@ -21,7 +21,7 @@ namespace LOGIYGames
         {
             // Input is already in world space from AI
             // Just flatten and normalize
-            Vector3 direction = new Vector3(_character.InputProvider.MovementInput.x, 0, _character.InputProvider.MovementInput.y);
+            Vector3 direction = new Vector3(_character.Input.MovementInput.x, 0, _character.Input.MovementInput.y);
             return direction.normalized;
         }
     }

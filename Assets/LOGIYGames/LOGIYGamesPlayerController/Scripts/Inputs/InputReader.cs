@@ -1,3 +1,4 @@
+using LOGIYGames.CharacterCore;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -12,7 +13,7 @@ namespace LOGIYGames
 {
     public class InputEvent : UnityEvent<InputAction.CallbackContext> { }
     [CreateAssetMenu(menuName = "Input/InputReader", fileName = "InputReader")]
-    public class InputReader : ScriptableObject, GameInputs.ICharacterInputsActions, GameInputs.IGameControlActions, GameInputs.IUIActions, GameInputs.ICameraActions
+    public class InputReader : ScriptableObject,IInputReader, GameInputs.ICharacterInputsActions, GameInputs.IGameControlActions, GameInputs.IUIActions, GameInputs.ICameraActions
     {
         private GameInputs gameInputs;
         public GameInputs GameInputs => gameInputs;

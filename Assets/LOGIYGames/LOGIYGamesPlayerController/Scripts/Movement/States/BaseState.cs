@@ -10,12 +10,6 @@ namespace LOGIYGames.Movement
     [Serializable]
     public abstract class BaseState : IState
     {
-
-
-        protected CameraAlongMovement _cameraAlongMovement;
-        protected CameraRelativeRotation _cameraRelativeRotation;
-        protected CameraAlongRotation _cameraAlongRotation;
-
         protected Character _character;
         protected MovementStateData _data;
 
@@ -29,12 +23,6 @@ namespace LOGIYGames.Movement
             _data.TurnSmoothTime = stateData.TurnSmoothTime;
             _data.Speed = stateData.Speed;
 
-            _cameraAlongMovement = new(_character);
-            _cameraRelativeRotation = new(_character);
-            _cameraAlongRotation = new(_character);
-
-            _character.CurrentMovementStrategy = _cameraAlongMovement;
-            _character.CurrentRotationStrategy = _cameraRelativeRotation;
         }
 
         public virtual void Enter()

@@ -8,11 +8,11 @@ namespace LOGIYGames
     /// without camera influence. Used for AI characters.
     /// Character rotates to face the direction it's moving.
     /// </summary>
-    public class AIMovementRotation : IRotationStrategy
+    public class InputRelativeRotation : IRotationStrategy
     {
         private Character _character;
 
-        public AIMovementRotation(Character character)
+        public InputRelativeRotation(Character character)
         {
             _character = character;
         }
@@ -20,9 +20,9 @@ namespace LOGIYGames
         public Quaternion GetRotation()
         {
             // If there's movement input, rotate to face movement direction
-            if (_character.InputProvider.MovementInput.magnitude > 0.01f)
+            if (_character.Input.MovementInput.magnitude > 0.01f)
             {
-                Vector3 direction = new Vector3(_character.InputProvider.MovementInput.x, 0, _character.InputProvider.MovementInput.y);
+                Vector3 direction = new Vector3(_character.Input.MovementInput.x, 0, _character.Input.MovementInput.y);
                 if (direction.magnitude > 0.01f)
                 {
                     return Quaternion.LookRotation(direction.normalized, Vector3.up);

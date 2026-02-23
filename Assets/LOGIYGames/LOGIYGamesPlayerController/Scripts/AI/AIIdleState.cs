@@ -13,7 +13,7 @@ namespace LOGIYGames.AI
         private CountdownTimer _idleTimer;
         private float _currentIdleDuration;
 
-        public AIIdleState(AIBrain brain, float minIdleDuration = 2f, float maxIdleDuration = 5f) : base(brain)
+        public AIIdleState(AIBrainStateDriver brain, float minIdleDuration = 2f, float maxIdleDuration = 5f) : base(brain)
         {
             _minIdleDuration = minIdleDuration;
             _maxIdleDuration = maxIdleDuration;

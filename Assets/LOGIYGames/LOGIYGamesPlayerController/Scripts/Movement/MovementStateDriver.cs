@@ -141,36 +141,36 @@ namespace LOGIYGames.Movement
             );
             // ----- Idle State Transitions -----
             AddTransition(_idleState, _walkState, () => HasMovementInput() && IsGrounded());
-            AddTransition(_idleState, _groundJumpState, () => Character.InputProvider.JumpPressed && IsGrounded());
-            AddTransition(_idleState, _crouchState, () => Character.InputProvider.CrouchPressed);
-            AddTransition(_idleState, _rollState, () => Character.InputProvider.EvadePressed);
+            AddTransition(_idleState, _groundJumpState, () => Character.Input.JumpPressed && IsGrounded());
+            AddTransition(_idleState, _crouchState, () => Character.Input.CrouchPressed);
+            AddTransition(_idleState, _rollState, () => Character.Input.EvadePressed);
 
             // ----- Walk State Transitions -----
             AddTransition(_walkState, _idleState, () => !HasMovementInput() && IsGrounded());
             AddTransition(_walkState, _runState, () => HasStrongMovementInput() && !IsSprinting());
-            AddTransition(_walkState, _groundJumpState, () => Character.InputProvider.JumpPressed && IsGrounded());
-            AddTransition(_walkState, _crouchState, () => Character.InputProvider.CrouchPressed);
-            AddTransition(_walkState, _rollState, () => Character.InputProvider.EvadePressed);
+            AddTransition(_walkState, _groundJumpState, () => Character.Input.JumpPressed && IsGrounded());
+            AddTransition(_walkState, _crouchState, () => Character.Input.CrouchPressed);
+            AddTransition(_walkState, _rollState, () => Character.Input.EvadePressed);
 
             // ----- Run State Transitions -----
             AddTransition(_runState, _idleState, () => !HasMovementInput() && IsGrounded());
             AddTransition(_runState, _walkState, () => HasMovementInput() && !HasStrongMovementInput());
-            AddTransition(_runState, _sprintState, () => Character.InputProvider.SprintPressed && HasStrongMovementInput());
-            AddTransition(_runState, _groundJumpState, () => Character.InputProvider.JumpPressed && IsGrounded());
-            AddTransition(_runState, _crouchState, () => Character.InputProvider.CrouchPressed);
-            AddTransition(_runState, _rollState, () => Character.InputProvider.EvadePressed);
+            AddTransition(_runState, _sprintState, () => Character.Input.SprintPressed && HasStrongMovementInput());
+            AddTransition(_runState, _groundJumpState, () => Character.Input.JumpPressed && IsGrounded());
+            AddTransition(_runState, _crouchState, () => Character.Input.CrouchPressed);
+            AddTransition(_runState, _rollState, () => Character.Input.EvadePressed);
 
             // ----- Sprint State Transitions -----
             AddTransition(_sprintState, _idleState, () => !HasMovementInput() && IsGrounded());
-            AddTransition(_sprintState, _runState, () => !Character.InputProvider.SprintPressed);
-            AddTransition(_sprintState, _groundJumpState, () => Character.InputProvider.JumpPressed && IsGrounded());
-            AddTransition(_sprintState, _crouchState, () => Character.InputProvider.CrouchPressed);
-            AddTransition(_sprintState, _rollState, () => Character.InputProvider.EvadePressed);
+            AddTransition(_sprintState, _runState, () => !Character.Input.SprintPressed);
+            AddTransition(_sprintState, _groundJumpState, () => Character.Input.JumpPressed && IsGrounded());
+            AddTransition(_sprintState, _crouchState, () => Character.Input.CrouchPressed);
+            AddTransition(_sprintState, _rollState, () => Character.Input.EvadePressed);
 
             // ----- Crouch State Transitions -----
-            AddTransition(_crouchState, _idleState, () => !Character.InputProvider.CrouchPressed && IsGrounded() && !HasMovementInput());
-            AddTransition(_crouchState, _walkState, () => !Character.InputProvider.CrouchPressed && HasMovementInput());
-            AddTransition(_crouchState, _rollState, () => Character.InputProvider.EvadePressed);
+            AddTransition(_crouchState, _idleState, () => !Character.Input.CrouchPressed && IsGrounded() && !HasMovementInput());
+            AddTransition(_crouchState, _walkState, () => !Character.Input.CrouchPressed && HasMovementInput());
+            AddTransition(_crouchState, _rollState, () => Character.Input.EvadePressed);
 
             // ----- Jump State Transitions -----
             AddTransition(_groundJumpState, _landingState, () =>IsGrounded() && _groundJumpState.IsDurationTimerElapsed);
@@ -181,7 +181,7 @@ namespace LOGIYGames.Movement
             // ----- Landing State Transitions -----
             AddTransition(_landingState, _idleState, () => _landingState.IsDurationTimerElapsed && !HasMovementInput());
             AddTransition(_landingState, _walkState, () => _landingState.IsDurationTimerElapsed && HasMovementInput());
-            AddTransition(_landingState, _rollState, () => Character.InputProvider. EvadePressed);
+            AddTransition(_landingState, _rollState, () => Character.Input. EvadePressed);
 
             // ----- Roll State Transitions -----
             AddTransition(_rollState, _idleState, () => _rollState.IsDurationTimerElapsed && !HasMovementInput() && IsGrounded());
@@ -204,13 +204,13 @@ namespace LOGIYGames.Movement
 
         #region Condition Helpers
 
-        private bool HasMovementInput() => Character.InputProvider.MovementInput.magnitude > 0.1f;
+        private bool HasMovementInput() => Character.Input.MovementInput.magnitude > 0.1f;
 
-        private bool HasStrongMovementInput() => Character.InputProvider.MovementInput.magnitude > 0.6f;
+        private bool HasStrongMovementInput() => Character.Input.MovementInput.magnitude > 0.6f;
 
         private bool IsGrounded() => Sensors.IsGrounded;
 
-        private bool IsSprinting() => Character.InputProvider.SprintPressed;
+        private bool IsSprinting() => Character.Input.SprintPressed;
 
         #endregion
 

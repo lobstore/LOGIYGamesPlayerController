@@ -8,8 +8,6 @@ namespace LOGIYGames
     /// </summary>
     public class SensorsModule : MonoModuleBase
     {
-        [Header("Component References")]
-        [SerializeField] private ControllerWrapperBase m_controllerWrapper;
 
         [Header("Detection Settings")]
         [SerializeField] private float m_upCheckDistance = 0.8f;
@@ -29,23 +27,18 @@ namespace LOGIYGames
         private string m_aboveObstacleName;
         private string m_belowObstacleName;
 
+        Collider col;
+
         // Detection origin calculated from capsule bounds
         public Vector3 DetectionOrigin
         {
             get
             {
-                if (m_controllerWrapper == null) return transform.position;
-                
-                Collider col = m_controllerWrapper.GetCollider();
-                if (col != null)
-                {
                     return new Vector3(
                         col.bounds.center.x,
                         col.bounds.center.y + m_detectionOriginYOffset,
                         col.bounds.center.z
                     );
-                }
-                return transform.position;
             }
         }
 
@@ -70,12 +63,7 @@ namespace LOGIYGames
 
         private void Awake()
         {
-            if (m_controllerWrapper == null)
-            {
-                m_controllerWrapper = GetComponent<ControllerWrapperBase>();
-            }
-            
-            Debug.Assert(m_controllerWrapper != null, "Error (SensorsModule): Could not find GenericControllerWrapper component");
+            col = GetComponent<Collider>();
         }
         
         public override void OnUpdate(float deltaTime)
@@ -94,10 +82,8 @@ namespace LOGIYGames
         }
         
         public bool IsValidSlope()
-        {
-            if (m_controllerWrapper == null) return false;
-            
-            float angle = Vector3.Angle(m_belowHit.normal, m_controllerWrapper.transform.up);
+        {         
+            float angle = Vector3.Angle(m_belowHit.normal, transform.up);
             bool validAngle = Mathf.Abs(angle) <= MaxStableSlopeAngle;
             return validAngle;
         }
@@ -110,16 +96,16 @@ namespace LOGIYGames
             IsGrounded = Physics.SphereCast(
                 DetectionOrigin, 
                 m_castDownSphereRadius, 
-                -m_controllerWrapper.transform.up, 
+                -transform.up, 
                 out m_groundHit, 
                 m_groundCheckDistance, 
                 m_groundLayers
             );
 
             GroundAngle = Vector3.SignedAngle(
-                m_controllerWrapper.transform.up, 
+                transform.up, 
                 m_belowHit.normal, 
-                m_controllerWrapper.transform.right
+                transform.right
             );
             IsOnSlope = GroundAngle == 0 ? false : true;
         }
@@ -129,7 +115,7 @@ namespace LOGIYGames
             IsObstacleBelow = Physics.SphereCast(
                 DetectionOrigin, 
                 m_castDownSphereRadius, 
-                -m_controllerWrapper.transform.up, 
+                -transform.up, 
                 out m_belowHit, 
                 m_belowCheckDistance, 
                 m_includeLayers
@@ -141,7 +127,7 @@ namespace LOGIYGames
             IsObstacleAbove = Physics.SphereCast(
                 DetectionOrigin, 
                 m_castUpSphereRadius, 
-                m_controllerWrapper.transform.up, 
+                transform.up, 
                 out m_aboveHit, 
                 m_upCheckDistance, 
                 m_includeLayers
@@ -156,9 +142,8 @@ namespace LOGIYGames
 
         private void OnDrawGizmos()
         {
-            if (m_controllerWrapper == null) return;
-
-            if (!m_showDebugInfo) return;
+            
+            if (!m_showDebugInfo||col==null) return;
 
             // Draw sphere casts
             DrawSphereCasts(DetectionOrigin);
@@ -173,13 +158,13 @@ namespace LOGIYGames
         private void DrawSphereCasts(Vector3 origin)
         {
             Gizmos.color = IsObstacleAbove ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(origin + m_controllerWrapper.transform.up * m_upCheckDistance, m_castUpSphereRadius);
+            Gizmos.DrawWireSphere(origin + transform.up * m_upCheckDistance, m_castUpSphereRadius);
 
             Gizmos.color = IsObstacleBelow ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(origin + -m_controllerWrapper.transform.up * m_belowCheckDistance, m_castDownSphereRadius);
+            Gizmos.DrawWireSphere(origin + -transform.up * m_belowCheckDistance, m_castDownSphereRadius);
 
             Gizmos.color = IsGrounded ? Color.green : Color.yellow;
-            Gizmos.DrawWireSphere(origin + -m_controllerWrapper.transform.up * m_groundCheckDistance, m_castDownSphereRadius);
+            Gizmos.DrawWireSphere(origin + -transform.up * m_groundCheckDistance, m_castDownSphereRadius);
 
             if (IsObstacleBelow)
             {
