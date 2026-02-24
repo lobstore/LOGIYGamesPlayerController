@@ -1,5 +1,7 @@
 using System;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace LOGIYGames.AI
 {
@@ -112,7 +114,10 @@ namespace LOGIYGames.AI
                 }
             }
         }
-
+        public bool IsTargetInAttackRange()
+        {
+            return Brain.Target != null && Vector3.Distance(Brain.transform.position, Brain.Target.position) <= Brain.AttackRange;
+        }
         /// <summary>
         /// Performs the attack action
         /// </summary>

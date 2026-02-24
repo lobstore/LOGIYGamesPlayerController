@@ -1,7 +1,7 @@
 using LOGIYGames.AI;
+using LOGIYGames.Scripts.AI;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.EventSystems;
 
 namespace LOGIYGames.CharacterCore
 {
@@ -76,6 +76,8 @@ namespace LOGIYGames.CharacterCore
             CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
             CController.Height = Height;
             CController.Center = new Vector3(0, Height / 2.0f, 0);
+
+
         }
 
         public override void OnLateUpdate(float deltaTime)
@@ -178,19 +180,16 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
 
-        public void TakeControl()
+        public void TakeControl(IInputReader inputReader)
         {
-            Input = PlayerManager.Instance.InputReader;
+            Input = inputReader;
             CurrentMovementStrategy = new CameraRelativeMovement(this);
             CurrentRotationStrategy = new CameraRelativeRotation(this);
-
-            GetComponent<NavMeshAgent>().enabled = false;
         }
 
         public void ReleaseControl()
         {
-            Input = GetComponent<AIBrainStateDriver>().Output;
-            GetComponent<NavMeshAgent>().enabled = true;
+            Input = GetComponent<IInputReader>();
             CurrentMovementStrategy = new InputRelativeMovement(this);
             CurrentRotationStrategy = new InputRelativeRotation(this);
         }

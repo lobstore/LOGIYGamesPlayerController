@@ -40,11 +40,7 @@ namespace LOGIYGames
 
         private void Update()
         {
-            if (!sensorModule.IsGrounded||characterGravityModule.Velocity.y>0)
-            {
-                agent.enabled = false;
-            }
-            else
+            if (sensorModule.IsGrounded&&characterGravityModule.Velocity.y<0)
             {
                 agent.enabled = true;
             }

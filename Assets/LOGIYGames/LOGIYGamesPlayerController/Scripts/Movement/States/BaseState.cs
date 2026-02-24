@@ -17,7 +17,6 @@ namespace LOGIYGames.Movement
         {
             _data = new();
             _character = ctx.Character;
-            _data.StateName = stateData.StateName;
             _data.Acceleration = stateData.Acceleration;
             _data.Deceleration = stateData.Deceleration;
             _data.TurnSmoothTime = stateData.TurnSmoothTime;
@@ -31,6 +30,15 @@ namespace LOGIYGames.Movement
             _character.Deceleration = _data.Deceleration;
             _character.TurnSmoothTime = _data.TurnSmoothTime;
             _character.SpeedMultiplier = _data.Speed;
+            if (_character.CurrentRotationStrategy == null)
+            {
+                _character.CurrentRotationStrategy = new NoneRotation();
+
+            }
+            if (_character.CurrentMovementStrategy == null)
+            {
+                _character.CurrentMovementStrategy = new NoneMovement();
+            }
         }
 
         public virtual void Exit() { }

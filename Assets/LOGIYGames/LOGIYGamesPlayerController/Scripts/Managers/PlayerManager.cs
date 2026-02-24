@@ -20,7 +20,7 @@ namespace LOGIYGames
         {
             CurrentControllable?.ReleaseControl();
             CurrentControllable = character;
-            CurrentControllable?.TakeControl();
+            CurrentControllable?.TakeControl(InputReader);
 
         }
         private void Update()
@@ -40,7 +40,7 @@ namespace LOGIYGames
             }
             else
             {
-                CurrentControllable?.TakeControl();
+                CurrentControllable?.TakeControl(InputReader);
             }
         }
     }
