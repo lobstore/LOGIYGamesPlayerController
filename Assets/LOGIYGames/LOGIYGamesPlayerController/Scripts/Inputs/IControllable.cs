@@ -2,7 +2,7 @@ namespace LOGIYGames.CharacterCore
 {
     public interface IControllable
     {
-        void TakeControl(IInputReader inputReader);
+        void TakeControl(IMovementInputReader inputReader);
         void ReleaseControl();
     }
 }

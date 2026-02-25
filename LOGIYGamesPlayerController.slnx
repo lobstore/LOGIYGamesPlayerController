@@ -4,11 +4,11 @@
   <Project Path="VRM10.csproj" />
   <Project Path="VrmLibTests.csproj" />
   <Project Path="UniGLTF.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="uLipSync.Samples.Common.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
   <Project Path="UniHumanoid.csproj" />
   <Project Path="UniHumanoid.Editor.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="SpringBoneJobs.csproj" />
   <Project Path="uLipSync.Editor.csproj" />
   <Project Path="VrmLib.csproj" />

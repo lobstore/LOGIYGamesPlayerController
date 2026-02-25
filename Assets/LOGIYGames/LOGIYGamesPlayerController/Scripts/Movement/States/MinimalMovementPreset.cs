@@ -39,24 +39,24 @@ namespace LOGIYGames
             && !_groundJumpState.IsDurationTimerRunning
             );
             // ----- Idle State Transitions -----
-            MovementStateDriver.AddTransition(_idleState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded);
+            MovementStateDriver.AddTransition(_idleState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
 
             // ----- Walk State Transitions -----
-            MovementStateDriver.AddTransition(_idleState, _runState, () => MovementStateDriver.Character.Input.MovementInput.magnitude > 0f && !MovementStateDriver.Character.Input.SprintPressed);
-            MovementStateDriver.AddTransition(_runState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded);
+            MovementStateDriver.AddTransition(_idleState, _runState, () => MovementStateDriver.Character.Input.MovementInput.magnitude > 0f);
+            MovementStateDriver.AddTransition(_runState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
 
             // ----- Run State Transitions -----
             MovementStateDriver.AddTransition(_runState, _idleState, () => MovementStateDriver.Character.Input.MovementInput.magnitude == 0f && MovementStateDriver.Sensors.IsGrounded);
             MovementStateDriver.AddTransition(_runState, _sprintState, () => MovementStateDriver.Character.Input.SprintPressed && MovementStateDriver.Character.Input.MovementInput.magnitude > 0);
-            MovementStateDriver.AddTransition(_runState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded);
+            MovementStateDriver.AddTransition(_runState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
 
             // ----- Sprint State Transitions -----
             MovementStateDriver.AddTransition(_sprintState, _idleState, () => MovementStateDriver.Character.Input.MovementInput.magnitude == 0f && MovementStateDriver.Sensors.IsGrounded);
             MovementStateDriver.AddTransition(_sprintState, _runState, () => !MovementStateDriver.Character.Input.SprintPressed);
-            MovementStateDriver.AddTransition(_sprintState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded);
+            MovementStateDriver.AddTransition(_sprintState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
 
             // ----- Jump State Transitions -----
-            MovementStateDriver.AddTransition(_groundJumpState, _runState, () => MovementStateDriver.Sensors.IsGrounded && _groundJumpState.IsDurationTimerElapsed);
+            MovementStateDriver.AddTransition(_groundJumpState, _runState, () => MovementStateDriver.Sensors.IsGrounded);
 
             // ----- Falling State Transitions -----
             MovementStateDriver.AddTransition(_fallingState, _idleState, () => MovementStateDriver.Sensors.IsGrounded);

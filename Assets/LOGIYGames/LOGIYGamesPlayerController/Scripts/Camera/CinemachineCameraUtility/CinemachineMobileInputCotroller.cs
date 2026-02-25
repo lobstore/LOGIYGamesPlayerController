@@ -6,14 +6,6 @@ namespace LOGIYGames
 {
     public class CinemachineMobileInputCotroller : InputAxisControllerBase<CinemachineMobileInputCotroller.DragReader>
     {
-        
-        private void Update()
-        {
-            if (Application.isPlaying)
-            {
-                UpdateControllers();
-            }
-        }
         [Serializable]
         public class DragReader : IInputAxisReader
         {

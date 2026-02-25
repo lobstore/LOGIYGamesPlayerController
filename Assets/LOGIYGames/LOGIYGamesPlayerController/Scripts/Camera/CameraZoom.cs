@@ -1,10 +1,12 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 namespace LOGIYGames
 {
     public class CameraZoom : MonoBehaviour
     {
-        [SerializeField] InputReader Input;
+        PlayerCameraInput PlayerCameraInput;
+
         [SerializeField][Range(0f, 10f)] private float defaultDistance = 4f;
         [SerializeField][Range(0f, 10f)] private float minimumDistance = 1f;
         [SerializeField][Range(0f, 10f)] private float maximumDistance = 6f;
@@ -14,7 +16,6 @@ namespace LOGIYGames
         [SerializeField][Range(0f, 10f)] private float currentTargetDistance;
 
         private CinemachinePositionComposer framingTransposer;
-        private CinemachineInputAxisController inputProvider;
 
         private float Distance { get { return framingTransposer.CameraDistance; } set { framingTransposer.CameraDistance = value; } }
 
@@ -23,27 +24,27 @@ namespace LOGIYGames
         {
             framingTransposer = GetComponent<CinemachinePositionComposer>();
 
-            inputProvider = GetComponent<CinemachineInputAxisController>();
-
             currentTargetDistance = defaultDistance;
+            PlayerCameraInput = CameraManager.Instance.CameraInput;
         }
+
+        private float zoomDelta;
 
         private void Update()
         {
+            zoomDelta = PlayerCameraInput.ZoomDelta;
             Zoom();
         }
 
         private void Zoom()
         {
-            float zoomDelta = Input.ZoomDelta * zoomSensitivity;
-
-            currentTargetDistance = Mathf.Clamp(currentTargetDistance + zoomDelta, minimumDistance, maximumDistance);
-            if (Mathf.Abs(Distance - currentTargetDistance) > 0.01f)
+            if (zoomDelta!=0)
             {
-                Distance = Mathf.Lerp(Distance, currentTargetDistance, smoothing * Time.deltaTime);
+                currentTargetDistance = Mathf.Clamp(currentTargetDistance + zoomDelta * zoomSensitivity, minimumDistance, maximumDistance);
 
             }
-            else { Distance = currentTargetDistance; }
+            Distance = Mathf.Lerp(Distance, currentTargetDistance, smoothing * Time.deltaTime);
+
         }
     }
 }

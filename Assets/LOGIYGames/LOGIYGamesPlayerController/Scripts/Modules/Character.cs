@@ -7,7 +7,7 @@ namespace LOGIYGames.CharacterCore
     {
         // TODO Make IInputReader Abstraction to change between AI/Player
         [Header("References")]
-        public IInputReader Input { get; set; }
+        public IMovementInputReader Input { get; set; }
         [field:SerializeField] public TargetingModule TargetingModule{  get; set; }
 
         public ControllerWrapperBase CController { get; set; }
@@ -123,7 +123,6 @@ namespace LOGIYGames.CharacterCore
             {
                 CurrentRotationStrategy = prevRotationStrategy;
             }
-            print(Input.FocusPressed);
         }
         private void SmoothHeightChanging()
         {
@@ -235,7 +234,7 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
 
-        public void TakeControl(IInputReader inputReader)
+        public void TakeControl(IMovementInputReader inputReader)
         {
             Input = inputReader;
             CurrentMovementStrategy = cameraRelativeMovement;
@@ -245,7 +244,7 @@ namespace LOGIYGames.CharacterCore
 
         public void ReleaseControl()
         {
-            Input = GetComponent<IInputReader>();
+            Input = GetComponent<IMovementInputReader>();
             CurrentMovementStrategy = inputRelativeMovement;
             CurrentRotationStrategy = inputRelativeRotation;
             prevRotationStrategy = CurrentRotationStrategy;

@@ -79,7 +79,7 @@ Material:
     - _M_SrcBlend: 5
     - _M_ZWrite: 0
     - _OutlineLightingMix: 1
-    - _OutlineWidth: 0
+    - _OutlineWidth: 0.0338
     - _OutlineWidthMode: 0
     - _RenderQueueOffset: -3
     - _RimFresnelPower: 100

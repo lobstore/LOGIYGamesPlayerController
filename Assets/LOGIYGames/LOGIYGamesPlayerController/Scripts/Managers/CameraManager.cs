@@ -10,7 +10,6 @@ namespace LOGIYGames
         ThirdPersonLookForward,
         Top_Down
     }
-
     public class CameraManager : Singleton<CameraManager>
     {
         [SerializeField] DragPointerHandler MobileInputReader;
@@ -24,6 +23,8 @@ namespace LOGIYGames
         CinemachineCameraController instance_ThirdPersonCameraController;
         CinemachineCameraController instance_TopDownCameraController;
 
+
+        [field: SerializeField] public PlayerCameraInput CameraInput {  get; private set; }
         [SerializeField] public CameraPerspectiveType CameraPerspectiveType;
         protected override void Initialize()
         {
@@ -42,6 +43,7 @@ namespace LOGIYGames
         }
         private void Start()
         {
+            CameraInput.Enable();
             Set3rdFreeLookView();
         }
         int index = 0;

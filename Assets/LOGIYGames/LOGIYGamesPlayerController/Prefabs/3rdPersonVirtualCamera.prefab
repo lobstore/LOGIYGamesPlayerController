@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 8448001709863631451}
   - component: {fileID: 2450535617189801227}
   - component: {fileID: 1843990008812083582}
-  - component: {fileID: 9100234294163511260}
+  - component: {fileID: -918887780970164633}
   m_Layer: 0
   m_Name: 3rdPersonVirtualCamera
   m_TagString: Untagged
@@ -184,6 +184,7 @@ MonoBehaviour:
   maximumDistance: 6
   smoothing: 4
   zoomSensitivity: 1
+  currentTargetDistance: 0
 --- !u!114 &4357187487791016319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,7 +258,7 @@ MonoBehaviour:
         AccelTime: 0.2
         DecelTime: 0.2
   PlayerIndex: -1
-  AutoEnableInputs: 1
+  AutoEnableInputs: 0
 --- !u!114 &1843990008812083582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,18 +298,18 @@ MonoBehaviour:
     NearLimit: 5
     FarLimit: 30
     MaxQualityBoost: 0.2
---- !u!114 &9100234294163511260
+--- !u!114 &-918887780970164633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5902921758408453199}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00bd081bbf967b646ac3b2af39435046, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CinemachineMobileInputCotroller
   ScanRecursively: 1
   SuppressInputWhileBlending: 1
   IgnoreTimeScale: 0

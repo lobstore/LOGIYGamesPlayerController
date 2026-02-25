@@ -9,7 +9,8 @@ namespace LOGIYGames.Animation
         [SerializeField] SensorsModule sensors;
         [SerializeField] Animator animator;
 
-        [SerializeField][Range(0, 0.5f)] private float animationsSmoothTime;
+        [SerializeField][Range(0, 0.5f)] private float locomotioAnimationsBlendTime;
+        [SerializeField][Range(0, 0.5f)] private float rotationAnimationsBlendTime;
 
         private void Awake()
         {
@@ -19,21 +20,21 @@ namespace LOGIYGames.Animation
         public override void OnFixedUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
-            animator.SetFloat("Speed", character.SpeedMultiplier, animationsSmoothTime, Time.deltaTime);
+            animator.SetFloat("Speed", character.SpeedMultiplier, locomotioAnimationsBlendTime, Time.deltaTime);
             if (character.CurrentRotationStrategy is CameraRelativeRotation or InputRelativeRotation)
             {
                 animator.SetFloat("HorizontalSpeed", 0);
             }
             else
             {
-                animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).x, animationsSmoothTime, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).x, locomotioAnimationsBlendTime, Time.deltaTime);
 
             }
-            animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).z, animationsSmoothTime, Time.deltaTime);
+            animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).z, locomotioAnimationsBlendTime, Time.deltaTime);
             animator.SetBool("IsMoving", character.Velocity.magnitude > 0 || character.DeltaYaw != 0);
             animator.SetBool("IsFalling", !sensors.IsGrounded);
             animator.SetBool("IsGrounded", sensors.IsGrounded);
-            animator.SetFloat("TurnAngle", character.DeltaYaw, animationsSmoothTime, Time.deltaTime);
+            animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
 
     }

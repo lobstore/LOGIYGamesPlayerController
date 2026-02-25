@@ -77,6 +77,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Focus",
+                    "type": "Button",
+                    "id": "bc47b8a6-573e-4066-befa-c20df2b922ed",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -242,6 +251,17 @@
                     "processors": "",
                     "groups": "Mouse",
                     "action": "Block",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f216bdce-8943-4fc4-a0d4-503a7f2fa42c",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse",
+                    "action": "Focus",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -582,15 +602,6 @@
                     "processors": "Clamp(min=-0.1,max=0.1);Invert",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Focus",
-                    "type": "Button",
-                    "id": "19444a48-41c3-4956-9a5b-d5ee7d63cfbb",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -624,17 +635,6 @@
                     "processors": "",
                     "groups": "Mouse",
                     "action": "Zoom",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d26a20f3-f845-4d86-aa83-2ce61cf3596d",
-                    "path": "<Mouse>/middleButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Mouse",
-                    "action": "Focus",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

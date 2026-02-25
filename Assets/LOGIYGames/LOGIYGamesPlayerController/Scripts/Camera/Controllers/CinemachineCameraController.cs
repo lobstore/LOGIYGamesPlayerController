@@ -5,11 +5,9 @@ namespace LOGIYGames
     public class CinemachineCameraController : MonoBehaviour
     {
 
-        Camera MainCamera;
         CinemachineCamera VirtualCamera;
         CinemachinePositionComposer CameraComposer;
         CinemachineFollowZoom FollowZoom;
-        public Transform CameraTransform { get => MainCamera.transform; }
         public Transform CameraFollowTarget { get => VirtualCamera?.Follow; set { if (VirtualCamera != null) { VirtualCamera.Follow = value; } } }
         public Transform CameraLookAtTarget { get => VirtualCamera?.LookAt; set { if (VirtualCamera != null) VirtualCamera.LookAt = value; } }
 
@@ -19,7 +17,6 @@ namespace LOGIYGames
         public int Priority { get => VirtualCamera.Priority; set { if (VirtualCamera != null) VirtualCamera.Priority = value; } }
         private void Awake()
         {
-            MainCamera = Camera.main;
             VirtualCamera = GetComponent<CinemachineCamera>();
             CameraComposer = GetComponent<CinemachinePositionComposer>();
             FollowZoom = GetComponent<CinemachineFollowZoom>();

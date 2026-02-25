@@ -1,5 +1,4 @@
 ﻿using LOGIYGames.Timers;
-using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -30,13 +29,6 @@ namespace LOGIYGames.Movement
         {
             base.Enter();
 
-            // Check cooldown before entering
-            if (!CanEnter())
-            {
-                Debug.LogWarning($"Cannot enter {GetType().Name} - cooldown is still running");
-                return;
-            }
-
             // Start duration timer
             if (_durationTimer != null)
             {
@@ -52,6 +44,7 @@ namespace LOGIYGames.Movement
             if (_durationTimer != null)
             {
                 _durationTimer.Stop();
+                _durationTimer.Reset();
             }
 
             // Start cooldown timer
@@ -73,9 +66,13 @@ namespace LOGIYGames.Movement
         {
             if (_cooldownTimer != null)
             {
-                return _cooldownTimer.IsFinished;
+                return !_cooldownTimer.IsRunning;
             }
-            return true;
+            else
+            {
+                return true;
+
+            }
         }
         public bool IsDurationTimerElapsed => _durationTimer?.IsFinished == true;
         public bool IsCooldownTimerElapsed => _cooldownTimer?.IsFinished == true;

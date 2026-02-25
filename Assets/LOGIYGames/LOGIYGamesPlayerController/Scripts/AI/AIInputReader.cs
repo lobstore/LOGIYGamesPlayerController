@@ -6,7 +6,7 @@ using LOGIYGames.AI;
 namespace LOGIYGames.Scripts.AI
 {
     [RequireComponent(typeof(AIBrainStateDriver))]
-	public class AIInputReader: MonoModuleBase, IInputReader
+	public class AIInputReader: MonoModuleBase, IMovementInputReader
 	{
         AIBrainStateDriver Driver;
 

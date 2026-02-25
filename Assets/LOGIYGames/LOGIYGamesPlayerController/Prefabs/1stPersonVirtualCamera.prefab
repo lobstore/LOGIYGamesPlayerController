@@ -237,7 +237,7 @@ MonoBehaviour:
         AccelTime: 0.2
         DecelTime: 0.2
   PlayerIndex: -1
-  AutoEnableInputs: 1
+  AutoEnableInputs: 0
 --- !u!114 &1740289185344008748
 MonoBehaviour:
   m_ObjectHideFlags: 0

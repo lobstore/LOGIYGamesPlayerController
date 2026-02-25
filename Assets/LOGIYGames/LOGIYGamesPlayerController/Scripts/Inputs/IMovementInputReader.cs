@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LOGIYGames.CharacterCore
 {
-    public interface IInputReader
+    public interface IMovementInputReader
     {
         Vector2 MovementInput { get;}
 
