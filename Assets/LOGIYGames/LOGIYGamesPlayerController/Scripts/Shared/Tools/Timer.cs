@@ -11,7 +11,7 @@ namespace LOGIYGames.Timers
         public float CurrentTime { get; set; }
         public bool IsRunning { get; protected set; }
 
-        public float Progress => Mathf.Clamp(CurrentTime / initialTime, 0, 1);
+        public virtual float Progress => Mathf.Clamp(CurrentTime / initialTime, 0, 1);
 
         public Action OnTimerStart = delegate { };
         public Action OnTimerStop = delegate { };

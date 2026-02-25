@@ -30,8 +30,6 @@ namespace LOGIYGames
 
         private void Update()
         {
-            print(Input.ZoomDelta);
-            print(Input.CameraInputsEnabled);
             Zoom();
         }
 

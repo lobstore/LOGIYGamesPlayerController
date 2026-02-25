@@ -1,3 +1,4 @@
+using LOGIYGames.Timers;
 using Unity.Netcode;
 using UnityEngine;
 using UniVRM10;
@@ -20,6 +21,8 @@ namespace LOGIYGames
         [Range(2f, 10f)] public float maxBlinkInterval = 6f;
         [Range(0.1f, 1f)] public float blinkDuration = 0.4f;
 
+
+
         [Header("Animation Curve")]
         public AnimationCurve blinkCurve = new AnimationCurve(
             new Keyframe(0f, 0f),
@@ -28,14 +31,16 @@ namespace LOGIYGames
             new Keyframe(1f, 0f)
         );
 
-        float CurrentBlinkValue;
-
         private int _blendshapeIndex = -1;
-        private float _timer;
+        private CountdownTimer _cooldonwTimer;
+        private CountdownTimer _blinkTimer;
+
         private float _nextBlinkTime;
 
         private void Awake()
         {
+            _blinkTimer = new(blinkDuration);
+            _cooldonwTimer = new(_nextBlinkTime = Random.Range(minBlinkInterval, maxBlinkInterval));
             _expressions = _vrm10.Runtime.Expression;
             if (skinnedMeshRenderer == null)
             {
@@ -53,42 +58,36 @@ namespace LOGIYGames
                 return;
             }
         }
+        
+        private void Start()
+        {
+
+
+            _cooldonwTimer.OnTimerStop = () => { _blinkTimer.Reset(); _blinkTimer.Start(); };
+            _blinkTimer.OnTimerStop = () => {_nextBlinkTime = Random.Range(minBlinkInterval, maxBlinkInterval); _cooldonwTimer.Reset(_nextBlinkTime); _cooldonwTimer.Start(); };
+            _blinkTimer.Start();
+
+        }
 
         private void OnEnable()
         {
-            ResetTimers();
             BlinkValue = 0;
-        }
-
-        private void ResetTimers()
-        {
-            _timer = 0f;
-            _nextBlinkTime = Random.Range(minBlinkInterval, maxBlinkInterval);
+            _blinkTimer.Start();
         }
 
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            _timer += Time.deltaTime;
-
-            if (_timer >= _nextBlinkTime)
-            {
-                PerformBlink();
-            }
+            PerformBlink();
         }
         private void PerformBlink()
         {
-            float blinkProgress = (_timer - _nextBlinkTime) / blinkDuration;
-
-            if (blinkProgress <= 1f)
-            {
-                BlinkValue = blinkCurve.Evaluate(blinkProgress);
-            }
-            else
-            {
-                ResetTimers();
-            }
+            BlinkValue = blinkCurve.Evaluate(_blinkTimer.Progress);
         }
+
+
+
+
         private void OnValidate()
         {
             if (minBlinkInterval > maxBlinkInterval)

@@ -21,6 +21,8 @@ namespace LOGIYGames.AI
         public bool EvadePressed { get; private set; }
         public bool CrouchPressed { get; private set; }
         public bool SprintPressed { get; private set; }
+        public bool FocusPressed { get; private set; }
+
 
         [Header("Detection Settings")]
         [SerializeField] private float detectionRange = 15f;
@@ -34,7 +36,7 @@ namespace LOGIYGames.AI
         [SerializeField] private float patrolArrivalThreshold = 0.5f;
 
         [Header("Target")]
-        [SerializeField] private Transform target;
+        [field:SerializeField] public TargetingModule TargetingModule {  get; private set; }
 
         [Header("Debug")]
         [SerializeField] private bool debugDraw = true;
@@ -54,8 +56,7 @@ namespace LOGIYGames.AI
         public float MinIdleDuration { get => minIdleDuration; set => minIdleDuration = value; }
         public float MaxIdleDuration { get => maxIdleDuration; set => maxIdleDuration = value; }
         public float PatrolArrivalThreshold { get => patrolArrivalThreshold; set => patrolArrivalThreshold = value; }
-        public Transform[] PatrolPoints1 { get => patrolPoints; set => patrolPoints = value; }
-        public Transform Target { get => target; set => target = value; }
+        public Transform Target { get => TargetingModule.Target; set => TargetingModule.Target = value; }
 
         private void Awake()
         {
@@ -93,9 +94,9 @@ namespace LOGIYGames.AI
 
         public bool HasLineOfSight()
         {
-            if (target == null) return false;
+            if (TargetingModule.Target == null) return false;
 
-            Vector3 direction = target.position - transform.position;
+            Vector3 direction = TargetingModule.Target.position - transform.position;
             float distance = direction.magnitude;
 
             if (distance > detectionRange) return false;
@@ -104,7 +105,7 @@ namespace LOGIYGames.AI
 
             if (Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, out RaycastHit hit, distance))
             {
-                return hit.transform == target || hit.transform.IsChildOf(target);
+                return hit.transform == TargetingModule.Target || hit.transform.IsChildOf(TargetingModule.Target);
             }
 
             return true;
@@ -112,9 +113,9 @@ namespace LOGIYGames.AI
 
         public bool IsTargetDetected()
         {
-            if (target == null) return false;
+            if (TargetingModule.Target == null) return false;
 
-            float distance = Vector3.Distance(transform.position, target.position);
+            float distance = Vector3.Distance(transform.position, TargetingModule.Target.position);
             if (distance > detectionRange) return false;
 
             return HasLineOfSight();
@@ -123,20 +124,20 @@ namespace LOGIYGames.AI
 
         public bool HasLostTarget()
         {
-            if (target == null) return true;
-            return Vector3.Distance(transform.position, target.position) > detectionRange * 1.5f;
+            if (TargetingModule.Target == null) return true;
+            return Vector3.Distance(transform.position, TargetingModule.Target.position) > detectionRange * 1.5f;
         }
 
         public float GetDistanceToTarget()
         {
-            return target == null ? float.MaxValue : Vector3.Distance(transform.position, target.position);
+            return TargetingModule.Target == null ? float.MaxValue : Vector3.Distance(transform.position, TargetingModule.Target.position);
         }
 
         public Vector3 GetDirectionToTarget()
         {
-            if (target == null) return transform.forward;
+            if (TargetingModule.Target == null) return transform.forward;
 
-            Vector3 direction = target.position - transform.position;
+            Vector3 direction = TargetingModule.Target.position - transform.position;
             direction.y = 0;
             return direction.normalized;
         }
@@ -145,6 +146,7 @@ namespace LOGIYGames.AI
             base.OnUpdate(deltaTime);
             if (_stateMachine == null) return;
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
+            FocusPressed = true ? Target!=null : false;
             _stateMachine.Update();
             if (navMeshAgent != null && navMeshAgent.hasPath && !navMeshAgent.pathPending)
             {
@@ -183,12 +185,12 @@ namespace LOGIYGames.AI
         }
         public void SetTarget(Transform newTarget)
         {
-            target = newTarget;
+            TargetingModule.Target = newTarget;
         }
 
         public void ClearTarget()
         {
-            target = null;
+            TargetingModule.Target = null;
         }
 
         private void OnDrawGizmosSelected()

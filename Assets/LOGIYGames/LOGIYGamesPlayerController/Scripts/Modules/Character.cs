@@ -1,8 +1,5 @@
-using LOGIYGames.AI;
-using LOGIYGames.Scripts.AI;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 namespace LOGIYGames.CharacterCore
 {
@@ -11,15 +8,24 @@ namespace LOGIYGames.CharacterCore
         // TODO Make IInputReader Abstraction to change between AI/Player
         [Header("References")]
         public IInputReader Input { get; set; }
-        public Transform Target;
+        [field:SerializeField] public TargetingModule TargetingModule{  get; set; }
+
         public ControllerWrapperBase CController { get; set; }
         // TODO Make Builder
         public IMovementStrategy CurrentMovementStrategy { get; set; }
         public IRotationStrategy CurrentRotationStrategy { get; set; }
 
-        [SerializeField] Animator Animator;
+        private CameraRelativeMovement cameraRelativeMovement;
+        private CameraRelativeRotation cameraRelativeRotation;
 
-        [SerializeField][Range(0,0.5f)] private float animationsSmoothTime;
+        private InputRelativeMovement inputRelativeMovement;
+        private InputRelativeRotation inputRelativeRotation;
+        private ToTargetRotation targetRelativeRotation;
+        private IRotationStrategy prevRotationStrategy;
+
+        public readonly UnityEvent OnJumpPerformed = new UnityEvent();
+        public readonly UnityEvent OnRollPerformed = new UnityEvent();
+
 
         #region VelocityVariables
 
@@ -76,8 +82,18 @@ namespace LOGIYGames.CharacterCore
 
         [field: SerializeField] public Transform CinemachineCameraLookAtTransform { get; set; }
         [field: SerializeField] public Transform CinemachineCameraFollowTransform { get; set; }
+        public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
 
         #endregion
+        private void Awake()
+        {
+            cameraRelativeMovement = new(this);
+            cameraRelativeRotation = new(this);
+
+            inputRelativeMovement = new(this);
+            inputRelativeRotation = new(this);
+            targetRelativeRotation = new(this);
+        }
 
         private void Start()
         {
@@ -93,25 +109,21 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnLateUpdate(deltaTime);
             SmoothHeightChanging();
-            Animator.SetFloat("Speed", SpeedMultiplier, animationsSmoothTime, Time.deltaTime);
-            if (CurrentRotationStrategy is CameraRelativeRotation or InputRelativeRotation)
-            {
-                Animator.SetFloat("HorizontalSpeed", 0);
-            }
-            else
-            {
-                Animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(velocity.normalized).x, animationsSmoothTime, Time.deltaTime);
 
-            }
-            Animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(velocity.normalized).z, animationsSmoothTime, Time.deltaTime);
-            Animator.SetBool("IsMoving", velocity.magnitude > 0 || deltaYaw!=0);
-            Animator.SetBool("IsFalling", !GetComponent<SensorsModule>().IsGrounded);
-            Animator.SetBool("IsGrounded", GetComponent<SensorsModule>().IsGrounded);
-            Animator.SetFloat("TurnAngle",deltaYaw, animationsSmoothTime, Time.deltaTime);
         }
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+            if (Input.FocusPressed)
+            {
+                CurrentRotationStrategy = targetRelativeRotation;
+
+            }
+            else
+            {
+                CurrentRotationStrategy = prevRotationStrategy;
+            }
+            print(Input.FocusPressed);
         }
         private void SmoothHeightChanging()
         {
@@ -175,7 +187,7 @@ namespace LOGIYGames.CharacterCore
         private void CalculateDeltaYaw(Quaternion targetRotation)
         {
             deltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y);
-            if (Mathf.Abs( deltaYaw )< 0.01f)
+            if (Mathf.Abs(deltaYaw) < 0.01f)
             {
                 deltaYaw = 0;
             }
@@ -195,7 +207,7 @@ namespace LOGIYGames.CharacterCore
             {
                 Velocity = Vector3.Lerp(Velocity, Vector3.zero, Deceleration * Time.deltaTime);
             }
-            if (velocity.magnitude<0.01f)
+            if (velocity.magnitude < 0.01f)
             {
                 Velocity = Vector3.zero;
             }
@@ -210,12 +222,13 @@ namespace LOGIYGames.CharacterCore
                 Vector3 cam = Camera.main.transform.forward;
                 Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * JumpPlanarForce;
             }
-            Animator.CrossFade("Jump", 0.05f);
+            OnJumpPerformed.Invoke();
             CController.Jump(JumpVerticalForce);
         }
 
         public void Roll()
         {
+            OnRollPerformed.Invoke();
             Jump();
             Velocity += transform.forward * JumpPlanarForce;
         }
@@ -225,15 +238,17 @@ namespace LOGIYGames.CharacterCore
         public void TakeControl(IInputReader inputReader)
         {
             Input = inputReader;
-            CurrentMovementStrategy = new CameraRelativeMovement(this);
-            CurrentRotationStrategy = new CameraRelativeRotation(this);
+            CurrentMovementStrategy = cameraRelativeMovement;
+            CurrentRotationStrategy = cameraRelativeRotation;
+            prevRotationStrategy = CurrentRotationStrategy;
         }
 
         public void ReleaseControl()
         {
             Input = GetComponent<IInputReader>();
-            CurrentMovementStrategy = new InputRelativeMovement(this);
-            CurrentRotationStrategy = new InputRelativeRotation(this);
+            CurrentMovementStrategy = inputRelativeMovement;
+            CurrentRotationStrategy = inputRelativeRotation;
+            prevRotationStrategy = CurrentRotationStrategy;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace LOGIYGames
         }
         public Quaternion GetRotation()
         {
-            if (Character.Target == null)
+            if (Character.TargetingModule.Target == null)
             {
                 float currentAngleY = Character.transform.eulerAngles.y;
                 Quaternion targetRotation = Quaternion.Euler(0f, currentAngleY, 0f);
@@ -20,7 +20,7 @@ namespace LOGIYGames
             }
             else
             {
-                Vector3 targetDirection = Character.Target.position - Character.transform.position;
+                Vector3 targetDirection = Character.TargetingModule.Target.position - Character.transform.position;
                 targetDirection.y = 0f;
                 return Quaternion.LookRotation(targetDirection);
             }

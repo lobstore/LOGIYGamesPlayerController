@@ -7,6 +7,7 @@ namespace LOGIYGames
     public class ModulesController : MonoBehaviour
     {
         List<IModule> modules = new();
+        List<IModule> enabledModules = new();
         private void Awake()
         {
             modules = GetComponents<IModule>().ToList();
@@ -16,18 +17,31 @@ namespace LOGIYGames
                 module.Initialize();
             }
             modules = modules.AsParallel().OrderBy(x => x.ModulePriority).ToList();
+            enabledModules=modules.Where(x => x.Enabled).ToList();
         }
         void Update()
         {
-            modules.ForEach((m) => { m.OnUpdate(Time.deltaTime); });
+            foreach (var module in enabledModules)
+            {
+                module.OnUpdate(Time.deltaTime); 
+                
+            }
         }
         private void FixedUpdate()
         {
-            modules.ForEach((m) => { m.OnFixedUpdate(Time.fixedDeltaTime); });
+            foreach (var module in enabledModules)
+            {
+                module.OnFixedUpdate(Time.deltaTime);
+
+            }
         }
         private void LateUpdate()
         {
-            modules.ForEach((m) => { m.OnLateUpdate(Time.deltaTime); });
+            foreach (var module in enabledModules)
+            {
+                module.OnLateUpdate(Time.deltaTime);
+
+            }
         }
     }
 }

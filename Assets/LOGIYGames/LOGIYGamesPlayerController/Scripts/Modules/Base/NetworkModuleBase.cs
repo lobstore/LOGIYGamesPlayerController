@@ -6,6 +6,8 @@ namespace LOGIYGames
     {
         public int ModulePriority { get; protected set; } = 0;
 
+        public bool Enabled => enabled;
+
         public virtual void Initialize()
         {
             if (!IsOwner) return;

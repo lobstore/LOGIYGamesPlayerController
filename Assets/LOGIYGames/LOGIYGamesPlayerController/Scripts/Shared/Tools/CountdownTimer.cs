@@ -18,7 +18,7 @@ namespace LOGIYGames.Timers
                 Stop();
             }
         }
-
+        public override float Progress => 1-base.Progress;
         public override bool IsFinished => CurrentTime <= 0;
 
     }

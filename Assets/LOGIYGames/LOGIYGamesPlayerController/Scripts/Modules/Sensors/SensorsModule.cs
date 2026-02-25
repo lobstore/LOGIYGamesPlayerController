@@ -27,18 +27,18 @@ namespace LOGIYGames
         private string m_aboveObstacleName;
         private string m_belowObstacleName;
 
-        Collider col;
+        [SerializeField] Collider col;
 
         // Detection origin calculated from capsule bounds
         public Vector3 DetectionOrigin
         {
             get
             {
-                    return new Vector3(
-                        col.bounds.center.x,
-                        col.bounds.center.y + m_detectionOriginYOffset,
-                        col.bounds.center.z
-                    );
+                return new Vector3(
+                    col.bounds.center.x,
+                    col.bounds.center.y + m_detectionOriginYOffset,
+                    col.bounds.center.z
+                );
             }
         }
 
@@ -63,15 +63,19 @@ namespace LOGIYGames
 
         private void Awake()
         {
-            col = GetComponent<Collider>();
+            if (col == null)
+            {
+                col = GetComponent<Collider>();
+
+            }
         }
-        
+
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
             PerformDetection();
         }
-        
+
         public override void OnLateUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
@@ -80,9 +84,9 @@ namespace LOGIYGames
                 UpdateDebugInfo();
             }
         }
-        
+
         public bool IsValidSlope()
-        {         
+        {
             float angle = Vector3.Angle(m_belowHit.normal, transform.up);
             bool validAngle = Mathf.Abs(angle) <= MaxStableSlopeAngle;
             return validAngle;
@@ -94,17 +98,17 @@ namespace LOGIYGames
             BelowObstaclesDetection();
 
             IsGrounded = Physics.SphereCast(
-                DetectionOrigin, 
-                m_castDownSphereRadius, 
-                -transform.up, 
-                out m_groundHit, 
-                m_groundCheckDistance, 
+                DetectionOrigin,
+                m_castDownSphereRadius,
+                -transform.up,
+                out m_groundHit,
+                m_groundCheckDistance,
                 m_groundLayers
             );
 
             GroundAngle = Vector3.SignedAngle(
-                transform.up, 
-                m_belowHit.normal, 
+                transform.up,
+                m_belowHit.normal,
                 transform.right
             );
             IsOnSlope = GroundAngle == 0 ? false : true;
@@ -113,11 +117,11 @@ namespace LOGIYGames
         private void BelowObstaclesDetection()
         {
             IsObstacleBelow = Physics.SphereCast(
-                DetectionOrigin, 
-                m_castDownSphereRadius, 
-                -transform.up, 
-                out m_belowHit, 
-                m_belowCheckDistance, 
+                DetectionOrigin,
+                m_castDownSphereRadius,
+                -transform.up,
+                out m_belowHit,
+                m_belowCheckDistance,
                 m_includeLayers
             );
         }
@@ -125,11 +129,11 @@ namespace LOGIYGames
         private void AboveObstaclesDetection()
         {
             IsObstacleAbove = Physics.SphereCast(
-                DetectionOrigin, 
-                m_castUpSphereRadius, 
-                transform.up, 
-                out m_aboveHit, 
-                m_upCheckDistance, 
+                DetectionOrigin,
+                m_castUpSphereRadius,
+                transform.up,
+                out m_aboveHit,
+                m_upCheckDistance,
                 m_includeLayers
             );
         }
@@ -142,14 +146,14 @@ namespace LOGIYGames
 
         private void OnDrawGizmos()
         {
-            
+
             if (!m_showDebugInfo) return;
 
             // Draw sphere casts
             DrawSphereCasts(DetectionOrigin);
             DrawBelowPlane();
         }
-        
+
         private void DrawBelowPlane()
         {
             DebugDraw.DrawPlane(m_belowHit.point, m_belowHit.normal, 1, Color.green);
