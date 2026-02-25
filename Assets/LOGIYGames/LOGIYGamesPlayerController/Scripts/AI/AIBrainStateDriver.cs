@@ -68,8 +68,8 @@ namespace LOGIYGames.AI
             navMeshAgent.updateRotation = false;
             navMeshAgent.updateUpAxis = false;
             navMeshAgent.updatePosition = true;
-            navMeshAgent.acceleration = 9999;
-            navMeshAgent.angularSpeed = 9999;
+            navMeshAgent.acceleration = 0;
+            navMeshAgent.angularSpeed = 0;
             navMeshAgent.speed = 0;
             navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.autoTraverseOffMeshLink = false;

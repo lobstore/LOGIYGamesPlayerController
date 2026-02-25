@@ -2,6 +2,7 @@ using LOGIYGames.AI;
 using LOGIYGames.Scripts.AI;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 namespace LOGIYGames.CharacterCore
 {
@@ -15,6 +16,8 @@ namespace LOGIYGames.CharacterCore
         // TODO Make Builder
         public IMovementStrategy CurrentMovementStrategy { get; set; }
         public IRotationStrategy CurrentRotationStrategy { get; set; }
+
+        [SerializeField] Animator Animator;
 
         #region VelocityVariables
 
@@ -53,6 +56,9 @@ namespace LOGIYGames.CharacterCore
         public float JumpPlanarForce { get; set; }
 
         private Vector3 velocity;
+        private float deltaYaw;
+        private float lastYRotation;
+        private float currentYRotation;
 
         #endregion
 
@@ -84,8 +90,18 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnLateUpdate(deltaTime);
             SmoothHeightChanging();
+            Animator.SetFloat("Speed", SpeedMultiplier, 0.1f, Time.deltaTime);
+            Animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(velocity.normalized).x, 0.1f, Time.deltaTime);
+            Animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(velocity.normalized).z, 0.1f, Time.deltaTime);
+            Animator.SetBool("IsMoving", velocity.magnitude > 0 || deltaYaw!=0);
+            Animator.SetBool("IsFalling", !GetComponent<SensorsModule>().IsGrounded);
+            Animator.SetBool("IsGrounded", GetComponent<SensorsModule>().IsGrounded);
+            Animator.SetFloat("TurnAngle",deltaYaw, 0.1f, Time.deltaTime);
         }
-
+        public override void OnUpdate(float deltaTime)
+        {
+            base.OnUpdate(deltaTime);
+        }
         private void SmoothHeightChanging()
         {
             if (Height == CController.Height && CController.Center.y == Height) return;
@@ -142,6 +158,16 @@ namespace LOGIYGames.CharacterCore
             {
                 CController.Rotate(targetRotation);
             }
+            CalculateDeltaYaw(targetRotation);
+        }
+
+        private void CalculateDeltaYaw(Quaternion targetRotation)
+        {
+            deltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y);
+            if (Mathf.Abs( deltaYaw )< 0.01f)
+            {
+                deltaYaw = 0;
+            }
         }
 
         #endregion
@@ -158,6 +184,10 @@ namespace LOGIYGames.CharacterCore
             {
                 Velocity = Vector3.Lerp(Velocity, Vector3.zero, Deceleration * Time.deltaTime);
             }
+            if (velocity.magnitude<0.01f)
+            {
+                Velocity = Vector3.zero;
+            }
             CController.Move(Velocity);
         }
 
@@ -169,6 +199,7 @@ namespace LOGIYGames.CharacterCore
                 Vector3 cam = Camera.main.transform.forward;
                 Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * JumpPlanarForce;
             }
+            Animator.CrossFade("Jump", 0.05f);
             CController.Jump(JumpVerticalForce);
         }
 

@@ -143,7 +143,7 @@ namespace LOGIYGames
         private void OnDrawGizmos()
         {
             
-            if (!m_showDebugInfo||col==null) return;
+            if (!m_showDebugInfo) return;
 
             // Draw sphere casts
             DrawSphereCasts(DetectionOrigin);
