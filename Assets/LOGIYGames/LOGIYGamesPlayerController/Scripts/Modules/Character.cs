@@ -19,6 +19,8 @@ namespace LOGIYGames.CharacterCore
 
         [SerializeField] Animator Animator;
 
+        [SerializeField][Range(0,0.5f)] private float animationsSmoothTime;
+
         #region VelocityVariables
 
         /// <summary>
@@ -60,6 +62,7 @@ namespace LOGIYGames.CharacterCore
         private float lastYRotation;
         private float currentYRotation;
 
+
         #endregion
 
         #region Height Properties
@@ -90,13 +93,21 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnLateUpdate(deltaTime);
             SmoothHeightChanging();
-            Animator.SetFloat("Speed", SpeedMultiplier, 0.1f, Time.deltaTime);
-            Animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(velocity.normalized).x, 0.1f, Time.deltaTime);
-            Animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(velocity.normalized).z, 0.1f, Time.deltaTime);
+            Animator.SetFloat("Speed", SpeedMultiplier, animationsSmoothTime, Time.deltaTime);
+            if (CurrentRotationStrategy is CameraRelativeRotation or InputRelativeRotation)
+            {
+                Animator.SetFloat("HorizontalSpeed", 0);
+            }
+            else
+            {
+                Animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(velocity.normalized).x, animationsSmoothTime, Time.deltaTime);
+
+            }
+            Animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(velocity.normalized).z, animationsSmoothTime, Time.deltaTime);
             Animator.SetBool("IsMoving", velocity.magnitude > 0 || deltaYaw!=0);
             Animator.SetBool("IsFalling", !GetComponent<SensorsModule>().IsGrounded);
             Animator.SetBool("IsGrounded", GetComponent<SensorsModule>().IsGrounded);
-            Animator.SetFloat("TurnAngle",deltaYaw, 0.1f, Time.deltaTime);
+            Animator.SetFloat("TurnAngle",deltaYaw, animationsSmoothTime, Time.deltaTime);
         }
         public override void OnUpdate(float deltaTime)
         {

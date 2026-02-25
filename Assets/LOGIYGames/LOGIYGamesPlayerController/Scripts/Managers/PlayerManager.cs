@@ -14,6 +14,7 @@ namespace LOGIYGames
         private void Start()
         {
             InputReader.EnableAllInputs();
+            InputReader.CameraInputsEnabled = true;
             SetCharacter(InitCharacter);
         }
         public void SetCharacter (IControllable character)

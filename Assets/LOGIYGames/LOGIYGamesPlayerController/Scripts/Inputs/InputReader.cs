@@ -20,7 +20,7 @@ namespace LOGIYGames
         GameObject lastUISelection;
         GameObject firstUISelection;
 
-        public bool CharacterInputsEnable
+        public bool CharacterInputsEnabled
         {
            
             get => gameInputs.CharacterInputs.enabled;
@@ -39,7 +39,7 @@ namespace LOGIYGames
             }
         }
 
-        public bool CameraInputsEnable
+        public bool CameraInputsEnabled
         {
             get => gameInputs.Camera.enabled;
             set
@@ -56,7 +56,7 @@ namespace LOGIYGames
                 }
             }
         }
-        public bool UIInputsEnable
+        public bool UIInputsEnabled
         {
             get => gameInputs.UI.enabled;
             set
@@ -71,7 +71,7 @@ namespace LOGIYGames
                 }
             }
         }
-        public bool GameControlInputsEnable
+        public bool GameControlInputsEnabled
         {
             get => gameInputs.GameControl.enabled;
             set
@@ -141,7 +141,6 @@ namespace LOGIYGames
         }
         public void EnableAllInputs()
         {
-            Debug.Log("EnableInputReader");
             gameInputs.Enable();
             //var evetnSystem = EventSystem.current;
             //if (evetnSystem == null)
@@ -200,8 +199,8 @@ namespace LOGIYGames
         {
             if (lastUISelection == null) lastUISelection = firstUISelection;
             EventSystem.current.SetSelectedGameObject(lastUISelection);
-            CharacterInputsEnable = false;
-            CameraInputsEnable = false;
+            CharacterInputsEnabled = false;
+            CameraInputsEnabled = false;
             Cursor.lockState = CursorLockMode.None;
             IsUIEngaged = true;
             UIEngaged?.Invoke();
@@ -212,8 +211,8 @@ namespace LOGIYGames
         {
             lastUISelection = EventSystem.current.currentSelectedGameObject;
             EventSystem.current.SetSelectedGameObject(null);
-            CharacterInputsEnable = true;
-            CameraInputsEnable = true;
+            CharacterInputsEnabled = true;
+            CameraInputsEnabled = true;
             Cursor.lockState = CursorLockMode.Locked;
             IsUIEngaged = false;
             UIDisengaged?.Invoke();

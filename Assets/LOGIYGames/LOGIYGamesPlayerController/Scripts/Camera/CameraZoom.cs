@@ -11,13 +11,13 @@ namespace LOGIYGames
 
         [SerializeField][Range(0f, 10f)] private float smoothing = 4f;
         [SerializeField][Range(0f, 10f)] private float zoomSensitivity = 1f;
+        [SerializeField][Range(0f, 10f)] private float currentTargetDistance;
 
         private CinemachinePositionComposer framingTransposer;
         private CinemachineInputAxisController inputProvider;
 
         private float Distance { get { return framingTransposer.CameraDistance; } set { framingTransposer.CameraDistance = value; } }
 
-        private float currentTargetDistance;
 
         private void Awake()
         {
@@ -30,13 +30,16 @@ namespace LOGIYGames
 
         private void Update()
         {
+            print(Input.ZoomDelta);
+            print(Input.CameraInputsEnabled);
             Zoom();
         }
 
         private void Zoom()
         {
-            float zoomValue = Input.ZoomDelta * zoomSensitivity;
-            currentTargetDistance = Mathf.Clamp(currentTargetDistance + zoomValue, minimumDistance, maximumDistance);
+            float zoomDelta = Input.ZoomDelta * zoomSensitivity;
+
+            currentTargetDistance = Mathf.Clamp(currentTargetDistance + zoomDelta, minimumDistance, maximumDistance);
             if (Mathf.Abs(Distance - currentTargetDistance) > 0.01f)
             {
                 Distance = Mathf.Lerp(Distance, currentTargetDistance, smoothing * Time.deltaTime);
