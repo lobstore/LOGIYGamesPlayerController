@@ -27,7 +27,7 @@ namespace LOGIYGames
                 return Quaternion.Euler(0f, currentAngleY, 0f);
             }
             
-            if (_character.Input.MovementInput.magnitude > 0.01f)
+            if (_character.Input.MovementInput.magnitude > 0)
             {
                 // Calculate target angle from movement input
                 // Atan2 returns angle in radians, convert to degrees

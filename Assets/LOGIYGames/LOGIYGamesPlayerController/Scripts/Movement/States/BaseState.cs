@@ -32,7 +32,7 @@ namespace LOGIYGames.Movement
             _character.SpeedMultiplier = _data.Speed;
             if (_character.CurrentRotationStrategy == null)
             {
-                _character.CurrentRotationStrategy = new NoneRotation();
+                _character.CurrentRotationStrategy = new NoneRotation(_character.transform);
 
             }
             if (_character.CurrentMovementStrategy == null)
@@ -45,6 +45,14 @@ namespace LOGIYGames.Movement
 
         public virtual void LogicUpdate()
         {
+            if (_character.Input.MovementInput.magnitude > 0)
+            {
+                _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, _data.Speed, _character.Acceleration * Time.deltaTime);
+            }
+            else
+            {
+                _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, 0, _character.Deceleration * Time.deltaTime);
+            }
         }
 
         public virtual void LateUpdate() { }

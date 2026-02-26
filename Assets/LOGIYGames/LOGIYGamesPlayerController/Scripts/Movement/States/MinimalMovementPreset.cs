@@ -14,6 +14,7 @@ namespace LOGIYGames
         public MovementStateData sprintStateData;
         public MovementStateData fallingStateData;
         public JumpStateData groundJumpStateData;
+        public JumpStateData rollStateData;
 
 
         private IdleState _idleState;
@@ -21,6 +22,7 @@ namespace LOGIYGames
         private FallingState _fallingState;
         private SprintState _sprintState;
         private JumpState _groundJumpState;
+        private RollState _rollState;
 
         private void InitializeStates(MovementStateDriver MovementStateDriver)
         {
@@ -29,7 +31,7 @@ namespace LOGIYGames
             _sprintState = new SprintState(MovementStateDriver, sprintStateData);
             _fallingState = new FallingState(MovementStateDriver, fallingStateData);
             _groundJumpState = new JumpState(MovementStateDriver, groundJumpStateData);
-
+            _rollState = new RollState(MovementStateDriver, rollStateData);
 
         }
         private void ConfigureTransitions(MovementStateDriver MovementStateDriver)
@@ -37,6 +39,11 @@ namespace LOGIYGames
             MovementStateDriver.AddAnyTransition(_fallingState, () =>
             !MovementStateDriver.Sensors.IsGrounded
             && !_groundJumpState.IsDurationTimerRunning
+            && !_rollState.IsDurationTimerRunning
+            );
+            MovementStateDriver.AddAnyTransition(_rollState, () =>
+            MovementStateDriver.Sensors.IsGrounded
+            && MovementStateDriver.Character.Input.EvadePressed
             );
             // ----- Idle State Transitions -----
             MovementStateDriver.AddTransition(_idleState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
@@ -56,10 +63,12 @@ namespace LOGIYGames
             MovementStateDriver.AddTransition(_sprintState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
 
             // ----- Jump State Transitions -----
-            MovementStateDriver.AddTransition(_groundJumpState, _runState, () => MovementStateDriver.Sensors.IsGrounded);
+            MovementStateDriver.AddTransition(_groundJumpState, _runState, () => MovementStateDriver.Sensors.IsGrounded && !_groundJumpState.IsDurationTimerRunning);
 
             // ----- Falling State Transitions -----
             MovementStateDriver.AddTransition(_fallingState, _idleState, () => MovementStateDriver.Sensors.IsGrounded);
+            // ----- Roll State Transitions -----
+            MovementStateDriver.AddTransition(_rollState, _runState, () => MovementStateDriver.Sensors.IsGrounded&& !_rollState.IsDurationTimerRunning);
 
         }
 

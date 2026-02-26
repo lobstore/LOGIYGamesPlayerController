@@ -44,7 +44,6 @@ namespace LOGIYGames.Movement
             if (_durationTimer != null)
             {
                 _durationTimer.Stop();
-                _durationTimer.Reset();
             }
 
             // Start cooldown timer

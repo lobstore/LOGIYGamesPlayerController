@@ -18,7 +18,7 @@ namespace LOGIYGames.Movement
         [Header("State Machine Configuration")]
         public MovementStatesPresetBase movementPreset;
         private StateMachine _stateMachine;
-
+        [SerializeField] private ControllerWrapperBase controller;
         #region Debug
 
         private string _currentStateName;
@@ -28,7 +28,7 @@ namespace LOGIYGames.Movement
 
         private void Awake()
         {
-            Character.CController = GetComponent<ControllerWrapperBase>();
+            Character.CController = controller;
             InitializeStateMachine();
         }
 

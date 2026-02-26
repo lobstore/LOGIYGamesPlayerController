@@ -6,29 +6,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 namespace LOGIYGames
 {
-    public class LevelLoader : MonoBehaviour
+    public class LevelLoader : Singleton<LevelLoader>
     {
-
-        public static LevelLoader Instance;
         public TextMeshProUGUI loadingPercentrage;
         public Image loadingProgressBar;
         private Animator m_Animator;
 
         AsyncOperation newSceneLoadingOperation;
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                m_Animator = GetComponent<Animator>();
 
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-
-        }
 
         private void Update()
         {

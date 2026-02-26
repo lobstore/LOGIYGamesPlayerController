@@ -21,10 +21,9 @@ namespace LOGIYGames.CharacterCore
         private InputRelativeMovement inputRelativeMovement;
         private InputRelativeRotation inputRelativeRotation;
         private ToTargetRotation targetRelativeRotation;
-        private IRotationStrategy prevRotationStrategy;
 
-        public readonly UnityEvent OnJumpPerformed = new UnityEvent();
-        public readonly UnityEvent OnRollPerformed = new UnityEvent();
+        public readonly UnityEvent<bool> OnJump = new();
+        public readonly UnityEvent<bool> OnRoll = new();
 
 
         #region VelocityVariables
@@ -114,15 +113,6 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            if (Input.FocusPressed)
-            {
-                CurrentRotationStrategy = targetRelativeRotation;
-
-            }
-            else
-            {
-                CurrentRotationStrategy = prevRotationStrategy;
-            }
         }
         private void SmoothHeightChanging()
         {
@@ -201,6 +191,7 @@ namespace LOGIYGames.CharacterCore
             if (Input.MovementInput.magnitude > 0)
             {
                 Velocity = Vector3.Lerp(Velocity, moveDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
+
             }
             else
             {
@@ -221,13 +212,11 @@ namespace LOGIYGames.CharacterCore
                 Vector3 cam = Camera.main.transform.forward;
                 Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * JumpPlanarForce;
             }
-            OnJumpPerformed.Invoke();
             CController.Jump(JumpVerticalForce);
         }
 
         public void Roll()
         {
-            OnRollPerformed.Invoke();
             Jump();
             Velocity += transform.forward * JumpPlanarForce;
         }
@@ -239,7 +228,6 @@ namespace LOGIYGames.CharacterCore
             Input = inputReader;
             CurrentMovementStrategy = cameraRelativeMovement;
             CurrentRotationStrategy = cameraRelativeRotation;
-            prevRotationStrategy = CurrentRotationStrategy;
         }
 
         public void ReleaseControl()
@@ -247,7 +235,6 @@ namespace LOGIYGames.CharacterCore
             Input = GetComponent<IMovementInputReader>();
             CurrentMovementStrategy = inputRelativeMovement;
             CurrentRotationStrategy = inputRelativeRotation;
-            prevRotationStrategy = CurrentRotationStrategy;
         }
     }
 }

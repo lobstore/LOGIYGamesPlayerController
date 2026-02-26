@@ -14,8 +14,17 @@ namespace LOGIYGames.Animation
 
         private void Awake()
         {
-            character.OnJumpPerformed.AddListener(() => { animator.CrossFade("Jump", 0.05f); });
-            character.OnRollPerformed.AddListener(() => { animator.CrossFade("Roll", 0.05f); });
+            character.OnJump.AddListener((x) =>
+            {
+                if (x)
+                animator.CrossFade("Jump", 0.05f);
+                animator.SetBool("IsJumping",x);
+            });
+            character.OnRoll.AddListener((x) => {
+                if (x)
+                animator.CrossFade("Rolling", 0.05f);
+                animator.SetBool("IsRolling", x);
+            });
         }
         public override void OnFixedUpdate(float deltaTime)
         {
@@ -24,13 +33,15 @@ namespace LOGIYGames.Animation
             if (character.CurrentRotationStrategy is CameraRelativeRotation or InputRelativeRotation)
             {
                 animator.SetFloat("HorizontalSpeed", 0);
+                animator.SetFloat("VerticalSpeed", character.SpeedMultiplier, locomotioAnimationsBlendTime, Time.deltaTime);
             }
             else
             {
+                animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).z, locomotioAnimationsBlendTime, Time.deltaTime);
                 animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).x, locomotioAnimationsBlendTime, Time.deltaTime);
 
             }
-            animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).z, locomotioAnimationsBlendTime, Time.deltaTime);
+
             animator.SetBool("IsMoving", character.Velocity.magnitude > 0 || character.DeltaYaw != 0);
             animator.SetBool("IsFalling", !sensors.IsGrounded);
             animator.SetBool("IsGrounded", sensors.IsGrounded);

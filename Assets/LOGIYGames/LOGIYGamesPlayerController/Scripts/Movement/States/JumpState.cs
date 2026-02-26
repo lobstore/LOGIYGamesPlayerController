@@ -1,10 +1,5 @@
 ﻿namespace LOGIYGames.Movement
 {
-
-
-    /// <summary>
-    /// Jump state with timer - transitions to Fall only after jump arc completes
-    /// </summary>
     public class JumpState : TimedState
     {
         private JumpStateData _stateData;
@@ -20,6 +15,12 @@
             _character.JumpVerticalForce = _stateData.VerticalJumpForce;
             _character.JumpPlanarForce = _stateData.PlanarJumpForce;
             _character.Jump();
+            _character.OnJump.Invoke(true);
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            _character.OnJump.Invoke(false);
         }
     }
 

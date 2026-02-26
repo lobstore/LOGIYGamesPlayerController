@@ -38,11 +38,11 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
             // Дополнительная инициализация
             Initialize();
         }
-        //else if (_instance != this)
-        //{
-        //    Debug.LogWarning($"[Singleton] Удаляем дубликат экземпляра {typeof(T)}");
-        //    Destroy(gameObject);
-        //}
+        else if (_instance != this)
+        {
+            Debug.LogWarning($"[Singleton] Удаляем дубликат экземпляра {typeof(T)}");
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

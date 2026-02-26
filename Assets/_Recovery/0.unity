@@ -44009,41 +44009,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
-    - target: {fileID: 1855765447984481519, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: agent
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1855765447984481519, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: character
-      value: 
-      objectReference: {fileID: 6718191764129459927}
-    - target: {fileID: 1855765447984481519, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: sensorModule
-      value: 
-      objectReference: {fileID: 6718191764129459940}
-    - target: {fileID: 1855765447984481519, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: characterController
-      value: 
-      objectReference: {fileID: 6718191764129459938}
-    - target: {fileID: 1855765447984481519, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: characterGravityModule
-      value: 
-      objectReference: {fileID: 6718191764129459937}
-    - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_sensors
-      value: 
-      objectReference: {fileID: 6718191764129459940}
-    - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_character
-      value: 
-      objectReference: {fileID: 6718191764129459927}
     - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: BaseGravityForce
       value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_controllerWrapper
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3732176754581607695, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_LocalPosition.x
@@ -44091,7 +44059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: rotationAnimationsBlendTime
-      value: 0.2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: locomotioAnimationsBlendTime
@@ -44100,14 +44068,6 @@ PrefabInstance:
     - target: {fileID: 4665650652985215719, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4882173074196649706, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4882173074196649706, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: navMeshAgent
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4882173074196649706, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
@@ -44129,44 +44089,22 @@ PrefabInstance:
       propertyPath: 'patrolPoints.Array.data[4]'
       value: 
       objectReference: {fileID: 1917523428}
-    - target: {fileID: 5306282931010333550, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6657963720063885413, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_SkinWidth
       value: 0.0001
       objectReference: {fileID: 0}
     - target: {fileID: 7766635551810355105, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7766635551810355105, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_BaseOffset
       value: -0.1
       objectReference: {fileID: 0}
-    - target: {fileID: 9160473370093739834, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: controller
-      value: 
-      objectReference: {fileID: 6718191764129459945}
-    m_RemovedComponents:
-    - {fileID: 1855765447984481519, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-    - {fileID: 7766635551810355105, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6718191764129459945}
     - targetCorrespondingSourceObject: {fileID: 2787143992442695444, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1862495795}
   m_SourcePrefab: {fileID: 100100000, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
---- !u!1 &354810366595266590 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2324911943303090081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44430,52 +44368,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
   m_PrefabInstance: {fileID: 354810366595266589}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 354810366595266590}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d4d1c4cabaa87f439bd975e3bbabc3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
---- !u!114 &6718191764129459937 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 354810366595266590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01b1a392b9d7c8d449075a2afbdee374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterGravityModule
---- !u!143 &6718191764129459938 stripped
-CharacterController:
-  m_CorrespondingSourceObject: {fileID: 6657963720063885413, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6718191764129459940 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 354810366595266590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1231c0fd016cc941a15bea9993fe88e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.SensorsModule
---- !u!114 &6718191764129459945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 354810366595266590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dc25859b5be7e44b8bb7ec724b6571e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterControllerWrapper
-  m_applyGravityWhenGrounded: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

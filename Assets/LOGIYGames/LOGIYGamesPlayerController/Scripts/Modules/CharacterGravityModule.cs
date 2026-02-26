@@ -25,18 +25,8 @@ namespace LOGIYGames
         public bool UseGravity { get => useGravity; set => useGravity = value; }
         
         [Header("References")]
-        private ControllerWrapperBase m_controllerWrapper;
-        private SensorsModule m_sensors;
-        private Character m_character;
-        
-        private void Awake()
-        {
-            m_controllerWrapper = GetComponent<ControllerWrapperBase>();
-            m_sensors = GetComponent<SensorsModule>();
-            m_character = GetComponent<Character>();
-            
-            Debug.Assert(m_controllerWrapper != null, "Error (CharacterGravityModule): Could not find GenericControllerWrapper component");
-        }
+        [SerializeField] private SensorsModule m_sensors;
+        [SerializeField] private Character m_character;
         
         public override void OnFixedUpdate(float fixedDeltaTime)
         {

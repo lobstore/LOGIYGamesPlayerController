@@ -91,34 +91,33 @@ namespace LOGIYGames
 
         public override void Move(Vector3 a_move)
         {
-            Vector3 totalVelocity = a_move + m_characterGravityModule.Velocity;
             if (m_sensors.IsValidSlope())
             {
                 if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.Input.MovementInput.magnitude > 0)
                 {
-                    ProjectVelocity(totalVelocity);
+                    ProjectVelocity(a_move);
 
                 }
                 else
                 {
-                    targetVelocity = totalVelocity;
+                    targetVelocity = a_move;
                 }
             }
             else
             {
-                ProjectVelocity(totalVelocity);
+                ProjectVelocity(a_move);
             }
-            
+            Vector3 totalVelocity = targetVelocity + m_characterGravityModule.Velocity;
 
             if (m_enableCollision)
             {
 
-                m_characterController.Move(targetVelocity * Time.deltaTime);
+                m_characterController.Move(totalVelocity * Time.deltaTime);
             }
             else
             {
 
-                m_characterController.transform.Translate(targetVelocity * Time.deltaTime, Space.World);
+                m_characterController.transform.Translate(totalVelocity * Time.deltaTime, Space.World);
             }
         }
 

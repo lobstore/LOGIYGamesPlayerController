@@ -6,19 +6,28 @@
     /// </summary>
     public class RollState : TimedState
     {
-        private RollStateData _stateData;
+        private JumpStateData _stateData;
 
-        public RollState(MovementStateDriver ctx, RollStateData stateData) : base(ctx, stateData)
+        public RollState(MovementStateDriver ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
         }
-
+        IRotationStrategy prev;
         public override void Enter()
         {
             base.Enter();
-            _character.JumpVerticalForce = _stateData.VerticalForce;
-            _character.JumpPlanarForce = _stateData.PlanarForce;
+            _character.JumpVerticalForce = _stateData.VerticalJumpForce;
+            _character.JumpPlanarForce = _stateData.PlanarJumpForce;
             _character.Roll();
+            prev = _character.CurrentRotationStrategy;
+            _character.CurrentRotationStrategy = new NoneRotation(_character.transform);
+            _character.OnRoll.Invoke(true);
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            _character.OnRoll.Invoke(false);
+            _character.CurrentRotationStrategy = prev;
         }
     }
 
