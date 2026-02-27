@@ -1,6 +1,6 @@
 ﻿namespace LOGIYGames.Movement
 {
-    public class WalkState : BaseState
+    public class WalkState : BaseMovementState
     {
         public WalkState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData) { }
     }

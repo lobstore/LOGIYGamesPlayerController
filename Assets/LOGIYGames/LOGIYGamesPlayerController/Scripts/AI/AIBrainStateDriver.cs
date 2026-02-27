@@ -35,9 +35,6 @@ namespace LOGIYGames.AI
         [SerializeField] private float maxIdleDuration = 5f;
         [SerializeField] private float patrolArrivalThreshold = 0.5f;
 
-        [Header("Target")]
-        [field:SerializeField] public TargetingModule TargetingModule {  get; private set; }
-
         [Header("Debug")]
         [SerializeField] private bool debugDraw = true;
         private string currentStateName;
@@ -56,7 +53,8 @@ namespace LOGIYGames.AI
         public float MinIdleDuration { get => minIdleDuration; set => minIdleDuration = value; }
         public float MaxIdleDuration { get => maxIdleDuration; set => maxIdleDuration = value; }
         public float PatrolArrivalThreshold { get => patrolArrivalThreshold; set => patrolArrivalThreshold = value; }
-        public Transform Target { get => TargetingModule.Target; set => TargetingModule.Target = value; }
+
+        public Transform Target;
 
         private void Awake()
         {
@@ -94,9 +92,9 @@ namespace LOGIYGames.AI
 
         public bool HasLineOfSight()
         {
-            if (TargetingModule.Target == null) return false;
+            if (Target == null) return false;
 
-            Vector3 direction = TargetingModule.Target.position - transform.position;
+            Vector3 direction = Target.position - transform.position;
             float distance = direction.magnitude;
 
             if (distance > detectionRange) return false;
@@ -105,7 +103,7 @@ namespace LOGIYGames.AI
 
             if (Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, out RaycastHit hit, distance))
             {
-                return hit.transform == TargetingModule.Target || hit.transform.IsChildOf(TargetingModule.Target);
+                return hit.transform == Target || hit.transform.IsChildOf(Target);
             }
 
             return true;
@@ -113,9 +111,9 @@ namespace LOGIYGames.AI
 
         public bool IsTargetDetected()
         {
-            if (TargetingModule.Target == null) return false;
+            if (Target == null) return false;
 
-            float distance = Vector3.Distance(transform.position, TargetingModule.Target.position);
+            float distance = Vector3.Distance(transform.position, Target.position);
             if (distance > detectionRange) return false;
 
             return HasLineOfSight();
@@ -124,20 +122,20 @@ namespace LOGIYGames.AI
 
         public bool HasLostTarget()
         {
-            if (TargetingModule.Target == null) return true;
-            return Vector3.Distance(transform.position, TargetingModule.Target.position) > detectionRange * 1.5f;
+            if (Target == null) return true;
+            return Vector3.Distance(transform.position, Target.position) > detectionRange * 1.5f;
         }
 
         public float GetDistanceToTarget()
         {
-            return TargetingModule.Target == null ? float.MaxValue : Vector3.Distance(transform.position, TargetingModule.Target.position);
+            return Target == null ? float.MaxValue : Vector3.Distance(transform.position, Target.position);
         }
 
         public Vector3 GetDirectionToTarget()
         {
-            if (TargetingModule.Target == null) return transform.forward;
+            if (Target == null) return transform.forward;
 
-            Vector3 direction = TargetingModule.Target.position - transform.position;
+            Vector3 direction = Target.position - transform.position;
             direction.y = 0;
             return direction.normalized;
         }
@@ -183,16 +181,6 @@ namespace LOGIYGames.AI
                 navMeshAgent.ResetPath();
             }
         }
-        public void SetTarget(Transform newTarget)
-        {
-            TargetingModule.Target = newTarget;
-        }
-
-        public void ClearTarget()
-        {
-            TargetingModule.Target = null;
-        }
-
         private void OnDrawGizmosSelected()
         {
             if (!debugDraw) return;

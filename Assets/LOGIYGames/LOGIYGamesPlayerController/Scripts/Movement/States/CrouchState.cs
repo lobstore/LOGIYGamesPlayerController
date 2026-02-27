@@ -6,7 +6,7 @@
 
     #region Movement States
 
-    public class CrouchState : BaseState
+    public class CrouchState : BaseMovementState
     {
         protected float StandingHeight;
         protected float CrouchHeight;

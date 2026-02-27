@@ -1,7 +1,5 @@
-using LOGIYGames.AI;
 using LOGIYGames.CharacterCore;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace LOGIYGames.Movement
@@ -19,6 +17,9 @@ namespace LOGIYGames.Movement
         public MovementStatesPresetBase movementPreset;
         private StateMachine _stateMachine;
         [SerializeField] private ControllerWrapperBase controller;
+
+
+
         #region Debug
 
         private string _currentStateName;
@@ -28,6 +29,7 @@ namespace LOGIYGames.Movement
 
         private void Awake()
         {
+
             Character.CController = controller;
             InitializeStateMachine();
         }
@@ -35,9 +37,9 @@ namespace LOGIYGames.Movement
         private void InitializeStateMachine()
         {
             _stateMachine = new StateMachine();
-            if (movementPreset!=null)
+            if (movementPreset != null)
             {
-            movementPreset.Init(this);
+                movementPreset.Init(this);
 
             }
             else
@@ -68,7 +70,7 @@ namespace LOGIYGames.Movement
             _stateMachine.AddTransition(from, to, new FuncPredicate(condition));
         }
 
-        public void AddAnyTransition( IState to, Func<bool> condition)
+        public void AddAnyTransition(IState to, Func<bool> condition)
         {
             _stateMachine.AddAnyTransition(to, new FuncPredicate(condition));
         }

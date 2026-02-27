@@ -8,24 +8,16 @@ namespace LOGIYGames.CharacterCore
         // TODO Make IInputReader Abstraction to change between AI/Player
         [Header("References")]
         public IMovementInputReader Input { get; set; }
-        [field:SerializeField] public TargetingModule TargetingModule{  get; set; }
+
+        public Transform Target;
 
         public ControllerWrapperBase CController { get; set; }
         // TODO Make Builder
         public IMovementStrategy CurrentMovementStrategy { get; set; }
         public IRotationStrategy CurrentRotationStrategy { get; set; }
 
-        private CameraRelativeMovement cameraRelativeMovement;
-        private CameraRelativeRotation cameraRelativeRotation;
-
-        private InputRelativeMovement inputRelativeMovement;
-        private InputRelativeRotation inputRelativeRotation;
-        private ToTargetRotation targetRelativeRotation;
-
-        public readonly UnityEvent<bool> OnJump = new();
-        public readonly UnityEvent<bool> OnRoll = new();
-
-
+        public IMovementStrategy DefaultMovementStrategy { get; set; }
+        public IRotationStrategy DefaultRotaionStrategy { get; set; }
         #region VelocityVariables
 
         /// <summary>
@@ -84,15 +76,6 @@ namespace LOGIYGames.CharacterCore
         public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
 
         #endregion
-        private void Awake()
-        {
-            cameraRelativeMovement = new(this);
-            cameraRelativeRotation = new(this);
-
-            inputRelativeMovement = new(this);
-            inputRelativeRotation = new(this);
-            targetRelativeRotation = new(this);
-        }
 
         private void Start()
         {
@@ -100,7 +83,8 @@ namespace LOGIYGames.CharacterCore
             CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
             CController.Height = Height;
             CController.Center = new Vector3(0, Height / 2.0f, 0);
-
+            DefaultMovementStrategy = new CameraRelativeMovement(this);
+            DefaultRotaionStrategy = new CameraRelativeRotation(this);
 
         }
 
@@ -223,18 +207,9 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
 
-        public void TakeControl(IMovementInputReader inputReader)
+        public void SetInputReader(IMovementInputReader inputReader)
         {
             Input = inputReader;
-            CurrentMovementStrategy = cameraRelativeMovement;
-            CurrentRotationStrategy = cameraRelativeRotation;
-        }
-
-        public void ReleaseControl()
-        {
-            Input = GetComponent<IMovementInputReader>();
-            CurrentMovementStrategy = inputRelativeMovement;
-            CurrentRotationStrategy = inputRelativeRotation;
         }
     }
 }

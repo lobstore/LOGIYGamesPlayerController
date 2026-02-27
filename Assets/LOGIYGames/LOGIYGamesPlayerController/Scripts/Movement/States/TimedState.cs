@@ -6,7 +6,7 @@ namespace LOGIYGames.Movement
     /// Base state with timer/cooldown support using CountdownTimer
     /// Supports both duration (minimum time in state) and cooldown (delay before re-entry)
     /// </summary>
-    public abstract class TimedState : BaseState
+    public abstract class TimedState : BaseMovementState
     {
         protected CountdownTimer _durationTimer;
         protected CountdownTimer _cooldownTimer;

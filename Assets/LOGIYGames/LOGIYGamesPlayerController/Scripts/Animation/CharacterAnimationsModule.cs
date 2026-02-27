@@ -14,17 +14,17 @@ namespace LOGIYGames.Animation
 
         private void Awake()
         {
-            character.OnJump.AddListener((x) =>
-            {
-                if (x)
-                animator.CrossFade("Jump", 0.05f);
-                animator.SetBool("IsJumping",x);
-            });
-            character.OnRoll.AddListener((x) => {
-                if (x)
-                animator.CrossFade("Rolling", 0.05f);
-                animator.SetBool("IsRolling", x);
-            });
+            //character.OnJump.AddListener((x) =>
+            //{
+            //    if (x)
+            //    animator.CrossFade("Jump", 0.05f);
+            //    animator.SetBool("IsJumping",x);
+            //});
+            //character.OnRoll.AddListener((x) => {
+            //    if (x)
+            //    animator.CrossFade("Rolling", 0.05f);
+            //    animator.SetBool("IsRolling", x);
+            //});
         }
         public override void OnFixedUpdate(float deltaTime)
         {
@@ -43,7 +43,6 @@ namespace LOGIYGames.Animation
             }
 
             animator.SetBool("IsMoving", character.Velocity.magnitude > 0 || character.DeltaYaw != 0);
-            animator.SetBool("IsFalling", !sensors.IsGrounded);
             animator.SetBool("IsGrounded", sensors.IsGrounded);
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }

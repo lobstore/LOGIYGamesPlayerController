@@ -1,6 +1,6 @@
 ﻿namespace LOGIYGames.Movement
 {
-    public class StopState : BaseState
+    public class StopState : BaseMovementState
     {
         public StopState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData) { }
     }

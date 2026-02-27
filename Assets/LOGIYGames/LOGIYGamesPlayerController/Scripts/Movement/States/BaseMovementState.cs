@@ -1,6 +1,7 @@
 ﻿using LOGIYGames.CharacterCore;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LOGIYGames.Movement
 {
@@ -8,12 +9,17 @@ namespace LOGIYGames.Movement
     /// Abstract base class for states with common functionality
     /// </summary>
     [Serializable]
-    public abstract class BaseState : IState
+    public abstract class BaseMovementState : IState
     {
         protected Character _character;
         protected MovementStateData _data;
-
-        protected BaseState(MovementStateDriver ctx, MovementStateData stateData)
+        // Что планируется
+        //public readonly UnityEvent OnStateEnter = new();
+        //public readonly UnityEvent OnStateExit = new();
+        //public readonly UnityEvent OnStateUpdate = new();
+        //public readonly UnityEvent OnStateFixedUpdate = new();
+        //public readonly UnityEvent OnStateLateUpdate = new();
+        protected BaseMovementState(MovementStateDriver ctx, MovementStateData stateData)
         {
             _data = new();
             _character = ctx.Character;
@@ -21,30 +27,29 @@ namespace LOGIYGames.Movement
             _data.Deceleration = stateData.Deceleration;
             _data.TurnSmoothTime = stateData.TurnSmoothTime;
             _data.Speed = stateData.Speed;
-
         }
 
         public virtual void Enter()
         {
+            //OnStateEnter.Invoke();
+            _character.JumpPlanarForce = 0;
+            _character.JumpVerticalForce = 0;
+            _character.CurrentMovementStrategy = _character.DefaultMovementStrategy;
+            _character.CurrentRotationStrategy = _character.DefaultRotaionStrategy;
             _character.Acceleration = _data.Acceleration;
             _character.Deceleration = _data.Deceleration;
             _character.TurnSmoothTime = _data.TurnSmoothTime;
             _character.SpeedMultiplier = _data.Speed;
-            if (_character.CurrentRotationStrategy == null)
-            {
-                _character.CurrentRotationStrategy = new NoneRotation(_character.transform);
-
-            }
-            if (_character.CurrentMovementStrategy == null)
-            {
-                _character.CurrentMovementStrategy = new NoneMovement();
-            }
         }
 
-        public virtual void Exit() { }
+        public virtual void Exit() 
+        {
+            //OnStateExit.Invoke();
+        }
 
         public virtual void LogicUpdate()
         {
+            //OnStateUpdate.Invoke();
             if (_character.Input.MovementInput.magnitude > 0)
             {
                 _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, _data.Speed, _character.Acceleration * Time.deltaTime);
@@ -55,10 +60,14 @@ namespace LOGIYGames.Movement
             }
         }
 
-        public virtual void LateUpdate() { }
+        public virtual void LateUpdate() 
+        { 
+            //OnStateLateUpdate.Invoke(); 
+        }
 
         public virtual void PhysicsUpdate()
         {
+            //OnStateFixedUpdate.Invoke();
             // Get target rotation from rotation strategy
             Quaternion targetRotation = _character.CurrentRotationStrategy.GetRotation();
             _character.Rotate(targetRotation, _character.TurnSmoothTime);

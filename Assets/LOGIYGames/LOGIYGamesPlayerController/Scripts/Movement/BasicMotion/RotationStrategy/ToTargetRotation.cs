@@ -1,29 +1,20 @@
-using LOGIYGames.CharacterCore;
 using UnityEngine;
 
 namespace LOGIYGames
 {
     public class ToTargetRotation : IRotationStrategy
     {
-        Character Character;
-        public ToTargetRotation(Character character)
+        Transform Target;
+        public ToTargetRotation(Transform target)
         {
-            Character = character;
+            Target = target;
         }
         public Quaternion GetRotation()
         {
-            if (Character.TargetingModule.Target == null)
-            {
-                float currentAngleY = Character.transform.eulerAngles.y;
-                Quaternion targetRotation = Quaternion.Euler(0f, currentAngleY, 0f);
-                return targetRotation;
-            }
-            else
-            {
-                Vector3 targetDirection = Character.TargetingModule.Target.position - Character.transform.position;
-                targetDirection.y = 0f;
-                return Quaternion.LookRotation(targetDirection);
-            }
+
+            Vector3 targetDirection = Target.position - Target.transform.position;
+            targetDirection.y = 0f;
+            return Quaternion.LookRotation(targetDirection);
         }
     }
 }
