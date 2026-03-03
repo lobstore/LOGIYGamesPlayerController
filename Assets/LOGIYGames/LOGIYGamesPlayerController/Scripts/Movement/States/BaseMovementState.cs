@@ -14,11 +14,11 @@ namespace LOGIYGames.Movement
         protected Character _character;
         protected MovementStateData _data;
         // Что планируется
-        //public readonly UnityEvent OnStateEnter = new();
-        //public readonly UnityEvent OnStateExit = new();
-        //public readonly UnityEvent OnStateUpdate = new();
-        //public readonly UnityEvent OnStateFixedUpdate = new();
-        //public readonly UnityEvent OnStateLateUpdate = new();
+        public readonly UnityEvent OnStateEnter = new();
+        public readonly UnityEvent OnStateExit = new();
+        public readonly UnityEvent OnStateUpdate = new();
+        public readonly UnityEvent OnStateFixedUpdate = new();
+        public readonly UnityEvent OnStateLateUpdate = new();
         protected BaseMovementState(MovementStateDriver ctx, MovementStateData stateData)
         {
             _data = new();
@@ -31,7 +31,7 @@ namespace LOGIYGames.Movement
 
         public virtual void Enter()
         {
-            //OnStateEnter.Invoke();
+            OnStateEnter.Invoke();
             _character.JumpPlanarForce = 0;
             _character.JumpVerticalForce = 0;
             _character.CurrentMovementStrategy = _character.DefaultMovementStrategy;
@@ -44,12 +44,12 @@ namespace LOGIYGames.Movement
 
         public virtual void Exit() 
         {
-            //OnStateExit.Invoke();
+            OnStateExit.Invoke();
         }
 
         public virtual void LogicUpdate()
         {
-            //OnStateUpdate.Invoke();
+            OnStateUpdate.Invoke();
             if (_character.Input.MovementInput.magnitude > 0)
             {
                 _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, _data.Speed, _character.Acceleration * Time.deltaTime);
@@ -62,12 +62,12 @@ namespace LOGIYGames.Movement
 
         public virtual void LateUpdate() 
         { 
-            //OnStateLateUpdate.Invoke(); 
+            OnStateLateUpdate.Invoke(); 
         }
 
         public virtual void PhysicsUpdate()
         {
-            //OnStateFixedUpdate.Invoke();
+            OnStateFixedUpdate.Invoke();
             // Get target rotation from rotation strategy
             Quaternion targetRotation = _character.CurrentRotationStrategy.GetRotation();
             _character.Rotate(targetRotation, _character.TurnSmoothTime);

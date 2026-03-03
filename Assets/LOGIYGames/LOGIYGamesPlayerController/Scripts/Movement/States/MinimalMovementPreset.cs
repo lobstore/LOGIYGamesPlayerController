@@ -23,7 +23,7 @@ namespace LOGIYGames
         private SprintState _sprintState;
         private JumpState _groundJumpState;
         private RollState _rollState;
-
+		// Add AnimationModule to State subscribtion
         private void InitializeStates(MovementStateDriver MovementStateDriver)
         {
             _idleState = new IdleState(MovementStateDriver, idleStateData);

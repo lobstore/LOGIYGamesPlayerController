@@ -44108,7 +44108,7 @@ PrefabInstance:
     - target: {fileID: 4882173074196649706, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: navMeshAgent
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 354810366595266591}
     - target: {fileID: 4882173074196649706, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
@@ -44149,7 +44149,12 @@ PrefabInstance:
       propertyPath: controller
       value: 
       objectReference: {fileID: 6718191764129459956}
-    m_RemovedComponents: []
+    - target: {fileID: 9160473370093739834, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: <Animations>k__BackingField
+      value: 
+      objectReference: {fileID: 354810366595266590}
+    m_RemovedComponents:
+    - {fileID: 5860444146413449140, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -44157,6 +44162,22 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1862495795}
   m_SourcePrefab: {fileID: 100100000, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+--- !u!114 &354810366595266590 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 354810366595266589}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704ef5ff3087d854fb10691512313206, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.AnimationsModule
+--- !u!195 &354810366595266591 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 7766635551810355105, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 354810366595266589}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2324911943303090081
 PrefabInstance:
   m_ObjectHideFlags: 0
