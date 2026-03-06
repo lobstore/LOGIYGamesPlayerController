@@ -30,8 +30,9 @@ namespace LOGIYGames.Movement
 
         private void Awake()
         {
-
             Character.CController = controller;
+            Character.DefaultMovementStrategy = new CameraRelativeMovement(Character);
+            Character.DefaultRotaionStrategy = new CameraRelativeRotation(Character);
             InitializeStateMachine();
         }
 

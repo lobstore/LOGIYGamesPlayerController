@@ -13,6 +13,7 @@
         {
             _stateData = stateData;
             _strategy = new NoneRotation(_character.transform);
+
         }
         public override void Enter()
         {
@@ -21,6 +22,12 @@
             _character.JumpVerticalForce = _stateData.VerticalJumpForce;
             _character.JumpPlanarForce = _stateData.PlanarJumpForce;
             _character.Roll();
+            _character.OnRollStart.Invoke();
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            _character.OnRollEnd.Invoke();
         }
     }
 

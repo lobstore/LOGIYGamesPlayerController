@@ -18,6 +18,13 @@ namespace LOGIYGames.CharacterCore
 
         public IMovementStrategy DefaultMovementStrategy { get; set; }
         public IRotationStrategy DefaultRotaionStrategy { get; set; }
+
+        public UnityEvent OnJumpStart = new();
+        public UnityEvent OnJumpEnd = new();
+        public UnityEvent OnRollStart = new();
+        public UnityEvent OnRollEnd = new();
+        public UnityEvent OnDashStart = new();
+        public UnityEvent OnDashEnd = new();
         #region VelocityVariables
 
         /// <summary>
@@ -83,8 +90,7 @@ namespace LOGIYGames.CharacterCore
             CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
             CController.Height = Height;
             CController.Center = new Vector3(0, Height / 2.0f, 0);
-            DefaultMovementStrategy = new CameraRelativeMovement(this);
-            DefaultRotaionStrategy = new CameraRelativeRotation(this);
+
 
         }
 
@@ -92,7 +98,14 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnLateUpdate(deltaTime);
             SmoothHeightChanging();
-
+            if (Input.FocusPressed)
+            {
+                CurrentRotationStrategy = new CameraAlongRotation(this);
+            }
+            else
+            {
+                CurrentRotationStrategy = DefaultRotaionStrategy;
+            }
         }
         public override void OnUpdate(float deltaTime)
         {

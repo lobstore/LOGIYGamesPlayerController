@@ -62,8 +62,10 @@ namespace LOGIYGames.Movement
 
         public virtual void LateUpdate() 
         { 
-            OnStateLateUpdate.Invoke(); 
+            OnStateLateUpdate.Invoke();
         }
+
+
 
         public virtual void PhysicsUpdate()
         {

@@ -12,6 +12,14 @@ namespace LOGIYGames.Animation
         [SerializeField][Range(0, 0.5f)] private float locomotioAnimationsBlendTime;
         [SerializeField][Range(0, 0.5f)] private float rotationAnimationsBlendTime;
 
+
+        private void Start()
+        {
+            character.OnJumpStart.AddListener(() => { PlayAnimation("Jump"); animator.SetBool("IsJumping",true); });
+            character.OnJumpEnd.AddListener(() => { animator.SetBool("IsJumping",false); });
+            character.OnRollStart.AddListener(() => { PlayAnimation("Roll"); animator.SetBool("IsRolling", true); });
+            character.OnRollEnd.AddListener(() => { animator.SetBool("IsRolling", false); });
+        }
         public void PlayAnimation(string animname)
         {
             animator.CrossFade(animname, 0.05f);

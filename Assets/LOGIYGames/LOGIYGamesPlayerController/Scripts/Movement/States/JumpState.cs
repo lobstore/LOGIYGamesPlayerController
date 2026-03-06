@@ -16,10 +16,12 @@ namespace LOGIYGames.Movement
             _character.JumpVerticalForce = _stateData.VerticalJumpForce;
             _character.JumpPlanarForce = _stateData.PlanarJumpForce;
             _character.Jump();
+            _character.OnJumpStart.Invoke();
         }
         public override void Exit()
         {
             base.Exit();
+            _character.OnJumpEnd.Invoke();
         }
     }
 
