@@ -39,7 +39,6 @@ namespace LOGIYGames.Movement
             _character.Acceleration = _data.Acceleration;
             _character.Deceleration = _data.Deceleration;
             _character.TurnSmoothTime = _data.TurnSmoothTime;
-            _character.SpeedMultiplier = _data.Speed;
         }
 
         public virtual void Exit() 
@@ -50,6 +49,11 @@ namespace LOGIYGames.Movement
         public virtual void LogicUpdate()
         {
             OnStateUpdate.Invoke();
+            ChangeSpeed();
+        }
+
+        protected virtual void ChangeSpeed()
+        {
             if (_character.Input.MovementInput.magnitude > 0)
             {
                 _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, _data.Speed, _character.Acceleration * Time.deltaTime);

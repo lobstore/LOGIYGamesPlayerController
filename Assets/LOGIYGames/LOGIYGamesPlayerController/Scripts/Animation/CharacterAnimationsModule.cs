@@ -31,6 +31,7 @@ namespace LOGIYGames.Animation
             animator.SetFloat("Speed", character.SpeedMultiplier, locomotioAnimationsBlendTime, Time.deltaTime);
             if (character.CurrentRotationStrategy is CameraRelativeRotation or InputRelativeRotation)
             {
+
                 animator.SetFloat("HorizontalSpeed", 0);
                 animator.SetFloat("VerticalSpeed", character.SpeedMultiplier, locomotioAnimationsBlendTime, Time.deltaTime);
             }

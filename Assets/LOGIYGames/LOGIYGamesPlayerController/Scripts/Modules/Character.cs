@@ -98,14 +98,6 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnLateUpdate(deltaTime);
             SmoothHeightChanging();
-            if (Input.FocusPressed)
-            {
-                CurrentRotationStrategy = new CameraAlongRotation(this);
-            }
-            else
-            {
-                CurrentRotationStrategy = DefaultRotaionStrategy;
-            }
         }
         public override void OnUpdate(float deltaTime)
         {
