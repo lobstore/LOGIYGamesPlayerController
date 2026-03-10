@@ -124,10 +124,6 @@ namespace LOGIYGames
             transform.rotation = a_rotation;
         }
 
-        public override void SetRotation(Quaternion a_rotation)
-        {
-            transform.rotation = a_rotation;
-        }
 
 
     }

@@ -175,11 +175,7 @@ namespace LOGIYGames
         {
             m_rigidbody.position = a_position;
         }
-        
-        public override void SetRotation(Quaternion a_rotation)
-        {
-            m_rigidbody.rotation = a_rotation;
-        }
+       
         
         public override void SetPositionAndRotation(Vector3 a_position, Quaternion a_rotation)
         {

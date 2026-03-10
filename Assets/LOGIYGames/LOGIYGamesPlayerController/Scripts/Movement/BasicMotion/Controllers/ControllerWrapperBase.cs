@@ -36,7 +36,6 @@ namespace LOGIYGames
         
         // Transform manipulation
         public abstract void SetPosition(Vector3 a_position);
-        public abstract void SetRotation(Quaternion a_rotation);
         public abstract void SetPositionAndRotation(Vector3 a_position, Quaternion a_rotation);
         
         // Cached movement data (for rollback/netcode support)

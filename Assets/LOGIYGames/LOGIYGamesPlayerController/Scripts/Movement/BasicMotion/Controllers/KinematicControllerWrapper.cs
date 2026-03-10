@@ -143,10 +143,6 @@ namespace LOGIYGames
             m_kinematicMotor.SetPosition(a_position);
         }
         
-        public override void SetRotation(Quaternion a_rotation)
-        {
-            m_kinematicMotor.SetRotation(a_rotation);
-        }
         
         public override void SetPositionAndRotation(Vector3 a_position, Quaternion a_rotation)
         {

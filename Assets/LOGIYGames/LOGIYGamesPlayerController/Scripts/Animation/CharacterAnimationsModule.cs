@@ -19,6 +19,7 @@ namespace LOGIYGames.Animation
             character.OnJumpEnd.AddListener(() => { animator.SetBool("IsJumping",false); });
             character.OnRollStart.AddListener(() => { PlayAnimation("Roll"); animator.SetBool("IsRolling", true); });
             character.OnRollEnd.AddListener(() => { animator.SetBool("IsRolling", false); });
+            character.OnBackTurnStart.AddListener(() => PlayAnimation("BackTurn"));
         }
         public void PlayAnimation(string animname)
         {
@@ -42,7 +43,7 @@ namespace LOGIYGames.Animation
 
             }
 
-            animator.SetBool("IsMoving", character.Velocity.magnitude > 0 || character.DeltaYaw != 0);
+            animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
             animator.SetBool("IsGrounded", sensors.IsGrounded);
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }

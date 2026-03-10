@@ -25,6 +25,9 @@ namespace LOGIYGames.CharacterCore
         public UnityEvent OnRollEnd = new();
         public UnityEvent OnDashStart = new();
         public UnityEvent OnDashEnd = new();
+        public UnityEvent OnBackTurnStart = new();
+        public UnityEvent OnBackTurnEnd = new();
+
         #region VelocityVariables
 
         /// <summary>
