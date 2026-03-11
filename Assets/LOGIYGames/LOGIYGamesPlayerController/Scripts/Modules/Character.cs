@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,13 +6,13 @@ namespace LOGIYGames.CharacterCore
 {
     public class Character : MonoModuleBase, IControllable
     {
-        // TODO Make IInputReader Abstraction to change between AI/Player
         [Header("References")]
         public IMovementInputReader Input { get; set; }
 
         public Transform Target;
 
         public ControllerWrapperBase CController { get; set; }
+        [SerializeField] private SensorsModule sensors;
         // TODO Make Builder
         public IMovementStrategy CurrentMovementStrategy { get; set; }
         public IRotationStrategy CurrentRotationStrategy { get; set; }
@@ -19,14 +20,16 @@ namespace LOGIYGames.CharacterCore
         public IMovementStrategy DefaultMovementStrategy { get; set; }
         public IRotationStrategy DefaultRotaionStrategy { get; set; }
 
-        public UnityEvent OnJumpStart = new();
-        public UnityEvent OnJumpEnd = new();
-        public UnityEvent OnRollStart = new();
-        public UnityEvent OnRollEnd = new();
-        public UnityEvent OnDashStart = new();
-        public UnityEvent OnDashEnd = new();
-        public UnityEvent OnBackTurnStart = new();
-        public UnityEvent OnBackTurnEnd = new();
+        public UnityEvent OnJump = new();
+        public UnityEvent OnRoll = new();
+        public UnityEvent OnDash = new();
+        public UnityEvent OnBackTurn = new();
+
+        public bool IsFalling { get; set; }
+        public bool IsCrouching { get; set; }
+        public bool IsGrounded { get => CController.IsGrounded; }
+        public bool IsSliding { get; set; }
+
 
         #region VelocityVariables
 
@@ -187,15 +190,27 @@ namespace LOGIYGames.CharacterCore
             }
             else
             {
-                Velocity = Vector3.Lerp(Velocity, Vector3.zero, Deceleration * Time.deltaTime);
-            }
-            if (velocity.magnitude < 0.01f)
-            {
-                Velocity = Vector3.zero;
+                if (Velocity.magnitude > 0.01f)
+                {
+
+                    Velocity = Vector3.Lerp(Velocity, Vector3.zero, Deceleration * Time.deltaTime);
+                }
+                else
+                {
+                    Velocity = Vector3.zero;
+                }
             }
             CController.Move(Velocity);
         }
+        public void Slide()
+        {
+            CController.Move( ProjectVelocity());
+        }
 
+        private Vector3 ProjectVelocity()
+        {
+            return Vector3.ProjectOnPlane(Velocity, sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up * SpeedMultiplier, sensors.BelowHit.normal);
+        }
         public void Jump()
         {
             if (Input.MovementInput.magnitude > 0)
@@ -205,12 +220,19 @@ namespace LOGIYGames.CharacterCore
                 Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * JumpPlanarForce;
             }
             CController.Jump(JumpVerticalForce);
+            OnJump.Invoke();
         }
 
         public void Roll()
         {
             Jump();
             Velocity += transform.forward * JumpPlanarForce;
+            OnRoll.Invoke();
+        }
+
+        public void TurnBack()
+        {
+            OnBackTurn.Invoke();
         }
         #endregion
 

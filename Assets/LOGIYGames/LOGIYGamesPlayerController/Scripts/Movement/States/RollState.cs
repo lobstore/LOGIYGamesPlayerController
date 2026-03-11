@@ -22,14 +22,12 @@
             _character.CurrentRotationStrategy = _strategy;
             _character.JumpVerticalForce = _stateData.VerticalJumpForce;
             _character.JumpPlanarForce = _stateData.PlanarJumpForce;
-            _character.SpeedMultiplier = _stateData.Speed;
             _character.Roll();
-            _character.OnRollStart.Invoke();
+            _character.OnRoll.Invoke();
         }
         public override void Exit()
         {
             base.Exit();
-            _character.OnRollEnd.Invoke();
             _character.CurrentRotationStrategy = _character.DefaultRotaionStrategy;
         }
     }

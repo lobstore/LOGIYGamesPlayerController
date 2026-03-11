@@ -18,7 +18,6 @@ namespace LOGIYGames.Movement
         public MovementStatesPresetBase movementPreset;
         private StateMachine _stateMachine;
         [SerializeField] private ControllerWrapperBase controller;
-        [field: SerializeField] public CharacterAnimationsModule Animations {  get; private set; }
 
 
         #region Debug

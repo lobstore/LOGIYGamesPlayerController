@@ -1,7 +1,6 @@
 ﻿using LOGIYGames.CharacterCore;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace LOGIYGames.Movement
 {
@@ -13,12 +12,6 @@ namespace LOGIYGames.Movement
     {
         protected Character _character;
         protected MovementStateData _data;
-        // Что планируется
-        public readonly UnityEvent OnStateEnter = new();
-        public readonly UnityEvent OnStateExit = new();
-        public readonly UnityEvent OnStateUpdate = new();
-        public readonly UnityEvent OnStateFixedUpdate = new();
-        public readonly UnityEvent OnStateLateUpdate = new();
         protected BaseMovementState(MovementStateDriver ctx, MovementStateData stateData)
         {
             _data = new();
@@ -31,9 +24,7 @@ namespace LOGIYGames.Movement
 
         public virtual void Enter()
         {
-            OnStateEnter.Invoke();
-            _character.JumpPlanarForce = 0;
-            _character.JumpVerticalForce = 0;
+
             _character.CurrentMovementStrategy = _character.DefaultMovementStrategy;
             _character.CurrentRotationStrategy = _character.DefaultRotaionStrategy;
             _character.Acceleration = _data.Acceleration;
@@ -41,14 +32,14 @@ namespace LOGIYGames.Movement
             _character.TurnSmoothTime = _data.TurnSmoothTime;
         }
 
-        public virtual void Exit() 
+        public virtual void Exit()
         {
-            OnStateExit.Invoke();
+            _character.JumpPlanarForce = 0;
+            _character.JumpVerticalForce = 0;
         }
 
         public virtual void LogicUpdate()
         {
-            OnStateUpdate.Invoke();
             ChangeSpeed();
         }
 
@@ -60,25 +51,29 @@ namespace LOGIYGames.Movement
             }
             else
             {
-                _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, 0, _character.Deceleration * Time.deltaTime);
+                if (_character.SpeedMultiplier > 0.01)
+                {
+
+                    _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, 0, _character.Deceleration * Time.deltaTime);
+                }
+                else
+                {
+                    _character.SpeedMultiplier = 0;
+                }
             }
         }
 
-        public virtual void LateUpdate() 
-        { 
-            OnStateLateUpdate.Invoke();
+        public virtual void LateUpdate()
+        {
         }
 
 
 
         public virtual void PhysicsUpdate()
         {
-            OnStateFixedUpdate.Invoke();
-            // Get target rotation from rotation strategy
             Quaternion targetRotation = _character.CurrentRotationStrategy.GetRotation();
             _character.Rotate(targetRotation, _character.TurnSmoothTime);
 
-            // Apply movement
             Vector3 dir = _character.CurrentMovementStrategy.GetMovementDirection();
             _character.Move(dir);
         }

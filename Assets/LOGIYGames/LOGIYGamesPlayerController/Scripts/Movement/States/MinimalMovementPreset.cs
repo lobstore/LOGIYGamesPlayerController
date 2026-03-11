@@ -13,12 +13,14 @@ namespace LOGIYGames
         public MovementStateData runStateData;
         public MovementStateData sprintStateData;
         public MovementStateData fallingStateData;
+        public MovementStateData slidingStateData;
         public JumpStateData groundJumpStateData;
         public JumpStateData rollStateData;
         public TimedMovementStateData turnBackStateData;
 
 
         private IdleState _idleState;
+        private SlideState _slideState;
         private BackTurnState _backTurnState;
         private RunState _runState;
         private FallingState _fallingState;
@@ -35,6 +37,7 @@ namespace LOGIYGames
             _groundJumpState = new JumpState(MovementStateDriver, groundJumpStateData);
             _rollState = new RollState(MovementStateDriver, rollStateData);
             _backTurnState = new BackTurnState(MovementStateDriver, turnBackStateData);
+            _slideState = new SlideState(MovementStateDriver, slidingStateData);
         }
         private void ConfigureTransitions(MovementStateDriver MovementStateDriver)
         {
@@ -59,6 +62,7 @@ namespace LOGIYGames
             MovementStateDriver.AddTransition(_runState, _sprintState, () => MovementStateDriver.Character.Input.SprintPressed && MovementStateDriver.Character.Input.MovementInput.magnitude > 0);
             MovementStateDriver.AddTransition(_runState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
             MovementStateDriver.AddTransition(_runState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs( MovementStateDriver.Character.DeltaYaw)>120);
+            MovementStateDriver.AddTransition(_runState, _slideState, () => MovementStateDriver.Sensors.GroundAngle > 25 && MovementStateDriver.Character.SpeedMultiplier > MovementStateDriver.Character.SpeedMultiplier*0.5f );
 
             // ----- Sprint State Transitions -----
             MovementStateDriver.AddTransition(_sprintState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
@@ -74,6 +78,7 @@ namespace LOGIYGames
             MovementStateDriver.AddTransition(_rollState, _runState, () => MovementStateDriver.Sensors.IsGrounded&& !_rollState.IsDurationTimerRunning);
             // TurnBack
             MovementStateDriver.AddTransition(_backTurnState, _runState, () => !_backTurnState.IsDurationTimerRunning);
+            MovementStateDriver.AddTransition(_slideState, _runState, () => MovementStateDriver.Sensors.GroundAngle <= 25|| MovementStateDriver.Character.Input.MovementInput.magnitude==0);
 
         }
 

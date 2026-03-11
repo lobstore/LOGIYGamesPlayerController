@@ -12,15 +12,16 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            _character.OnBackTurnStart.Invoke();
             _character.CurrentRotationStrategy = new NoneRotation(_character.transform);
+            _character.CurrentMovementStrategy = new NoneMovement();
+            _character.TurnBack();
         }
 
         public override void Exit()
         {
             base.Exit();
-            _character.OnBackTurnEnd.Invoke();
             _character.CurrentRotationStrategy = _character.DefaultRotaionStrategy;
+            _character.CurrentMovementStrategy = _character.DefaultMovementStrategy;
         }
     }
 }

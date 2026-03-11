@@ -1,4 +1,5 @@
 using LOGIYGames.CharacterCore;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -123,7 +124,7 @@ namespace LOGIYGames
 
         private void ProjectVelocity(Vector3 totalVelocity)
         {
-            targetVelocity = Vector3.ProjectOnPlane(totalVelocity, m_sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up, m_sensors.BelowHit.normal);
+            targetVelocity = Vector3.ProjectOnPlane(totalVelocity, m_sensors.BelowHit.normal) + Vector3.ProjectOnPlane(m_characterGravityModule.Velocity, m_sensors.BelowHit.normal);
         }
 
         public override void Rotate(Quaternion a_targetRotation)
