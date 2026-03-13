@@ -16,7 +16,20 @@ namespace LOGIYGames.Animation
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) => { PlayAnimation("Jump"); });
             character.EventBus.Subscribe<RollPerformedEvent>((evt) => { PlayAnimation("Roll"); });
             character.EventBus.Subscribe<TurnPerformedEvent>((evt) => PlayAnimation("BackTurn"));
-            character.EventBus.Subscribe<ItemThrowedEvent>((evt) => PlayAnimation("Throw"));
+            character.EventBus.Subscribe<OnLeashWeaponEvent>((evt) =>
+            {
+                if (evt.unleashWeapon)
+                {
+                    PlayAnimation("Unleash");
+                    animator.SetBool("IsInCombat", true);
+                }
+                else
+                {
+                    PlayAnimation("Leash");
+                    animator.SetBool("IsInCombat", false);
+                }
+            }
+            );
         }
         public void PlayAnimation(string animname)
         {

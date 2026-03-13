@@ -25,7 +25,6 @@ namespace LOGIYGames
             {
                 if (x.performed)
                 {
-                    print("x.performed");
                     UIEngaged = !UIEngaged;
                     if (UIEngaged)
                     {

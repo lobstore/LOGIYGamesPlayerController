@@ -29,7 +29,7 @@ namespace LOGIYGames
         private RollState _rollState;
 
         private IdleActionState _idleActionState;
-        private ReadyActionState _readyActionState;
+        private CombatActionState _readyActionState;
         private UnleashWeaponActionState _unleashWeaponActionState;
         private LeashWeaponActionState _leashWeaponActionState;
         private ThrowItemActionState _throwItemActionState;
@@ -46,9 +46,9 @@ namespace LOGIYGames
             _slideState = new SlideState(character, slidingStateData);
 
             _idleActionState = new IdleActionState(character);
+            _readyActionState = new CombatActionState(character);
             _unleashWeaponActionState = new UnleashWeaponActionState(character);
             _leashWeaponActionState = new LeashWeaponActionState(character);
-            _readyActionState = new ReadyActionState(character);
             _throwItemActionState = new ThrowItemActionState(character);
         }
         private void ConfigureTransitions(Character character)
