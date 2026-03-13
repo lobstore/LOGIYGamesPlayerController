@@ -1,5 +1,5 @@
+using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
-using System;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -27,68 +27,87 @@ namespace LOGIYGames
         private SprintState _sprintState;
         private JumpState _groundJumpState;
         private RollState _rollState;
-		// Add AnimationModule to State subscribtion
-        private void InitializeStates(MovementStateDriver MovementStateDriver)
+
+        private IdleActionState _idleActionState;
+        private ReadyActionState _readyActionState;
+        private UnleashWeaponActionState _unleashWeaponActionState;
+        private LeashWeaponActionState _leashWeaponActionState;
+        private ThrowItemActionState _throwItemActionState;
+        // Add AnimationModule to State subscribtion
+        private void InitializeStates(Character character)
         {
-            _idleState = new IdleState(MovementStateDriver, idleStateData);
-            _runState = new RunState(MovementStateDriver, runStateData);
-            _sprintState = new SprintState(MovementStateDriver, sprintStateData);
-            _fallingState = new FallingState(MovementStateDriver, fallingStateData);
-            _groundJumpState = new JumpState(MovementStateDriver, groundJumpStateData);
-            _rollState = new RollState(MovementStateDriver, rollStateData);
-            _backTurnState = new BackTurnState(MovementStateDriver, turnBackStateData);
-            _slideState = new SlideState(MovementStateDriver, slidingStateData);
+            _idleState = new IdleState(character, idleStateData);
+            _runState = new RunState(character, runStateData);
+            _sprintState = new SprintState(character, sprintStateData);
+            _fallingState = new FallingState(character, fallingStateData);
+            _groundJumpState = new JumpState(character, groundJumpStateData);
+            _rollState = new RollState(character, rollStateData);
+            _backTurnState = new BackTurnState(character, turnBackStateData);
+            _slideState = new SlideState(character, slidingStateData);
+
+            _idleActionState = new IdleActionState(character);
+            _unleashWeaponActionState = new UnleashWeaponActionState(character);
+            _leashWeaponActionState = new LeashWeaponActionState(character);
+            _readyActionState = new ReadyActionState(character);
+            _throwItemActionState = new ThrowItemActionState(character);
         }
-        private void ConfigureTransitions(MovementStateDriver MovementStateDriver)
+        private void ConfigureTransitions(Character character)
         {
-            MovementStateDriver.AddAnyTransition(_fallingState, () =>
-            !MovementStateDriver.Sensors.IsGrounded
+            character.AddAnyStateMachineTransition(_rollState, () =>character.Input.EvadePressed && !_groundJumpState.IsDurationTimerRunning&&character.IsGrounded);
+            character.AddAnyStateMachineTransition(_fallingState, () =>
+            !character.Sensors.IsGrounded
             && !_groundJumpState.IsDurationTimerRunning
             && !_rollState.IsDurationTimerRunning
+            && !character.Input.JumpPressed
             );
-            MovementStateDriver.AddAnyTransition(_rollState, () =>
-            MovementStateDriver.Sensors.IsGrounded
-            && MovementStateDriver.Character.Input.EvadePressed
-            );
+
             // ----- Idle State Transitions -----
-            MovementStateDriver.AddTransition(_idleState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
 
             // ----- Walk State Transitions -----
-            MovementStateDriver.AddTransition(_idleState, _runState, () => MovementStateDriver.Character.Input.MovementInput.magnitude > 0f);
-            MovementStateDriver.AddTransition(_runState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
+            character.AddStateMachineTransition(_idleState, _runState, () => character.Input.MovementInput.magnitude > 0f);
+            character.AddStateMachineTransition(_idleState, _groundJumpState, () => character.Input.JumpPressed && character.JumpCount < groundJumpStateData.MaxJumpCount && _groundJumpState.CanEnter());
 
             // ----- Run State Transitions -----
-            MovementStateDriver.AddTransition(_runState, _idleState, () => MovementStateDriver.Character.Input.MovementInput.magnitude == 0f && MovementStateDriver.Sensors.IsGrounded);
-            MovementStateDriver.AddTransition(_runState, _sprintState, () => MovementStateDriver.Character.Input.SprintPressed && MovementStateDriver.Character.Input.MovementInput.magnitude > 0);
-            MovementStateDriver.AddTransition(_runState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
-            MovementStateDriver.AddTransition(_runState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs( MovementStateDriver.Character.DeltaYaw)>120);
-            MovementStateDriver.AddTransition(_runState, _slideState, () => MovementStateDriver.Sensors.GroundAngle > 25 && MovementStateDriver.Character.SpeedMultiplier > MovementStateDriver.Character.SpeedMultiplier*0.5f );
+            character.AddStateMachineTransition(_runState, _idleState, () => character.Input.MovementInput.magnitude == 0f && character.Sensors.IsGrounded);
+            character.AddStateMachineTransition(_runState, _sprintState, () => character.Input.SprintPressed && character.Input.MovementInput.magnitude > 0);
+            character.AddStateMachineTransition(_runState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
+            character.AddStateMachineTransition(_runState, _slideState, () => character.Sensors.GroundAngle > 25 && character.SpeedMultiplier > character.SpeedMultiplier * 0.5f);
+            character.AddStateMachineTransition(_runState, _groundJumpState, () => character.Input.JumpPressed && character.JumpCount < groundJumpStateData.MaxJumpCount && _groundJumpState.CanEnter());
 
             // ----- Sprint State Transitions -----
-            MovementStateDriver.AddTransition(_sprintState, _groundJumpState, () => MovementStateDriver.Character.Input.JumpPressed && MovementStateDriver.Sensors.IsGrounded && _groundJumpState.CanEnter());
-            MovementStateDriver.AddTransition(_sprintState, _idleState, () => MovementStateDriver.Character.Input.MovementInput.magnitude == 0f && MovementStateDriver.Sensors.IsGrounded);
-            MovementStateDriver.AddTransition(_sprintState, _runState, () => !MovementStateDriver.Character.Input.SprintPressed);
+            character.AddStateMachineTransition(_sprintState, _idleState, () => character.Input.MovementInput.magnitude == 0f && character.Sensors.IsGrounded);
+            character.AddStateMachineTransition(_sprintState, _runState, () => !character.Input.SprintPressed);
+            character.AddStateMachineTransition(_sprintState, _groundJumpState, () => character.Input.JumpPressed && character.JumpCount < groundJumpStateData.MaxJumpCount && _groundJumpState.CanEnter());
 
             // ----- Jump State Transitions -----
-            MovementStateDriver.AddTransition(_groundJumpState, _runState, () => MovementStateDriver.Sensors.IsGrounded && !_groundJumpState.IsDurationTimerRunning);
+            character.AddStateMachineTransition(_groundJumpState, _runState, () => character.Sensors.IsGrounded && !_groundJumpState.IsDurationTimerRunning);
 
             // ----- Falling State Transitions -----
-            MovementStateDriver.AddTransition(_fallingState, _idleState, () => MovementStateDriver.Sensors.IsGrounded);
-            // ----- Roll State Transitions -----
-            MovementStateDriver.AddTransition(_rollState, _runState, () => MovementStateDriver.Sensors.IsGrounded&& !_rollState.IsDurationTimerRunning);
-            // TurnBack
-            MovementStateDriver.AddTransition(_backTurnState, _runState, () => !_backTurnState.IsDurationTimerRunning);
-            MovementStateDriver.AddTransition(_slideState, _runState, () => MovementStateDriver.Sensors.GroundAngle <= 25|| MovementStateDriver.Character.Input.MovementInput.magnitude==0);
+            character.AddStateMachineTransition(_fallingState, _idleState, () => character.Sensors.IsGrounded);
+            character.AddStateMachineTransition(_fallingState, _groundJumpState, () => character.Input.JumpPressed && character.JumpCount < groundJumpStateData.MaxJumpCount && _groundJumpState.CanEnter());
 
+            // ----- Roll State Transitions -----
+            character.AddStateMachineTransition(_rollState, _runState, () => character.IsGrounded && !_rollState.IsDurationTimerRunning);
+            // TurnBack
+            character.AddStateMachineTransition(_backTurnState, _runState, () => !_backTurnState.IsDurationTimerRunning);
+            character.AddStateMachineTransition(_slideState, _runState, () => character.Sensors.GroundAngle <= 25 || character.Input.MovementInput.magnitude == 0);
+
+            character.AddSubStateMachineTransition(_idleActionState, _unleashWeaponActionState, () => character.Input.AttackPressed );
+            character.AddSubStateMachineTransition(_unleashWeaponActionState, _readyActionState, () => true);
+            character.AddSubStateMachineTransition(_readyActionState, _leashWeaponActionState, () => character.Input.AttackPressed );
+            character.AddSubStateMachineTransition(_leashWeaponActionState, _idleActionState, () => true);
+            character.AddSubStateMachineTransition(_readyActionState, _throwItemActionState, () => character.Input.CrouchPressed);
+            character.AddSubStateMachineTransition(_throwItemActionState, _readyActionState, () =>true);
         }
 
 
 
-        public override void Init(MovementStateDriver MovementStateDriver)
+        public override void Init(Character character)
         {
-            InitializeStates(MovementStateDriver);
-            ConfigureTransitions(MovementStateDriver);
-            MovementStateDriver.StateMachine.SetState(_idleState);
+            InitializeStates(character);
+            ConfigureTransitions(character);
+            character.MovementStateMachine.SetState(_idleState);
+            character.ActionStateMachine.SetState(_idleActionState);
         }
     }
 }

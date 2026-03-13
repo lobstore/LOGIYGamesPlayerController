@@ -1,3 +1,4 @@
+using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace LOGIYGames
 {
     public class SlideState : BaseMovementState
     {
-        public SlideState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData)
+        public SlideState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
 namespace LOGIYGames
 {
     public class StateMachine
@@ -13,7 +11,7 @@ namespace LOGIYGames
         public void Update()
         {
             var transition = GetTransition();
-            if (transition != null )
+            if (transition != null)
                 ChangeState(transition.To);
 
             CurrentNode.State?.LogicUpdate();
@@ -45,8 +43,7 @@ namespace LOGIYGames
 
             previousState?.Exit();
             nextState?.Enter();
-            new StringBuilder();
-            LastTransition =previousState.GetType()+" -> "+nextState.GetType();
+            LastTransition = previousState.GetType() + " -> " + nextState.GetType();
             CurrentNode = nodes[state.GetType()];
         }
 
@@ -67,7 +64,7 @@ namespace LOGIYGames
         {
             GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);
         }
-    
+
         public void AddAnyTransition(IState to, IPredicate condition)
         {
             anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
@@ -85,7 +82,7 @@ namespace LOGIYGames
 
             return node;
         }
-       public class StateNode
+        public class StateNode
         {
             public IState State { get; }
             public HashSet<ITransition> Transitions { get; }

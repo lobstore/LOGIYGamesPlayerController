@@ -1,11 +1,12 @@
+using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class BackTurnState : TimedState
+    public class BackTurnState : TimedMovementState
     {
-        public BackTurnState(MovementStateDriver ctx, TimedMovementStateData stateData) : base(ctx, stateData)
+        public BackTurnState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
         {
         }
 
@@ -14,9 +15,15 @@ namespace LOGIYGames
             base.Enter();
             _character.CurrentRotationStrategy = new NoneRotation(_character.transform);
             _character.CurrentMovementStrategy = new NoneMovement();
-            _character.TurnBack();
+            _character.EventBus.Publish(new TurnPerformedEvent
+            {
+                angle = _character.DeltaYaw
+            });
         }
-
+        protected override void Aim()
+        {
+            
+        }
         public override void Exit()
         {
             base.Exit();

@@ -12,10 +12,10 @@ namespace LOGIYGames.Movement
     {
         protected Character _character;
         protected MovementStateData _data;
-        protected BaseMovementState(MovementStateDriver ctx, MovementStateData stateData)
+        protected BaseMovementState(Character ctx, MovementStateData stateData)
         {
             _data = new();
-            _character = ctx.Character;
+            _character = ctx;
             _data.Acceleration = stateData.Acceleration;
             _data.Deceleration = stateData.Deceleration;
             _data.TurnSmoothTime = stateData.TurnSmoothTime;
@@ -34,8 +34,6 @@ namespace LOGIYGames.Movement
 
         public virtual void Exit()
         {
-            _character.JumpPlanarForce = 0;
-            _character.JumpVerticalForce = 0;
         }
 
         public virtual void LogicUpdate()
@@ -65,9 +63,20 @@ namespace LOGIYGames.Movement
 
         public virtual void LateUpdate()
         {
+            Aim();
         }
 
-
+        protected virtual void Aim()
+        {
+            if (_character.Input.FocusPressed)
+            {
+                _character.CurrentRotationStrategy = new CameraAlongRotation(_character);
+            }
+            else
+            {
+                _character.CurrentRotationStrategy = _character.DefaultRotaionStrategy;
+            }
+        }
 
         public virtual void PhysicsUpdate()
         {

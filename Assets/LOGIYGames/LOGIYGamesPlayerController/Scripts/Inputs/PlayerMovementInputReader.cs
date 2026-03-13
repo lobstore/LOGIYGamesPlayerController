@@ -16,6 +16,7 @@ namespace LOGIYGames
         InputAction m_CrouchAction;
         InputAction m_SprintAction;
         InputAction m_FocusAction;
+        InputAction m_AttackAction;
 
         public void Enable()
         {
@@ -34,6 +35,7 @@ namespace LOGIYGames
             m_CrouchAction = CharacterActionMap.FindAction("Crouch");
             m_SprintAction = CharacterActionMap.FindAction("Sprint");
             m_FocusAction = CharacterActionMap.FindAction("Focus");
+            m_AttackAction = CharacterActionMap.FindAction("Attack");
         }
         private void Update()
         {
@@ -43,6 +45,7 @@ namespace LOGIYGames
             SprintPressed = m_SprintAction.IsPressed();
             CrouchPressed = m_CrouchAction.IsPressed();
             FocusPressed = m_FocusAction.IsPressed();
+            AttackPressed = m_AttackAction.WasPressedThisFrame();
         }
         public Vector2 MovementInput { get; private set; }
 
@@ -56,5 +59,6 @@ namespace LOGIYGames
 
         public bool CrouchPressed { get; private set; }
 
+        public bool AttackPressed {  get; private set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using LOGIYGames.Timers;
+﻿using LOGIYGames.CharacterCore;
+using LOGIYGames.Timers;
 
 namespace LOGIYGames.Movement
 {
@@ -6,12 +7,12 @@ namespace LOGIYGames.Movement
     /// Base state with timer/cooldown support using CountdownTimer
     /// Supports both duration (minimum time in state) and cooldown (delay before re-entry)
     /// </summary>
-    public abstract class TimedState : BaseMovementState
+    public abstract class TimedMovementState : BaseMovementState
     {
         protected CountdownTimer _durationTimer;
         protected CountdownTimer _cooldownTimer;
 
-        protected TimedState(MovementStateDriver ctx, TimedMovementStateData stateData) : base(ctx, stateData)
+        protected TimedMovementState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
         {
             // Create timers from data
             if (stateData.Duration > 0)

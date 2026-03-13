@@ -12,5 +12,7 @@ namespace LOGIYGames.CharacterCore
         bool SprintPressed { get;}
         bool CrouchPressed { get;}
 
+        bool AttackPressed { get;}
+
     }
 }

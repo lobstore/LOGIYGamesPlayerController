@@ -1,8 +1,10 @@
-﻿namespace LOGIYGames.Movement
+﻿using LOGIYGames.CharacterCore;
+
+namespace LOGIYGames.Movement
 {
-    public class LandingState : TimedState
+    public class LandingState : TimedMovementState
     {
-        public LandingState(MovementStateDriver ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
+        public LandingState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
     }
 
 }

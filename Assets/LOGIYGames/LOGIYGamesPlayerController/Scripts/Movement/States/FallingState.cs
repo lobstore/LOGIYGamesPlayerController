@@ -1,8 +1,10 @@
-﻿namespace LOGIYGames.Movement
+﻿using LOGIYGames.CharacterCore;
+
+namespace LOGIYGames.Movement
 {
     public class FallingState : BaseMovementState
     {
-        public FallingState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public FallingState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
 
         public override void Enter()
         {

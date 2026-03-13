@@ -1,36 +1,76 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
+
+
 namespace LOGIYGames.CharacterCore
 {
+    public class JumpPerformedEvent
+    {
+        public float verticalForce;
+        public float planarForce;
+    }
+    public class RollPerformedEvent
+    {
+        public float verticalForce;
+        public float planarForce;
+    }
+    public class TurnPerformedEvent
+    {
+        public float angle;
+    }
+    public class OnLeashWeaponEvent
+    {
+        public bool unleashWeapon;
+    }
+    public class ItemThrowedEvent
+    {
+        
+    }
     public class Character : MonoModuleBase, IControllable
     {
         [Header("References")]
         public IMovementInputReader Input { get; set; }
 
-        public Transform Target;
-
-        public ControllerWrapperBase CController { get; set; }
-        [SerializeField] private SensorsModule sensors;
+        [field: SerializeField] private ControllerWrapperBase CController;
+        [field: SerializeField] public SensorsModule Sensors { get; private set; }
         // TODO Make Builder
+        public IMovementStrategy DefaultMovementStrategy { get; set; }
         public IMovementStrategy CurrentMovementStrategy { get; set; }
+
+        public IRotationStrategy DefaultRotaionStrategy { get; set; }
         public IRotationStrategy CurrentRotationStrategy { get; set; }
 
-        public IMovementStrategy DefaultMovementStrategy { get; set; }
-        public IRotationStrategy DefaultRotaionStrategy { get; set; }
+        public IEventDispatcher EventBus { get; private set; }
 
-        public UnityEvent OnJump = new();
-        public UnityEvent OnRoll = new();
-        public UnityEvent OnDash = new();
-        public UnityEvent OnBackTurn = new();
+        public int JumpCount;
+
+        [Header("State Machine Configuration")]
+        public MovementStatesPresetBase movementPreset;
+        private StateMachine _movementStateMachine;
+        private StateMachine _actionStateMachine;
+
+        public StateMachine MovementStateMachine => _movementStateMachine;
+        public StateMachine ActionStateMachine => _actionStateMachine;
 
         public bool IsFalling { get; set; }
         public bool IsCrouching { get; set; }
         public bool IsGrounded { get => CController.IsGrounded; }
         public bool IsSliding { get; set; }
 
+        public void SetInputReader(IMovementInputReader inputReader)
+        {
+            Input = inputReader;
+        }
 
+        #region Debug
+
+        private string _currentMovementStateName;
+        private string _lastMovementTransition;
+        private string _currentActionStateName;
+        private string _lastActionTransition;
+        #endregion
         #region VelocityVariables
 
         /// <summary>
@@ -64,9 +104,6 @@ namespace LOGIYGames.CharacterCore
 
         public Vector3 Velocity { get => velocity; set => velocity = value; }
 
-        public float JumpVerticalForce { get; set; }
-        public float JumpPlanarForce { get; set; }
-
         private Vector3 velocity;
         private float deltaYaw;
         private float lastYRotation;
@@ -74,7 +111,6 @@ namespace LOGIYGames.CharacterCore
 
 
         #endregion
-
         #region Height Properties
 
         [field: SerializeField] public float Height { get; set; }
@@ -89,7 +125,13 @@ namespace LOGIYGames.CharacterCore
         public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
 
         #endregion
-
+        private void Awake()
+        {
+            DefaultMovementStrategy = new CameraRelativeMovement(this);
+            DefaultRotaionStrategy = new CameraRelativeRotation(this);
+            EventBus = new EventDispatcher();
+            InitializeStateMachine();
+        }
         private void Start()
         {
             // TODO Make ICBFollowable abstraction to change follow target
@@ -97,17 +139,32 @@ namespace LOGIYGames.CharacterCore
             CController.Height = Height;
             CController.Center = new Vector3(0, Height / 2.0f, 0);
 
+            EventBus.Subscribe<JumpPerformedEvent>(Jump);
+            EventBus.Subscribe<RollPerformedEvent>(Roll);
 
         }
-
+        public override void OnFixedUpdate(float fixedDeltaTime)
+        {
+            base.OnFixedUpdate(fixedDeltaTime);
+            _movementStateMachine.FixedUpdate();
+            _actionStateMachine.FixedUpdate();
+        }
         public override void OnLateUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
+            _movementStateMachine.LateUpdate();
+            _actionStateMachine.LateUpdate();
             SmoothHeightChanging();
         }
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+            _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
+            _lastMovementTransition = _movementStateMachine.LastTransition;
+            _currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
+            _lastActionTransition = _actionStateMachine.LastTransition;
+            _movementStateMachine.Update();
+            _actionStateMachine.Update();
         }
         private void SmoothHeightChanging()
         {
@@ -204,42 +261,66 @@ namespace LOGIYGames.CharacterCore
         }
         public void Slide()
         {
-            CController.Move( ProjectVelocity());
+            CController.Move(ProjectVelocity());
         }
 
         private Vector3 ProjectVelocity()
         {
-            return Vector3.ProjectOnPlane(Velocity, sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up * SpeedMultiplier, sensors.BelowHit.normal);
+            return Vector3.ProjectOnPlane(Velocity, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
         }
-        public void Jump()
+        public void Jump(JumpPerformedEvent evt)
         {
             if (Input.MovementInput.magnitude > 0)
             {
                 Vector3 movement = new Vector3(Input.MovementInput.x, 0, Input.MovementInput.y);
                 Vector3 cam = Camera.main.transform.forward;
-                Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * JumpPlanarForce;
+                Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * evt.planarForce;
             }
-            CController.Jump(JumpVerticalForce);
-            OnJump.Invoke();
+            CController.Jump(evt.verticalForce);
+            JumpCount++;
         }
 
-        public void Roll()
+        public void Roll(RollPerformedEvent evt)
         {
-            Jump();
-            Velocity += transform.forward * JumpPlanarForce;
-            OnRoll.Invoke();
+            Jump(new JumpPerformedEvent { planarForce = evt.planarForce, verticalForce = evt.verticalForce});
+            Velocity += transform.forward * evt.planarForce;
+
         }
 
-        public void TurnBack()
-        {
-            OnBackTurn.Invoke();
-        }
         #endregion
 
 
-        public void SetInputReader(IMovementInputReader inputReader)
+
+        private void InitializeStateMachine()
         {
-            Input = inputReader;
+            _movementStateMachine = new StateMachine();
+            _actionStateMachine = new StateMachine();
+            if (movementPreset != null)
+            {
+                movementPreset.Init(this);
+
+            }
+            else
+            {
+                Debug.LogError("No MovementPreset provided");
+            }
         }
+        public void AddStateMachineTransition(IState from, IState to, Func<bool> condition)
+        {
+            _movementStateMachine.AddTransition(from, to, new FuncPredicate(condition));
+        }
+        public void AddSubStateMachineTransition(IState from, IState to, Func<bool> condition)
+        {
+            _actionStateMachine.AddTransition(from, to, new FuncPredicate(condition));
+        }
+        public void AddAnyStateMachineTransition(IState to, Func<bool> condition)
+        {
+            _movementStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
+        }
+        public void AddAnySubStateMachineTransition(IState to, Func<bool> condition)
+        {
+            _actionStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
+        }
+
     }
 }

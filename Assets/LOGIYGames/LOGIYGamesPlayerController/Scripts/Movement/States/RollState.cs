@@ -1,12 +1,14 @@
-﻿namespace LOGIYGames.Movement
+﻿using LOGIYGames.CharacterCore;
+
+namespace LOGIYGames.Movement
 {
 
-    public class RollState : TimedState
+    public class RollState : TimedMovementState
     {
         private JumpStateData _stateData;
         private IRotationStrategy _strategy;
 
-        public RollState(MovementStateDriver ctx, JumpStateData stateData) : base(ctx, stateData)
+        public RollState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
             _strategy = new NoneRotation(_character.transform);
@@ -20,10 +22,15 @@
         {
             base.Enter();
             _character.CurrentRotationStrategy = _strategy;
-            _character.JumpVerticalForce = _stateData.VerticalJumpForce;
-            _character.JumpPlanarForce = _stateData.PlanarJumpForce;
-            _character.Roll();
-            _character.OnRoll.Invoke();
+            _character.EventBus.Publish(new RollPerformedEvent
+            {
+                planarForce = _stateData.PlanarJumpForce,
+                verticalForce = _stateData.VerticalJumpForce,
+            });
+        }
+        protected override void Aim()
+        {
+            
         }
         public override void Exit()
         {

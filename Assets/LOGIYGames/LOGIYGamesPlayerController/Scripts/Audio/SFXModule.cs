@@ -11,7 +11,7 @@ namespace LOGIYGames
     /// Creates AudioSources at specified transforms and plays sounds through them.
     /// Supports animation events for timing-based audio playback.
     /// </summary>
-    public class AudioModule : MonoBehaviour
+    public class SFXModule : MonoBehaviour
     {
         [Serializable]
         public class AudioPoint

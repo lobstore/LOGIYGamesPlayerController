@@ -55,7 +55,7 @@ namespace LOGIYGames
             else
             {
                 CurrentGravityForce = BaseGravityForce;
-                Velocity += CurrentGravityForce * gravityDirection.normalized * Time.deltaTime;
+                Velocity = Vector3.Lerp(Velocity, CurrentGravityForce * gravityDirection.normalized, Time.deltaTime);
             }
             
             // Check for overhead obstacles

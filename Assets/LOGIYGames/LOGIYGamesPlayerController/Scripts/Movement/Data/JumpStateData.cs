@@ -9,5 +9,6 @@ namespace LOGIYGames
         [Header("Jump Forces")]
         public float PlanarJumpForce = 5f;
         public float VerticalJumpForce = 10f;
+        public int MaxJumpCount = 2;
     }
 }

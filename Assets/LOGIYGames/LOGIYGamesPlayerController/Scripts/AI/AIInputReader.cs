@@ -22,6 +22,8 @@ namespace LOGIYGames.Scripts.AI
 
         public bool FocusPressed {  get ; private set ; }
 
+        public bool AttackPressed {  get ; private set ; }
+
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
@@ -31,6 +33,7 @@ namespace LOGIYGames.Scripts.AI
             SprintPressed = Driver.SprintPressed;
             CrouchPressed = Driver.CrouchPressed;
             FocusPressed = Driver.FocusPressed;
+            //AttackPressed = Driver.AttackPressed;
         }
     }
 }

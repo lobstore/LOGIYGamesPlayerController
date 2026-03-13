@@ -1,11 +1,11 @@
-﻿using UnityEngine.Events;
+﻿using LOGIYGames.CharacterCore;
 
 namespace LOGIYGames.Movement
 {
-    public class JumpState : TimedState
+    public class JumpState : TimedMovementState
     {
         private JumpStateData _stateData;
-        public JumpState(MovementStateDriver ctx, JumpStateData stateData) : base(ctx, stateData)
+        public JumpState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
         }
@@ -13,13 +13,19 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-            _character.JumpVerticalForce = _stateData.VerticalJumpForce;
-            _character.JumpPlanarForce = _stateData.PlanarJumpForce;
-            _character.Jump();
+            _character.EventBus.Publish(new JumpPerformedEvent
+            {
+                verticalForce = _stateData.VerticalJumpForce,
+                planarForce = _stateData.PlanarJumpForce
+            });
         }
         public override void Exit()
         {
             base.Exit();
+        }
+        public override bool CanEnter()
+        {
+            return base.CanEnter();
         }
     }
 

@@ -524,7 +524,6 @@ GameObject:
   - component: {fileID: 8868509905734867149}
   - component: {fileID: 8334357512040222824}
   - component: {fileID: 2268543539570239712}
-  - component: {fileID: 9160473370093739834}
   - component: {fileID: 6657963720063885413}
   - component: {fileID: 2605798501068234886}
   - component: {fileID: 1368982890377351462}
@@ -583,8 +582,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
   <ModulePriority>k__BackingField: 0
-  Target: {fileID: 0}
-  sensors: {fileID: 2268543539570239712}
+  Target: {fileID: 3732176754581607695}
+  <CController>k__BackingField: {fileID: 1176126297597612246}
+  <Sensors>k__BackingField: {fileID: 2268543539570239712}
+  movementPreset: {fileID: 11400000, guid: a950937825b83ab4086272ca9dbfed13, type: 2}
   OnJump:
     m_PersistentCalls:
       m_Calls: []
@@ -629,23 +630,6 @@ MonoBehaviour:
   m_showDebugInfo: 1
   col: {fileID: 6657963720063885413}
   MaxStableSlopeAngle: 90
---- !u!114 &9160473370093739834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596e04d4f3d7ab5489f1e0253f443afd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.MovementStateDriver
-  Character: {fileID: 8334357512040222824}
-  Sensors: {fileID: 2268543539570239712}
-  movementPreset: {fileID: 11400000, guid: a950937825b83ab4086272ca9dbfed13, type: 2}
-  controller: {fileID: 1176126297597612246}
-  <Animations>k__BackingField: {fileID: 3842424064180597113}
 --- !u!143 &6657963720063885413
 CharacterController:
   m_ObjectHideFlags: 0
@@ -810,7 +794,6 @@ MonoBehaviour:
   <ModulePriority>k__BackingField: 0
   character: {fileID: 8334357512040222824}
   animator: {fileID: 2654077868994141792}
-  locomotioAnimationsBlendTime: 0.05
   rotationAnimationsBlendTime: 0.2
 --- !u!95 &2654077868994141792
 Animator:
@@ -828,7 +811,7 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
+  m_AnimatePhysics: 1
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1

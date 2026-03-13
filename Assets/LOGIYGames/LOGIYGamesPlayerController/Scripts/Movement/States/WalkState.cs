@@ -1,8 +1,10 @@
-﻿namespace LOGIYGames.Movement
+﻿using LOGIYGames.CharacterCore;
+
+namespace LOGIYGames.Movement
 {
     public class WalkState : BaseMovementState
     {
-        public WalkState(MovementStateDriver ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public WalkState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
     }
 
 }
