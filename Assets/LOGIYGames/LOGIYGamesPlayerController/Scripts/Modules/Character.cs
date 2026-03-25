@@ -18,6 +18,7 @@ namespace LOGIYGames.CharacterCore
     }
     public class TurnPerformedEvent
     {
+        public float speed;
         public float angle;
     }
     public class OnLeashWeaponEvent
@@ -106,11 +107,11 @@ namespace LOGIYGames.CharacterCore
 
         private Vector3 velocity;
         private float deltaYaw;
-        private float lastYRotation;
-        private float currentYRotation;
 
 
         #endregion
+        public Quaternion targetRotation;
+        public Vector3 targetDirection;
         #region Height Properties
 
         [field: SerializeField] public float Height { get; set; }
@@ -159,12 +160,17 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+            targetRotation = CurrentRotationStrategy.GetRotation();
+            CalculateDeltaYaw();
+            targetDirection = CurrentMovementStrategy.GetMovementDirection();
             _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
             _lastMovementTransition = _movementStateMachine.LastTransition;
             _currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
             _lastActionTransition = _actionStateMachine.LastTransition;
             _movementStateMachine.Update();
             _actionStateMachine.Update();
+
+
         }
         private void SmoothHeightChanging()
         {
@@ -192,7 +198,7 @@ namespace LOGIYGames.CharacterCore
             if (desiredDirection.sqrMagnitude < 0.001f) return;
 
             Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, Vector3.up);
-            Rotate(targetRotation, turnSmoothTime);
+            Rotate(targetRotation);
         }
 
         /// <summary>
@@ -208,24 +214,24 @@ namespace LOGIYGames.CharacterCore
         /// Rotates character to a target rotation.
         /// Delegates to controller wrapper for proper KinematicCharacterController integration.
         /// </summary>
-        public void Rotate(Quaternion targetRotation, float turnSmoothTime = 0)
+        public void Rotate(Quaternion targetRotation)
         {
-            float smoothTime = turnSmoothTime > 0 ? turnSmoothTime : TurnSmoothTime;
-
-            if (smoothTime > 0f)
+            if (TurnSmoothTime > 0f)
             {
                 // Smooth rotation using Slerp
-                Quaternion smoothedRotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime * Time.fixedDeltaTime);
+                Quaternion smoothedRotation = Quaternion.Slerp(transform.rotation, targetRotation, TurnSmoothTime * Time.fixedDeltaTime);
                 CController.Rotate(smoothedRotation);
             }
             else
             {
                 CController.Rotate(targetRotation);
             }
-            CalculateDeltaYaw(targetRotation);
         }
-
-        private void CalculateDeltaYaw(Quaternion targetRotation)
+        public void Rotate()
+        {
+            Rotate(targetRotation);
+        }
+        private void CalculateDeltaYaw()
         {
             deltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y);
             if (Mathf.Abs(deltaYaw) < 0.01f)
@@ -259,11 +265,14 @@ namespace LOGIYGames.CharacterCore
             }
             CController.Move(Velocity);
         }
+        public void Move()
+        {
+            Move(targetDirection);
+        }
         public void Slide()
         {
             CController.Move(ProjectVelocity());
         }
-
         private Vector3 ProjectVelocity()
         {
             return Vector3.ProjectOnPlane(Velocity, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
@@ -279,7 +288,6 @@ namespace LOGIYGames.CharacterCore
             CController.Jump(evt.verticalForce);
             JumpCount++;
         }
-
         public void Roll(RollPerformedEvent evt)
         {
             Jump(new JumpPerformedEvent { planarForce = evt.planarForce, verticalForce = evt.verticalForce});
@@ -288,8 +296,6 @@ namespace LOGIYGames.CharacterCore
         }
 
         #endregion
-
-
 
         private void InitializeStateMachine()
         {

@@ -15,7 +15,38 @@ namespace LOGIYGames.Animation
         {
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) => { PlayAnimation("Jump"); });
             character.EventBus.Subscribe<RollPerformedEvent>((evt) => { PlayAnimation("Roll"); });
-            character.EventBus.Subscribe<TurnPerformedEvent>((evt) => PlayAnimation("BackTurn"));
+            character.EventBus.Subscribe<TurnPerformedEvent>((evt) => {
+                if (evt.speed > 0.5)
+                {
+
+                    PlayAnimation("BackTurn");
+                } else if(evt.speed<0.5&& evt.speed > 0.2f)
+                {
+                    if (evt.angle > 0)
+                    {
+                        PlayAnimation("BackTurnWalkRight");
+
+                    }
+                    else
+                    {
+                        PlayAnimation("BackTurnWalkLeft");
+
+                    }
+                }
+                else if(evt.speed <0.2)
+                {
+                    if (evt.angle > 0)
+                    {
+                        PlayAnimation("BackTurnIdleRight");
+
+                    }
+                    else
+                    {
+                        PlayAnimation("BackTurnIdleLeft");
+
+                    }
+                }
+            } );
             character.EventBus.Subscribe<OnLeashWeaponEvent>((evt) =>
             {
                 if (evt.unleashWeapon)
@@ -44,14 +75,14 @@ namespace LOGIYGames.Animation
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
-                animator.SetFloat("VerticalSpeed", character.SpeedMultiplier);
+                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.magnitude,0.05f, Time.deltaTime);
             }
             else
             {
                 //animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).z);
                 //animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).x);
-                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, 0.05f, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, 0.05f, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, 0.1f, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, 0.1f, Time.deltaTime);
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);

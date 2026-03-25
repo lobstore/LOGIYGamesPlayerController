@@ -17,6 +17,7 @@ namespace LOGIYGames
             _character.CurrentMovementStrategy = new NoneMovement();
             _character.EventBus.Publish(new TurnPerformedEvent
             {
+                speed = _character.SpeedMultiplier,
                 angle = _character.DeltaYaw
             });
         }

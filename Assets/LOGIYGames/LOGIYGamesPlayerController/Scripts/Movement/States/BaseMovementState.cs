@@ -80,11 +80,9 @@ namespace LOGIYGames.Movement
 
         public virtual void PhysicsUpdate()
         {
-            Quaternion targetRotation = _character.CurrentRotationStrategy.GetRotation();
-            _character.Rotate(targetRotation, _character.TurnSmoothTime);
 
-            Vector3 dir = _character.CurrentMovementStrategy.GetMovementDirection();
-            _character.Move(dir);
+            _character.Rotate();
+            _character.Move();
         }
     }
 

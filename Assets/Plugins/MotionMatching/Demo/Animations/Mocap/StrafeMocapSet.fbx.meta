@@ -1,183 +1,534 @@
 fileFormatVersion: 2
 guid: 9c0726374073ac0448032da416da1d67
+AssetOrigin:
+  serializedVersion: 1
+  productId: 145624
+  packageName: Motion Matching for Unity
+  packageVersion: 2.3.2
+  assetPath: Assets/Plugins/MotionMatching/Demo/Animations/Mocap/StrafeMocapSet.fbx
+  uploadId: 741503
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: AnimatedRoot
-    100002: Chest
-    100004: Foot.L
-    100006: Foot.R
-    100008: Hand.L
-    100010: Hand.R
-    100012: Head
-    100014: Hips
-    100016: IndexDistal.L
-    100018: IndexDistal.R
-    100020: IndexIntermediate.L
-    100022: IndexIntermediate.R
-    100024: IndexPalm.L
-    100026: IndexPalm.R
-    100028: IndexProximal.L
-    100030: IndexProximal.R
-    100032: //RootNode
-    100034: LowerArm.L
-    100036: LowerArm.R
-    100038: LowerLeg.L
-    100040: LowerLeg.R
-    100042: MiddleDistal.L
-    100044: MiddleDistal.R
-    100046: MiddleIntermediate.L
-    100048: MiddleIntermediate.R
-    100050: MiddlePalm.L
-    100052: MiddlePalm.R
-    100054: MiddleProximal.L
-    100056: MiddleProximal.R
-    100058: Neck
-    100060: PinkyDistal.L
-    100062: PinkyDistal.R
-    100064: PinkyIntermediate.L
-    100066: PinkyIntermediate.R
-    100068: PinkyPalm.L
-    100070: PinkyPalm.R
-    100072: PinkyProximal.L
-    100074: PinkyProximal.R
-    100076: RingDistal.L
-    100078: RingDistal.R
-    100080: RingIntermediate.L
-    100082: RingIntermediate.R
-    100084: RingPalm.L
-    100086: RingPalm.R
-    100088: RingProximal.L
-    100090: RingProximal.R
-    100092: Shoulder.L
-    100094: Shoulder.R
-    100096: Spine
-    100098: ThumbDistal.L
-    100100: ThumbDistal.R
-    100102: ThumbIntermediate.L
-    100104: ThumbIntermediate.R
-    100106: ThumbProximal.L
-    100108: ThumbProximal.R
-    100110: Toe.L
-    100112: Toe.R
-    100114: UpperArm.L
-    100116: UpperArm.R
-    100118: UpperChest
-    100120: UpperLeg.L
-    100122: UpperLeg.R
-    400000: AnimatedRoot
-    400002: Chest
-    400004: Foot.L
-    400006: Foot.R
-    400008: Hand.L
-    400010: Hand.R
-    400012: Head
-    400014: Hips
-    400016: IndexDistal.L
-    400018: IndexDistal.R
-    400020: IndexIntermediate.L
-    400022: IndexIntermediate.R
-    400024: IndexPalm.L
-    400026: IndexPalm.R
-    400028: IndexProximal.L
-    400030: IndexProximal.R
-    400032: //RootNode
-    400034: LowerArm.L
-    400036: LowerArm.R
-    400038: LowerLeg.L
-    400040: LowerLeg.R
-    400042: MiddleDistal.L
-    400044: MiddleDistal.R
-    400046: MiddleIntermediate.L
-    400048: MiddleIntermediate.R
-    400050: MiddlePalm.L
-    400052: MiddlePalm.R
-    400054: MiddleProximal.L
-    400056: MiddleProximal.R
-    400058: Neck
-    400060: PinkyDistal.L
-    400062: PinkyDistal.R
-    400064: PinkyIntermediate.L
-    400066: PinkyIntermediate.R
-    400068: PinkyPalm.L
-    400070: PinkyPalm.R
-    400072: PinkyProximal.L
-    400074: PinkyProximal.R
-    400076: RingDistal.L
-    400078: RingDistal.R
-    400080: RingIntermediate.L
-    400082: RingIntermediate.R
-    400084: RingPalm.L
-    400086: RingPalm.R
-    400088: RingProximal.L
-    400090: RingProximal.R
-    400092: Shoulder.L
-    400094: Shoulder.R
-    400096: Spine
-    400098: ThumbDistal.L
-    400100: ThumbDistal.R
-    400102: ThumbIntermediate.L
-    400104: ThumbIntermediate.R
-    400106: ThumbProximal.L
-    400108: ThumbProximal.R
-    400110: Toe.L
-    400112: Toe.R
-    400114: UpperArm.L
-    400116: UpperArm.R
-    400118: UpperChest
-    400120: UpperLeg.L
-    400122: UpperLeg.R
-    7400000: Stafe_Walk_Plant
-    7400002: Strafe_Run_Plant_01
-    7400004: Strafe_Run_Plant_02
-    7400006: Strafe_Run_Plant_03
-    7400008: Strafe_Run_Plant_04
-    7400010: Strafe_Run_StartStop
-    7400012: Strafe_Walk_StartStop
-    7400014: Strafe_Run_Plant_01_MIRROR
-    7400016: Strafe_Run_Plant_02_MIRROR
-    7400018: Strafe_Run_Plant_03_MIRROR
-    7400020: Strafe_Run_Plant_04_MIRROR
-    7400022: Strafe_Walk_StartStop_MIRROR
-    7400024: Strafe_Run_StartStop_MIRROR
-    7400026: Stafe_Walk_Plant_MIRROR
-    7400028: Stafe_Walk_LoopBack
-    7400030: Strafe_Walk_Loop45R
-    7400032: Strafe_Walk_Loop45L
-    7400034: Strafe_Walk_LoopBack_MIRROR
-    7400036: Strafe_Walk_LoopRight
-    7400038: Strafe_Walk_LoopLeft
-    7400040: Strafe_Walk_Loop135L
-    7400042: Strafe_Walk_Loop135R
-    7400044: Strafe_Walk_LoopForward
-    7400046: Strafe_Walk_LoopBack
-    7400048: Strafe_Run_BackLoop
-    7400050: Strafe_Run_BackLoop_MIRROR
-    7400052: Strafe_Run_Right45
-    7400054: Strafe_Run_Left45
-    7400056: Strafe_Run_Left
-    7400058: Strafe_Run_Right
-    7400060: Strafe_Run_Left135
-    7400062: Strafe_Run_Right135
-    7400064: Strafe_AccelDecel_01
-    7400066: Strafe_AccelDecel_02
-    7400068: Strafe_AccelDecel_03
-    7400070: Strafe_AccelDecel_04
-    7400072: Strafe_AccelDecel_05
-    7400074: Strafe_RunCircle
-    7400076: Strafe_WalkCircleSpiral
-    7400078: Strafe_RunCircle_MIRROR
-    7400080: Strafe_WalkCircleSpiral_MIRROR
-    7400082: Strafe_AccelDecel_01_MIRROR
-    7400084: Strafe_AccelDecel_02_MIRROR
-    7400086: Strafe_AccelDecel_03_MIRROR
-    7400088: Strafe_AccelDecel_04_MIRROR
-    7400090: Strafe_AccelDecel_05_MIRROR
-    9500000: //RootNode
-    2186277476908879412: ImportLogs
+  serializedVersion: 24200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: AnimatedRoot
+  - first:
+      1: 100002
+    second: Chest
+  - first:
+      1: 100004
+    second: Foot.L
+  - first:
+      1: 100006
+    second: Foot.R
+  - first:
+      1: 100008
+    second: Hand.L
+  - first:
+      1: 100010
+    second: Hand.R
+  - first:
+      1: 100012
+    second: Head
+  - first:
+      1: 100014
+    second: Hips
+  - first:
+      1: 100016
+    second: IndexDistal.L
+  - first:
+      1: 100018
+    second: IndexDistal.R
+  - first:
+      1: 100020
+    second: IndexIntermediate.L
+  - first:
+      1: 100022
+    second: IndexIntermediate.R
+  - first:
+      1: 100024
+    second: IndexPalm.L
+  - first:
+      1: 100026
+    second: IndexPalm.R
+  - first:
+      1: 100028
+    second: IndexProximal.L
+  - first:
+      1: 100030
+    second: IndexProximal.R
+  - first:
+      1: 100032
+    second: //RootNode
+  - first:
+      1: 100034
+    second: LowerArm.L
+  - first:
+      1: 100036
+    second: LowerArm.R
+  - first:
+      1: 100038
+    second: LowerLeg.L
+  - first:
+      1: 100040
+    second: LowerLeg.R
+  - first:
+      1: 100042
+    second: MiddleDistal.L
+  - first:
+      1: 100044
+    second: MiddleDistal.R
+  - first:
+      1: 100046
+    second: MiddleIntermediate.L
+  - first:
+      1: 100048
+    second: MiddleIntermediate.R
+  - first:
+      1: 100050
+    second: MiddlePalm.L
+  - first:
+      1: 100052
+    second: MiddlePalm.R
+  - first:
+      1: 100054
+    second: MiddleProximal.L
+  - first:
+      1: 100056
+    second: MiddleProximal.R
+  - first:
+      1: 100058
+    second: Neck
+  - first:
+      1: 100060
+    second: PinkyDistal.L
+  - first:
+      1: 100062
+    second: PinkyDistal.R
+  - first:
+      1: 100064
+    second: PinkyIntermediate.L
+  - first:
+      1: 100066
+    second: PinkyIntermediate.R
+  - first:
+      1: 100068
+    second: PinkyPalm.L
+  - first:
+      1: 100070
+    second: PinkyPalm.R
+  - first:
+      1: 100072
+    second: PinkyProximal.L
+  - first:
+      1: 100074
+    second: PinkyProximal.R
+  - first:
+      1: 100076
+    second: RingDistal.L
+  - first:
+      1: 100078
+    second: RingDistal.R
+  - first:
+      1: 100080
+    second: RingIntermediate.L
+  - first:
+      1: 100082
+    second: RingIntermediate.R
+  - first:
+      1: 100084
+    second: RingPalm.L
+  - first:
+      1: 100086
+    second: RingPalm.R
+  - first:
+      1: 100088
+    second: RingProximal.L
+  - first:
+      1: 100090
+    second: RingProximal.R
+  - first:
+      1: 100092
+    second: Shoulder.L
+  - first:
+      1: 100094
+    second: Shoulder.R
+  - first:
+      1: 100096
+    second: Spine
+  - first:
+      1: 100098
+    second: ThumbDistal.L
+  - first:
+      1: 100100
+    second: ThumbDistal.R
+  - first:
+      1: 100102
+    second: ThumbIntermediate.L
+  - first:
+      1: 100104
+    second: ThumbIntermediate.R
+  - first:
+      1: 100106
+    second: ThumbProximal.L
+  - first:
+      1: 100108
+    second: ThumbProximal.R
+  - first:
+      1: 100110
+    second: Toe.L
+  - first:
+      1: 100112
+    second: Toe.R
+  - first:
+      1: 100114
+    second: UpperArm.L
+  - first:
+      1: 100116
+    second: UpperArm.R
+  - first:
+      1: 100118
+    second: UpperChest
+  - first:
+      1: 100120
+    second: UpperLeg.L
+  - first:
+      1: 100122
+    second: UpperLeg.R
+  - first:
+      4: 400000
+    second: AnimatedRoot
+  - first:
+      4: 400002
+    second: Chest
+  - first:
+      4: 400004
+    second: Foot.L
+  - first:
+      4: 400006
+    second: Foot.R
+  - first:
+      4: 400008
+    second: Hand.L
+  - first:
+      4: 400010
+    second: Hand.R
+  - first:
+      4: 400012
+    second: Head
+  - first:
+      4: 400014
+    second: Hips
+  - first:
+      4: 400016
+    second: IndexDistal.L
+  - first:
+      4: 400018
+    second: IndexDistal.R
+  - first:
+      4: 400020
+    second: IndexIntermediate.L
+  - first:
+      4: 400022
+    second: IndexIntermediate.R
+  - first:
+      4: 400024
+    second: IndexPalm.L
+  - first:
+      4: 400026
+    second: IndexPalm.R
+  - first:
+      4: 400028
+    second: IndexProximal.L
+  - first:
+      4: 400030
+    second: IndexProximal.R
+  - first:
+      4: 400032
+    second: //RootNode
+  - first:
+      4: 400034
+    second: LowerArm.L
+  - first:
+      4: 400036
+    second: LowerArm.R
+  - first:
+      4: 400038
+    second: LowerLeg.L
+  - first:
+      4: 400040
+    second: LowerLeg.R
+  - first:
+      4: 400042
+    second: MiddleDistal.L
+  - first:
+      4: 400044
+    second: MiddleDistal.R
+  - first:
+      4: 400046
+    second: MiddleIntermediate.L
+  - first:
+      4: 400048
+    second: MiddleIntermediate.R
+  - first:
+      4: 400050
+    second: MiddlePalm.L
+  - first:
+      4: 400052
+    second: MiddlePalm.R
+  - first:
+      4: 400054
+    second: MiddleProximal.L
+  - first:
+      4: 400056
+    second: MiddleProximal.R
+  - first:
+      4: 400058
+    second: Neck
+  - first:
+      4: 400060
+    second: PinkyDistal.L
+  - first:
+      4: 400062
+    second: PinkyDistal.R
+  - first:
+      4: 400064
+    second: PinkyIntermediate.L
+  - first:
+      4: 400066
+    second: PinkyIntermediate.R
+  - first:
+      4: 400068
+    second: PinkyPalm.L
+  - first:
+      4: 400070
+    second: PinkyPalm.R
+  - first:
+      4: 400072
+    second: PinkyProximal.L
+  - first:
+      4: 400074
+    second: PinkyProximal.R
+  - first:
+      4: 400076
+    second: RingDistal.L
+  - first:
+      4: 400078
+    second: RingDistal.R
+  - first:
+      4: 400080
+    second: RingIntermediate.L
+  - first:
+      4: 400082
+    second: RingIntermediate.R
+  - first:
+      4: 400084
+    second: RingPalm.L
+  - first:
+      4: 400086
+    second: RingPalm.R
+  - first:
+      4: 400088
+    second: RingProximal.L
+  - first:
+      4: 400090
+    second: RingProximal.R
+  - first:
+      4: 400092
+    second: Shoulder.L
+  - first:
+      4: 400094
+    second: Shoulder.R
+  - first:
+      4: 400096
+    second: Spine
+  - first:
+      4: 400098
+    second: ThumbDistal.L
+  - first:
+      4: 400100
+    second: ThumbDistal.R
+  - first:
+      4: 400102
+    second: ThumbIntermediate.L
+  - first:
+      4: 400104
+    second: ThumbIntermediate.R
+  - first:
+      4: 400106
+    second: ThumbProximal.L
+  - first:
+      4: 400108
+    second: ThumbProximal.R
+  - first:
+      4: 400110
+    second: Toe.L
+  - first:
+      4: 400112
+    second: Toe.R
+  - first:
+      4: 400114
+    second: UpperArm.L
+  - first:
+      4: 400116
+    second: UpperArm.R
+  - first:
+      4: 400118
+    second: UpperChest
+  - first:
+      4: 400120
+    second: UpperLeg.L
+  - first:
+      4: 400122
+    second: UpperLeg.R
+  - first:
+      74: 7400000
+    second: Stafe_Walk_Plant
+  - first:
+      74: 7400002
+    second: Strafe_Run_Plant_01
+  - first:
+      74: 7400004
+    second: Strafe_Run_Plant_02
+  - first:
+      74: 7400006
+    second: Strafe_Run_Plant_03
+  - first:
+      74: 7400008
+    second: Strafe_Run_Plant_04
+  - first:
+      74: 7400010
+    second: Strafe_Run_StartStop
+  - first:
+      74: 7400012
+    second: Strafe_Walk_StartStop
+  - first:
+      74: 7400014
+    second: Strafe_Run_Plant_01_MIRROR
+  - first:
+      74: 7400016
+    second: Strafe_Run_Plant_02_MIRROR
+  - first:
+      74: 7400018
+    second: Strafe_Run_Plant_03_MIRROR
+  - first:
+      74: 7400020
+    second: Strafe_Run_Plant_04_MIRROR
+  - first:
+      74: 7400022
+    second: Strafe_Walk_StartStop_MIRROR
+  - first:
+      74: 7400024
+    second: Strafe_Run_StartStop_MIRROR
+  - first:
+      74: 7400026
+    second: Stafe_Walk_Plant_MIRROR
+  - first:
+      74: 7400028
+    second: Stafe_Walk_LoopBack
+  - first:
+      74: 7400030
+    second: Strafe_Walk_Loop45R
+  - first:
+      74: 7400032
+    second: Strafe_Walk_Loop45L
+  - first:
+      74: 7400034
+    second: Strafe_Walk_LoopBack_MIRROR
+  - first:
+      74: 7400036
+    second: Strafe_Walk_LoopRight
+  - first:
+      74: 7400038
+    second: Strafe_Walk_LoopLeft
+  - first:
+      74: 7400040
+    second: Strafe_Walk_Loop135L
+  - first:
+      74: 7400042
+    second: Strafe_Walk_Loop135R
+  - first:
+      74: 7400044
+    second: Strafe_Walk_LoopForward
+  - first:
+      74: 7400046
+    second: Strafe_Walk_LoopBack
+  - first:
+      74: 7400048
+    second: Strafe_Run_BackLoop
+  - first:
+      74: 7400050
+    second: Strafe_Run_BackLoop_MIRROR
+  - first:
+      74: 7400052
+    second: Strafe_Run_Right45
+  - first:
+      74: 7400054
+    second: Strafe_Run_Left45
+  - first:
+      74: 7400056
+    second: Strafe_Run_Left
+  - first:
+      74: 7400058
+    second: Strafe_Run_Right
+  - first:
+      74: 7400060
+    second: Strafe_Run_Left135
+  - first:
+      74: 7400062
+    second: Strafe_Run_Right135
+  - first:
+      74: 7400064
+    second: Strafe_AccelDecel_01
+  - first:
+      74: 7400066
+    second: Strafe_AccelDecel_02
+  - first:
+      74: 7400068
+    second: Strafe_AccelDecel_03
+  - first:
+      74: 7400070
+    second: Strafe_AccelDecel_04
+  - first:
+      74: 7400072
+    second: Strafe_AccelDecel_05
+  - first:
+      74: 7400074
+    second: Strafe_RunCircle
+  - first:
+      74: 7400076
+    second: Strafe_WalkCircleSpiral
+  - first:
+      74: 7400078
+    second: Strafe_RunCircle_MIRROR
+  - first:
+      74: 7400080
+    second: Strafe_WalkCircleSpiral_MIRROR
+  - first:
+      74: 7400082
+    second: Strafe_AccelDecel_01_MIRROR
+  - first:
+      74: 7400084
+    second: Strafe_AccelDecel_02_MIRROR
+  - first:
+      74: 7400086
+    second: Strafe_AccelDecel_03_MIRROR
+  - first:
+      74: 7400088
+    second: Strafe_AccelDecel_04_MIRROR
+  - first:
+      74: 7400090
+    second: Strafe_AccelDecel_05_MIRROR
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      41386430: 2186277476908879412
+    second: ImportLogs
   externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -186,9 +537,8 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: AnimatedRoot
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -206,6 +556,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Stafe_Walk_Plant
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 0
       lastFrame: 1812
       wrapMode: 0
@@ -234,6 +585,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Plant_01
       takeName: AnimUprisingRig|Strafe_Run_Plant_01
+      internalID: 0
       firstFrame: 1
       lastFrame: 228
       wrapMode: 0
@@ -262,6 +614,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Plant_02
       takeName: AnimUprisingRig|Strafe_Run_Plant_02
+      internalID: 0
       firstFrame: 1
       lastFrame: 265
       wrapMode: 0
@@ -290,6 +643,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Plant_03
       takeName: AnimUprisingRig|Strafe_Run_Plant_03
+      internalID: 0
       firstFrame: 1
       lastFrame: 271
       wrapMode: 0
@@ -318,6 +672,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Plant_04
       takeName: AnimUprisingRig|Strafe_Run_Plant_04
+      internalID: 0
       firstFrame: 1
       lastFrame: 254
       wrapMode: 0
@@ -346,6 +701,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_StartStop
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 1
       lastFrame: 1601
       wrapMode: 0
@@ -374,6 +730,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_StartStop
       takeName: AnimUprisingRig|Strafe_Walk_StartStop_01
+      internalID: 0
       firstFrame: 1
       lastFrame: 2416
       wrapMode: 0
@@ -402,6 +759,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Plant_01_MIRROR
       takeName: AnimUprisingRig|Strafe_Run_Plant_01
+      internalID: 0
       firstFrame: 1
       lastFrame: 228
       wrapMode: 0
@@ -430,6 +788,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Plant_02_MIRROR
       takeName: AnimUprisingRig|Strafe_Run_Plant_02
+      internalID: 0
       firstFrame: 1
       lastFrame: 265
       wrapMode: 0
@@ -458,6 +817,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Plant_03_MIRROR
       takeName: AnimUprisingRig|Strafe_Run_Plant_03
+      internalID: 0
       firstFrame: 1
       lastFrame: 271
       wrapMode: 0
@@ -486,6 +846,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Plant_04_MIRROR
       takeName: AnimUprisingRig|Strafe_Run_Plant_04
+      internalID: 0
       firstFrame: 1
       lastFrame: 254
       wrapMode: 0
@@ -514,6 +875,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_StartStop_MIRROR
       takeName: AnimUprisingRig|Strafe_Walk_StartStop_01
+      internalID: 0
       firstFrame: 1
       lastFrame: 2416
       wrapMode: 0
@@ -542,6 +904,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_StartStop_MIRROR
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 1
       lastFrame: 1601
       wrapMode: 0
@@ -570,6 +933,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Stafe_Walk_Plant_MIRROR
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 1
       lastFrame: 1812
       wrapMode: 0
@@ -598,6 +962,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Stafe_Walk_LoopBack
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 126
       lastFrame: 155
       wrapMode: 0
@@ -626,6 +991,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_Loop45R
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 626
       lastFrame: 655
       wrapMode: 0
@@ -654,6 +1020,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_Loop45L
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 626
       lastFrame: 655
       wrapMode: 0
@@ -682,6 +1049,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_LoopBack_MIRROR
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 143
       lastFrame: 172
       wrapMode: 0
@@ -710,8 +1078,9 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_LoopRight
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 1073
-      lastFrame: 1102
+      lastFrame: 1104
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -738,12 +1107,13 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_LoopLeft
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 1073
-      lastFrame: 1102
+      lastFrame: 1104
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
-      cycleOffset: 0.57
+      cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
@@ -766,8 +1136,9 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_Loop135L
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 738
-      lastFrame: 767
+      lastFrame: 770
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -794,8 +1165,9 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_Loop135R
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 738
-      lastFrame: 767
+      lastFrame: 770
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -822,6 +1194,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_LoopForward
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 240
       lastFrame: 269
       wrapMode: 0
@@ -850,6 +1223,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Walk_LoopBack
       takeName: AnimUprisingRig|Stafe_Walk_Plant
+      internalID: 0
       firstFrame: 143
       lastFrame: 172
       wrapMode: 0
@@ -878,6 +1252,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_BackLoop
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 66
       lastFrame: 85
       wrapMode: 0
@@ -906,6 +1281,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_BackLoop_MIRROR
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 66
       lastFrame: 85
       wrapMode: 0
@@ -934,6 +1310,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Right45
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 269
       lastFrame: 290
       wrapMode: 0
@@ -962,6 +1339,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Left45
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 269
       lastFrame: 290
       wrapMode: 0
@@ -990,6 +1368,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Left
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 995
       lastFrame: 1015
       wrapMode: 0
@@ -1018,6 +1397,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Right
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 995
       lastFrame: 1015
       wrapMode: 0
@@ -1046,6 +1426,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Left135
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 533
       lastFrame: 554
       wrapMode: 0
@@ -1074,6 +1455,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_Run_Right135
       takeName: AnimUprisingRig|Strafe_Run_StartStop_01
+      internalID: 0
       firstFrame: 533
       lastFrame: 554
       wrapMode: 0
@@ -1101,7 +1483,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_01
-      takeName: AnimUprisingRig|Strafe_AccelDecel_Neutral [Part1]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel_Neutral [Part1]'
+      internalID: 0
       firstFrame: 2
       lastFrame: 120
       wrapMode: 0
@@ -1129,7 +1512,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_02
-      takeName: AnimUprisingRig|Strafe_AccelDecel [Part2]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel [Part2]'
+      internalID: 0
       firstFrame: 37
       lastFrame: 156
       wrapMode: 0
@@ -1157,7 +1541,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_03
-      takeName: AnimUprisingRig|Strafe_AccelDecel [Part2]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel [Part2]'
+      internalID: 0
       firstFrame: 194
       lastFrame: 306
       wrapMode: 0
@@ -1185,7 +1570,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_04
-      takeName: AnimUprisingRig|Strafe_AccelDecel [Part3]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel [Part3]'
+      internalID: 0
       firstFrame: 45
       lastFrame: 158
       wrapMode: 0
@@ -1213,7 +1599,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_05
-      takeName: AnimUprisingRig|Strafe_AccelDecel [Part3]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel [Part3]'
+      internalID: 0
       firstFrame: 258
       lastFrame: 367
       wrapMode: 0
@@ -1242,6 +1629,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_RunCircle
       takeName: AnimUprisingRig|Strafe_RunCircle
+      internalID: 0
       firstFrame: 62
       lastFrame: 527
       wrapMode: 0
@@ -1270,6 +1658,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_WalkCircleSpiral
       takeName: AnimUprisingRig|Strafe_WalkCircleSpiral
+      internalID: 0
       firstFrame: 56
       lastFrame: 1092
       wrapMode: 0
@@ -1298,6 +1687,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_RunCircle_MIRROR
       takeName: AnimUprisingRig|Strafe_RunCircle
+      internalID: 0
       firstFrame: 62
       lastFrame: 527
       wrapMode: 0
@@ -1326,6 +1716,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Strafe_WalkCircleSpiral_MIRROR
       takeName: AnimUprisingRig|Strafe_WalkCircleSpiral
+      internalID: 0
       firstFrame: 62
       lastFrame: 1092
       wrapMode: 0
@@ -1353,7 +1744,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_01_MIRROR
-      takeName: AnimUprisingRig|Strafe_AccelDecel_Neutral [Part1]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel_Neutral [Part1]'
+      internalID: 0
       firstFrame: 2
       lastFrame: 120
       wrapMode: 0
@@ -1381,7 +1773,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_02_MIRROR
-      takeName: AnimUprisingRig|Strafe_AccelDecel [Part2]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel [Part2]'
+      internalID: 0
       firstFrame: 39
       lastFrame: 156
       wrapMode: 0
@@ -1409,7 +1802,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_03_MIRROR
-      takeName: AnimUprisingRig|Strafe_AccelDecel [Part2]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel [Part2]'
+      internalID: 0
       firstFrame: 194
       lastFrame: 306
       wrapMode: 0
@@ -1437,7 +1831,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_04_MIRROR
-      takeName: AnimUprisingRig|Strafe_AccelDecel [Part3]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel [Part3]'
+      internalID: 0
       firstFrame: 45
       lastFrame: 158
       wrapMode: 0
@@ -1465,7 +1860,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Strafe_AccelDecel_05_MIRROR
-      takeName: AnimUprisingRig|Strafe_AccelDecel [Part3]
+      takeName: 'AnimUprisingRig|Strafe_AccelDecel [Part3]'
+      internalID: 0
       firstFrame: 258
       lastFrame: 367
       wrapMode: 0
@@ -1498,25 +1894,39 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -1525,10 +1935,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 1
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human:
     - boneName: Hips
       humanName: Hips
@@ -2264,22 +2674,20 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: d9b2ee02710f70746b6aa2acbe11a1f7,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: d9b2ee02710f70746b6aa2acbe11a1f7, type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
+  avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 145624
-  packageName: Motion Matching for Unity
-  packageVersion: 2.3.2
-  assetPath: Assets/Plugins/MotionMatching/Demo/Animations/Mocap/StrafeMocapSet.fbx
-  uploadId: 741503

@@ -11,6 +11,7 @@ namespace LOGIYGames
 
         public MovementStateData idleStateData;
         public MovementStateData runStateData;
+        public MovementStateData walkStateData;
         public MovementStateData sprintStateData;
         public MovementStateData fallingStateData;
         public MovementStateData slidingStateData;
@@ -23,6 +24,7 @@ namespace LOGIYGames
         private SlideState _slideState;
         private BackTurnState _backTurnState;
         private RunState _runState;
+        private WalkState _walkState;
         private FallingState _fallingState;
         private SprintState _sprintState;
         private JumpState _groundJumpState;
@@ -38,6 +40,7 @@ namespace LOGIYGames
         {
             _idleState = new IdleState(character, idleStateData);
             _runState = new RunState(character, runStateData);
+            _walkState = new WalkState(character, walkStateData);
             _sprintState = new SprintState(character, sprintStateData);
             _fallingState = new FallingState(character, fallingStateData);
             _groundJumpState = new JumpState(character, groundJumpStateData);
@@ -66,7 +69,10 @@ namespace LOGIYGames
             // ----- Walk State Transitions -----
             character.AddStateMachineTransition(_idleState, _runState, () => character.Input.MovementInput.magnitude > 0f);
             character.AddStateMachineTransition(_idleState, _groundJumpState, () => character.Input.JumpPressed && character.JumpCount < groundJumpStateData.MaxJumpCount && _groundJumpState.CanEnter());
-
+            character.AddStateMachineTransition(_idleState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
+            character.AddStateMachineTransition(_idleState, _walkState, () => Input.GetKeyDown(KeyCode.Z));
+            character.AddStateMachineTransition(_walkState, _idleState, () => Input.GetKeyDown(KeyCode.Z));
+            character.AddStateMachineTransition(_walkState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
             // ----- Run State Transitions -----
             character.AddStateMachineTransition(_runState, _idleState, () => character.Input.MovementInput.magnitude == 0f && character.Sensors.IsGrounded);
             character.AddStateMachineTransition(_runState, _sprintState, () => character.Input.SprintPressed && character.Input.MovementInput.magnitude > 0);
