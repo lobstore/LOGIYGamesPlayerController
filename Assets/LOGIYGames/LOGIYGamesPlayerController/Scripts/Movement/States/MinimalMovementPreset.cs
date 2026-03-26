@@ -22,7 +22,7 @@ namespace LOGIYGames
 
         private IdleState _idleState;
         private SlideState _slideState;
-        private BackTurnState _backTurnState;
+        private TurnState _backTurnState;
         private RunState _runState;
         private WalkState _walkState;
         private FallingState _fallingState;
@@ -45,7 +45,7 @@ namespace LOGIYGames
             _fallingState = new FallingState(character, fallingStateData);
             _groundJumpState = new JumpState(character, groundJumpStateData);
             _rollState = new RollState(character, rollStateData);
-            _backTurnState = new BackTurnState(character, turnBackStateData);
+            _backTurnState = new TurnState(character, turnBackStateData);
             _slideState = new SlideState(character, slidingStateData);
 
             _idleActionState = new IdleActionState(character);

@@ -18,7 +18,7 @@ namespace LOGIYGames.CharacterCore
     }
     public class TurnPerformedEvent
     {
-        public float speed;
+        public float movementSpeed;
         public float angle;
     }
     public class OnLeashWeaponEvent

@@ -16,11 +16,11 @@ namespace LOGIYGames.Animation
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) => { PlayAnimation("Jump"); });
             character.EventBus.Subscribe<RollPerformedEvent>((evt) => { PlayAnimation("Roll"); });
             character.EventBus.Subscribe<TurnPerformedEvent>((evt) => {
-                if (evt.speed > 0.5)
+                if (evt.movementSpeed > 0.5)
                 {
 
                     PlayAnimation("BackTurn");
-                } else if(evt.speed<0.5&& evt.speed > 0.2f)
+                } else if(evt.movementSpeed<0.5&& evt.movementSpeed > 0.2f)
                 {
                     if (evt.angle > 0)
                     {
@@ -33,7 +33,7 @@ namespace LOGIYGames.Animation
 
                     }
                 }
-                else if(evt.speed <0.2)
+                else if(evt.movementSpeed <0.2)
                 {
                     if (evt.angle > 0)
                     {

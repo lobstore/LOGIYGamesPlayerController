@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class BackTurnState : TimedMovementState
+    public class TurnState : TimedMovementState
     {
-        public BackTurnState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
+        public TurnState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
         {
         }
 
@@ -17,7 +17,7 @@ namespace LOGIYGames
             _character.CurrentMovementStrategy = new NoneMovement();
             _character.EventBus.Publish(new TurnPerformedEvent
             {
-                speed = _character.SpeedMultiplier,
+                movementSpeed = _character.SpeedMultiplier,
                 angle = _character.DeltaYaw
             });
         }
