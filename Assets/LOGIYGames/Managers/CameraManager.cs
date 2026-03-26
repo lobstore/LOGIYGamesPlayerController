@@ -12,7 +12,6 @@ namespace LOGIYGames
     }
     public class CameraManager : Singleton<CameraManager>
     {
-        [SerializeField] DragPointerHandler MobileInputReader;
         [SerializeField] List<CinemachineCameraController> cinemachineCameraControllers = new();
         public CinemachineCameraController CurrentCameraController { get; private set; }
         [SerializeField] CinemachineCameraController FirstPersonCameraController;
@@ -24,7 +23,7 @@ namespace LOGIYGames
         CinemachineCameraController instance_TopDownCameraController;
 
 
-        [field: SerializeField] public PlayerCameraInput CameraInput {  get; private set; }
+        [field: SerializeField] public PlayerCameraInputReader CameraInput {  get; private set; }
         [SerializeField] public CameraPerspectiveType CameraPerspectiveType;
         protected override void Initialize()
         {
@@ -35,11 +34,6 @@ namespace LOGIYGames
             cinemachineCameraControllers.Add(instance_FirstPersonCameraController);
             cinemachineCameraControllers.Add(instance_ThirdPersonCameraController);
             cinemachineCameraControllers.Add(instance_TopDownCameraController);
-
-            foreach (var cam in cinemachineCameraControllers)
-            {
-                GetComponent<CinemachineMobileInputCotroller>()?.Controllers.ForEach(x=>x.Input.DragInput = MobileInputReader);
-            }
         }
         private void Start()
         {

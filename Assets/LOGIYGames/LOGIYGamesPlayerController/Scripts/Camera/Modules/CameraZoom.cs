@@ -5,7 +5,7 @@ namespace LOGIYGames
 {
     public class CameraZoom : MonoBehaviour
     {
-        PlayerCameraInput PlayerCameraInput;
+        PlayerCameraInputReader PlayerCameraInput;
 
         [SerializeField][Range(0f, 10f)] private float defaultDistance = 4f;
         [SerializeField][Range(0f, 10f)] private float minimumDistance = 1f;

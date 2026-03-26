@@ -1,10 +1,10 @@
 ﻿<Solution>
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="UniGLTF.Editor.csproj" />
   <Project Path="VRM10.Editor.csproj" />
   <Project Path="VRM10.csproj" />
   <Project Path="VrmLibTests.csproj" />
   <Project Path="UniGLTF.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="uLipSync.Samples.Common.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
   <Project Path="UniHumanoid.csproj" />

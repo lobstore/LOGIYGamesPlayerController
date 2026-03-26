@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace LOGIYGames
 {
-    public class PlayerCameraInput:MonoBehaviour
+    public class PlayerCameraInputReader:MonoBehaviour
     {
         [SerializeField] InputActionAsset InputActions;
         InputActionMap CameraActionMap;
