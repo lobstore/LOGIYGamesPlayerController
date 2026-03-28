@@ -42,7 +42,7 @@ namespace LOGIYGames
             MovementInput = m_MoveAction.ReadValue<Vector2>();
             JumpPressed = m_JumpAction.WasPressedThisFrame();
             EvadePressed = m_EvadeAction.WasPressedThisFrame();
-            SprintPressed = m_SprintAction.IsPressed();
+            SprintPressing = m_SprintAction.IsPressed();
             CrouchPressed = m_CrouchAction.IsPressed();
             FocusPressed = m_FocusAction.IsPressed();
             AttackPressed = m_AttackAction.WasPressedThisFrame();
@@ -55,7 +55,7 @@ namespace LOGIYGames
 
         public bool EvadePressed { get; private set; }
 
-        public bool SprintPressed { get; private set; }
+        public bool SprintPressing { get; private set; }
 
         public bool CrouchPressed { get; private set; }
 

@@ -1,6 +1,6 @@
 using System;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
-using UnityEngine.Events;
 
 
 
@@ -8,26 +8,41 @@ namespace LOGIYGames.CharacterCore
 {
     public class JumpPerformedEvent
     {
+        public enum Direction
+        {
+            Left,
+            Right,
+            Forward,
+            Backward
+        }
+        public Direction direction;
         public float verticalForce;
         public float planarForce;
     }
-    public class RollPerformedEvent
+    public class DashPerformedEvent : JumpPerformedEvent
     {
-        public float verticalForce;
-        public float planarForce;
+
+
+    }
+    public class RollPerformedEvent : JumpPerformedEvent
+    {
     }
     public class TurnPerformedEvent
     {
         public float movementSpeed;
         public float angle;
     }
-    public class OnLeashWeaponEvent
+    public class LeashWeaponEvent
     {
         public bool unleashWeapon;
     }
     public class ItemThrowedEvent
     {
-        
+
+    }
+    public class LandedEvent
+    {
+
     }
     public class Character : MonoModuleBase, IControllable
     {
@@ -37,11 +52,9 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] private ControllerWrapperBase CController;
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
         // TODO Make Builder
-        public IMovementStrategy DefaultMovementStrategy { get; set; }
         public IMovementStrategy CurrentMovementStrategy { get; set; }
-
-        public IRotationStrategy DefaultRotaionStrategy { get; set; }
         public IRotationStrategy CurrentRotationStrategy { get; set; }
+        public IRotationStrategy DefaultRotationStrategy { get; set; }
 
         public IEventDispatcher EventBus { get; private set; }
 
@@ -128,8 +141,9 @@ namespace LOGIYGames.CharacterCore
         #endregion
         private void Awake()
         {
-            DefaultMovementStrategy = new CameraRelativeMovement(this);
-            DefaultRotaionStrategy = new CameraRelativeRotation(this);
+            CurrentMovementStrategy = new CameraRelativeMovement(this);
+            CurrentRotationStrategy = new CameraRelativeRotation(this);
+            DefaultRotationStrategy = CurrentRotationStrategy;
             EventBus = new EventDispatcher();
             InitializeStateMachine();
         }
@@ -142,11 +156,13 @@ namespace LOGIYGames.CharacterCore
 
             EventBus.Subscribe<JumpPerformedEvent>(Jump);
             EventBus.Subscribe<RollPerformedEvent>(Roll);
+            EventBus.Subscribe<DashPerformedEvent>(Dash);
 
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
+
             _movementStateMachine.FixedUpdate();
             _actionStateMachine.FixedUpdate();
         }
@@ -160,18 +176,25 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+
             targetRotation = CurrentRotationStrategy.GetRotation();
             CalculateDeltaYaw();
             targetDirection = CurrentMovementStrategy.GetMovementDirection();
+            _movementStateMachine.Update();
+            _actionStateMachine.Update();
+            Debug();
+
+
+        }
+
+        private void Debug()
+        {
             _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
             _lastMovementTransition = _movementStateMachine.LastTransition;
             _currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
             _lastActionTransition = _actionStateMachine.LastTransition;
-            _movementStateMachine.Update();
-            _actionStateMachine.Update();
-
-
         }
+
         private void SmoothHeightChanging()
         {
             if (Height == CController.Height && CController.Center.y == Height) return;
@@ -273,26 +296,27 @@ namespace LOGIYGames.CharacterCore
         {
             CController.Move(ProjectVelocity());
         }
+        public void Dash(DashPerformedEvent evt)
+        {
+            // --- Добавляем импульс для рывка ---
+            Velocity += targetDirection * evt.planarForce;
+
+
+        }
         private Vector3 ProjectVelocity()
         {
             return Vector3.ProjectOnPlane(Velocity, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
         }
         public void Jump(JumpPerformedEvent evt)
         {
-            if (Input.MovementInput.magnitude > 0)
-            {
-                Vector3 movement = new Vector3(Input.MovementInput.x, 0, Input.MovementInput.y);
-                Vector3 cam = Camera.main.transform.forward;
-                Velocity += Quaternion.LookRotation(new Vector3(cam.x, 0, cam.z)) * movement * SpeedMultiplier * evt.planarForce;
-            }
+            Velocity += targetDirection * SpeedMultiplier * evt.planarForce;
             CController.Jump(evt.verticalForce);
             JumpCount++;
         }
         public void Roll(RollPerformedEvent evt)
         {
-            Jump(new JumpPerformedEvent { planarForce = evt.planarForce, verticalForce = evt.verticalForce});
-            Velocity += transform.forward * evt.planarForce;
-
+            Velocity = transform.forward * evt.planarForce + Velocity;
+            CController.Jump(evt.verticalForce);
         }
 
         #endregion
@@ -308,7 +332,7 @@ namespace LOGIYGames.CharacterCore
             }
             else
             {
-                Debug.LogError("No MovementPreset provided");
+                UnityEngine.Debug.LogError("No MovementPreset provided");
             }
         }
         public void AddStateMachineTransition(IState from, IState to, Func<bool> condition)

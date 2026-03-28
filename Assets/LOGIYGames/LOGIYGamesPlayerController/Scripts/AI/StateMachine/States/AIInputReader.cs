@@ -17,7 +17,7 @@ namespace LOGIYGames.Scripts.AI
         public Vector2 MovementInput { get ; private set ; }
         public bool JumpPressed { get ; private set ; }
         public bool EvadePressed { get ; private set ; }
-        public bool SprintPressed { get ; private set ; }
+        public bool SprintPressing { get ; private set ; }
         public bool CrouchPressed { get ; private set ; }
 
         public bool FocusPressed {  get ; private set ; }
@@ -30,7 +30,7 @@ namespace LOGIYGames.Scripts.AI
             MovementInput = Driver.MovementInput;
             JumpPressed = Driver.JumpPressed;
             EvadePressed = Driver.EvadePressed;
-            SprintPressed = Driver.SprintPressed;
+            SprintPressing = Driver.SprintPressed;
             CrouchPressed = Driver.CrouchPressed;
             FocusPressed = Driver.FocusPressed;
             //AttackPressed = Driver.AttackPressed;

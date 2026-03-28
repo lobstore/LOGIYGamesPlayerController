@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 9043036403964964748}
   - component: {fileID: 4170622409733040555}
   - component: {fileID: 8149182025060742599}
-  - component: {fileID: 1740289185344008748}
   m_Layer: 0
   m_Name: 1stPersonVirtualCamera
   m_TagString: Untagged
@@ -238,44 +237,3 @@ MonoBehaviour:
         DecelTime: 0.2
   PlayerIndex: -1
   AutoEnableInputs: 0
---- !u!114 &1740289185344008748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7261505452651263688}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00bd081bbf967b646ac3b2af39435046, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ScanRecursively: 1
-  SuppressInputWhileBlending: 1
-  IgnoreTimeScale: 0
-  m_ControllerManager:
-    Controllers:
-    - Name: Look X (Pan)
-      Owner: {fileID: 4720824850533462554}
-      Enabled: 1
-      Input:
-        invert: 0
-        horizicalSensetivity: 1
-        verticalSensetivity: 1
-        DragInput: {fileID: 0}
-      InputValue: 0
-      Driver:
-        AccelTime: 0
-        DecelTime: 0
-    - Name: Look Y (Tilt)
-      Owner: {fileID: 4720824850533462554}
-      Enabled: 1
-      Input:
-        invert: 0
-        horizicalSensetivity: 1
-        verticalSensetivity: 1
-        DragInput: {fileID: 0}
-      InputValue: 0
-      Driver:
-        AccelTime: 0
-        DecelTime: 0

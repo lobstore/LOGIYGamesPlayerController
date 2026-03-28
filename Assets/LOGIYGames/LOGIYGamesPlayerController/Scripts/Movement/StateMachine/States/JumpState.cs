@@ -19,14 +19,6 @@ namespace LOGIYGames.Movement
                 planarForce = _stateData.PlanarJumpForce
             });
         }
-        public override void Exit()
-        {
-            base.Exit();
-        }
-        public override bool CanEnter()
-        {
-            return base.CanEnter();
-        }
     }
 
 }

@@ -12,7 +12,7 @@ namespace LOGIYGames
         {
             base.Enter();
             Character.EventBus.Publish(
-                new OnLeashWeaponEvent
+                new LeashWeaponEvent
                 {
                     unleashWeapon = true
                 }

@@ -2,9 +2,10 @@
 
 namespace LOGIYGames.Movement
 {
-    public class StopState : BaseMovementState
+    public class StopState : TimedMovementState
     {
-        public StopState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public StopState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
+
     }
 
 }

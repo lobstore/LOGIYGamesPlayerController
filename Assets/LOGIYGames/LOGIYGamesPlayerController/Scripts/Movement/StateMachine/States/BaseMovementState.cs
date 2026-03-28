@@ -12,6 +12,7 @@ namespace LOGIYGames.Movement
     {
         protected Character _character;
         protected MovementStateData _data;
+        public bool IsActiveState {  get; private set; }
         protected BaseMovementState(Character ctx, MovementStateData stateData)
         {
             _data = new();
@@ -24,16 +25,15 @@ namespace LOGIYGames.Movement
 
         public virtual void Enter()
         {
-
-            _character.CurrentMovementStrategy = _character.DefaultMovementStrategy;
-            _character.CurrentRotationStrategy = _character.DefaultRotaionStrategy;
             _character.Acceleration = _data.Acceleration;
             _character.Deceleration = _data.Deceleration;
             _character.TurnSmoothTime = _data.TurnSmoothTime;
+            IsActiveState = true;
         }
 
         public virtual void Exit()
         {
+            IsActiveState = false;
         }
 
         public virtual void LogicUpdate()
@@ -64,6 +64,7 @@ namespace LOGIYGames.Movement
         public virtual void LateUpdate()
         {
             Aim();
+
         }
 
         protected virtual void Aim()
@@ -74,15 +75,22 @@ namespace LOGIYGames.Movement
             }
             else
             {
-                _character.CurrentRotationStrategy = _character.DefaultRotaionStrategy;
+                _character.CurrentRotationStrategy = _character.DefaultRotationStrategy;
             }
         }
 
         public virtual void PhysicsUpdate()
         {
-
-            _character.Rotate();
+            Move();
+            Rotate();
+        }
+        protected virtual void Move()
+        {
             _character.Move();
+        }
+        protected virtual void Rotate()
+        {
+            _character.Rotate();
         }
     }
 

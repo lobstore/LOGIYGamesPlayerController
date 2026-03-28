@@ -9,7 +9,7 @@ namespace LOGIYGames.CharacterCore
         bool FocusPressed { get;}
         bool JumpPressed { get;}
         bool EvadePressed { get;}
-        bool SprintPressed { get;}
+        bool SprintPressing { get;}
         bool CrouchPressed { get;}
 
         bool AttackPressed { get;}

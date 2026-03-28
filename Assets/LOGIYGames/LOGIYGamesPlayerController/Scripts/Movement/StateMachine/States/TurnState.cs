@@ -13,13 +13,19 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            _character.CurrentRotationStrategy = new NoneRotation(_character.transform);
-            _character.CurrentMovementStrategy = new NoneMovement();
             _character.EventBus.Publish(new TurnPerformedEvent
             {
                 movementSpeed = _character.SpeedMultiplier,
                 angle = _character.DeltaYaw
             });
+        }
+        protected override void Rotate()
+        {
+            
+        }
+        protected override void Move()
+        {
+            
         }
         protected override void Aim()
         {
@@ -28,8 +34,6 @@ namespace LOGIYGames
         public override void Exit()
         {
             base.Exit();
-            _character.CurrentRotationStrategy = _character.DefaultRotaionStrategy;
-            _character.CurrentMovementStrategy = _character.DefaultMovementStrategy;
         }
     }
 }

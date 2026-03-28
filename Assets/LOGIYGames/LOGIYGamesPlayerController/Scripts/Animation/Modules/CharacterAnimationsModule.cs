@@ -10,17 +10,46 @@ namespace LOGIYGames.Animation
 
         [SerializeField][Range(0, 0.5f)] private float rotationAnimationsBlendTime;
 
+        public string _dashLeft;
+        public string _dashRight;
+        public string _dashForward;
+        public string _dashBackward;
 
         private void Start()
         {
+
+
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) => { PlayAnimation("Jump"); });
             character.EventBus.Subscribe<RollPerformedEvent>((evt) => { PlayAnimation("Roll"); });
-            character.EventBus.Subscribe<TurnPerformedEvent>((evt) => {
+            character.EventBus.Subscribe<DashPerformedEvent>((evt) => {
+
+                switch (evt.direction)
+                {
+                    case JumpPerformedEvent.Direction.Left:
+                        PlayAnimation(_dashLeft);
+                        break;
+                    case JumpPerformedEvent.Direction.Right:
+                        PlayAnimation(_dashRight);
+                        break;
+                    case JumpPerformedEvent.Direction.Forward:
+                        PlayAnimation(_dashForward);
+                        break;
+                    case JumpPerformedEvent.Direction.Backward:
+                        PlayAnimation(_dashBackward);
+                        break;
+                    default:
+                        break;
+                }
+
+            });
+            character.EventBus.Subscribe<TurnPerformedEvent>((evt) =>
+            {
                 if (evt.movementSpeed > 0.5)
                 {
 
                     PlayAnimation("BackTurn");
-                } else if(evt.movementSpeed<0.5&& evt.movementSpeed > 0.2f)
+                }
+                else if (evt.movementSpeed < 0.5 && evt.movementSpeed > 0.2f)
                 {
                     if (evt.angle > 0)
                     {
@@ -33,7 +62,7 @@ namespace LOGIYGames.Animation
 
                     }
                 }
-                else if(evt.movementSpeed <0.2)
+                else if (evt.movementSpeed < 0.2)
                 {
                     if (evt.angle > 0)
                     {
@@ -46,8 +75,8 @@ namespace LOGIYGames.Animation
 
                     }
                 }
-            } );
-            character.EventBus.Subscribe<OnLeashWeaponEvent>((evt) =>
+            });
+            character.EventBus.Subscribe<LeashWeaponEvent>((evt) =>
             {
                 if (evt.unleashWeapon)
                 {
@@ -75,7 +104,7 @@ namespace LOGIYGames.Animation
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
-                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.magnitude,0.05f, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.magnitude, 0.05f, Time.deltaTime);
             }
             else
             {
