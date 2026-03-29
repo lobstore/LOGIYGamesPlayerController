@@ -27,7 +27,8 @@ namespace LOGIYGames
         [Header("References")]
         [SerializeField] private SensorsModule m_sensors;
         [SerializeField] private Character m_character;
-        
+        [SerializeField] private float gravityChangeSpeed;
+
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
@@ -50,13 +51,12 @@ namespace LOGIYGames
                 m_sensors.IsValidSlope())
             {
                 CurrentGravityForce = groundMagnit;
-                Velocity = CurrentGravityForce * gravityDirection.normalized;
             }
             else
             {
                 CurrentGravityForce = BaseGravityForce;
-                Velocity = Vector3.Lerp(Velocity, CurrentGravityForce * gravityDirection.normalized, Time.deltaTime);
             }
+                Velocity = Vector3.Lerp(Velocity, CurrentGravityForce * gravityDirection.normalized, Time.deltaTime * gravityChangeSpeed);
             
             // Check for overhead obstacles
             if (m_sensors != null && m_sensors.AboveHit.collider != null)

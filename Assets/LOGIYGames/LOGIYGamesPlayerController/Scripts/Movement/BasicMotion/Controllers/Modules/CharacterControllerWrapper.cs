@@ -1,7 +1,5 @@
 using LOGIYGames.CharacterCore;
-using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace LOGIYGames
 {
@@ -23,40 +21,46 @@ namespace LOGIYGames
         private SensorsModule m_sensors;
 
         private bool m_enableCollision = true;
-        private Vector3 targetVelocity;
+        private Vector3 totalVelocity;
+        private Vector3 totalVerticalVelocity;
+        private Vector3 totalPlanarVelocity;
+        Vector3 planarVelocity;
+        Vector3 verticalVelocity;
+        [SerializeField] private float projectingPlanarSpeed;
+        [SerializeField] private float projectingVerticalSpeed;
 
         #region Public Properties
 
         public override bool IsGrounded { get { return m_sensors.IsGrounded; } }
-        
+
         public override bool ApplyGravityWhenGrounded { get { return m_applyGravityWhenGrounded; } }
-        
+
         public override Vector3 Velocity { get { return m_characterController.velocity; } }
-        
+
         public override float MaxStepHeight
         {
             get { return m_characterController.stepOffset; }
             set { m_characterController.stepOffset = value; }
         }
-        
+
         public override float Height
         {
             get { return m_characterController.height; }
             set { m_characterController.height = value; }
         }
-        
-        public override float SlopeLimit 
-        { 
-            get => m_characterController.slopeLimit; 
-            set => m_characterController.slopeLimit = Mathf.Max(0, value); 
+
+        public override float SlopeLimit
+        {
+            get => m_characterController.slopeLimit;
+            set => m_characterController.slopeLimit = Mathf.Max(0, value);
         }
-        
+
         public override Vector3 Center
         {
             get { return m_characterController.center; }
             set { m_characterController.center = value; }
         }
-        
+
         public override float Radius
         {
             get { return m_characterController.radius; }
@@ -83,7 +87,7 @@ namespace LOGIYGames
 
         private void LateUpdate()
         {
-            DebugDraw.DrawArrow(transform.position,targetVelocity,Color.green);
+            DebugDraw.DrawArrow(transform.position, totalVelocity, Color.green);
         }
 
         #endregion
@@ -92,27 +96,34 @@ namespace LOGIYGames
 
         public override void Move(Vector3 a_move)
         {
+            planarVelocity = a_move;
+            verticalVelocity = m_characterGravityModule.Velocity;
+
+
             if (m_sensors.IsValidSlope())
             {
-                if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.Input.MovementInput.magnitude > 0)
+                if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.Input.MovementInput.magnitude> 0)
                 {
-                    ProjectVelocity(a_move);
-
+                    ProjectVelocity();
                 }
                 else
                 {
-                    targetVelocity = a_move;
+                    totalPlanarVelocity = planarVelocity;
+                    totalVerticalVelocity = verticalVelocity;
                 }
+
             }
             else
             {
-                ProjectVelocity(a_move);
+                ProjectVelocity();
             }
-            Vector3 totalVelocity = targetVelocity + m_characterGravityModule.Velocity;
+
+
+
+            totalVelocity = totalVerticalVelocity + totalPlanarVelocity;
 
             if (m_enableCollision)
             {
-
                 m_characterController.Move(totalVelocity * Time.deltaTime);
             }
             else
@@ -122,9 +133,14 @@ namespace LOGIYGames
             }
         }
 
-        private void ProjectVelocity(Vector3 totalVelocity)
+        private void ProjectVelocity()
         {
-            targetVelocity = Vector3.ProjectOnPlane(totalVelocity, m_sensors.BelowHit.normal) + Vector3.ProjectOnPlane(m_characterGravityModule.Velocity, m_sensors.BelowHit.normal);
+            Vector3 projectedPlanarVelocity = Vector3.zero;
+            Vector3 projectedVerticalVelocity = Vector3.zero;
+            projectedPlanarVelocity = Vector3.ProjectOnPlane(planarVelocity, m_sensors.BelowHit.normal);
+            projectedVerticalVelocity = Vector3.ProjectOnPlane(verticalVelocity, m_sensors.BelowHit.normal);
+            totalPlanarVelocity = Vector3.Lerp(totalPlanarVelocity, projectedPlanarVelocity, Time.deltaTime * projectingPlanarSpeed);
+            totalVerticalVelocity = Vector3.Lerp(totalVerticalVelocity, projectedVerticalVelocity, Time.deltaTime * projectingVerticalSpeed);
         }
 
         public override void Rotate(Quaternion a_targetRotation)
@@ -149,9 +165,9 @@ namespace LOGIYGames
 
         public override Vector3 GetCachedMoveDelta()
         {
-            return Velocity*Time.deltaTime;
+            return Velocity * Time.deltaTime;
         }
-        
+
         public override Quaternion GetCachedRotDelta()
         {
             return transform.rotation;

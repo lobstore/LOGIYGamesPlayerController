@@ -39,6 +39,15 @@ namespace LOGIYGames
         private UnleashWeaponActionState _unleashWeaponActionState;
         private LeashWeaponActionState _leashWeaponActionState;
         private ThrowItemActionState _throwItemActionState;
+
+        public override void Init(Character character)
+        {
+            InitializeStates(character);
+            ConfigureTransitions(character);
+            character.MovementStateMachine.SetState(_idleState);
+            character.ActionStateMachine.SetState(_idleActionState);
+        }
+
         // Add AnimationModule to State subscribtion
         private void InitializeStates(Character character)
         {
@@ -60,6 +69,8 @@ namespace LOGIYGames
             _leashWeaponActionState = new LeashWeaponActionState(character);
             _throwItemActionState = new ThrowItemActionState(character);
         }
+
+
         private void ConfigureTransitions(Character character)
         {
             character.AddAnyStateMachineTransition(_rollState, () =>character.Input.EvadePressed && !_groundJumpState.IsDurationTimerRunning&&character.IsGrounded);
@@ -84,7 +95,7 @@ namespace LOGIYGames
             //character.AddStateMachineTransition(_runState, _sprintState, () => character.Input.SprintPressing && character.Input.MovementInput.magnitude > 0);
             character.AddStateMachineTransition(_runState, _dashState, () => Input.GetKeyDown(KeyCode.LeftShift));
             character.AddStateMachineTransition(_runState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
-            character.AddStateMachineTransition(_runState, _slideState, () => character.Sensors.GroundAngle > 25 && character.SpeedMultiplier > character.SpeedMultiplier * 0.5f);
+            //character.AddStateMachineTransition(_runState, _slideState, () => character.Sensors.GroundAngle > 25 && character.SpeedMultiplier > character.SpeedMultiplier * 0.5f);
             character.AddStateMachineTransition(_runState, _groundJumpState, () => character.Input.JumpPressed && character.JumpCount < groundJumpStateData.MaxJumpCount && _groundJumpState.CanEnter());
 
             // ----- Sprint State Transitions -----
@@ -126,12 +137,6 @@ namespace LOGIYGames
 
 
 
-        public override void Init(Character character)
-        {
-            InitializeStates(character);
-            ConfigureTransitions(character);
-            character.MovementStateMachine.SetState(_idleState);
-            character.ActionStateMachine.SetState(_idleActionState);
-        }
+
     }
 }

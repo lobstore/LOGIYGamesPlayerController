@@ -46,10 +46,10 @@ namespace LOGIYGames.CharacterCore
     }
     public class Character : MonoModuleBase, IControllable
     {
-        [Header("References")]
         public IMovementInputReader Input { get; set; }
+        [Header("References")]
 
-        [field: SerializeField] private ControllerWrapperBase CController;
+        [field: SerializeField] private ControllerWrapperBase Motor;
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
         // TODO Make Builder
         public IMovementStrategy CurrentMovementStrategy { get; set; }
@@ -70,7 +70,7 @@ namespace LOGIYGames.CharacterCore
 
         public bool IsFalling { get; set; }
         public bool IsCrouching { get; set; }
-        public bool IsGrounded { get => CController.IsGrounded; }
+        public bool IsGrounded { get => Motor.IsGrounded; }
         public bool IsSliding { get; set; }
 
         public void SetInputReader(IMovementInputReader inputReader)
@@ -86,7 +86,8 @@ namespace LOGIYGames.CharacterCore
         private string _lastActionTransition;
         #endregion
         #region VelocityVariables
-
+        [Header("Movement Configuration")]
+        public float BaseSpeed;
         /// <summary>
         /// Gets or sets the deceleration value.
         /// </summary>
@@ -113,18 +114,17 @@ namespace LOGIYGames.CharacterCore
 
         public float TurnSmoothTime { get; set; } = 5f;
 
-        [field: SerializeField] public float BaseSpeed { get; set; }
         public float CurrentSpeed => SpeedMultiplier * BaseSpeed * Input.MovementInput.magnitude;
 
         public Vector3 Velocity { get => velocity; set => velocity = value; }
 
         private Vector3 velocity;
         private float deltaYaw;
-
+        public Quaternion targetRotation { get; set; }
+        public Vector3 targetDirection { get; set; }
 
         #endregion
-        public Quaternion targetRotation;
-        public Vector3 targetDirection;
+
         #region Height Properties
 
         [field: SerializeField] public float Height { get; set; }
@@ -133,9 +133,9 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
         #region Camera References
-
-        [field: SerializeField] public Transform CinemachineCameraLookAtTransform { get; set; }
-        [field: SerializeField] public Transform CinemachineCameraFollowTransform { get; set; }
+        [Header("Camera Configuration")]
+        public Transform CameraLookAt;
+        public Transform CameraFollow;
         public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
 
         #endregion
@@ -150,9 +150,9 @@ namespace LOGIYGames.CharacterCore
         private void Start()
         {
             // TODO Make ICBFollowable abstraction to change follow target
-            CameraManager.Instance.SetTargetTo(CinemachineCameraFollowTransform, CinemachineCameraLookAtTransform);
-            CController.Height = Height;
-            CController.Center = new Vector3(0, Height / 2.0f, 0);
+            CameraManager.Instance.SetTargetTo(CameraFollow, CameraLookAt);
+            Motor.Height = Height;
+            Motor.Center = new Vector3(0, Height / 2.0f, 0);
 
             EventBus.Subscribe<JumpPerformedEvent>(Jump);
             EventBus.Subscribe<RollPerformedEvent>(Roll);
@@ -197,16 +197,16 @@ namespace LOGIYGames.CharacterCore
 
         private void SmoothHeightChanging()
         {
-            if (Height == CController.Height && CController.Center.y == Height) return;
-            if (!Mathf.Approximately(CController.Height, Height) || !Mathf.Approximately(CController.Center.y, Height / 2.0f))
+            if (Height == Motor.Height && Motor.Center.y == Height) return;
+            if (!Mathf.Approximately(Motor.Height, Height) || !Mathf.Approximately(Motor.Center.y, Height / 2.0f))
             {
-                CController.Height = Mathf.Lerp(CController.Height, Height, HeightChangingSmoothTime * Time.deltaTime);
-                CController.Center = Vector3.Lerp(CController.Center, new Vector3(0, Height / 2.0f, 0), HeightChangingSmoothTime * Time.deltaTime);
+                Motor.Height = Mathf.Lerp(Motor.Height, Height, HeightChangingSmoothTime * Time.deltaTime);
+                Motor.Center = Vector3.Lerp(Motor.Center, new Vector3(0, Height / 2.0f, 0), HeightChangingSmoothTime * Time.deltaTime);
             }
             else
             {
-                CController.Height = Height;
-                CController.Center = new Vector3(0, Height / 2.0f, 0);
+                Motor.Height = Height;
+                Motor.Center = new Vector3(0, Height / 2.0f, 0);
             }
         }
 
@@ -243,11 +243,11 @@ namespace LOGIYGames.CharacterCore
             {
                 // Smooth rotation using Slerp
                 Quaternion smoothedRotation = Quaternion.Slerp(transform.rotation, targetRotation, TurnSmoothTime * Time.fixedDeltaTime);
-                CController.Rotate(smoothedRotation);
+                Motor.Rotate(smoothedRotation);
             }
             else
             {
-                CController.Rotate(targetRotation);
+                Motor.Rotate(targetRotation);
             }
         }
         public void Rotate()
@@ -276,7 +276,7 @@ namespace LOGIYGames.CharacterCore
             }
             else
             {
-                if (Velocity.magnitude > 0.01f)
+                if (Velocity.magnitude > 0.001f)
                 {
 
                     Velocity = Vector3.Lerp(Velocity, Vector3.zero, Deceleration * Time.deltaTime);
@@ -286,7 +286,7 @@ namespace LOGIYGames.CharacterCore
                     Velocity = Vector3.zero;
                 }
             }
-            CController.Move(Velocity);
+            Motor.Move(Velocity);
         }
         public void Move()
         {
@@ -294,7 +294,7 @@ namespace LOGIYGames.CharacterCore
         }
         public void Slide()
         {
-            CController.Move(ProjectVelocity());
+            Motor.Move(ProjectVelocity());
         }
         public void Dash(DashPerformedEvent evt)
         {
@@ -310,13 +310,13 @@ namespace LOGIYGames.CharacterCore
         public void Jump(JumpPerformedEvent evt)
         {
             Velocity += targetDirection * SpeedMultiplier * evt.planarForce;
-            CController.Jump(evt.verticalForce);
+            Motor.Jump(evt.verticalForce);
             JumpCount++;
         }
         public void Roll(RollPerformedEvent evt)
         {
             Velocity = transform.forward * evt.planarForce + Velocity;
-            CController.Jump(evt.verticalForce);
+            Motor.Jump(evt.verticalForce);
         }
 
         #endregion

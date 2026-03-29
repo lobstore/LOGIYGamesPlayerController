@@ -16701,6 +16701,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4776272554816088, guid: 94a3318e328358d4095f16b054b14180, type: 3}
   m_PrefabInstance: {fileID: 1065312355}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1065572671 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4734613552037350644, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 354810366595266589}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1067766983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17288,7 +17293,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: 6a42f21236d41cc47b9e2ad7fadca0e1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -34375,6 +34380,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4627547270634096, guid: 93a135b5c8137e5468cb55d97a43df67, type: 3}
   m_PrefabInstance: {fileID: 1655056048}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1962768864 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2640723071682425344, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 354810366595266589}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1968779695 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4316652776831010, guid: 9b3d693a654a56c43b2249ca7efee293, type: 3}
@@ -34883,7 +34893,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: 6a42f21236d41cc47b9e2ad7fadca0e1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -36372,7 +36382,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: 6a42f21236d41cc47b9e2ad7fadca0e1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -43804,9 +43814,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
+    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: projectingSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: projectingPlanarSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: projectingVerticalSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: MaxStableSlopeAngle
+      value: 35.9
+      objectReference: {fileID: 0}
     - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: BaseGravityForce
-      value: 30
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: gravityChangeSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654077868994141792, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2654077868994141792, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_Controller
@@ -43872,10 +43906,30 @@ PrefabInstance:
       propertyPath: _dashBackward
       value: DashBackward
       objectReference: {fileID: 0}
+    - target: {fileID: 6657963720063885413, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: m_SlopeLimit
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: Motor
+      value: 
+      objectReference: {fileID: 354810366595266590}
+    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: BaseSpeed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: CController
       value: 
       objectReference: {fileID: 354810366595266590}
+    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: CameraFollow
+      value: 
+      objectReference: {fileID: 1065572671}
+    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: CameraLookAt
+      value: 
+      objectReference: {fileID: 1962768864}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: movementPreset
       value: 
@@ -43888,6 +43942,14 @@ PrefabInstance:
       propertyPath: <BaseSpeed>k__BackingField
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: CinemachineCameraFollowTransform
+      value: 
+      objectReference: {fileID: 1065572671}
+    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: CinemachineCameraLookAtTransform
+      value: 
+      objectReference: {fileID: 1962768864}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -43955,6 +44017,10 @@ PrefabInstance:
     - target: {fileID: 2791204035372060595, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_Name
       value: Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153722467040546871, guid: b83642689ef8fbc449591d8b594438db, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7153722467040546871, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: volumeLayer.m_Bits

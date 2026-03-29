@@ -110,10 +110,10 @@ MonoBehaviour:
   TargetOffset: {x: 0, y: 0.17, z: 0}
   Damping: {x: 0.4, y: 0.8, z: 0}
   Lookahead:
-    Enabled: 0
-    Time: 0
-    Smoothing: 0
-    IgnoreY: 0
+    Enabled: 1
+    Time: 0.2
+    Smoothing: 6
+    IgnoreY: 1
 --- !u!114 &843236777794795246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,9 +134,9 @@ MonoBehaviour:
     Range: {x: -180, y: 180}
     Wrap: 1
     Recentering:
-      Enabled: 0
+      Enabled: 1
       Wait: 2
-      Time: 2
+      Time: 5
     Restrictions: 0
   TiltAxis:
     Value: 0
