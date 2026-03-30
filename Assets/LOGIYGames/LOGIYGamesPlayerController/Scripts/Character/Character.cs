@@ -1,6 +1,6 @@
 using System;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 
@@ -52,9 +52,10 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] private ControllerWrapperBase Motor;
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
         // TODO Make Builder
-        public IMovementStrategy CurrentMovementStrategy { get; set; }
-        public IRotationStrategy CurrentRotationStrategy { get; set; }
+        public IMovementStrategy MovementStrategy { get; set; }
+        public IRotationStrategy RotationStrategy { get; set; }
         public IRotationStrategy DefaultRotationStrategy { get; set; }
+        public IMovementStrategy DefaultMovementStrategy { get; set; }
 
         public IEventDispatcher EventBus { get; private set; }
 
@@ -74,11 +75,6 @@ namespace LOGIYGames.CharacterCore
         public bool IsCrouching { get; set; }
         public bool IsGrounded { get => Motor.IsGrounded; }
         public bool IsSliding { get; set; }
-
-        public void SetInputReader(IMovementInputReader inputReader)
-        {
-            Input = inputReader;
-        }
 
         #region Debug
 
@@ -136,30 +132,36 @@ namespace LOGIYGames.CharacterCore
 
         #region Camera References
         [Header("Camera Configuration")]
-        public Transform CameraLookAt;
-        public Transform CameraFollow;
+        [SerializeField] Transform cameraLookAt;
+        [SerializeField] Transform cameraFollow;
+        public Transform CameraLookAt => cameraLookAt;
+        public Transform CameraFollow => cameraFollow;
         public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
+
+        public UnityEvent OnControlReleased { get; } = new();
 
         #endregion
         private void Awake()
         {
-            CurrentMovementStrategy = new CameraRelativeMovement(this);
-            CurrentRotationStrategy = new CameraRelativeRotation(this);
-            DefaultRotationStrategy = CurrentRotationStrategy;
             EventBus = new EventDispatcher();
             InitializeStateMachine();
+            DefaultMovementStrategy = new CameraRelativeMovement(this);
+            DefaultRotationStrategy = new CameraRelativeRotation(this);
         }
         private void Start()
         {
-            // TODO Make ICBFollowable abstraction to change follow target
-            CameraManager.Instance.SetTargetTo(CameraFollow, CameraLookAt);
+
             Motor.Height = Height;
             Motor.Center = new Vector3(0, Height / 2.0f, 0);
 
             EventBus.Subscribe<JumpPerformedEvent>(Jump);
             EventBus.Subscribe<RollPerformedEvent>(Roll);
             EventBus.Subscribe<DashPerformedEvent>(Dash);
+            if (Input == null)
+            {
+                Release();
 
+            }
         }
         private void OnTriggerEnter(Collider other)
         {
@@ -188,9 +190,9 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnUpdate(deltaTime);
 
-            targetRotation = CurrentRotationStrategy.GetRotation();
+            targetRotation = RotationStrategy.GetRotation();
             CalculateDeltaYaw();
-            targetDirection = CurrentMovementStrategy.GetMovementDirection();
+            targetDirection = MovementStrategy.GetMovementDirection();
             _movementStateMachine.Update();
             _actionStateMachine.Update();
             Debug();
@@ -200,6 +202,8 @@ namespace LOGIYGames.CharacterCore
 
         private void Debug()
         {
+            print(gameObject.name + " " + RotationStrategy);
+            print(gameObject.name + " " + MovementStrategy);
             _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
             _lastMovementTransition = _movementStateMachine.LastTransition;
             _currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
@@ -360,5 +364,17 @@ namespace LOGIYGames.CharacterCore
             _actionStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
         }
 
+        public void TakeControl(IMovementInputReader inputReader)
+        {
+            Input = inputReader;
+        }
+
+        public void Release()
+        {
+            Input = new NoneInput();
+            RotationStrategy = new NoneRotation();
+            MovementStrategy = new NoneMovement();
+            OnControlReleased.Invoke();
+        }
     }
 }

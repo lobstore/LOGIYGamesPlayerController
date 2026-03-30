@@ -11,7 +11,7 @@ namespace LOGIYGames.AI
         private float _lostTimer;
         private bool _wasTargetVisible;
 
-        public AIChaseState(AIBrainStateDriver brain, float lostChaseDuration = 3f) : base(brain)
+        public AIChaseState(AIBrain brain, float lostChaseDuration = 3f) : base(brain)
         {
             _lostChaseDuration = lostChaseDuration;
             DetectionRange = brain.DetectionRange;

@@ -14,7 +14,7 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            turnEnd = _character.CurrentRotationStrategy.GetRotation();
+            turnEnd = _character.RotationStrategy.GetRotation();
             _character.EventBus.Publish(new TurnPerformedEvent
             {
                 movementSpeed = _character.SpeedMultiplier,

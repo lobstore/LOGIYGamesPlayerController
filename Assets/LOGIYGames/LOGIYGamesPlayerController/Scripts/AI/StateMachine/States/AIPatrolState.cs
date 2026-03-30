@@ -10,7 +10,7 @@ namespace LOGIYGames.AI
         private Transform _currentPatrolPoint;
         private readonly float _arrivalThreshold;
 
-        public AIPatrolState(AIBrainStateDriver brain, float arrivalThreshold = 0.5f) : base(brain)
+        public AIPatrolState(AIBrain brain, float arrivalThreshold = 0.5f) : base(brain)
         {
             _arrivalThreshold = arrivalThreshold;
             DetectionRange = brain.DetectionRange;

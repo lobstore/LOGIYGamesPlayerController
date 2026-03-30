@@ -109,7 +109,7 @@ namespace LOGIYGames.Animation
         {
             base.OnLateUpdate(deltaTime);
             animator.SetFloat("Speed", character.SpeedMultiplier);
-            if (character.CurrentRotationStrategy is CameraRelativeRotation or InputRelativeRotation or NoneRotation)
+            if (character.RotationStrategy is CameraRelativeRotation or InputRelativeRotation or NoneRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);

@@ -12,7 +12,7 @@ namespace LOGIYGames
         private AIPatrolState _patrolState;
         private AIChaseState _chaseState;
         private AIAttackState _attackState;
-        public override void Init(AIBrainStateDriver AIBrainStateDriver)
+        public override void Init(AIBrain AIBrainStateDriver)
         {
             // Initialize all states
             _idleState = new AIIdleState(AIBrainStateDriver, AIBrainStateDriver.MinIdleDuration, AIBrainStateDriver.MaxIdleDuration);
@@ -26,7 +26,7 @@ namespace LOGIYGames
         /// <summary>
         /// Configures all AI behavior state transitions
         /// </summary>
-        private void ConfigureTransitions(AIBrainStateDriver AIBrainStateDriver)
+        private void ConfigureTransitions(AIBrain AIBrainStateDriver)
         {
             // ----- Idle State Transitions -----
             AIBrainStateDriver.AddTransition(_idleState, _patrolState, () =>

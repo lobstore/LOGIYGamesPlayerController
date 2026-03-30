@@ -3,25 +3,18 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    /// <summary>
-    /// Movement strategy that moves character in world space directions
-    /// without camera influence. Used for AI characters.
-    /// Input direction is treated as world-space direction.
-    /// </summary>
     public class InputRelativeMovement : IMovementStrategy
     {
-        private Character _character;
+        Character Character;
 
         public InputRelativeMovement(Character character)
         {
-            _character = character;
+            Character = character;
         }
 
         public Vector3 GetMovementDirection()
         {
-            // Input is already in world space from AI
-            // Just flatten and normalize
-            Vector3 direction = new Vector3(_character.Input.MovementInput.x, 0, _character.Input.MovementInput.y);
+            Vector3 direction = new Vector3(Character.Input.MovementInput.x, 0, Character.Input.MovementInput.y);
             return direction.normalized;
         }
     }

@@ -63,7 +63,7 @@ namespace LOGIYGames.Movement
 
         public virtual void LateUpdate()
         {
-            Aim();
+           // Aim();
 
         }
 
@@ -71,11 +71,11 @@ namespace LOGIYGames.Movement
         {
             if (_character.Input.FocusPressed)
             {
-                _character.CurrentRotationStrategy = new CameraAlongRotation(_character);
+                _character.RotationStrategy = new CameraAlongRotation();
             }
             else
             {
-                _character.CurrentRotationStrategy = _character.DefaultRotationStrategy;
+                _character.RotationStrategy = _character.DefaultRotationStrategy;
             }
         }
 

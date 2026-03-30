@@ -1,23 +1,20 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Scripts.AI;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace LOGIYGames.AI
 {
-    /// <summary>
-    /// AI Brain component that manages AI behavior state machine
-    /// Uses NavMeshAgent directly for movement
-    /// </summary>
-    public class AIBrainStateDriver : MonoModuleBase
+    public class AIBrain : MonoModuleBase
     {
+        public AIInputReader InputReader { get; private set; }
+
         [Header("References")]
-        
+
         [SerializeField] private NavMeshAgent navMeshAgent;
         [SerializeField] private AIStatesPresetBase statesPreset;
-        public Vector2 MovementInput{  get; private set; }
-        public bool JumpPressed {  get; private set; }
+        public Vector2 MovementInput { get; private set; }
+        public bool JumpPressed { get; private set; }
         public bool EvadePressed { get; private set; }
         public bool CrouchPressed { get; private set; }
         public bool SprintPressed { get; private set; }
@@ -47,8 +44,6 @@ namespace LOGIYGames.AI
         public float AttackRange => attackRange;
         public StateMachine StateMachine => _stateMachine;
 
-        public float DetectionRange1 { get => detectionRange; set => detectionRange = value; }
-        public float AttackRange1 { get => attackRange; set => attackRange = value; }
         public float LostTargetTimeout { get => lostTargetTimeout; set => lostTargetTimeout = value; }
         public float MinIdleDuration { get => minIdleDuration; set => minIdleDuration = value; }
         public float MaxIdleDuration { get => maxIdleDuration; set => maxIdleDuration = value; }
@@ -72,11 +67,22 @@ namespace LOGIYGames.AI
             navMeshAgent.speed = 0;
             navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.autoTraverseOffMeshLink = false;
+            InputReader = new(this);
+            var character = GetComponent<Character>();
+            character.OnControlReleased.AddListener(() =>
+            {
+                character.TakeControl(InputReader);
+                character.RotationStrategy = new InputRelativeRotation(character);
+                character.MovementStrategy = new InputRelativeMovement(character);
+
+            });
+
         }
 
         private void Start()
         {
             InitializeStateMachine();
+
         }
 
         private void InitializeStateMachine()
@@ -141,21 +147,22 @@ namespace LOGIYGames.AI
         }
         public override void OnUpdate(float deltaTime)
         {
+
             base.OnUpdate(deltaTime);
             if (_stateMachine == null) return;
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
-            FocusPressed = true ? Target!=null : false;
+            FocusPressed = true ? Target != null : false;
             _stateMachine.Update();
             if (navMeshAgent != null && navMeshAgent.hasPath && !navMeshAgent.pathPending)
             {
                 Vector3 desiredDirection = navMeshAgent.path.corners[1] - transform.position;
                 desiredDirection.y = 0;
-                MovementInput = new Vector2(desiredDirection.x,desiredDirection.z).normalized;
+                MovementInput = new Vector2(desiredDirection.x, desiredDirection.z).normalized;
 
             }
             else
             {
-                MovementInput=Vector2.zero;
+                MovementInput = Vector2.zero;
             }
         }
         public override void OnFixedUpdate(float fixedDeltaTime)

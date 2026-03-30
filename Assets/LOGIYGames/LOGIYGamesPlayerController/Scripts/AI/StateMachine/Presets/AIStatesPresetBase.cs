@@ -6,6 +6,6 @@ namespace LOGIYGames
 
     public abstract class AIStatesPresetBase : ScriptableObject
     {
-        public abstract void Init(AIBrainStateDriver AIBrainStateDriver);
+        public abstract void Init(AIBrain AIBrainStateDriver);
     }
 }

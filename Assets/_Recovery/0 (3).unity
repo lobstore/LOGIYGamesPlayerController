@@ -18542,7 +18542,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: MaxStableSlopeAngle
-      value: 90
+      value: 35.9
       objectReference: {fileID: 0}
     - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: BaseGravityForce
@@ -18560,10 +18560,6 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 8eccf9a92ff353147a77f36f4eaef42b, type: 2}
-    - target: {fileID: 2654077868994141792, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_UpdateMode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2654077868994141792, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_AnimatePhysics
       value: 1
@@ -18629,17 +18625,13 @@ PrefabInstance:
       value: DashBackward
       objectReference: {fileID: 0}
     - target: {fileID: 6657963720063885413, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6657963720063885413, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_SlopeLimit
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: Motor
       value: 
-      objectReference: {fileID: 1614020792}
+      objectReference: {fileID: 1614020774}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: BaseSpeed
       value: 0
@@ -18684,8 +18676,7 @@ PrefabInstance:
       propertyPath: CinemachineCameraLookAtTransform
       value: 
       objectReference: {fileID: 845161104}
-    m_RemovedComponents:
-    - {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -18695,9 +18686,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1614020772}
-    - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1614020792}
   m_SourcePrefab: {fileID: 100100000, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
 --- !u!4 &1165910460 stripped
 Transform:
@@ -24400,23 +24388,22 @@ MonoBehaviour:
   patrolArrivalThreshold: 0.5
   debugDraw: 1
   Target: {fileID: 0}
+--- !u!114 &1614020774 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 1165372373}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614020771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dc25859b5be7e44b8bb7ec724b6571e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterControllerWrapper
 --- !u!143 &1614020781 stripped
 CharacterController:
   m_CorrespondingSourceObject: {fileID: 6657963720063885413, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
   m_PrefabInstance: {fileID: 1165372373}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1614020792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1614020771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70e52f5613cf3094b9e24db14f6edc6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.NavMeshControllerWrapper
 --- !u!1001 &1620231523
 PrefabInstance:
   m_ObjectHideFlags: 0

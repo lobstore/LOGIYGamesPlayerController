@@ -18,7 +18,7 @@ namespace LOGIYGames.AI
 
         public Action OnAttackPerformed;
 
-        public AIAttackState(AIBrainStateDriver brain, float attackCooldown = 1f, bool shouldStrafe = true) : base(brain)
+        public AIAttackState(AIBrain brain, float attackCooldown = 1f, bool shouldStrafe = true) : base(brain)
         {
             _attackCooldown = attackCooldown;
             _shouldStrafe = shouldStrafe;

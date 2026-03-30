@@ -23,8 +23,6 @@ namespace LOGIYGames
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            Debug.Log(_character.CurrentMovementStrategy);
-            Debug.Log(_character.CurrentRotationStrategy);
         }
     }
     public class LadderDownState : LadderMovementState
@@ -45,7 +43,7 @@ namespace LOGIYGames
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            Debug.Log(_character.CurrentMovementStrategy);
+            Debug.Log(_character.MovementStrategy);
         }
         protected override void Aim()
         {
@@ -60,8 +58,8 @@ namespace LOGIYGames
         public override void Exit()
         {
             base.Exit();
-            _character.CurrentRotationStrategy = _character.DefaultRotationStrategy;
-            _character.CurrentMovementStrategy = new CameraRelativeMovement(_character);
+            _character.RotationStrategy = _character.DefaultRotationStrategy;
+            _character.MovementStrategy = new CameraRelativeMovement(_character);
             _character.GetComponent<CharacterGravityModule>().UseGravity = true;
         }
         protected override void Aim()
@@ -83,8 +81,8 @@ namespace LOGIYGames
             base.Enter();
             _character.GetComponent<CharacterGravityModule>().UseGravity = false;
             _character.SetPosition(_character.Target.position);
-            _character.CurrentRotationStrategy = new ToTargetRotation(_character.Target);
-            _character.CurrentMovementStrategy = new YAxisMovement(_character);
+            _character.RotationStrategy = new ToTargetRotation(_character.Target);
+            _character.MovementStrategy = new YAxisMovement(_character);
         }
         protected override void Aim()
         {

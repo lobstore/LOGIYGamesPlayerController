@@ -94,7 +94,9 @@ namespace LOGIYGames
         }
         private void ConfigureTransitions(Character character)
         {
-            character.AddAnyStateMachineTransition(_rollState, () =>character.Input.EvadePressed && !_groundJumpState.IsDurationTimerRunning&&character.IsGrounded);
+            character.AddAnyStateMachineTransition(_rollState, () =>character.Input.EvadePressed 
+            && !_groundJumpState.IsDurationTimerRunning&&character.IsGrounded
+            && !IsOnLadder());
             character.AddAnyStateMachineTransition(_fallingState, () =>
             !character.Sensors.IsGrounded
             && !_groundJumpState.IsDurationTimerRunning
@@ -102,7 +104,7 @@ namespace LOGIYGames
             && !IsOnLadder()
             && !character.Input.JumpPressed
             );
-            //NOTE: SEQUENCE ID IMPORTANT
+            //NOTE: SEQUENCE IS IMPORTANT
             // ----- Idle State Transitions -----
             character.AddStateMachineTransition(_idleState, _groundJumpState, () => character.Input.JumpPressed && character.JumpCount < groundJumpStateData.MaxJumpCount && _groundJumpState.CanEnter());
             character.AddStateMachineTransition(_idleState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);

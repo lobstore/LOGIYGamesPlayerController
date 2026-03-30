@@ -4,9 +4,8 @@ using UnityEngine.InputSystem;
 
 namespace LOGIYGames
 {
-    public class PlayerMovementInputReader :MonoBehaviour, IMovementInputReader
+    public class PlayerMovementInputReader : IMovementInputReader
     {
-        [SerializeField] InputActionAsset InputActions;
 
         InputActionMap CharacterActionMap;
 
@@ -26,7 +25,7 @@ namespace LOGIYGames
         {
             CharacterActionMap.Disable();
         }
-        private void Awake()
+        public PlayerMovementInputReader(InputActionAsset InputActions )
         {
             CharacterActionMap = InputActions.FindActionMap("CharacterInputs");
             m_MoveAction = CharacterActionMap.FindAction("Move");
@@ -36,29 +35,21 @@ namespace LOGIYGames
             m_SprintAction = CharacterActionMap.FindAction("Sprint");
             m_FocusAction = CharacterActionMap.FindAction("Focus");
             m_AttackAction = CharacterActionMap.FindAction("Attack");
+
         }
-        private void Update()
-        {
-            MovementInput = m_MoveAction.ReadValue<Vector2>();
-            JumpPressed = m_JumpAction.WasPressedThisFrame();
-            EvadePressed = m_EvadeAction.WasPressedThisFrame();
-            SprintPressing = m_SprintAction.IsPressed();
-            CrouchPressed = m_CrouchAction.IsPressed();
-            FocusPressed = m_FocusAction.IsPressed();
-            AttackPressed = m_AttackAction.WasPressedThisFrame();
-        }
-        public Vector2 MovementInput { get; private set; }
 
-        public bool FocusPressed { get; private set; }
+        public Vector2 MovementInput => m_MoveAction.ReadValue<Vector2>();
 
-        public bool JumpPressed { get; private set; }
+        public bool FocusPressed => m_FocusAction.IsPressed();
 
-        public bool EvadePressed { get; private set; }
+        public bool JumpPressed => m_JumpAction.WasPressedThisFrame();
 
-        public bool SprintPressing { get; private set; }
+        public bool EvadePressed => m_EvadeAction.WasPressedThisFrame();
 
-        public bool CrouchPressed { get; private set; }
+        public bool SprintPressing => m_SprintAction.IsPressed();
 
-        public bool AttackPressed {  get; private set; }
+        public bool CrouchPressed => m_CrouchAction.IsPressed();
+
+        public bool AttackPressed => m_AttackAction.WasPressedThisFrame();
     }
 }

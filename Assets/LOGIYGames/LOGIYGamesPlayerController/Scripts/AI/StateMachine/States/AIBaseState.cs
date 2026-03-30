@@ -8,7 +8,7 @@ namespace LOGIYGames.AI
     /// </summary>
     public abstract class AIBaseState : IState
     {
-        protected AIBrainStateDriver Brain { get; private set; }
+        protected AIBrain Brain { get; private set; }
         protected Character Character { get; private set; }
         protected Transform CharacterTransform { get; private set; }
 
@@ -27,7 +27,7 @@ namespace LOGIYGames.AI
         /// </summary>
         protected float StateTime { get; private set; }
 
-        protected AIBaseState(AIBrainStateDriver brain)
+        protected AIBaseState(AIBrain brain)
         {
             Brain = brain;
             CharacterTransform = brain.transform;
