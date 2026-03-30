@@ -60,6 +60,8 @@ namespace LOGIYGames.CharacterCore
 
         public int JumpCount;
 
+        public Transform Target;
+
         [Header("State Machine Configuration")]
         public MovementStatesPresetBase movementPreset;
         private StateMachine _movementStateMachine;
@@ -159,6 +161,15 @@ namespace LOGIYGames.CharacterCore
             EventBus.Subscribe<DashPerformedEvent>(Dash);
 
         }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Ladder")) Target = other.transform;
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Ladder")) Target = null;
+        }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
@@ -221,7 +232,7 @@ namespace LOGIYGames.CharacterCore
             if (desiredDirection.sqrMagnitude < 0.001f) return;
 
             Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, Vector3.up);
-            Rotate(targetRotation);
+            Rotate(targetRotation, turnSmoothTime);
         }
 
         /// <summary>
@@ -237,9 +248,9 @@ namespace LOGIYGames.CharacterCore
         /// Rotates character to a target rotation.
         /// Delegates to controller wrapper for proper KinematicCharacterController integration.
         /// </summary>
-        public void Rotate(Quaternion targetRotation)
+        public void Rotate(Quaternion targetRotation, float turnSpeed = 0)
         {
-            if (TurnSmoothTime > 0f)
+            if (turnSpeed > 0f)
             {
                 // Smooth rotation using Slerp
                 Quaternion smoothedRotation = Quaternion.Slerp(transform.rotation, targetRotation, TurnSmoothTime * Time.fixedDeltaTime);
@@ -250,10 +261,7 @@ namespace LOGIYGames.CharacterCore
                 Motor.Rotate(targetRotation);
             }
         }
-        public void Rotate()
-        {
-            Rotate(targetRotation);
-        }
+
         private void CalculateDeltaYaw()
         {
             deltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y);
@@ -288,9 +296,9 @@ namespace LOGIYGames.CharacterCore
             }
             Motor.Move(Velocity);
         }
-        public void Move()
+        public void SetPosition(Vector3 position)
         {
-            Move(targetDirection);
+            Motor.SetPosition(position);
         }
         public void Slide()
         {

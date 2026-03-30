@@ -86,11 +86,11 @@ namespace LOGIYGames.Movement
         }
         protected virtual void Move()
         {
-            _character.Move();
+            _character.Move(_character.targetDirection);
         }
         protected virtual void Rotate()
         {
-            _character.Rotate();
+            _character.Rotate(_character.targetRotation, _character.TurnSmoothTime);
         }
     }
 

@@ -118,8 +118,8 @@ namespace LOGIYGames
         {
             if (m_collisionEnabled)
             {
-                m_cachedMoveDelta = a_move * Time.deltaTime;
-                m_kinematicMotor.SetPosition(m_kinematicMotor.TransientPosition + m_cachedMoveDelta);
+                m_cachedMoveDelta = a_move;
+                //m_kinematicMotor.SetPosition(m_kinematicMotor.TransientPosition + m_cachedMoveDelta);
             }
             else
             {
@@ -130,8 +130,8 @@ namespace LOGIYGames
         public override void Rotate(Quaternion a_targetRotation)
         {
             // Apply target rotation directly
-            m_kinematicMotor.Transform.rotation = a_targetRotation;
-            m_cachedRotDelta = a_targetRotation * Quaternion.Inverse(transform.rotation);
+            //m_kinematicMotor.Transform.rotation = a_targetRotation;
+            m_cachedRotDelta = a_targetRotation;
         }
         
         #endregion
@@ -217,21 +217,20 @@ namespace LOGIYGames
         /// </summary>
         public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
         {
-            // Rotation is handled directly in Rotate() method
-            // No additional processing needed here
+            currentRotation = m_cachedRotDelta;
         }
         
         public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
         {
             float currentVelocityMagnitude = currentVelocity.magnitude;
             Vector3 effectiveGroundNormal = m_kinematicMotor.GroundingStatus.GroundNormal;
-            
+
             // Reorient velocity on slope
             currentVelocity = m_kinematicMotor.GetDirectionTangentToSurface(currentVelocity, effectiveGroundNormal) * currentVelocityMagnitude;
-            
+            currentVelocity = Vector3.Lerp(currentVelocity, m_cachedMoveDelta, deltaTime*5);
             if (m_characterGravityModule != null && !m_kinematicMotor.GroundingStatus.IsStableOnGround)
             {
-                currentVelocity += m_characterGravityModule.Velocity * deltaTime;
+                currentVelocity += m_characterGravityModule.Velocity;
             }
         }
         

@@ -46,7 +46,16 @@ namespace LOGIYGames.Animation
             {
                 if (evt.movementSpeed > 0.5)
                 {
+                    if (evt.angle > 0)
+                    {
+                        PlayAnimation("BackTurnRunRight");
 
+                    }
+                    else
+                    {
+                        PlayAnimation("BackTurnRunLeft");
+
+                    }
                     PlayAnimation("BackTurn");
                 }
                 else if (evt.movementSpeed < 0.5 && evt.movementSpeed > 0.2f)

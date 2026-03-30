@@ -1,3 +1,5 @@
+using LOGIYGames.CharacterCore;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -14,12 +16,11 @@ namespace LOGIYGames
     {
         [Header("Rigidbody Controller Settings")]
         [SerializeField] private bool m_applyGravityWhenGrounded = false;
-        [SerializeField] private float m_slopeLimit = 60f;
-        [SerializeField] private float m_stepOffset = 0.3f;
-        
+        [SerializeField] private float groundDrag;
+        [SerializeField] private float airDrag;
+
+
         [Header("Movement Settings")]
-        [Tooltip("Use AddForce for movement instead of MovePosition")]
-        [SerializeField] private bool m_useAddForce = true;
         [Tooltip("Force mode for movement (ignored if useAddForce is false)")]
         [SerializeField] private ForceMode m_movementForceMode = ForceMode.Acceleration;
         [Tooltip("Movement force multiplier")]
@@ -29,10 +30,9 @@ namespace LOGIYGames
         private CapsuleCollider m_capsuleCollider;
         private CharacterGravityModule m_characterGravityModule;
         private SensorsModule m_sensors;
+        private Character m_character;
 
         private bool m_collisionEnabled = true;
-        private Vector3 m_cachedMoveDelta = Vector3.zero;
-        private Quaternion m_cachedRotDelta = Quaternion.identity;
 
         // Cached values for properties
         private float m_cachedHeight;
@@ -55,12 +55,7 @@ namespace LOGIYGames
             }
         }
         
-        public override float MaxStepHeight
-        {
-            get => m_stepOffset;
-            set => m_stepOffset = value;
-        }
-        
+        public override float MaxStepHeight { get; set; }  
         public override float Height
         {
             get => m_cachedHeight;
@@ -71,11 +66,7 @@ namespace LOGIYGames
             }
         }
         
-        public override float SlopeLimit
-        {
-            get => m_slopeLimit;
-            set => m_slopeLimit = Mathf.Max(0, value);
-        }
+        public override float SlopeLimit {  get; set; }
         
         public override Vector3 Center
         {
@@ -109,7 +100,7 @@ namespace LOGIYGames
             m_capsuleCollider = GetComponent<CapsuleCollider>();
             m_characterGravityModule = GetComponent<CharacterGravityModule>();
             m_sensors = GetComponent<SensorsModule>();
-
+            m_character = GetComponent<Character>();
             Debug.Assert(m_rigidbody != null, "Error (RigidbodyControllerWrapper): Could not find Rigidbody component");
             Debug.Assert(m_capsuleCollider != null, "Error (RigidbodyControllerWrapper): Could not find CapsuleCollider component");
 
@@ -124,24 +115,35 @@ namespace LOGIYGames
             m_cachedCenter = m_capsuleCollider.center;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
-            // Ground detection is handled by SensorsModule
+            if (IsGrounded)
+            {
+                m_rigidbody.linearDamping = groundDrag;
+            }
+            else
+            {
+                m_rigidbody.linearDamping = airDrag;
+            }
         }
-
         #endregion
 
         #region Movement Methods
 
         public override void Move(Vector3 a_move)
         {
+     
             if (m_collisionEnabled)
             {
-                m_cachedMoveDelta = a_move * Time.fixedDeltaTime;
-                
-                if (m_useAddForce)
+                if (IsGrounded)
                 {
-                    // Apply force for physics-based movement
+
+                    a_move = Vector3.ProjectOnPlane(a_move, m_sensors.BelowHit.normal);
+    
+                }
+
+                if (m_rigidbody.linearVelocity.magnitude <= m_character.CurrentSpeed)
+                {
                     Vector3 force = a_move * m_movementForceMultiplier;
                     m_rigidbody.AddForce(force, m_movementForceMode);
                 }
@@ -155,15 +157,12 @@ namespace LOGIYGames
             else
             {
                 m_rigidbody.position += a_move * Time.fixedDeltaTime;
-                m_cachedMoveDelta = a_move * Time.fixedDeltaTime;
             }
         }
 
         public override void Rotate(Quaternion a_targetRotation)
         {
-            // Apply target rotation directly through Rigidbody
             m_rigidbody.MoveRotation(a_targetRotation);
-            m_cachedRotDelta = a_targetRotation * Quaternion.Inverse(transform.rotation);
         }
         
 
@@ -183,9 +182,15 @@ namespace LOGIYGames
             m_rigidbody.rotation = a_rotation;
         }
         
-        public override Vector3 GetCachedMoveDelta() => m_cachedMoveDelta;
+        public override Vector3 GetCachedMoveDelta()
+        {
+            return m_rigidbody.linearVelocity*Time.deltaTime;
+        }
         
-        public override Quaternion GetCachedRotDelta() => m_cachedRotDelta;
+        public override Quaternion GetCachedRotDelta()
+        {
+            return m_rigidbody.rotation;
+        }
         
         #endregion
         
@@ -193,6 +198,7 @@ namespace LOGIYGames
         
         public override void Jump(float force)
         {
+            m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z);
             m_rigidbody.AddForce(Vector3.up * Mathf.Sqrt(force * -2f * Physics.gravity.y), ForceMode.Impulse);
         }
         

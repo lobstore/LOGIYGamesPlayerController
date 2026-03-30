@@ -40,7 +40,8 @@ namespace LOGIYGames
             
             if (!useGravity) 
             { 
-                CurrentGravityForce = 0; 
+                CurrentGravityForce = 0;
+                Velocity = Vector3.zero;
                 return; 
             }
             
