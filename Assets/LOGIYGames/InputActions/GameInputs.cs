@@ -111,7 +111,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Interaction"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""54fa26db-28e4-4193-b582-0cd771e54f12"",
                     ""expectedControlType"": """",
@@ -182,7 +182,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Interaction"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -193,7 +193,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Interaction"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -761,7 +761,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_CharacterInputs = asset.FindActionMap("CharacterInputs", throwIfNotFound: true);
         m_CharacterInputs_Move = m_CharacterInputs.FindAction("Move", throwIfNotFound: true);
         m_CharacterInputs_Jump = m_CharacterInputs.FindAction("Jump", throwIfNotFound: true);
-        m_CharacterInputs_Interaction = m_CharacterInputs.FindAction("Interaction", throwIfNotFound: true);
+        m_CharacterInputs_Interact = m_CharacterInputs.FindAction("Interact", throwIfNotFound: true);
         m_CharacterInputs_Sprint = m_CharacterInputs.FindAction("Sprint", throwIfNotFound: true);
         m_CharacterInputs_Crouch = m_CharacterInputs.FindAction("Crouch", throwIfNotFound: true);
         m_CharacterInputs_Evade = m_CharacterInputs.FindAction("Evade", throwIfNotFound: true);
@@ -873,7 +873,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private List<ICharacterInputsActions> m_CharacterInputsActionsCallbackInterfaces = new List<ICharacterInputsActions>();
     private readonly InputAction m_CharacterInputs_Move;
     private readonly InputAction m_CharacterInputs_Jump;
-    private readonly InputAction m_CharacterInputs_Interaction;
+    private readonly InputAction m_CharacterInputs_Interact;
     private readonly InputAction m_CharacterInputs_Sprint;
     private readonly InputAction m_CharacterInputs_Crouch;
     private readonly InputAction m_CharacterInputs_Evade;
@@ -900,9 +900,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_CharacterInputs_Jump;
         /// <summary>
-        /// Provides access to the underlying input action "CharacterInputs/Interaction".
+        /// Provides access to the underlying input action "CharacterInputs/Interact".
         /// </summary>
-        public InputAction @Interaction => m_Wrapper.m_CharacterInputs_Interaction;
+        public InputAction @Interact => m_Wrapper.m_CharacterInputs_Interact;
         /// <summary>
         /// Provides access to the underlying input action "CharacterInputs/Sprint".
         /// </summary>
@@ -959,9 +959,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @Interaction.started += instance.OnInteraction;
-            @Interaction.performed += instance.OnInteraction;
-            @Interaction.canceled += instance.OnInteraction;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
@@ -997,9 +997,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @Interaction.started -= instance.OnInteraction;
-            @Interaction.performed -= instance.OnInteraction;
-            @Interaction.canceled -= instance.OnInteraction;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
@@ -1573,12 +1573,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Interaction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnInteraction(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Sprint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

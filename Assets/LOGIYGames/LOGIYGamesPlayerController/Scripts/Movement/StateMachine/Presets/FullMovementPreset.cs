@@ -94,8 +94,8 @@ namespace LOGIYGames
         }
         private void ConfigureTransitions(Character character)
         {
-            character.AddAnyStateMachineTransition(_rollState, () =>character.Input.EvadePressed 
-            && !_groundJumpState.IsDurationTimerRunning&&character.IsGrounded
+            character.AddAnyStateMachineTransition(_rollState, () => character.Input.EvadePressed
+            && !_groundJumpState.IsDurationTimerRunning && character.IsGrounded
             && !IsOnLadder());
             character.AddAnyStateMachineTransition(_fallingState, () =>
             !character.Sensors.IsGrounded
@@ -110,7 +110,7 @@ namespace LOGIYGames
             character.AddStateMachineTransition(_idleState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
             character.AddStateMachineTransition(_idleState, _walkState, () => Input.GetKeyDown(KeyCode.Z));
             character.AddStateMachineTransition(_idleState, _runState, () => character.Input.MovementInput.magnitude > 0f);
-            character.AddStateMachineTransition(_idleState, _ladderEnterState, () => _ladderEnterState.CanEnter()&&Input.GetKeyDown(KeyCode.E));
+            character.AddStateMachineTransition(_idleState, _ladderEnterState, () => _ladderEnterState.CanEnter() && character.Input.InteractPressed);
 
             // ----- Walk State Transitions -----
             character.AddStateMachineTransition(_walkState, _idleState, () => Input.GetKeyDown(KeyCode.Z));
@@ -152,20 +152,23 @@ namespace LOGIYGames
             character.AddStateMachineTransition(_backTurnState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
             character.AddStateMachineTransition(_slideState, _runState, () => character.Sensors.GroundAngle <= 25 || character.Input.MovementInput.magnitude == 0);
 
-            character.AddSubStateMachineTransition(_idleActionState, _unleashWeaponActionState, () => character.Input.AttackPressed );
+            character.AddSubStateMachineTransition(_idleActionState, _unleashWeaponActionState, () => character.Input.AttackPressed);
             character.AddSubStateMachineTransition(_unleashWeaponActionState, _readyActionState, () => true);
-            character.AddSubStateMachineTransition(_readyActionState, _leashWeaponActionState, () => character.Input.AttackPressed );
+            character.AddSubStateMachineTransition(_readyActionState, _leashWeaponActionState, () => character.Input.AttackPressed);
             character.AddSubStateMachineTransition(_leashWeaponActionState, _idleActionState, () => true);
             character.AddSubStateMachineTransition(_readyActionState, _throwItemActionState, () => character.Input.CrouchPressed);
-            character.AddSubStateMachineTransition(_throwItemActionState, _readyActionState, () =>true);
+            character.AddSubStateMachineTransition(_throwItemActionState, _readyActionState, () => true);
 
             // ----- Ladder State Transitions -----
             character.AddStateMachineTransition(_ladderEnterState, _ladderIdleState, () => _ladderEnterState.IsDurationTimerElapsed);
-            character.AddStateMachineTransition(_ladderIdleState, _ladderExitState, () => _ladderExitState.CanEnter() && Input.GetKeyDown(KeyCode.E));
-            character.AddStateMachineTransition(_ladderIdleState, _ladderUpState, () => Input.GetKey(KeyCode.W) );
-            character.AddStateMachineTransition(_ladderUpState, _ladderIdleState, () => !Input.GetKey(KeyCode.W) );
-            character.AddStateMachineTransition(_ladderIdleState, _ladderDownState, () => Input.GetKey(KeyCode.S));
-            character.AddStateMachineTransition(_ladderDownState, _ladderIdleState, () => !Input.GetKey(KeyCode.S));
+            character.AddStateMachineTransition(_ladderIdleState, _ladderExitState, () => _ladderExitState.CanEnter() && character.Input.InteractPressed);
+            character.AddStateMachineTransition(_ladderIdleState, _ladderUpState, () => character.Input.MovementInput.y > 0);
+            character.AddStateMachineTransition(_ladderUpState, _ladderIdleState, () => character.Input.MovementInput.y <= 0 );
+            character.AddStateMachineTransition(_ladderIdleState, _ladderDownState, () => character.Input.MovementInput.y < 0);
+            character.AddStateMachineTransition(_ladderDownState, _ladderIdleState, () => character.Input.MovementInput.y >= 0);
+            character.AddStateMachineTransition(_ladderDownState, _ladderExitState, () => _ladderExitState.CanEnter());
+            character.AddStateMachineTransition(_ladderUpState, _ladderExitState, () =>  _ladderExitState.CanEnter());
+
 
             character.AddStateMachineTransition(_ladderExitState, _idleState, () => _ladderExitState.IsDurationTimerElapsed);
 

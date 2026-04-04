@@ -1,5 +1,6 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
+using LOGIYGames.Shared.Character.Events;
 using UnityEngine;
 using UnityEngine.UIElements;
 

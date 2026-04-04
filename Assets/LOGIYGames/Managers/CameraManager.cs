@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace LOGIYGames
 {
@@ -22,12 +23,12 @@ namespace LOGIYGames
         CinemachineCameraController instance_ThirdPersonCameraController;
         CinemachineCameraController instance_TopDownCameraController;
 
-
-        [field: SerializeField] public PlayerCameraInputReader CameraInput {  get; private set; }
+        [SerializeField] InputActionAsset inputActions;
+        public PlayerCameraInputReader CameraInput {  get; private set; }
         [SerializeField] public CameraPerspectiveType CameraPerspectiveType;
         protected override void Initialize()
         {
-
+            CameraInput = new(inputActions);
             instance_FirstPersonCameraController = Instantiate(FirstPersonCameraController, null);
             instance_ThirdPersonCameraController = Instantiate(ThirdPersonCameraController, null);
             instance_TopDownCameraController = Instantiate(TopDownCameraController, null);
@@ -38,7 +39,24 @@ namespace LOGIYGames
         private void Start()
         {
             CameraInput.Enable();
-            Set3rdFreeLookView();
+            switch (CameraPerspectiveType)
+            {
+                case CameraPerspectiveType.FirstPerson:
+                    Set1stView();
+                    break;
+                case CameraPerspectiveType.ThirdPersonFreeLook:
+                    Set3rdFreeLookView();
+                    break;
+                case CameraPerspectiveType.ThirdPersonLookForward:
+                    Set3rdLookForwardView();
+                    break;
+                case CameraPerspectiveType.Top_Down:
+                    SetTopDownView();
+                    break;
+                default:
+                    break;
+            }
+ 
         }
         int index = 0;
         private void Update()

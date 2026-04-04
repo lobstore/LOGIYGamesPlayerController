@@ -3,17 +3,12 @@ using UnityEngine.InputSystem;
 
 namespace LOGIYGames
 {
-    public class PlayerCameraInputReader:MonoBehaviour
+    public class PlayerCameraInputReader:ICameraInputReader
     {
-        [SerializeField] InputActionAsset InputActions;
+        InputActionAsset InputActions;
         InputActionMap CameraActionMap;
         InputAction ZoomAction;
-        public float ZoomDelta {  get; private set; }
-
-        private void Update()
-        {
-            ZoomDelta = ZoomAction.ReadValue<float>();
-        }
+        public float ZoomDelta => ZoomAction.ReadValue<float>();
 
         public void Enable()
         {
@@ -23,10 +18,15 @@ namespace LOGIYGames
         {
             CameraActionMap.Disable();
         }
-        private void Awake()
+        public PlayerCameraInputReader(InputActionAsset inputActions)
         {
+            InputActions = inputActions;
             CameraActionMap = InputActions.FindActionMap("Camera");
             ZoomAction = CameraActionMap.FindAction("Zoom");
         }
+    }
+    public interface ICameraInputReader
+    {
+        public float ZoomDelta { get; }
     }
 }

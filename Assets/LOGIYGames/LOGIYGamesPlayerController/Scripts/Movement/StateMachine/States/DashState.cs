@@ -1,5 +1,7 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
+using LOGIYGames.Shared.Character.Events;
+using LOGIYGames.Shared.Enums;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -17,21 +19,21 @@ namespace LOGIYGames
             Vector3 localDir = _character.transform.InverseTransformDirection(_character.targetDirection);
             float forwardDot = Vector3.Dot(localDir, Vector3.forward);
             float rightDot = Vector3.Dot(localDir, Vector3.right);
-            JumpPerformedEvent.Direction direction;
+            Direction direction;
             // Сравниваем проекции, чтобы определить направление
             if (Mathf.Abs(forwardDot) > Mathf.Abs(rightDot))
             {
                 if (forwardDot > 0)
-                    direction = JumpPerformedEvent.Direction.Forward;
+                    direction = Direction.Forward;
                 else
-                    direction = JumpPerformedEvent.Direction.Backward;
+                    direction = Direction.Backward;
             }
             else
             {
                 if (rightDot > 0)
-                    direction = JumpPerformedEvent.Direction.Right;
+                    direction = Direction.Right;
                 else
-                    direction = JumpPerformedEvent.Direction.Left;
+                    direction = Direction.Left;
             }
 
             _character.EventBus.Publish(new DashPerformedEvent

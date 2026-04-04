@@ -6,6 +6,5 @@ namespace LOGIYGames
 
         public Vector3 GetMovementDirection();
     }
-
 }
 

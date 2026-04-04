@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LOGIYGames.CharacterCore
 {
-    public interface IMovementInputReader
+    public interface ICharacterInputReader
     {
         Vector2 MovementInput { get;}
 
@@ -11,7 +11,7 @@ namespace LOGIYGames.CharacterCore
         bool EvadePressed { get;}
         bool SprintPressing { get;}
         bool CrouchPressed { get;}
-
+        bool InteractPressed { get;}
         bool AttackPressed { get;}
 
     }

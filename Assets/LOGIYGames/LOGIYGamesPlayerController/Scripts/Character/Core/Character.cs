@@ -1,3 +1,4 @@
+using LOGIYGames.Shared.Character.Events;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,84 +7,45 @@ using UnityEngine.Events;
 
 namespace LOGIYGames.CharacterCore
 {
-    public class JumpPerformedEvent
-    {
-        public enum Direction
-        {
-            Left,
-            Right,
-            Forward,
-            Backward
-        }
-        public Direction direction;
-        public float verticalForce;
-        public float planarForce;
-    }
-    public class DashPerformedEvent : JumpPerformedEvent
-    {
 
-
-    }
-    public class RollPerformedEvent : JumpPerformedEvent
-    {
-    }
-    public class TurnPerformedEvent
-    {
-        public float movementSpeed;
-        public float angle;
-    }
-    public class LeashWeaponEvent
-    {
-        public bool unleashWeapon;
-    }
-    public class ItemThrowedEvent
-    {
-
-    }
-    public class LandedEvent
-    {
-
-    }
     public class Character : MonoModuleBase, IControllable
     {
-        public IMovementInputReader Input { get; set; }
+        public ICharacterInputReader Input { get; set; }
         [Header("References")]
 
         [field: SerializeField] private ControllerWrapperBase Motor;
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
-        // TODO Make Builder
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
         public IRotationStrategy DefaultRotationStrategy { get; set; }
         public IMovementStrategy DefaultMovementStrategy { get; set; }
-
         public IEventDispatcher EventBus { get; private set; }
 
         public int JumpCount;
 
-        public Transform Target;
-
         [Header("State Machine Configuration")]
+        #region State Machine Configuration
         public MovementStatesPresetBase movementPreset;
         private StateMachine _movementStateMachine;
         private StateMachine _actionStateMachine;
-
         public StateMachine MovementStateMachine => _movementStateMachine;
         public StateMachine ActionStateMachine => _actionStateMachine;
+        #endregion
 
         public bool IsFalling { get; set; }
         public bool IsCrouching { get; set; }
         public bool IsGrounded { get => Motor.IsGrounded; }
         public bool IsSliding { get; set; }
+        public bool IsOnLadder { get; set; }
 
-        #region Debug
-
+        #region Inpector Debug Variables
         private string _currentMovementStateName;
         private string _lastMovementTransition;
         private string _currentActionStateName;
         private string _lastActionTransition;
         #endregion
-        #region VelocityVariables
+
+        #region Velocity Variables
         [Header("Movement Configuration")]
         public float BaseSpeed;
         /// <summary>
@@ -137,16 +99,16 @@ namespace LOGIYGames.CharacterCore
         public Transform CameraLookAt => cameraLookAt;
         public Transform CameraFollow => cameraFollow;
         public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
+        #endregion
 
         public UnityEvent OnControlReleased { get; } = new();
-
-        #endregion
         private void Awake()
         {
             EventBus = new EventDispatcher();
             InitializeStateMachine();
             DefaultMovementStrategy = new CameraRelativeMovement(this);
             DefaultRotationStrategy = new CameraRelativeRotation(this);
+            EventsSubscription();
         }
         private void Start()
         {
@@ -154,28 +116,23 @@ namespace LOGIYGames.CharacterCore
             Motor.Height = Height;
             Motor.Center = new Vector3(0, Height / 2.0f, 0);
 
-            EventBus.Subscribe<JumpPerformedEvent>(Jump);
-            EventBus.Subscribe<RollPerformedEvent>(Roll);
-            EventBus.Subscribe<DashPerformedEvent>(Dash);
             if (Input == null)
             {
                 Release();
 
             }
         }
-        private void OnTriggerEnter(Collider other)
+
+        private void EventsSubscription()
         {
-            if (other.CompareTag("Ladder")) Target = other.transform;
+            EventBus.Subscribe<JumpPerformedEvent>(Jump);
+            EventBus.Subscribe<RollPerformedEvent>(Roll);
+            EventBus.Subscribe<DashPerformedEvent>(Dash);
         }
 
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Ladder")) Target = null;
-        }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
-
             _movementStateMachine.FixedUpdate();
             _actionStateMachine.FixedUpdate();
         }
@@ -189,27 +146,15 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-
             targetRotation = RotationStrategy.GetRotation();
+            targetDirection = MovementStrategy.GetMovementDirection().normalized;
             CalculateDeltaYaw();
-            targetDirection = MovementStrategy.GetMovementDirection();
             _movementStateMachine.Update();
             _actionStateMachine.Update();
-            Debug();
+            StatesDebug();
 
 
         }
-
-        private void Debug()
-        {
-            print(gameObject.name + " " + RotationStrategy);
-            print(gameObject.name + " " + MovementStrategy);
-            _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
-            _lastMovementTransition = _movementStateMachine.LastTransition;
-            _currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
-            _lastActionTransition = _actionStateMachine.LastTransition;
-        }
-
         private void SmoothHeightChanging()
         {
             if (Height == Motor.Height && Motor.Center.y == Height) return;
@@ -276,7 +221,6 @@ namespace LOGIYGames.CharacterCore
         }
 
         #endregion
-
         #region Movement Methods
 
         public void Move(Vector3 moveDirection)
@@ -331,8 +275,16 @@ namespace LOGIYGames.CharacterCore
             Motor.Jump(evt.verticalForce);
         }
 
+        public void ResetVelocity()
+        {
+            Acceleration = 0;
+            Deceleration = 0;
+            SpeedMultiplier = 0;
+            velocity = Vector3.zero;
+            targetDirection = Vector3.zero;
+        }
         #endregion
-
+        #region State Machine
         private void InitializeStateMachine()
         {
             _movementStateMachine = new StateMachine();
@@ -363,8 +315,16 @@ namespace LOGIYGames.CharacterCore
         {
             _actionStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
         }
-
-        public void TakeControl(IMovementInputReader inputReader)
+        private void StatesDebug()
+        {
+            _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
+            _lastMovementTransition = _movementStateMachine.LastTransition;
+            _currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
+            _lastActionTransition = _actionStateMachine.LastTransition;
+        }
+        #endregion
+        #region IControllable
+        public void TakeControl(ICharacterInputReader inputReader)
         {
             Input = inputReader;
         }
@@ -376,5 +336,6 @@ namespace LOGIYGames.CharacterCore
             MovementStrategy = new NoneMovement();
             OnControlReleased.Invoke();
         }
+        #endregion
     }
 }

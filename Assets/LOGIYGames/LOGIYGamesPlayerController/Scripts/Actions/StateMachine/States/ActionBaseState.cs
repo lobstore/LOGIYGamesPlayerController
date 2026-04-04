@@ -1,4 +1,5 @@
 using LOGIYGames.CharacterCore;
+using LOGIYGames.Shared.Character.Events;
 using UnityEngine;
 
 namespace LOGIYGames

@@ -1,4 +1,6 @@
 using LOGIYGames.CharacterCore;
+using LOGIYGames.Shared.Character.Events;
+using LOGIYGames.Shared.Enums;
 using UnityEngine;
 
 namespace LOGIYGames.Animation
@@ -17,7 +19,32 @@ namespace LOGIYGames.Animation
 
         private void Start()
         {
-
+            character.EventBus.Subscribe<LadderEnteredEvent>((evt) => { 
+                switch (evt.from)
+                {
+                    case Direction.Up:
+                        PlayAnimation("LadderMountFromTop");
+                        break;
+                    case Direction.Down:
+                        PlayAnimation("LadderMountFromBottom");
+                        break;
+                    default:
+                        break;
+                }
+            });
+            character.EventBus.Subscribe<LadderExitedEvent>((evt) => {
+                switch (evt.from)
+                {
+                    case Direction.Up:
+                        PlayAnimation("LadderDismountFromTop");
+                        break;
+                    case Direction.Down:
+                        PlayAnimation("LadderDismountFromBottom");
+                        break;
+                    default:
+                        break;
+                }
+            });
 
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) => { PlayAnimation("Jump"); });
             character.EventBus.Subscribe<RollPerformedEvent>((evt) => { PlayAnimation("Roll"); });
@@ -25,16 +52,16 @@ namespace LOGIYGames.Animation
 
                 switch (evt.direction)
                 {
-                    case JumpPerformedEvent.Direction.Left:
+                    case Direction.Left:
                         PlayAnimation(_dashLeft);
                         break;
-                    case JumpPerformedEvent.Direction.Right:
+                    case Direction.Right:
                         PlayAnimation(_dashRight);
                         break;
-                    case JumpPerformedEvent.Direction.Forward:
+                    case Direction.Forward:
                         PlayAnimation(_dashForward);
                         break;
-                    case JumpPerformedEvent.Direction.Backward:
+                    case Direction.Backward:
                         PlayAnimation(_dashBackward);
                         break;
                     default:
@@ -109,7 +136,7 @@ namespace LOGIYGames.Animation
         {
             base.OnLateUpdate(deltaTime);
             animator.SetFloat("Speed", character.SpeedMultiplier);
-            if (character.RotationStrategy is CameraRelativeRotation or InputRelativeRotation or NoneRotation)
+            if (character.RotationStrategy is CameraRelativeRotation or InputRelativeRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
@@ -117,8 +144,6 @@ namespace LOGIYGames.Animation
             }
             else
             {
-                //animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).z);
-                //animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(character.Velocity.normalized).x);
                 animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, 0.1f, Time.deltaTime);
                 animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, 0.1f, Time.deltaTime);
             }

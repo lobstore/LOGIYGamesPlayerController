@@ -5,7 +5,7 @@ using LOGIYGames.AI;
 
 namespace LOGIYGames.Scripts.AI
 {
-	public class AIInputReader: IMovementInputReader
+	public class AIInputReader: ICharacterInputReader
 	{
         AIBrain Driver;
         public AIInputReader(AIBrain Driver)
@@ -22,5 +22,6 @@ namespace LOGIYGames.Scripts.AI
 
         public bool AttackPressed => false;
 
+        public bool InteractPressed => false;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LOGIYGames.CharacterCore
 {
-    public class NoneInput : IMovementInputReader
+    public class NoneInput : ICharacterInputReader
     {
         public Vector2 MovementInput => Vector3.zero;
 
@@ -20,5 +20,6 @@ namespace LOGIYGames.CharacterCore
 
         public bool AttackPressed => false;
 
+        public bool InteractPressed => false;
     }
 }

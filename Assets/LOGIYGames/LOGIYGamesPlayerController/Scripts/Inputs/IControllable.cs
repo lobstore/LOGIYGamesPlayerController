@@ -10,7 +10,7 @@ namespace LOGIYGames.CharacterCore
         Transform CameraLookAt { get; }
         Transform CameraFollow { get; }
         UnityEvent OnControlReleased { get; }
-        void TakeControl(IMovementInputReader inputReader);
+        void TakeControl(ICharacterInputReader inputReader);
         void Release();
     }
 }
