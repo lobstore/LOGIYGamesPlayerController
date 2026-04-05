@@ -36,7 +36,6 @@ namespace LOGIYGames
 
             _character.EventBus.Publish(new LadderExitedEvent
             {
-                from = _character.GetComponent<LadderMovementController>().LadderEndpoint.IsTop ? Direction.Up : Direction.Down
             });
 
         }
@@ -54,19 +53,19 @@ namespace LOGIYGames
             _character.MovementStrategy = _character.DefaultMovementStrategy;
             _character.RotationStrategy = _character.DefaultRotationStrategy;
             _character.transform.SetParent(null);
-            _character.GetComponent<CharacterGravityModule>().UseGravity = true;
             _character.IsOnLadder = false;
+            _character.GetComponent<CharacterGravityModule>().UseGravity = true;
+
         }
         public override bool CanEnter()
         {
             return base.CanEnter()
-                && _character.GetComponent<LadderMovementController>().LadderEndpoint != null
                 && _character.IsOnLadder
-                && f();
+                &&f();
         }
         bool f()
         {
-            return (_character.GetComponent<LadderMovementController>().LadderEndpoint.IsTop && _character.Input.MovementInput.y > 0) || (!_character.GetComponent<LadderMovementController>().LadderEndpoint.IsTop && _character.Input.MovementInput.y < 0);
+            return (_character.Input.MovementInput.y > 0&& !_character.GetComponent<LadderMovementController>().LadderInFrontLegs)|| (_character.Input.MovementInput.y < 0 && _character.IsGrounded);
         }
     }
     public class LadderEnterState : TimedMovementState
@@ -79,27 +78,26 @@ namespace LOGIYGames
         {
             base.Enter();
             _character.ResetVelocity();
-            _character.transform.SetParent(_character.GetComponent<LadderMovementController>().LadderEndpoint.Ladder, true);
 
             _character.MovementStrategy = new LadderMovement(_character);
-            _character.RotationStrategy = new LadderRotation(_character.GetComponent<LadderMovementController>().LadderEndpoint.Ladder);
+            _character.RotationStrategy = new LadderRotation(_character.GetComponent<LadderMovementController>().Ladder.transform);
 
             _character.GetComponent<CharacterGravityModule>().UseGravity = false;
 
-            _character.transform.localPosition = new Vector3(0, _character.transform.position.y, 0);
-            _character.transform.localRotation = Quaternion.identity;
+            _character.transform.position = new Vector3(_character.GetComponent<LadderMovementController>().Ladder.transform.position.x, _character.transform.position.y, _character.GetComponent<LadderMovementController>().Ladder.transform.position.z) - _character.GetComponent<LadderMovementController>().Ladder.transform.forward*0.5f;
+            _character.transform.rotation = _character.GetComponent<LadderMovementController>().Ladder.transform.rotation;
+            _character.transform.SetParent(_character.GetComponent<LadderMovementController>().Ladder.transform, true);
 
             _character.EventBus.Publish(new LadderEnteredEvent
             {
-                from = _character.GetComponent<LadderMovementController>().LadderEndpoint.IsTop ? Direction.Up : Direction.Down
             });
             _character.IsOnLadder = true;
         }
         public override bool CanEnter()
         {
             return base.CanEnter()
-                && _character.GetComponent<LadderMovementController>().LadderEndpoint
-                && !_character.IsOnLadder;
+                && !_character.IsOnLadder
+                && _character.GetComponent<LadderMovementController>().LadderInFrontLegs;
         }
     }
 }

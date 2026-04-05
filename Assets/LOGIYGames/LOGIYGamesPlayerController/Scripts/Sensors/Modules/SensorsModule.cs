@@ -26,6 +26,7 @@ namespace LOGIYGames
         [SerializeField] private bool m_showDebugInfo = true;
         private string m_aboveObstacleName;
         private string m_belowObstacleName;
+        private string m_legsForwardObstacleName;
 
         [SerializeField] Collider col;
 
@@ -46,16 +47,19 @@ namespace LOGIYGames
         private RaycastHit m_belowHit;
         private RaycastHit m_groundHit;
         private RaycastHit m_aboveHit;
+        private RaycastHit m_legsFrontHit;
 
         // Public Properties
         public RaycastHit BelowHit => m_belowHit;
         public RaycastHit GroundHit => m_groundHit;
         public RaycastHit AboveHit => m_aboveHit;
+        public RaycastHit LegsFrontHit => m_legsFrontHit;
 
         public bool IsObstacleBelow { get; private set; }
         public bool IsObstacleAbove { get; private set; }
         public bool IsOnSlope { get; private set; }
         public bool IsGrounded { get; private set; }
+        public bool IsObstacleLegsFront { get; private set; }
         public float GroundAngle { get; private set; }
 
         [Range(0, 90)]
@@ -96,7 +100,7 @@ namespace LOGIYGames
         {
             AboveObstaclesDetection();
             BelowObstaclesDetection();
-
+            LegsFrontObstaclesDetection();
             IsGrounded = Physics.SphereCast(
                 DetectionOrigin,
                 m_castDownSphereRadius,
@@ -125,7 +129,16 @@ namespace LOGIYGames
                 m_includeLayers
             );
         }
-
+        private void LegsFrontObstaclesDetection()
+        {
+            IsObstacleLegsFront = Physics.Raycast(
+                DetectionOrigin,
+                transform.forward,
+                out m_legsFrontHit,
+                0.5f,
+                m_includeLayers
+            );
+        }
         private void AboveObstaclesDetection()
         {
             IsObstacleAbove = Physics.SphereCast(
@@ -142,6 +155,7 @@ namespace LOGIYGames
         {
             m_aboveObstacleName = m_aboveHit.transform?.name;
             m_belowObstacleName = m_belowHit.transform?.name;
+            m_legsForwardObstacleName = m_legsFrontHit.transform?.name;
         }
 
         private void OnDrawGizmos()
@@ -152,6 +166,8 @@ namespace LOGIYGames
             // Draw sphere casts
             DrawSphereCasts(DetectionOrigin);
             DrawBelowPlane();
+
+            Debug.DrawRay(DetectionOrigin, transform.forward*0.5f, Color.red);
         }
 
         private void DrawBelowPlane()
@@ -169,6 +185,7 @@ namespace LOGIYGames
 
             Gizmos.color = IsGrounded ? Color.green : Color.yellow;
             Gizmos.DrawWireSphere(origin + -transform.up * m_groundCheckDistance, m_castDownSphereRadius);
+
 
             if (IsObstacleBelow)
             {

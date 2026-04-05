@@ -17,6 +17,7 @@ namespace LOGIYGames
         public MovementStateData slidingStateData;
         public MovementStateData ladderIdleStateData;
         public MovementStateData ladderClimbStateData;
+        public MovementStateData wallClimbStateData;
 
         public JumpStateData groundJumpStateData;
         public JumpStateData rollStateData;
@@ -31,6 +32,7 @@ namespace LOGIYGames
         private LadderIdleState _ladderIdleState;
         private LadderUpState _ladderUpState;
         private LadderDownState _ladderDownState;
+        private WallClimbState _wallClimbState;
         private IdleState _idleState;
         private SlideState _slideState;
         private TurnState _backTurnState;
@@ -76,6 +78,7 @@ namespace LOGIYGames
             _ladderIdleState = new LadderIdleState(character, ladderIdleStateData);
             _ladderUpState = new LadderUpState(character, ladderClimbStateData);
             _ladderDownState = new LadderDownState(character, ladderClimbStateData);
+            _wallClimbState = new WallClimbState(character, wallClimbStateData);
 
             _idleActionState = new IdleActionState(character);
             _readyActionState = new CombatActionState(character);
@@ -103,6 +106,7 @@ namespace LOGIYGames
             && !_rollState.IsDurationTimerRunning
             && !IsOnLadder()
             && !character.Input.JumpPressed
+            && !_wallClimbState.IsActiveState
             );
             //NOTE: SEQUENCE IS IMPORTANT
             // ----- Idle State Transitions -----
@@ -122,6 +126,7 @@ namespace LOGIYGames
             character.AddStateMachineTransition(_runState, _backTurnState, () => _backTurnState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
             //character.AddStateMachineTransition(_runState, _slideState, () => character.Sensors.GroundAngle > 25 && character.SpeedMultiplier > character.SpeedMultiplier * 0.5f);
             character.AddStateMachineTransition(_runState, _groundJumpState, () => character.Input.JumpPressed && character.JumpCount < groundJumpStateData.MaxJumpCount && _groundJumpState.CanEnter());
+            character.AddStateMachineTransition(_runState, _wallClimbState, () => character.Sensors.IsObstacleLegsFront && character.Sensors.LegsFrontHit.collider.CompareTag("Climbable"));
 
             // ----- Sprint State Transitions -----
             character.AddStateMachineTransition(_sprintState, _idleState, () => character.Input.MovementInput.magnitude == 0f && character.Sensors.IsGrounded);
@@ -159,7 +164,7 @@ namespace LOGIYGames
             character.AddSubStateMachineTransition(_readyActionState, _throwItemActionState, () => character.Input.CrouchPressed);
             character.AddSubStateMachineTransition(_throwItemActionState, _readyActionState, () => true);
 
-            // ----- Ladder State Transitions -----
+            // ----- From Ladder State Transitions -----
             character.AddStateMachineTransition(_ladderEnterState, _ladderIdleState, () => _ladderEnterState.IsDurationTimerElapsed);
             character.AddStateMachineTransition(_ladderIdleState, _ladderExitState, () => _ladderExitState.CanEnter() && character.Input.InteractPressed);
             character.AddStateMachineTransition(_ladderIdleState, _ladderUpState, () => character.Input.MovementInput.y > 0);
@@ -168,9 +173,10 @@ namespace LOGIYGames
             character.AddStateMachineTransition(_ladderDownState, _ladderIdleState, () => character.Input.MovementInput.y >= 0);
             character.AddStateMachineTransition(_ladderDownState, _ladderExitState, () => _ladderExitState.CanEnter());
             character.AddStateMachineTransition(_ladderUpState, _ladderExitState, () =>  _ladderExitState.CanEnter());
-
-
             character.AddStateMachineTransition(_ladderExitState, _idleState, () => _ladderExitState.IsDurationTimerElapsed);
+            // ----- From Wall Climb State Transitions -----
+            character.AddStateMachineTransition(_wallClimbState, _idleState, () => character.Input.JumpPressed  || !character.Sensors.IsObstacleLegsFront || !character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") || (character.IsGrounded && character.Input.MovementInput.y < 0));
+
 
         }
 

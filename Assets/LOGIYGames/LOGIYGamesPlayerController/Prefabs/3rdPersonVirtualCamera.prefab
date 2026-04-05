@@ -272,7 +272,7 @@ MonoBehaviour:
   CollideAgainst:
     serializedVersion: 2
     m_Bits: 4294967295
-  IgnoreTag: Player
+  IgnoreTag: Character
   TransparentLayers:
     serializedVersion: 2
     m_Bits: 0

@@ -19,32 +19,6 @@ namespace LOGIYGames.Animation
 
         private void Start()
         {
-            character.EventBus.Subscribe<LadderEnteredEvent>((evt) => { 
-                switch (evt.from)
-                {
-                    case Direction.Up:
-                        PlayAnimation("LadderMountFromTop");
-                        break;
-                    case Direction.Down:
-                        PlayAnimation("LadderMountFromBottom");
-                        break;
-                    default:
-                        break;
-                }
-            });
-            character.EventBus.Subscribe<LadderExitedEvent>((evt) => {
-                switch (evt.from)
-                {
-                    case Direction.Up:
-                        PlayAnimation("LadderDismountFromTop");
-                        break;
-                    case Direction.Down:
-                        PlayAnimation("LadderDismountFromBottom");
-                        break;
-                    default:
-                        break;
-                }
-            });
 
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) => { PlayAnimation("Jump"); });
             character.EventBus.Subscribe<RollPerformedEvent>((evt) => { PlayAnimation("Roll"); });
@@ -153,6 +127,7 @@ namespace LOGIYGames.Animation
             animator.SetBool("IsFalling", character.IsFalling);
             animator.SetBool("IsSliding", character.IsSliding);
             animator.SetBool("IsFocusing", character.Input.FocusPressed);
+            animator.SetBool("IsOnLadder", character.IsOnLadder);
 
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }

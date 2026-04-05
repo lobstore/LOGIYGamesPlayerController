@@ -2,7 +2,8 @@
 
 namespace LOGIYGames
 {
-    public interface IMovementStrategy {
+    public interface IMovementStrategy
+    {
 
         public Vector3 GetMovementDirection();
     }
