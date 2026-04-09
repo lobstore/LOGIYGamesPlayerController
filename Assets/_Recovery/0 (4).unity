@@ -44123,7 +44123,7 @@ PrefabInstance:
     - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: col
       value: 
-      objectReference: {fileID: 6718191764129459972}
+      objectReference: {fileID: 6718191764129459940}
     - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_showDebugInfo
       value: 1
@@ -44196,13 +44196,9 @@ PrefabInstance:
       propertyPath: gravityChangeSpeed
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: GravityAcceleration
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 2654077868994141792, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2654077868994141792, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_Controller
@@ -44365,16 +44361,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: _data
-      value: 
-      objectReference: {fileID: 11400000, guid: 8d5fcd2a8fa1f0745a6d8d8359a06121, type: 2}
-    - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: _dashLeft
       value: DashLeft
-      objectReference: {fileID: 0}
-    - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: _dashRight
@@ -44387,10 +44375,6 @@ PrefabInstance:
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: _dashBackward
       value: DashBackward
-      objectReference: {fileID: 0}
-    - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: crossFadeSpeed
-      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: applyRootMotion
@@ -44755,15 +44739,11 @@ PrefabInstance:
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: Motor
       value: 
-      objectReference: {fileID: 6718191764129459971}
+      objectReference: {fileID: 6718191764129459938}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: Target
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_motor
-      value: 
-      objectReference: {fileID: 6718191764129459971}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: BaseSpeed
       value: 4
@@ -44892,25 +44872,13 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-    - {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-    - {fileID: 6657963720063885413, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6718191764129459950}
-    - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6718191764129459973}
-    - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6718191764129459972}
-    - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6718191764129459971}
   m_SourcePrefab: {fileID: 100100000, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
 --- !u!1001 &2324911943303090081
 PrefabInstance:
@@ -45039,7 +45007,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: CameraPerspectiveType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: TopDownCameraController
@@ -45117,6 +45085,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4d1c4cabaa87f439bd975e3bbabc3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
+--- !u!114 &6718191764129459938 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 354810366595266589}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9350826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dc25859b5be7e44b8bb7ec724b6571e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterControllerWrapper
+--- !u!143 &6718191764129459940 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 6657963720063885413, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 354810366595266589}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6718191764129459950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45130,72 +45114,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.LadderMovementController
   character: {fileID: 6718191764129459927}
---- !u!114 &6718191764129459971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9350826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bcfc58e402ac3a45b86c5f19c27b6a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.RigidbodyControllerWrapper
-  groundDrag: 0
-  airDrag: 0
-  m_movementForceMode: 2
-  m_movementForceMultiplier: 1
---- !u!136 &6718191764129459972
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9350826}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.2
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &6718191764129459973
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9350826}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

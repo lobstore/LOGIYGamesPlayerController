@@ -14,18 +14,14 @@ namespace LOGIYGames
         Character character;
         private Vector3 targetVelocity;
 
-        public override bool IsGrounded => sensorModule.IsGrounded;
-
-        public override Vector3 Velocity => agent.velocity;
-
-        public override bool CollisionEnabled { get; set; }
         public override float MaxStepHeight { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public override float Height { get => agent.height; set => agent.height = value; }
         public override float SlopeLimit { get => sensorModule.MaxStableSlopeAngle; set => sensorModule.MaxStableSlopeAngle = value; }
         public override Vector3 Center { get => characterController.center; set => characterController.center = value; }
         public override float Radius { get => agent.radius; set => agent.radius = value; }
+        public override bool UseGravity { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
-        public override bool ApplyGravityWhenGrounded { get; }
+        public override Vector3 Velocity => throw new System.NotImplementedException();
 
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -45,32 +41,13 @@ namespace LOGIYGames
                 agent.enabled = true;
             }
         }
-        public override Vector3 GetCachedMoveDelta()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override Quaternion GetCachedRotDelta()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override Collider GetCollider()
-        {
-            return characterController;
-        }
-
-        public override void Initialize()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void Jump(float force)
+        public override void Jump(Vector3 force)
         {
             agent.enabled = false;
             if (characterGravityModule != null)
             {
-                characterGravityModule.Velocity = transform.up * Mathf.Sqrt(force * -2f * Physics.gravity.y);
+                //characterGravityModule.Velocity = transform.up * Mathf.Sqrt(force * -2f * Physics.gravity.y);
+                characterGravityModule.Velocity = force ;
             }
         }
 
@@ -108,7 +85,7 @@ namespace LOGIYGames
         {
             targetVelocity = Vector3.ProjectOnPlane(totalVelocity, sensorModule.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up, sensorModule.BelowHit.normal);
         }
-        public override void Rotate(Quaternion a_targetRotation)
+        public override void SetRotation(Quaternion a_targetRotation)
         {
             transform.rotation = a_targetRotation;
         }
@@ -118,13 +95,9 @@ namespace LOGIYGames
             agent.Warp(a_position);
         }
 
-        public override void SetPositionAndRotation(Vector3 a_position, Quaternion a_rotation)
+        public override void ResetVelocity()
         {
-            agent.Warp(a_position);
-            transform.rotation = a_rotation;
+            agent.ResetPath();
         }
-
-
-
     }
 }

@@ -12,15 +12,12 @@ namespace LOGIYGames
     public class CharacterControllerWrapper : ControllerWrapperBase
     {
         [Header("Unity Controller Settings")]
-        [SerializeField]
-        private bool m_applyGravityWhenGrounded = false;
 
         private CharacterController m_characterController;
         private CharacterGravityModule m_characterGravityModule;
         private Character m_character;
         private SensorsModule m_sensors;
 
-        private bool m_enableCollision = true;
         private Vector3 totalVelocity;
         private Vector3 totalVerticalVelocity;
         private Vector3 totalPlanarVelocity;
@@ -30,12 +27,6 @@ namespace LOGIYGames
         [SerializeField] private float projectingVerticalSpeed;
 
         #region Public Properties
-
-        public override bool IsGrounded { get { return m_sensors.IsGrounded; } }
-
-        public override bool ApplyGravityWhenGrounded { get { return m_applyGravityWhenGrounded; } }
-
-        public override Vector3 Velocity { get { return m_characterController.velocity; } }
 
         public override float MaxStepHeight
         {
@@ -66,7 +57,9 @@ namespace LOGIYGames
             get { return m_characterController.radius; }
             set { m_characterController.radius = value; }
         }
+        public override bool UseGravity { get => m_characterGravityModule.UseGravity; set => m_characterGravityModule.UseGravity = value; }
 
+        public override Vector3 Velocity => m_characterController.velocity;
         #endregion
 
         #region Unity Lifecycle
@@ -102,7 +95,7 @@ namespace LOGIYGames
 
             if (m_sensors.IsValidSlope())
             {
-                if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.Input.MovementInput.magnitude> 0)
+                if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.Input.MovementInput.magnitude > 0)
                 {
                     ProjectVelocity();
                 }
@@ -122,17 +115,13 @@ namespace LOGIYGames
 
             totalVelocity = totalVerticalVelocity + totalPlanarVelocity;
 
-            if (m_enableCollision)
-            {
-                m_characterController.Move(totalVelocity * Time.deltaTime);
-            }
-            else
-            {
+            m_characterController.Move(totalVelocity * Time.deltaTime);
 
-                m_characterController.transform.Translate(totalVelocity * Time.deltaTime, Space.World);
-            }
         }
-
+        public override void ForceMove( Vector3 a_move)
+        {
+            m_characterController.Move(a_move * Time.deltaTime);
+        }
         private void ProjectVelocity()
         {
             Vector3 projectedPlanarVelocity = Vector3.zero;
@@ -143,7 +132,7 @@ namespace LOGIYGames
             totalVerticalVelocity = Vector3.Lerp(totalVerticalVelocity, projectedVerticalVelocity, Time.deltaTime * projectingVerticalSpeed);
         }
 
-        public override void Rotate(Quaternion a_targetRotation)
+        public override void SetRotation(Quaternion a_targetRotation)
         {
             m_characterController.transform.rotation = a_targetRotation;
         }
@@ -157,80 +146,27 @@ namespace LOGIYGames
             transform.position = a_position;
         }
 
-
-        public override void SetPositionAndRotation(Vector3 a_position, Quaternion a_rotation)
-        {
-            transform.SetPositionAndRotation(a_position, a_rotation);
-        }
-
-        public override Vector3 GetCachedMoveDelta()
-        {
-            return Velocity * Time.deltaTime;
-        }
-
-        public override Quaternion GetCachedRotDelta()
-        {
-            return transform.rotation;
-        }
-
         #endregion
 
-        #region Collision Management
-
-        public override bool CollisionEnabled
-        {
-            get { return m_enableCollision; }
-            set
-            {
-                m_enableCollision = value;
-            }
-        }
-
-        #endregion
 
         #region Jump Method
 
-        public override void Jump(float force)
+        public override void Jump(Vector3 force)
         {
             if (m_characterGravityModule != null)
             {
-                m_characterGravityModule.Velocity = transform.up * Mathf.Sqrt(force * -2f * Physics.gravity.y);
+                m_characterGravityModule.Velocity = force;
             }
         }
 
         #endregion
 
-        #region Initialization
 
-        public override void Initialize()
+        public override void ResetVelocity()
         {
-            m_characterController.enableOverlapRecovery = true;
+            totalVelocity = Vector3.zero;
         }
 
-        #endregion
-
-        #region Collider Access
-
-        public override Collider GetCollider()
-        {
-            return m_characterController;
-        }
-
-        #endregion
-
-        #region Unity Lifecycle Events
-
-        private void OnEnable()
-        {
-            m_characterController.enabled = true;
-        }
-
-        private void OnDisable()
-        {
-            m_characterController.enabled = false;
-        }
-
-        #endregion
 
 
     }

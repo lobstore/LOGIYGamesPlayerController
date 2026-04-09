@@ -1,5 +1,3 @@
-using LOGIYGames.CharacterCore;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -15,7 +13,6 @@ namespace LOGIYGames
     public class RigidbodyControllerWrapper : ControllerWrapperBase
     {
         [Header("Rigidbody Controller Settings")]
-        [SerializeField] private bool m_applyGravityWhenGrounded = false;
         [SerializeField] private float groundDrag;
         [SerializeField] private float airDrag;
 
@@ -25,82 +22,67 @@ namespace LOGIYGames
         [SerializeField] private ForceMode m_movementForceMode = ForceMode.Acceleration;
         [Tooltip("Movement force multiplier")]
         [SerializeField] private float m_movementForceMultiplier = 10f;
-        
+
         private Rigidbody m_rigidbody;
         private CapsuleCollider m_capsuleCollider;
-        private CharacterGravityModule m_characterGravityModule;
         private SensorsModule m_sensors;
-        private Character m_character;
-
-        private bool m_collisionEnabled = true;
 
         // Cached values for properties
-        private float m_cachedHeight;
-        private float m_cachedRadius;
-        private Vector3 m_cachedCenter;
-        
+        private float m_Height;
+        private float m_Radius;
+        private Vector3 m_Center;
+
         #region Public Properties
 
-        public override bool IsGrounded => m_sensors != null && m_sensors.IsGrounded;
-
-        public override Vector3 Velocity => m_rigidbody != null ? m_rigidbody.linearVelocity : Vector3.zero;
-        
-        public override bool CollisionEnabled
-        {
-            get => m_collisionEnabled;
-            set
-            {
-                m_collisionEnabled = value;
-                m_capsuleCollider.enabled = value;
-            }
-        }
-        
-        public override float MaxStepHeight { get; set; }  
+        public override float MaxStepHeight { get; set; }
         public override float Height
         {
-            get => m_cachedHeight;
+            get => m_Height;
             set
             {
-                m_cachedHeight = value;
+                m_Height = value;
                 UpdateCapsuleDimensions();
             }
         }
-        
-        public override float SlopeLimit {  get; set; }
-        
+
+        public override float SlopeLimit { get; set; }
+
         public override Vector3 Center
         {
-            get => m_cachedCenter;
+            get => m_Center;
             set
             {
-                m_cachedCenter = value;
+                m_Center = value;
                 UpdateCapsuleCenter();
             }
         }
-        
+
         public override float Radius
         {
-            get => m_cachedRadius;
+            get => m_Radius;
             set
             {
-                m_cachedRadius = value;
+                m_Radius = value;
                 UpdateCapsuleDimensions();
             }
         }
-        
-        public override bool ApplyGravityWhenGrounded => m_applyGravityWhenGrounded;
-        
+
+        public override Vector3 Position => m_rigidbody.position;
+        public override Quaternion Rotation => m_rigidbody.rotation;
+        public override Transform Transform => m_rigidbody.transform;
+
+        public override bool UseGravity { get => m_rigidbody.useGravity; set => m_rigidbody.useGravity = value; }
+
+        public override Vector3 Velocity => m_rigidbody.linearVelocity;
         #endregion
-        
+
         #region Unity Lifecycle
 
         private void Awake()
         {
             m_rigidbody = GetComponent<Rigidbody>();
             m_capsuleCollider = GetComponent<CapsuleCollider>();
-            m_characterGravityModule = GetComponent<CharacterGravityModule>();
             m_sensors = GetComponent<SensorsModule>();
-            m_character = GetComponent<Character>();
             Debug.Assert(m_rigidbody != null, "Error (RigidbodyControllerWrapper): Could not find Rigidbody component");
             Debug.Assert(m_capsuleCollider != null, "Error (RigidbodyControllerWrapper): Could not find CapsuleCollider component");
 
@@ -110,14 +92,14 @@ namespace LOGIYGames
             m_rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
             // Cache initial capsule values
-            m_cachedRadius = m_capsuleCollider.radius;
-            m_cachedHeight = m_capsuleCollider.height;
-            m_cachedCenter = m_capsuleCollider.center;
+            m_Radius = m_capsuleCollider.radius;
+            m_Height = m_capsuleCollider.height;
+            m_Center = m_capsuleCollider.center;
         }
 
         private void Update()
         {
-            if (IsGrounded)
+            if (m_sensors.IsGrounded)
             {
                 m_rigidbody.linearDamping = groundDrag;
             }
@@ -132,110 +114,80 @@ namespace LOGIYGames
 
         public override void Move(Vector3 a_move)
         {
-     
-            if (m_collisionEnabled)
+            Vector3 horizontalVelocity = Vector3.zero;
+            Vector3 force = Vector3.zero;
+            horizontalVelocity = m_rigidbody.linearVelocity;
+            horizontalVelocity.y = 0;
+            if (m_sensors.IsGrounded)
             {
-                if (IsGrounded)
-                {
 
-                    a_move = Vector3.ProjectOnPlane(a_move, m_sensors.BelowHit.normal);
-    
-                }
 
-                if (m_rigidbody.linearVelocity.magnitude <= m_character.CurrentSpeed)
-                {
-                    Vector3 force = a_move * m_movementForceMultiplier;
-                    m_rigidbody.AddForce(force, m_movementForceMode);
-                }
-                else
-                {
+                force = a_move;
+                m_rigidbody.AddForce(force - horizontalVelocity, m_movementForceMode);
+                //a_move = Vector3.ProjectOnPlane(a_move, m_sensors.BelowHit.normal);
 
-                    m_rigidbody.linearVelocity = new Vector3(a_move.x, m_rigidbody.linearVelocity.y, a_move.z);
-
-                }
             }
             else
             {
-                m_rigidbody.position += a_move * Time.fixedDeltaTime;
+                force = a_move * m_movementForceMultiplier;
+                m_rigidbody.AddForce(force - horizontalVelocity, ForceMode.Force);
             }
-        }
 
-        public override void Rotate(Quaternion a_targetRotation)
+
+        }
+        public override void ResetVelocity()
+        {
+            m_rigidbody.linearVelocity = Vector3.zero;
+        }
+        public override void SetRotation(Quaternion a_targetRotation)
         {
             m_rigidbody.MoveRotation(a_targetRotation);
+            m_rigidbody.PublishTransform();
         }
-        
+
 
         #endregion
-        
+
         #region Transform Methods
-        
+
         public override void SetPosition(Vector3 a_position)
         {
             m_rigidbody.position = a_position;
         }
-       
-        
-        public override void SetPositionAndRotation(Vector3 a_position, Quaternion a_rotation)
-        {
-            m_rigidbody.position = a_position;
-            m_rigidbody.rotation = a_rotation;
-        }
-        
-        public override Vector3 GetCachedMoveDelta()
-        {
-            return m_rigidbody.linearVelocity*Time.deltaTime;
-        }
-        
-        public override Quaternion GetCachedRotDelta()
-        {
-            return m_rigidbody.rotation;
-        }
-        
+
+
         #endregion
-        
+
         #region Jump Method
-        
-        public override void Jump(float force)
+
+        public override void Jump(Vector3 force)
         {
             m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z);
-            m_rigidbody.AddForce(Vector3.up * Mathf.Sqrt(force * -2f * Physics.gravity.y), ForceMode.Impulse);
+            m_rigidbody.AddForce(force, ForceMode.Impulse);
         }
-        
+
         #endregion
-        
+
         #region Capsule Management
-        
+
         private void UpdateCapsuleDimensions()
         {
             if (m_capsuleCollider == null) return;
-            
-            m_capsuleCollider.radius = m_cachedRadius;
-            m_capsuleCollider.height = m_cachedHeight;
+
+            m_capsuleCollider.radius = m_Radius;
+            m_capsuleCollider.height = m_Height;
         }
-        
+
         private void UpdateCapsuleCenter()
         {
             if (m_capsuleCollider == null) return;
-            
-            m_capsuleCollider.center = m_cachedCenter;
+
+            m_capsuleCollider.center = m_Center;
         }
-        
-        public override Collider GetCollider()
-        {
-            return m_capsuleCollider;
-        }
-        
+
+
         #endregion
-        
-        #region Initialization
-        
-        public override void Initialize()
-        {
-            // Rigidbody is already configured in Awake
-        }
-        
-        #endregion
-        
+
+
     }
 }

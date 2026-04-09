@@ -4,22 +4,28 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class WallClimbState : BaseMovementState
+    public class WallClimbMovementState : BaseMovementState
     {
-        public WallClimbState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        SensorsModule sensorModule;
+        ControllerWrapperBase Controller;
+        public WallClimbMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
+            sensorModule = ctx.GetComponent<SensorsModule>();
+            Controller = ctx.GetComponent<ControllerWrapperBase>();
         }
         public override void Enter()
         {
             _character.ResetVelocity();
             base.Enter();
-            _character.MovementStrategy = new WallClimbMovement(_character.GetComponent<SensorsModule>(), _character);
-            _character.RotationStrategy = new WallClimbRotaion(_character.GetComponent<SensorsModule>());
-            _character.GetComponent<CharacterGravityModule>().UseGravity = false;
+            _character.MovementStrategy = new WallClimbMovement(sensorModule, _character);
+            _character.RotationStrategy = new WallClimbRotaion(sensorModule);
+            Controller.UseGravity = false;
+            _character.IsWallClimbing = true;
         }
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+            _character.ForceMove(-sensorModule.LegsFrontHit.normal);
         }
         public override void Exit()
         {
@@ -27,8 +33,8 @@ namespace LOGIYGames
             _character.MovementStrategy = _character.DefaultMovementStrategy;
             _character.RotationStrategy = _character.DefaultRotationStrategy;
             _character.ResetVelocity();
-            _character.GetComponent<CharacterGravityModule>().UseGravity = true;
-
+            Controller.UseGravity = true;
+            _character.IsWallClimbing = false;
         }
     }
     //public class ClimbWallState : ContinuousState

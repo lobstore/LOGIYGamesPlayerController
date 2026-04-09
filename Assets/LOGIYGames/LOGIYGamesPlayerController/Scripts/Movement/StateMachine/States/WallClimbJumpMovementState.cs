@@ -1,12 +1,14 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
+using LOGIYGames.Shared.Enums;
+using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
-    public class JumpState : TimedMovementState
+    public class WallClimbJumpMovementState : TimedMovementState
     {
         private JumpStateData _stateData;
-        public JumpState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
+        public WallClimbJumpMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
         }
@@ -14,12 +16,16 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
+
+            Direction direction = _character.GetRelativeMovementDirection();
             _character.EventBus.Publish(new JumpPerformedEvent
             {
                 verticalForce = _stateData.VerticalJumpForce,
-                planarForce = _stateData.PlanarJumpForce
+                planarForce = _stateData.PlanarJumpForce,
+                direction = direction,
+                jumpType = JumpType.HangJump
+
             });
         }
     }
-
 }

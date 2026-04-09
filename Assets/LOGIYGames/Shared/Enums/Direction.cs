@@ -9,4 +9,5 @@
         Up,
         Down
     }
+    public enum JumpType { GroundJump, HangJump, WallRunJump }
 }

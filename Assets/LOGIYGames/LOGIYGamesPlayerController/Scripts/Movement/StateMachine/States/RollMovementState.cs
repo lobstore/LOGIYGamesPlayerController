@@ -4,11 +4,11 @@ using LOGIYGames.Shared.Character.Events;
 namespace LOGIYGames.Movement
 {
 
-    public class RollState : TimedMovementState
+    public class RollMovementState : TimedMovementState
     {
         private JumpStateData _stateData;
 
-        public RollState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
+        public RollMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
 
@@ -21,10 +21,16 @@ namespace LOGIYGames.Movement
                 planarForce = _stateData.PlanarJumpForce,
                 verticalForce = _stateData.VerticalJumpForce,
             });
+            _character.MovementStrategy = new NoneMovement();
         }
         protected override void Rotate()
         {
             
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            _character.MovementStrategy = _character.DefaultMovementStrategy;
         }
     }
 

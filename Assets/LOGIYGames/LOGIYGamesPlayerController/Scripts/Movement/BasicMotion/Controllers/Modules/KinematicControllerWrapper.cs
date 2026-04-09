@@ -30,20 +30,6 @@ namespace LOGIYGames
         private Vector3 m_cachedCenter;
         
         #region Public Properties
-        
-        public override bool IsGrounded => m_kinematicMotor.GroundingStatus.IsStableOnGround;
-        
-        public override Vector3 Velocity => m_kinematicMotor.Velocity;
-        
-        public override bool CollisionEnabled
-        {
-            get => m_collisionEnabled;
-            set
-            {
-                m_collisionEnabled = value;
-            }
-        }
-        
         public override float MaxStepHeight
         {
             get => m_kinematicMotor.MaxStepHeight;
@@ -85,13 +71,16 @@ namespace LOGIYGames
                 UpdateCapsuleDimensions();
             }
         }
-        
-        public override bool ApplyGravityWhenGrounded => m_applyGravityWhenGrounded;
-        
+
+        public override bool UseGravity { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
+        public override Vector3 Velocity => throw new System.NotImplementedException();
+
+
         #endregion
-        
+
         #region Unity Lifecycle
-        
+
         private void Awake()
         {
             m_kinematicMotor = GetComponent<KinematicCharacterMotor>();
@@ -119,7 +108,6 @@ namespace LOGIYGames
             if (m_collisionEnabled)
             {
                 m_cachedMoveDelta = a_move;
-                //m_kinematicMotor.SetPosition(m_kinematicMotor.TransientPosition + m_cachedMoveDelta);
             }
             else
             {
@@ -127,10 +115,8 @@ namespace LOGIYGames
             }
         }  
         
-        public override void Rotate(Quaternion a_targetRotation)
+        public override void SetRotation(Quaternion a_targetRotation)
         {
-            // Apply target rotation directly
-            //m_kinematicMotor.Transform.rotation = a_targetRotation;
             m_cachedRotDelta = a_targetRotation;
         }
         
@@ -143,28 +129,16 @@ namespace LOGIYGames
             m_kinematicMotor.SetPosition(a_position);
         }
         
-        
-        public override void SetPositionAndRotation(Vector3 a_position, Quaternion a_rotation)
-        {
-            m_kinematicMotor.SetPosition(a_position);
-            m_kinematicMotor.SetRotation(a_rotation);
-        }
-        
-        public override Vector3 GetCachedMoveDelta() => m_cachedMoveDelta;
-        
-        public override Quaternion GetCachedRotDelta() => m_cachedRotDelta;
-        
         #endregion
         
         #region Jump Method
         
-        public override void Jump(float force)
+        public override void Jump(Vector3 force)
         {
             if (m_characterGravityModule != null)
             {
                 m_kinematicMotor.ForceUnground(0.1f);
-                Vector3 upDirection = m_kinematicMotor.CharacterUp;
-                m_characterGravityModule.Velocity = upDirection * Mathf.Sqrt(force * -2f * Physics.gravity.y);
+                m_characterGravityModule.Velocity =  force;
             }
         }
         
@@ -188,24 +162,6 @@ namespace LOGIYGames
             m_capsuleCollider.center = m_cachedCenter;
             m_kinematicMotor.SetCapsuleDimensions(m_cachedRadius, m_cachedHeight, m_cachedCenter.y);
         }
-        
-        public override Collider GetCollider()
-        {
-            return m_capsuleCollider;
-        }
-        
-        #endregion
-        
-        #region Initialization
-        
-        public override void Initialize()
-        {
-            // No additional setup needed
-        }
-        
-        #endregion
-        
-        #region ICharacterController Implementation
         
         public void BeforeCharacterUpdate(float deltaTime)
         {
@@ -262,16 +218,13 @@ namespace LOGIYGames
         public void OnDiscreteCollisionDetected(Collider hitCollider)
         {
         }
-        
-        #endregion
-        
-        #region Editor Helpers
-        
-        private void OnValidate()
+
+        public override void ResetVelocity()
         {
-            m_slopeLimit = Mathf.Max(0, m_slopeLimit);
+            throw new System.NotImplementedException();
         }
-        
+
         #endregion
+
     }
 }

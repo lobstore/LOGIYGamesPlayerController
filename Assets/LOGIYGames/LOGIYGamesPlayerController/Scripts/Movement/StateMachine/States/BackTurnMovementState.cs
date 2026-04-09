@@ -2,13 +2,12 @@ using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace LOGIYGames
 {
-    public class TurnState : TimedMovementState
+    public class BackTurnMovementState : TimedMovementState
     {
-        public TurnState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
+        public BackTurnMovementState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
         {
         }
         Quaternion turnEnd;
@@ -21,23 +20,23 @@ namespace LOGIYGames
                 movementSpeed = _character.SpeedMultiplier,
                 angle = _character.DeltaYaw
             });
+            _character.ResetVelocity();
         }
         protected override void Move()
         {
-            
+
         }
         protected override void Rotate()
         {
+            if (_data.IsAnimationDriven) return;
             _character.Rotate(turnEnd, _character.TurnSmoothTime);
-        }
-        protected override void Aim()
-        {
-            
         }
         public override void Exit()
         {
             base.Exit();
+            if (_data.IsAnimationDriven) return;
             _character.Rotate(turnEnd);
         }
     }
+
 }

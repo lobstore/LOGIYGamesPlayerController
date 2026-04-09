@@ -82,6 +82,12 @@ namespace LOGIYGames
 
             return node;
         }
+        public void RemoveNodeIfExist(IState state)
+        {
+            var node = nodes.GetValueOrDefault(state.GetType());
+            if (node == null) return;
+            nodes.Remove(state.GetType());
+        }
         public class StateNode
         {
             public IState State { get; }

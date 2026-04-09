@@ -4,7 +4,7 @@ namespace LOGIYGames.Shared.Character.Events
 {
     public class JumpPerformedEvent
     {
-
+        public JumpType jumpType;
         public Direction direction;
         public float verticalForce;
         public float planarForce;
@@ -15,6 +15,10 @@ namespace LOGIYGames.Shared.Character.Events
 
     }
     public class RollPerformedEvent : JumpPerformedEvent
+    {
+
+    }
+    public class SlipPerformedEvent : JumpPerformedEvent
     {
     }
     public class TurnPerformedEvent
@@ -32,7 +36,8 @@ namespace LOGIYGames.Shared.Character.Events
     }
     public class LandedEvent
     {
-
+        public Direction horizontalDirection;
+        public float fallingSpeed;
     }
     public class LadderEnteredEvent
     {
@@ -41,5 +46,10 @@ namespace LOGIYGames.Shared.Character.Events
     public class LadderExitedEvent
     {
         public Direction from;
+    }
+    public class MovementStoppedEvent
+    {
+        public Direction direction;
+        public float speed;
     }
 }

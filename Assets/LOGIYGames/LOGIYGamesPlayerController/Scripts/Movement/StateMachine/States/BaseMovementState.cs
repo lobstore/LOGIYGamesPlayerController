@@ -12,19 +12,20 @@ namespace LOGIYGames.Movement
     {
         protected Character _character;
         protected MovementStateData _data;
-        public bool IsActiveState {  get; private set; }
+        protected Animator _animator;
+        public bool IsActiveState { get; private set; }
         protected BaseMovementState(Character ctx, MovementStateData stateData)
         {
+            _animator = ctx.GetComponent<Animator>();
             _data = new();
             _character = ctx;
-            _data.Acceleration = stateData.Acceleration;
-            _data.Deceleration = stateData.Deceleration;
-            _data.TurnSmoothTime = stateData.TurnSmoothTime;
-            _data.Speed = stateData.Speed;
+            _data = stateData;
         }
 
         public virtual void Enter()
         {
+            //Debug.Log("Entered State" + GetType());
+            _animator.applyRootMotion = _data.IsAnimationDriven;
             _character.Acceleration = _data.Acceleration;
             _character.Deceleration = _data.Deceleration;
             _character.TurnSmoothTime = _data.TurnSmoothTime;
@@ -49,35 +50,15 @@ namespace LOGIYGames.Movement
             }
             else
             {
-                if (_character.SpeedMultiplier > 0.01)
-                {
-
-                    _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, 0, _character.Deceleration * Time.deltaTime);
-                }
-                else
-                {
-                    _character.SpeedMultiplier = 0;
-                }
+                _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, 0, _character.Deceleration * Time.deltaTime);
             }
         }
 
         public virtual void LateUpdate()
         {
-           // Aim();
 
         }
 
-        protected virtual void Aim()
-        {
-            if (_character.Input.FocusPressed)
-            {
-                _character.RotationStrategy = new CameraAlongRotation();
-            }
-            else
-            {
-                _character.RotationStrategy = _character.DefaultRotationStrategy;
-            }
-        }
 
         public virtual void PhysicsUpdate()
         {

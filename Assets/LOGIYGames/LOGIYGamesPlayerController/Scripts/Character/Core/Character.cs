@@ -1,4 +1,5 @@
 using LOGIYGames.Shared.Character.Events;
+using LOGIYGames.Shared.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,7 +14,7 @@ namespace LOGIYGames.CharacterCore
         public ICharacterInputReader Input { get; set; }
         [Header("References")]
 
-        [field: SerializeField] private ControllerWrapperBase Motor;
+        [field: SerializeField] private ControllerWrapperBase m_motor;
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
@@ -34,9 +35,10 @@ namespace LOGIYGames.CharacterCore
 
         public bool IsFalling { get; set; }
         public bool IsCrouching { get; set; }
-        public bool IsGrounded { get => Motor.IsGrounded; }
+        public bool IsGrounded { get => Sensors.IsGrounded; }
         public bool IsSliding { get; set; }
         public bool IsOnLadder { get; set; }
+        public bool IsWallClimbing { get; set; }
 
         #region Inpector Debug Variables
         private string _currentMovementStateName;
@@ -105,17 +107,37 @@ namespace LOGIYGames.CharacterCore
         private void Awake()
         {
             EventBus = new EventDispatcher();
-            InitializeStateMachine();
-            DefaultMovementStrategy = new CameraRelativeMovement(this);
-            DefaultRotationStrategy = new CameraRelativeRotation(this);
+
+            switch (CameraManager.Instance.CameraPerspectiveType)
+            {
+                case CameraPerspectiveType.FirstPerson:
+                    DefaultMovementStrategy = new CameraRelativeMovement(this);
+                    DefaultRotationStrategy = new CameraAlongRotation();
+                    break;
+                case CameraPerspectiveType.ThirdPersonFreeLook:
+                    DefaultMovementStrategy = new CameraRelativeMovement(this);
+                    DefaultRotationStrategy = new CameraRelativeRotation(this);
+                    break;
+                case CameraPerspectiveType.ThirdPersonLookForward:
+                    DefaultMovementStrategy = new CameraRelativeMovement(this);
+                    DefaultRotationStrategy = new CameraAlongRotation();
+                    break;
+                case CameraPerspectiveType.Top_Down:
+                    DefaultMovementStrategy = new CameraRelativeMovement(this);
+                    DefaultRotationStrategy = new CameraRelativeRotation(this);
+                    break;
+                default:
+                    break;
+            }
+
             EventsSubscription();
         }
         private void Start()
         {
 
-            Motor.Height = Height;
-            Motor.Center = new Vector3(0, Height / 2.0f, 0);
-
+            m_motor.Height = Height;
+            m_motor.Center = new Vector3(0, Height / 2.0f, 0);
+            InitializeStateMachine();
             if (Input == null)
             {
                 Release();
@@ -125,10 +147,29 @@ namespace LOGIYGames.CharacterCore
 
         private void EventsSubscription()
         {
-            EventBus.Subscribe<JumpPerformedEvent>(Jump);
+            EventBus.Subscribe<JumpPerformedEvent>((evt) =>
+            {
+                switch (evt.jumpType)
+                {
+                    case JumpType.GroundJump:
+                        GroundJump(evt);
+                        break;
+                    case JumpType.HangJump:
+                        WallJump(evt);
+                        break;
+                    case JumpType.WallRunJump:
+                        break;
+                    default:
+                        break;
+                }
+
+            });
             EventBus.Subscribe<RollPerformedEvent>(Roll);
             EventBus.Subscribe<DashPerformedEvent>(Dash);
+            EventBus.Subscribe<SlipPerformedEvent>(SlipJump);
         }
+
+
 
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
@@ -157,16 +198,16 @@ namespace LOGIYGames.CharacterCore
         }
         private void SmoothHeightChanging()
         {
-            if (Height == Motor.Height && Motor.Center.y == Height) return;
-            if (!Mathf.Approximately(Motor.Height, Height) || !Mathf.Approximately(Motor.Center.y, Height / 2.0f))
+            if (Height == m_motor.Height && m_motor.Center.y == Height) return;
+            if (!Mathf.Approximately(m_motor.Height, Height) || !Mathf.Approximately(m_motor.Center.y, Height / 2.0f))
             {
-                Motor.Height = Mathf.Lerp(Motor.Height, Height, HeightChangingSmoothTime * Time.deltaTime);
-                Motor.Center = Vector3.Lerp(Motor.Center, new Vector3(0, Height / 2.0f, 0), HeightChangingSmoothTime * Time.deltaTime);
+                m_motor.Height = Mathf.Lerp(m_motor.Height, Height, HeightChangingSmoothTime * Time.deltaTime);
+                m_motor.Center = Vector3.Lerp(m_motor.Center, new Vector3(0, Height / 2.0f, 0), HeightChangingSmoothTime * Time.deltaTime);
             }
             else
             {
-                Motor.Height = Height;
-                Motor.Center = new Vector3(0, Height / 2.0f, 0);
+                m_motor.Height = Height;
+                m_motor.Center = new Vector3(0, Height / 2.0f, 0);
             }
         }
 
@@ -177,10 +218,7 @@ namespace LOGIYGames.CharacterCore
         /// </summary>
         public void RotateToDirection(Vector3 desiredDirection, float turnSmoothTime = 0)
         {
-            desiredDirection.y = 0;
-            if (desiredDirection.sqrMagnitude < 0.001f) return;
-
-            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, Vector3.up);
+            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, m_motor.transform.up);
             Rotate(targetRotation, turnSmoothTime);
         }
 
@@ -189,7 +227,7 @@ namespace LOGIYGames.CharacterCore
         /// </summary>
         public void RotateToPosition(Vector3 position, float turnSmoothTime = 0)
         {
-            Vector3 desiredDirection = position - transform.position;
+            Vector3 desiredDirection = position - m_motor.transform.position;
             RotateToDirection(desiredDirection.normalized, turnSmoothTime);
         }
 
@@ -202,12 +240,12 @@ namespace LOGIYGames.CharacterCore
             if (turnSpeed > 0f)
             {
                 // Smooth rotation using Slerp
-                Quaternion smoothedRotation = Quaternion.Slerp(transform.rotation, targetRotation, TurnSmoothTime * Time.fixedDeltaTime);
-                Motor.Rotate(smoothedRotation);
+                Quaternion smoothedRotation = Quaternion.Slerp(m_motor.Rotation, targetRotation, TurnSmoothTime * Time.fixedDeltaTime);
+                m_motor.SetRotation(smoothedRotation);
             }
             else
             {
-                Motor.Rotate(targetRotation);
+                m_motor.SetRotation(targetRotation);
             }
         }
 
@@ -232,7 +270,7 @@ namespace LOGIYGames.CharacterCore
             }
             else
             {
-                if (Velocity.magnitude > 0.001f)
+                if (Velocity.magnitude > 0.0001f)
                 {
 
                     Velocity = Vector3.Lerp(Velocity, Vector3.zero, Deceleration * Time.deltaTime);
@@ -242,37 +280,49 @@ namespace LOGIYGames.CharacterCore
                     Velocity = Vector3.zero;
                 }
             }
-            Motor.Move(Velocity);
+            m_motor.Move(Velocity);
+        }
+        public void ForceMove(Vector3 moveDirection)
+        {
+            m_motor.Move(moveDirection);
         }
         public void SetPosition(Vector3 position)
         {
-            Motor.SetPosition(position);
+            m_motor.SetPosition(position);
         }
         public void Slide()
         {
-            Motor.Move(ProjectVelocity());
+            m_motor.Move(ProjectVelocity());
+        }
+        private void SlipJump(SlipPerformedEvent evt)
+        {
+            Velocity = m_motor.transform.forward * evt.planarForce;
         }
         public void Dash(DashPerformedEvent evt)
         {
-            // --- Добавляем импульс для рывка ---
-            Velocity += targetDirection * evt.planarForce;
-
-
+            Velocity = targetDirection * (evt.planarForce + CurrentSpeed);
+            m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
         }
         private Vector3 ProjectVelocity()
         {
-            return Vector3.ProjectOnPlane(Velocity, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
+            return Vector3.ProjectOnPlane(Velocity, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-m_motor.transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
         }
-        public void Jump(JumpPerformedEvent evt)
+        public void GroundJump(JumpPerformedEvent evt)
         {
-            Velocity += targetDirection * SpeedMultiplier * evt.planarForce;
-            Motor.Jump(evt.verticalForce);
+            Velocity = targetDirection * (evt.planarForce + CurrentSpeed);
+            m_motor.Jump(new Vector3(0, evt.verticalForce,0));
+            JumpCount++;
+        }
+        public void WallJump(JumpPerformedEvent evt)
+        {
+            Velocity = Sensors.LegsFrontHit.normal * (evt.planarForce + CurrentSpeed);
+            m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
             JumpCount++;
         }
         public void Roll(RollPerformedEvent evt)
         {
-            Velocity = transform.forward * evt.planarForce + Velocity;
-            Motor.Jump(evt.verticalForce);
+            Velocity = m_motor.transform.forward * evt.planarForce;
+            m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
         }
 
         public void ResetVelocity()
@@ -282,6 +332,7 @@ namespace LOGIYGames.CharacterCore
             SpeedMultiplier = 0;
             velocity = Vector3.zero;
             targetDirection = Vector3.zero;
+            m_motor.ResetVelocity();
         }
         #endregion
         #region State Machine
@@ -303,13 +354,13 @@ namespace LOGIYGames.CharacterCore
         {
             _movementStateMachine.AddTransition(from, to, new FuncPredicate(condition));
         }
-        public void AddSubStateMachineTransition(IState from, IState to, Func<bool> condition)
-        {
-            _actionStateMachine.AddTransition(from, to, new FuncPredicate(condition));
-        }
         public void AddAnyStateMachineTransition(IState to, Func<bool> condition)
         {
             _movementStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
+        }
+        public void AddSubStateMachineTransition(IState from, IState to, Func<bool> condition)
+        {
+            _actionStateMachine.AddTransition(from, to, new FuncPredicate(condition));
         }
         public void AddAnySubStateMachineTransition(IState to, Func<bool> condition)
         {
@@ -337,5 +388,40 @@ namespace LOGIYGames.CharacterCore
             OnControlReleased.Invoke();
         }
         #endregion
+        public Direction GetRelativeMovementDirection()
+        {
+            Vector3 localDir;
+            if (targetDirection.magnitude>0)
+            {
+
+
+                localDir = m_motor.transform.InverseTransformDirection(targetDirection);
+            }
+            else
+            {
+                localDir = m_motor.transform.InverseTransformDirection(m_motor.Velocity);
+            }
+            float forwardDot = Vector3.Dot(localDir, Vector3.forward);
+            float rightDot = Vector3.Dot(localDir, Vector3.right);
+            float upDot = Vector3.Dot(localDir, Vector3.up);
+            Direction direction;
+            // Сравниваем проекции, чтобы определить направление
+            if (Mathf.Abs(forwardDot) > Mathf.Abs(rightDot))
+            {
+                if (forwardDot > 0)
+                    direction = Direction.Forward;
+                else
+                    direction = Direction.Backward;
+            }
+            else
+            {
+                if (rightDot > 0)
+                    direction = Direction.Right;
+                else
+                    direction = Direction.Left;
+            }
+
+            return direction;
+        }
     }
 }

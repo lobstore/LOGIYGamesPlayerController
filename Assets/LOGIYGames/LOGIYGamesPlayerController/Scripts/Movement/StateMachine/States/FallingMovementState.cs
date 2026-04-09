@@ -2,9 +2,9 @@
 
 namespace LOGIYGames.Movement
 {
-    public class FallingState : BaseMovementState
+    public class FallingMovementState : BaseMovementState
     {
-        public FallingState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public FallingMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
 
         public override void Enter()
         {

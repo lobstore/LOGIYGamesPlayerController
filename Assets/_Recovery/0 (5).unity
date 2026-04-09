@@ -44365,10 +44365,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: _data
-      value: 
-      objectReference: {fileID: 11400000, guid: 8d5fcd2a8fa1f0745a6d8d8359a06121, type: 2}
-    - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: _dashLeft
       value: DashLeft
       objectReference: {fileID: 0}
@@ -44387,10 +44383,6 @@ PrefabInstance:
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: _dashBackward
       value: DashBackward
-      objectReference: {fileID: 0}
-    - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: crossFadeSpeed
-      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: applyRootMotion
@@ -44761,10 +44753,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_motor
-      value: 
-      objectReference: {fileID: 6718191764129459971}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: BaseSpeed
       value: 4
       objectReference: {fileID: 0}
@@ -45039,7 +45027,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: CameraPerspectiveType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: TopDownCameraController
