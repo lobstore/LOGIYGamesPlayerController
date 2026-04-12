@@ -9,6 +9,10 @@ namespace LOGIYGames
         public float Acceleration = 6;
         public float Deceleration = 6;
         public float Speed = 0;
-        public bool IsAnimationDriven;
+        public float ActionFrameDuration = 0;
+
+        public bool IsAnimationDrivenMovement;
+        public bool IsAnimationDrivenRotation;
+        public bool UseProjectionOnPlane;
     }
 }

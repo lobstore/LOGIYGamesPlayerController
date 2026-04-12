@@ -1,13 +1,9 @@
 using LOGIYGames.CharacterCore;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace LOGIYGames
 {
-    /// <summary>
-    /// Wrapper for Unity's built-in CharacterController.
-    /// Implements the GenericControllerWrapper interface to allow seamless swapping
-    /// with KinematicControllerWrapper.
-    /// </summary>
     [RequireComponent(typeof(CharacterController))]
     public class CharacterControllerWrapper : ControllerWrapperBase
     {
@@ -19,12 +15,11 @@ namespace LOGIYGames
         private SensorsModule m_sensors;
 
         private Vector3 totalVelocity;
-        private Vector3 totalVerticalVelocity;
-        private Vector3 totalPlanarVelocity;
         Vector3 planarVelocity;
         Vector3 verticalVelocity;
         [SerializeField] private float projectingPlanarSpeed;
-        [SerializeField] private float projectingVerticalSpeed;
+        [SerializeField] private float slopeSlideMaxSpeed;
+        [SerializeField] private float slopeSlideAcceleration;
 
         #region Public Properties
 
@@ -69,11 +64,15 @@ namespace LOGIYGames
             m_sensors = GetComponent<SensorsModule>();
             m_character = GetComponent<Character>();
             m_characterController = GetComponent<CharacterController>();
+            m_characterGravityModule = GetComponent<CharacterGravityModule>();
             if (m_characterController == null)
             {
                 m_characterController = gameObject.AddComponent<CharacterController>();
             }
-            m_characterGravityModule = GetComponent<CharacterGravityModule>();
+            if (m_characterController == null)
+            {
+                m_characterGravityModule = GetComponent<CharacterGravityModule>();
+            }
 
             m_characterController.enableOverlapRecovery = true;
         }
@@ -82,54 +81,43 @@ namespace LOGIYGames
         {
             DebugDraw.DrawArrow(transform.position, totalVelocity, Color.green);
         }
+        private void Update()
+        {
+            if (!m_sensors.IsValidSlope() && verticalVelocity.y<0)
+            {
+                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.down* slopeSlideMaxSpeed, m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
 
+            }
+            else
+            {
+                totalVelocity = planarVelocity + verticalVelocity;
+            }
+        }
         #endregion
 
         #region Movement Methods
 
         public override void Move(Vector3 a_move)
         {
+
             planarVelocity = a_move;
             verticalVelocity = m_characterGravityModule.Velocity;
-
-
-            if (m_sensors.IsValidSlope())
-            {
-                if (m_sensors.IsGrounded && m_characterGravityModule.Velocity.y < 0 && m_character.Input.MovementInput.magnitude > 0)
-                {
-                    ProjectVelocity();
-                }
-                else
-                {
-                    totalPlanarVelocity = planarVelocity;
-                    totalVerticalVelocity = verticalVelocity;
-                }
-
-            }
-            else
+            if (m_sensors.IsOnSlope && UseProjectionOnPlane)
             {
                 ProjectVelocity();
             }
 
-
-
-            totalVelocity = totalVerticalVelocity + totalPlanarVelocity;
-
             m_characterController.Move(totalVelocity * Time.deltaTime);
-
         }
-        public override void ForceMove( Vector3 a_move)
+        public override void ForceMove(Vector3 a_move)
         {
             m_characterController.Move(a_move * Time.deltaTime);
         }
         private void ProjectVelocity()
         {
             Vector3 projectedPlanarVelocity = Vector3.zero;
-            Vector3 projectedVerticalVelocity = Vector3.zero;
             projectedPlanarVelocity = Vector3.ProjectOnPlane(planarVelocity, m_sensors.BelowHit.normal);
-            projectedVerticalVelocity = Vector3.ProjectOnPlane(verticalVelocity, m_sensors.BelowHit.normal);
-            totalPlanarVelocity = Vector3.Lerp(totalPlanarVelocity, projectedPlanarVelocity, Time.deltaTime * projectingPlanarSpeed);
-            totalVerticalVelocity = Vector3.Lerp(totalVerticalVelocity, projectedVerticalVelocity, Time.deltaTime * projectingVerticalSpeed);
+            planarVelocity = Vector3.Lerp(planarVelocity, projectedPlanarVelocity, Time.deltaTime * projectingPlanarSpeed);
         }
 
         public override void SetRotation(Quaternion a_targetRotation)

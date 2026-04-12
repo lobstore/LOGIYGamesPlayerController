@@ -1,4 +1,5 @@
 ﻿using LOGIYGames.CharacterCore;
+using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -8,8 +9,14 @@ namespace LOGIYGames.Movement
 
         public override void Enter()
         {
+
             base.Enter();
             _character.IsFalling = true;
+        }
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+
         }
         public override void Exit()
         {

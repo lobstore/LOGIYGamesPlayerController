@@ -1,3 +1,4 @@
+using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using System;
@@ -350,19 +351,19 @@ namespace LOGIYGames.CharacterCore
                 UnityEngine.Debug.LogError("No MovementPreset provided");
             }
         }
-        public void AddStateMachineTransition(IState from, IState to, Func<bool> condition)
+        public void AddMovementStateMachineTransition(BaseMovementState from, BaseMovementState to, Func<bool> condition)
         {
             _movementStateMachine.AddTransition(from, to, new FuncPredicate(condition));
         }
-        public void AddAnyStateMachineTransition(IState to, Func<bool> condition)
+        public void AddAnyMovementStateMachineTransition(BaseMovementState to, Func<bool> condition)
         {
             _movementStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
         }
-        public void AddSubStateMachineTransition(IState from, IState to, Func<bool> condition)
+        public void AddActionStateMachineTransition(ActionBaseState from, ActionBaseState to, Func<bool> condition)
         {
             _actionStateMachine.AddTransition(from, to, new FuncPredicate(condition));
         }
-        public void AddAnySubStateMachineTransition(IState to, Func<bool> condition)
+        public void AddAnyActionStateMachineTransition(ActionBaseState to, Func<bool> condition)
         {
             _actionStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
         }
@@ -383,7 +384,7 @@ namespace LOGIYGames.CharacterCore
         public void Release()
         {
             Input = new NoneInput();
-            RotationStrategy = new NoneRotation();
+            RotationStrategy = new NoneRotation(transform);
             MovementStrategy = new NoneMovement();
             OnControlReleased.Invoke();
         }

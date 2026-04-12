@@ -94,8 +94,6 @@ namespace LOGIYGames.Animation
             });
             character.EventBus.Subscribe<LandedEvent>((evt) =>
         {
-            print(evt.horizontalDirection);
-            print(evt.fallingSpeed);
 
             switch (evt.horizontalDirection)
             {
@@ -254,6 +252,10 @@ namespace LOGIYGames.Animation
                         else if (evt.speed < 1)
                         {
                             PlayAnimation(_data.Run_Stop_Forward);
+                        }
+                        else if (evt.speed > 1)
+                        {
+                            PlayAnimation(_data.Sprint_Stop_Forward);
                         }
                         break;
                     case Direction.Backward:

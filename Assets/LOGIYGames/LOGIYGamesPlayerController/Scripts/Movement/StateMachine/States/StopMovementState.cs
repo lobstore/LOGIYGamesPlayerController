@@ -17,14 +17,18 @@ namespace LOGIYGames.Movement
                 direction = dir,
                 speed = _character.SpeedMultiplier
             });
-        }
-        protected override void Move()
-        {
-            
+            _character.MovementStrategy = new NoneMovement();
+            //_character.RotationStrategy = new NoneRotation(_character.transform);
         }
         protected override void Rotate()
         {
             
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            _character.MovementStrategy = _character.DefaultMovementStrategy;
+            //_character.RotationStrategy = _character.DefaultRotationStrategy;
         }
     }
 

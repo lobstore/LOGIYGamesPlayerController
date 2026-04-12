@@ -1,4 +1,5 @@
 ﻿using LOGIYGames.CharacterCore;
+using LOGIYGames.Timers;
 using System;
 using UnityEngine;
 
@@ -11,30 +12,47 @@ namespace LOGIYGames.Movement
     public abstract class BaseMovementState : IState
     {
         protected Character _character;
+        protected ControllerWrapperBase _controller;
         protected MovementStateData _data;
         protected Animator _animator;
+        protected CountdownTimer actionFrameTimer;
         public bool IsActiveState { get; private set; }
+        public bool IsActionFrameElapsed => actionFrameTimer.IsFinished;
+        public bool IsActionFrameInProgress => actionFrameTimer.IsRunning;
+
         protected BaseMovementState(Character ctx, MovementStateData stateData)
         {
             _animator = ctx.GetComponent<Animator>();
-            _data = new();
             _character = ctx;
             _data = stateData;
+            _controller = ctx.GetComponent<ControllerWrapperBase>();
+            actionFrameTimer = new CountdownTimer(_data.ActionFrameDuration);
         }
 
         public virtual void Enter()
         {
             //Debug.Log("Entered State" + GetType());
-            _animator.applyRootMotion = _data.IsAnimationDriven;
+            _animator.applyRootMotion = _data.IsAnimationDrivenMovement;
             _character.Acceleration = _data.Acceleration;
             _character.Deceleration = _data.Deceleration;
             _character.TurnSmoothTime = _data.TurnSmoothTime;
+            _controller.UseProjectionOnPlane = _data.UseProjectionOnPlane;
+            actionFrameTimer.Start();
             IsActiveState = true;
+            if (_character.IsGrounded)
+            {
+                _character.JumpCount = 0;
+            }
         }
 
         public virtual void Exit()
         {
             IsActiveState = false;
+            if (actionFrameTimer.IsRunning)
+            {
+                actionFrameTimer.Stop();
+
+            }
         }
 
         public virtual void LogicUpdate()
@@ -67,10 +85,18 @@ namespace LOGIYGames.Movement
         }
         protected virtual void Move()
         {
+            if (_data.IsAnimationDrivenMovement)
+            {
+                return;
+            }
             _character.Move(_character.targetDirection);
         }
         protected virtual void Rotate()
         {
+            if (_data.IsAnimationDrivenRotation)
+            {
+                return;
+            }
             _character.Rotate(_character.targetRotation, _character.TurnSmoothTime);
         }
     }

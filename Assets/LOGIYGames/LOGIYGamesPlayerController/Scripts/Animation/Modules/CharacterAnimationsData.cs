@@ -24,6 +24,7 @@ namespace LOGIYGames.Animation
         public int Run_BackTurn_Right { get; } = Animator.StringToHash(nameof(Run_BackTurn_Right));
         public int Run_BackTurn_Left { get; } = Animator.StringToHash(nameof(Run_BackTurn_Left));
 
+        public int Sprint_Stop_Forward{ get; } = Animator.StringToHash(nameof(Sprint_Stop_Forward));
         public int Sprint_BackTurn_Left { get; } = Animator.StringToHash(nameof(Sprint_BackTurn_Left));
 
         public int Walk_Stop_Left { get; } = Animator.StringToHash(nameof(Walk_Stop_Left));

@@ -7,7 +7,7 @@ namespace LOGIYGames.Movement
         public SprintMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
         protected override void Move()
         {
-            if (_data.IsAnimationDriven) return;
+            if (_data.IsAnimationDrivenMovement) return;
             base.Move();
         }
     }

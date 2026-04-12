@@ -28,13 +28,13 @@ namespace LOGIYGames
         }
         protected override void Rotate()
         {
-            if (_data.IsAnimationDriven) return;
+            if (_data.IsAnimationDrivenRotation) return;
             _character.Rotate(turnEnd, _character.TurnSmoothTime);
         }
         public override void Exit()
         {
             base.Exit();
-            if (_data.IsAnimationDriven) return;
+            if (_data.IsAnimationDrivenRotation) return;
             _character.Rotate(turnEnd);
         }
     }

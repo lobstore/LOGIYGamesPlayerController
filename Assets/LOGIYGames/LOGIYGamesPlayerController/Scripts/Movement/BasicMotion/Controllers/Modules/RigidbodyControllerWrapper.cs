@@ -107,6 +107,8 @@ namespace LOGIYGames
             {
                 m_rigidbody.linearDamping = airDrag;
             }
+            m_rigidbody.useGravity = !m_sensors.IsOnSlope;
+
         }
         #endregion
 
@@ -120,16 +122,19 @@ namespace LOGIYGames
             horizontalVelocity.y = 0;
             if (m_sensors.IsGrounded)
             {
-
-
                 force = a_move;
+                if (m_sensors.IsOnSlope)
+                {
+                    if (UseProjectionOnPlane)
+                    {
+                        force = Vector3.ProjectOnPlane(force, m_sensors.BelowHit.normal);
+                    }
+                }
                 m_rigidbody.AddForce(force - horizontalVelocity, m_movementForceMode);
-                //a_move = Vector3.ProjectOnPlane(a_move, m_sensors.BelowHit.normal);
-
             }
             else
             {
-                force = a_move * m_movementForceMultiplier;
+                force = a_move;
                 m_rigidbody.AddForce(force - horizontalVelocity, ForceMode.Force);
             }
 

@@ -13,21 +13,11 @@ namespace LOGIYGames
     public class KinematicControllerWrapper : ControllerWrapperBase, ICharacterController
     {
         [Header("Kinematic Controller Settings")]
-        [SerializeField] private bool m_applyGravityWhenGrounded = false;
-        [SerializeField] private float m_slopeLimit = 60f;
         
         private KinematicCharacterMotor m_kinematicMotor;
         private CapsuleCollider m_capsuleCollider;
+        private SensorsModule m_SensorsModule;
         private CharacterGravityModule m_characterGravityModule;
-        
-        private bool m_collisionEnabled = true;
-        private Vector3 m_cachedMoveDelta = Vector3.zero;
-        private Quaternion m_cachedRotDelta = Quaternion.identity;
-        
-        // Cached values for properties
-        private float m_cachedHeight;
-        private float m_cachedRadius;
-        private Vector3 m_cachedCenter;
         
         #region Public Properties
         public override float MaxStepHeight
@@ -35,46 +25,42 @@ namespace LOGIYGames
             get => m_kinematicMotor.MaxStepHeight;
             set => m_kinematicMotor.MaxStepHeight = value;
         }
-        
+        Quaternion targetRotation;
+        Vector3 targetVelocity;
+        public int StableMovementSharpness;
+        public float StableSlope;
+
         public override float Height
         {
-            get => m_cachedHeight;
+            get => m_capsuleCollider.height;
             set
             {
-                m_cachedHeight = value;
+                m_capsuleCollider.height = value;
                 UpdateCapsuleDimensions();
             }
         }
-        
+
         public override float SlopeLimit
         {
-            get => m_slopeLimit;
-            set => m_slopeLimit = Mathf.Max(0, value);
+            get => m_kinematicMotor.MaxStableSlopeAngle;
+            set => m_kinematicMotor.MaxStableSlopeAngle = Mathf.Max(0, value);
         }
-        
+
         public override Vector3 Center
         {
-            get => m_cachedCenter;
-            set
-            {
-                m_cachedCenter = value;
-                UpdateCapsuleCenter();
-            }
+            get { return m_capsuleCollider.center; }
+            set { m_capsuleCollider.center = value; UpdateCapsuleDimensions(); }
         }
-        
+
         public override float Radius
         {
-            get => m_cachedRadius;
-            set
-            {
-                m_cachedRadius = value;
-                UpdateCapsuleDimensions();
-            }
+            get { return m_capsuleCollider.radius; }
+            set { m_capsuleCollider.radius = value; UpdateCapsuleDimensions(); }
         }
 
-        public override bool UseGravity { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public override bool UseGravity { get => m_characterGravityModule.UseGravity; set => m_characterGravityModule.UseGravity = value; }
 
-        public override Vector3 Velocity => throw new System.NotImplementedException();
+        public override Vector3 Velocity => m_kinematicMotor.Velocity;
 
 
         #endregion
@@ -86,17 +72,13 @@ namespace LOGIYGames
             m_kinematicMotor = GetComponent<KinematicCharacterMotor>();
             m_capsuleCollider = GetComponent<CapsuleCollider>();
             m_characterGravityModule = GetComponent<CharacterGravityModule>();
-            
+            m_kinematicMotor.MaxStableSlopeAngle = StableSlope;
             Debug.Assert(m_kinematicMotor != null, "Error (KinematicControllerWrapper): Could not find KinematicCharacterMotor component");
             Debug.Assert(m_capsuleCollider != null, "Error (KinematicControllerWrapper): Could not find CapsuleCollider component");
             
             // Assign this as the controller to the motor
             m_kinematicMotor.CharacterController = this;
             
-            // Cache initial capsule values
-            m_cachedRadius = m_capsuleCollider.radius;
-            m_cachedHeight = m_capsuleCollider.height;
-            m_cachedCenter = m_capsuleCollider.center;
         }
         
         #endregion
@@ -105,19 +87,12 @@ namespace LOGIYGames
         
         public override void Move(Vector3 a_move)
         {
-            if (m_collisionEnabled)
-            {
-                m_cachedMoveDelta = a_move;
-            }
-            else
-            {
-                m_kinematicMotor.Transform.Translate(a_move * Time.deltaTime, Space.World);
-            }
+            targetVelocity = a_move;
         }  
         
         public override void SetRotation(Quaternion a_targetRotation)
         {
-            m_cachedRotDelta = a_targetRotation;
+            targetRotation = a_targetRotation;
         }
         
         #endregion
@@ -150,17 +125,9 @@ namespace LOGIYGames
         {
             if (m_capsuleCollider == null) return;
             
-            m_capsuleCollider.radius = m_cachedRadius;
-            m_capsuleCollider.height = m_cachedHeight;
-            m_kinematicMotor.SetCapsuleDimensions(m_cachedRadius, m_cachedHeight, m_cachedCenter.y);
-        }
-        
-        private void UpdateCapsuleCenter()
-        {
-            if (m_capsuleCollider == null) return;
-            
-            m_capsuleCollider.center = m_cachedCenter;
-            m_kinematicMotor.SetCapsuleDimensions(m_cachedRadius, m_cachedHeight, m_cachedCenter.y);
+            m_capsuleCollider.radius = Radius;
+            m_capsuleCollider.height = Height;
+            m_kinematicMotor.SetCapsuleDimensions(Radius, Height, Center.y);
         }
         
         public void BeforeCharacterUpdate(float deltaTime)
@@ -173,7 +140,7 @@ namespace LOGIYGames
         /// </summary>
         public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
         {
-            currentRotation = m_cachedRotDelta;
+            currentRotation = targetRotation;
         }
         
         public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
@@ -183,7 +150,7 @@ namespace LOGIYGames
 
             // Reorient velocity on slope
             currentVelocity = m_kinematicMotor.GetDirectionTangentToSurface(currentVelocity, effectiveGroundNormal) * currentVelocityMagnitude;
-            currentVelocity = Vector3.Lerp(currentVelocity, m_cachedMoveDelta, deltaTime*5);
+            currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, 1f - Mathf.Exp(-StableMovementSharpness * deltaTime));
             if (m_characterGravityModule != null && !m_kinematicMotor.GroundingStatus.IsStableOnGround)
             {
                 currentVelocity += m_characterGravityModule.Velocity;
@@ -221,7 +188,7 @@ namespace LOGIYGames
 
         public override void ResetVelocity()
         {
-            throw new System.NotImplementedException();
+            targetVelocity = Vector3.zero;
         }
 
         #endregion
