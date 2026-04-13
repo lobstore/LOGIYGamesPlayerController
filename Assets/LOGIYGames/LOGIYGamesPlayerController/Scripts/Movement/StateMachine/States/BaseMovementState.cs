@@ -2,7 +2,6 @@
 using LOGIYGames.Timers;
 using System;
 using UnityEngine;
-
 namespace LOGIYGames.Movement
 {
     /// <summary>
@@ -28,7 +27,6 @@ namespace LOGIYGames.Movement
             _controller = ctx.GetComponent<ControllerWrapperBase>();
             actionFrameTimer = new CountdownTimer(_data.ActionFrameDuration);
         }
-
         public virtual void Enter()
         {
             //Debug.Log("Entered State" + GetType());
@@ -76,8 +74,6 @@ namespace LOGIYGames.Movement
         {
 
         }
-
-
         public virtual void PhysicsUpdate()
         {
             Move();
@@ -100,5 +96,24 @@ namespace LOGIYGames.Movement
             _character.Rotate(_character.targetRotation, _character.TurnSmoothTime);
         }
     }
-
+    public class FlyMovementState : BaseMovementState
+    {
+        public FlyMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        {
+        }
+        public override void Enter()
+        {
+            base.Enter();
+            _character.MovementStrategy = new FlyMovement(_character);
+            _character.GetComponent<ControllerWrapperBase>().UseGravity = false;
+            _character.IsFlying = true;
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            _character.MovementStrategy = _character.DefaultMovementStrategy;
+            _character.GetComponent<ControllerWrapperBase>().UseGravity = true;
+            _character.IsFlying = false;
+        }
+    }
 }

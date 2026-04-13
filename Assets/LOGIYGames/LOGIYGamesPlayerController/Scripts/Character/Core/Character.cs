@@ -13,15 +13,16 @@ namespace LOGIYGames.CharacterCore
     public class Character : MonoModuleBase, IControllable
     {
         public ICharacterInputReader Input { get; set; }
-        [Header("References")]
-
-        [field: SerializeField] private ControllerWrapperBase m_motor;
-        [field: SerializeField] public SensorsModule Sensors { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
         public IRotationStrategy DefaultRotationStrategy { get; set; }
         public IMovementStrategy DefaultMovementStrategy { get; set; }
         public IEventDispatcher EventBus { get; private set; }
+        
+        [Header("References")]
+
+        [field: SerializeField] private ControllerWrapperBase m_motor;
+        [field: SerializeField] public SensorsModule Sensors { get; private set; }
 
         public int JumpCount;
 
@@ -35,11 +36,13 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
         public bool IsFalling { get; set; }
+        public bool IsFlying { get; set; }
         public bool IsCrouching { get; set; }
         public bool IsGrounded { get => Sensors.IsGrounded; }
         public bool IsSliding { get; set; }
         public bool IsOnLadder { get; set; }
         public bool IsWallClimbing { get; set; }
+        public bool IsSwimming { get; set; }
 
         #region Inpector Debug Variables
         private string _currentMovementStateName;

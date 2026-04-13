@@ -18,9 +18,11 @@ namespace LOGIYGames
         public MovementStateData ladderIdleMovementStateData;
         public MovementStateData ladderClimbMovementStateData;
         public MovementStateData wallClimbMovementStateData;
+        public MovementStateData swimMovementStateData;
+        public MovementStateData flyMovementStateData;
 
-        public JumpStateData groundJumpMovementStateData = new();
-        public JumpStateData wallJumpMovementStateData = new();
+        public JumpStateData groundJumpMovementStateData;
+        public JumpStateData wallJumpMovementStateData;
         public JumpStateData rollMovementStateData;
         public JumpStateData dashMovementStateData;
         public JumpStateData slipMovementStateData;
@@ -51,6 +53,8 @@ namespace LOGIYGames
         private RollMovementState _rollMovementState;
         private DashMovementState _dashMovementState;
         private StopMovementState _stopMovementState;
+        private SwimMovementState _swimMovementState;
+        private FlyMovementState _flyMovementState;
 
         private IdleActionState _idleActionState;
 
@@ -85,6 +89,8 @@ namespace LOGIYGames
             _stopMovementState = new StopMovementState(character, stoppingMovementStateData);
             _turnMovementState = new TurnMovementState(character, turnMovementStateData);
             _slipMovementState = new SlipMovementState(character, slipMovementStateData);
+            _swimMovementState = new SwimMovementState(character, swimMovementStateData);
+            _flyMovementState = new FlyMovementState(character, flyMovementStateData);
             _idleActionState = new IdleActionState(character);
         }
 
@@ -105,7 +111,8 @@ namespace LOGIYGames
             && character.Sensors.LegsFrontHit.collider.CompareTag("Climbable")
             && character.Input.MovementInput.y > 0
             && !IsOnLadder());
-            character.AddAnyMovementStateMachineTransition(_fallingMovementState, () =>CanFall(character));
+            character.AddAnyMovementStateMachineTransition(_fallingMovementState, () => CanFall(character));
+            character.AddAnyMovementStateMachineTransition(_swimMovementState, () => character.Sensors.IsInWater);
             //NOTE: SEQUENCE IS IMPORTANT
             // ----- Idle State Transitions -----
             character.AddMovementStateMachineTransition(_idleMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && character.JumpCount < groundJumpMovementStateData.MaxJumpCount && _groundJumpMovementState.CanEnter());
@@ -113,6 +120,7 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_idleMovementState, _walkMovementState, () => Input.GetKeyDown(KeyCode.Z));
             character.AddMovementStateMachineTransition(_idleMovementState, _runMovementState, () => character.Input.MovementInput.magnitude > 0f);
             character.AddMovementStateMachineTransition(_idleMovementState, _ladderEnterMovementState, () => _ladderEnterMovementState.CanEnter() && character.Input.InteractPressed);
+            character.AddMovementStateMachineTransition(_idleMovementState, _flyMovementState, () => character.Input.FocusPressed);
             // ----- Walk State Transitions -----
             character.AddMovementStateMachineTransition(_walkMovementState, _idleMovementState, () => Input.GetKeyDown(KeyCode.Z));
             character.AddMovementStateMachineTransition(_walkMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
@@ -132,11 +140,12 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_sprintMovementState, _stopMovementState, () => _stopMovementState.CanEnter() && (character.Input.MovementInput.magnitude == 0 || Mathf.Abs(character.DeltaYaw) > 120));
             character.AddMovementStateMachineTransition(_sprintMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && character.JumpCount < groundJumpMovementStateData.MaxJumpCount && _groundJumpMovementState.CanEnter());
             // ----- Jump State Transitions -----
-            character.AddMovementStateMachineTransition(_groundJumpMovementState, _runMovementState, () => character.Sensors.IsGrounded && !_groundJumpMovementState.IsDurationTimerRunning);
+            character.AddMovementStateMachineTransition(_groundJumpMovementState, _runMovementState, () => character.Sensors.IsGrounded && _groundJumpMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude > 0);
+            character.AddMovementStateMachineTransition(_groundJumpMovementState, _idleMovementState, () => character.Sensors.IsGrounded && _groundJumpMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude == 0);
             // ----- Dash State Transitions -----
             character.AddMovementStateMachineTransition(_dashMovementState, _sprintMovementState, () => character.Sensors.IsGrounded && character.Input.SprintPressing && !_dashMovementState.IsDurationTimerRunning);
-            character.AddMovementStateMachineTransition(_dashMovementState, _stopMovementState, () => character.Sensors.IsGrounded && character.Input.MovementInput.magnitude==0 && !_dashMovementState.IsDurationTimerRunning);
-            character.AddMovementStateMachineTransition(_dashMovementState, _runMovementState, () => character.Sensors.IsGrounded && character.Input.MovementInput.magnitude>0 && !_dashMovementState.IsDurationTimerRunning);
+            character.AddMovementStateMachineTransition(_dashMovementState, _stopMovementState, () => character.Sensors.IsGrounded && character.Input.MovementInput.magnitude == 0 && !_dashMovementState.IsDurationTimerRunning);
+            character.AddMovementStateMachineTransition(_dashMovementState, _runMovementState, () => character.Sensors.IsGrounded && character.Input.MovementInput.magnitude > 0 && !_dashMovementState.IsDurationTimerRunning);
             // ----- Falling State Transitions -----
             character.AddMovementStateMachineTransition(_fallingMovementState, _landingMovementState, () => character.Sensors.IsGrounded);
             character.AddMovementStateMachineTransition(_fallingMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && character.JumpCount < groundJumpMovementStateData.MaxJumpCount && _fallingMovementState.IsActionFrameInProgress && _groundJumpMovementState.CanEnter());
@@ -166,6 +175,12 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_wallClimbMovementState, _wallJumpMovementState, () => _wallJumpMovementState.CanEnter() && character.Input.JumpPressed);
             character.AddMovementStateMachineTransition(_wallJumpMovementState, _idleMovementState, () => character.IsGrounded);
             character.AddMovementStateMachineTransition(_fallingMovementState, _wallClimbMovementState, () => character.Sensors.IsObstacleLegsFront && character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") && character.Input.MovementInput.y > 0);
+            // ----- From Swimming State Transitions -----
+            character.AddMovementStateMachineTransition(_swimMovementState, _idleMovementState, () => character.IsGrounded && character.Input.MovementInput.y == 0);
+            character.AddMovementStateMachineTransition(_swimMovementState, _runMovementState, () => character.IsGrounded && character.Input.MovementInput.y> 0);
+            // ----- From Fly State Transitions -----
+            character.AddMovementStateMachineTransition(_flyMovementState, _idleMovementState, () => !character.Input.FocusPressed);
+
         }
 
         private bool CanFall(Character character)
@@ -176,7 +191,9 @@ namespace LOGIYGames
                         && !IsOnLadder()
                         && !character.Input.JumpPressed
                         && !_wallClimbMovementState.IsActiveState
-                        && !_wallJumpMovementState.IsDurationTimerRunning;
+                        && !_wallJumpMovementState.IsDurationTimerRunning
+                        && !character.Sensors.IsInWater
+                        && !_flyMovementState.IsActiveState;
         }
     }
 }

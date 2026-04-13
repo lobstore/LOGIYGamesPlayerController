@@ -12,7 +12,6 @@ namespace LOGIYGames.Movement
         {
             _stateData = stateData;
         }
-
         public override void Enter()
         {
             base.Enter();
@@ -29,6 +28,10 @@ namespace LOGIYGames.Movement
                 jumpType = JumpType.GroundJump
 
             });
+        }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && (_character.Sensors.IsValidSlope() || _character.Sensors.GroundAngle<=0);
         }
 
     }

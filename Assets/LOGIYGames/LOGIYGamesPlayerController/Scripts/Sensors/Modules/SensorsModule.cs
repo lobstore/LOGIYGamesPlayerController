@@ -60,6 +60,12 @@ namespace LOGIYGames
         public bool IsOnSlope { get; private set; }
         public bool IsGrounded { get; private set; }
         public bool IsObstacleLegsFront { get; private set; }
+        public bool IsInWater { get; private set; }
+        /// <summary>
+        /// <value>value</value> > 0: Up,
+        /// value < 0: Down, 
+        /// value = 0: On plane, or Not grounded
+        /// </summary>
         public float GroundAngle { get; private set; }
 
         [Range(0, 90)]
@@ -88,7 +94,22 @@ namespace LOGIYGames
                 UpdateDebugInfo();
             }
         }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Water"))
+            {
+                IsInWater = true;
 
+            }
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Water"))
+            {
+                IsInWater = false;
+
+            }
+        }
         public bool IsValidSlope()
         {
             float angle = Vector3.Angle(m_belowHit.normal, transform.up);
@@ -111,8 +132,9 @@ namespace LOGIYGames
             );
 
             GroundAngle = Vector3.SignedAngle(
-                transform.up,
+
                 m_belowHit.normal,
+                transform.up,
                 transform.right
             );
             IsOnSlope = GroundAngle == 0 ? false : true;
@@ -167,7 +189,7 @@ namespace LOGIYGames
             DrawSphereCasts(DetectionOrigin);
             DrawBelowPlane();
 
-            Debug.DrawRay(DetectionOrigin, transform.forward*0.5f, Color.red);
+            Debug.DrawRay(DetectionOrigin, transform.forward * 0.5f, Color.red);
         }
 
         private void DrawBelowPlane()

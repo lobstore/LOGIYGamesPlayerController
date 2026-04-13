@@ -153,6 +153,8 @@ namespace LOGIYGames
         public override void ResetVelocity()
         {
             totalVelocity = Vector3.zero;
+            planarVelocity = Vector3.zero;
+            verticalVelocity = Vector3.zero;
         }
 
 

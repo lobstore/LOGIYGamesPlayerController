@@ -308,6 +308,8 @@ namespace LOGIYGames.Animation
             animator.SetBool("IsFocusing", character.Input.FocusPressed);
             animator.SetBool("IsOnLadder", character.IsOnLadder);
             animator.SetBool("IsWallClimbing", character.IsWallClimbing);
+            animator.SetBool("IsSwimming", character.IsSwimming);
+            animator.SetBool("IsFlying", character.IsFlying);
 
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
