@@ -44009,6 +44009,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
+    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: MaxStableSlopeAngle
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: MaxGravityForce
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 3732176754581607695, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.94318
@@ -44105,38 +44113,6 @@ PrefabInstance:
     - target: {fileID: 2791204035372060595, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_Name
       value: Camera
-      objectReference: {fileID: 0}
-    - target: {fileID: 7153722467040546871, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7153722467040546871, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: volumeLayer.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 7153722467040546871, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: fastApproximateAntialiasing.fastMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7153722467040546871, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: fastApproximateAntialiasing.keepAlpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: field of view
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: far clip plane
-      value: 5000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: near clip plane
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: orthographic size
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

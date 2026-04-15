@@ -93,48 +93,91 @@ namespace LOGIYGames.Animation
             });
             });
             character.EventBus.Subscribe<LandedEvent>((evt) =>
-        {
-
-            switch (evt.horizontalDirection)
             {
-                case Direction.Left:
-                    if (evt.fallingSpeed > -5)
-                    {
-                        PlayAnimation(_data.Landing_Light_Idle);
+                print(evt.fallingSpeed);
+                switch (evt.horizontalDirection)
+                {
+                    case Direction.Left:
+                        if (evt.fallingSpeed > -7)
+                        {
+                            PlayAnimation(_data.Landing_Light_Left);
 
-                    }
-                    else if (evt.fallingSpeed < -5)
-                    {
-                        PlayAnimation(_data.Landing_Hard_Idle);
-                    }
-                    break;
-                case Direction.Right:
-                    if (evt.fallingSpeed > -5)
-                    {
-                        PlayAnimation(_data.Landing_Light_Idle);
+                        }
+                        else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
+                        {
+                            PlayAnimation(_data.Landing_Hard_Forward);
+                        }
+                        else if (evt.fallingSpeed < -10)
+                        {
+                            PlayAnimation(_data.Landing_Break);
+                        }
+                        break;
+                    case Direction.Right:
+                        if (evt.fallingSpeed > -7)
+                        {
+                            PlayAnimation(_data.Landing_Light_Right);
 
-                    }
-                    else if (evt.fallingSpeed < -5)
-                    {
-                        PlayAnimation(_data.Landing_Hard_Idle);
-                    }
-                    break;
-                case Direction.Forward:
-                    if (evt.fallingSpeed > -5)
-                    {
-                        PlayAnimation(_data.Landing_Light_Idle);
+                        }
+                        else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
+                        {
+                            PlayAnimation(_data.Landing_Hard_Forward);
+                        }
+                        else if (evt.fallingSpeed < -10)
+                        {
+                            PlayAnimation(_data.Landing_Break);
+                        }
+                        break;
+                    case Direction.Forward:
+                        if (evt.fallingSpeed > -7)
+                        {
+                            PlayAnimation(_data.Landing_Light_Forward);
 
-                    }
-                    else if (evt.fallingSpeed < -5)
-                    {
-                        PlayAnimation(_data.Landing_Hard_Idle);
-                    }
-                    break;
-                default:
-                    break;
-            }
+                        }
+                        else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
+                        {
+                            print("as");
+                            PlayAnimation(_data.Landing_Hard_Forward);
+                        }
+                        else if (evt.fallingSpeed < -10)
+                        {
+                            PlayAnimation(_data.Landing_Break);
+                        }
+                        break;
+                    case Direction.Backward:
+                        if (evt.fallingSpeed > -7)
+                        {
+                            PlayAnimation(_data.Landing_Light_Backward);
 
-        });
+                        }
+                        else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
+                        {
+                            PlayAnimation(_data.Landing_Hard_Forward);
+                        }
+                        else if (evt.fallingSpeed < -10)
+                        {
+                            PlayAnimation(_data.Landing_Break);
+                        }
+                        break;
+                    case Direction.NoMovement:
+                        if (evt.fallingSpeed > -7)
+                        {
+                            PlayAnimation(_data.Landing_Light_Idle);
+
+                        }
+                        else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
+                        {
+                            PlayAnimation(_data.Landing_Break);
+                        }
+                        else if (evt.fallingSpeed < -10)
+                        {
+                            PlayAnimation(_data.Landing_Break);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            });
             character.EventBus.Subscribe<RollPerformedEvent>((evt) => { PlayAnimation(_data.Roll_Forward); });
             character.EventBus.Subscribe<DashPerformedEvent>((evt) =>
             {
@@ -159,6 +202,20 @@ namespace LOGIYGames.Animation
 
             });
             character.EventBus.Subscribe<TurnPerformedEvent>((evt) =>
+            {
+
+                if (evt.angle > 0)
+                {
+                    PlayAnimation(_data.Idle_BackTurn_Right);
+
+                }
+                else
+                {
+                    PlayAnimation(_data.Idle_BackTurn_Left);
+
+                }
+            });
+            character.EventBus.Subscribe<BackTurnPerformedEvent>((evt) =>
             {
                 if (evt.movementSpeed > 0.5)
                 {
@@ -222,6 +279,8 @@ namespace LOGIYGames.Animation
             );
             character.EventBus.Subscribe<MovementStoppedEvent>((evt) =>
             {
+                print(evt.speed);
+                print(evt.direction);
                 switch (evt.direction)
                 {
                     case Direction.Left:

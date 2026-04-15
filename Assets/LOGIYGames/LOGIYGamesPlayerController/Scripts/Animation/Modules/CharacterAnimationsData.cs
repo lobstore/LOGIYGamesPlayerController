@@ -42,7 +42,15 @@ namespace LOGIYGames.Animation
         public int Roll_Right { get; } = Animator.StringToHash(nameof(Roll_Right));
         public int Roll_Left { get; } = Animator.StringToHash(nameof(Roll_Left));
         public int Landing_Light_Idle { get; } = Animator.StringToHash(nameof(Landing_Light_Idle));
-        public int Landing_Hard_Idle { get; } = Animator.StringToHash(nameof(Landing_Hard_Idle));
+        public int Landing_Light_Forward { get; } = Animator.StringToHash(nameof(Landing_Light_Forward));
+        public int Landing_Light_Backward { get; } = Animator.StringToHash(nameof(Landing_Light_Backward));
+        public int Landing_Light_Right { get; } = Animator.StringToHash(nameof(Landing_Light_Right));
+        public int Landing_Light_Left { get; } = Animator.StringToHash(nameof(Landing_Light_Left));
+        public int Landing_Hard_Forward { get; } = Animator.StringToHash(nameof(Landing_Hard_Forward));
+        public int Landing_Hard_Left { get; } = Animator.StringToHash(nameof(Landing_Hard_Left));
+        public int Landing_Hard_Right { get; } = Animator.StringToHash(nameof(Landing_Hard_Right));
+        public int Landing_Hard_Backward { get; } = Animator.StringToHash(nameof(Landing_Hard_Backward));
+        public int Landing_Break { get; } = Animator.StringToHash(nameof(Landing_Break));
 
 
     }

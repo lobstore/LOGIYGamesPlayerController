@@ -5,6 +5,7 @@ namespace LOGIYGames
 {
     public abstract class ControllerWrapperBase : MonoBehaviour
     {
+        public virtual GroundedReport LastGroundedReport { get; }
         public abstract bool UseGravity { get; set; }
         public abstract float MaxStepHeight { get; set; }
         public abstract float Height { get; set; }

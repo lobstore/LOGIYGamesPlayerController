@@ -26,6 +26,11 @@ namespace LOGIYGames.Shared.Character.Events
         public float movementSpeed;
         public float angle;
     }
+    public class BackTurnPerformedEvent
+    {
+        public float movementSpeed;
+        public float angle;
+    }
     public class LeashWeaponEvent
     {
         public bool unleashWeapon;

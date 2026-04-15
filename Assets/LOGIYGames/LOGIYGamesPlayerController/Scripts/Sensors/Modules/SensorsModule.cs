@@ -1,11 +1,9 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LOGIYGames
 {
-    /// <summary>
-    /// Handles sensor detection for characters using either Unity CharacterController or KinematicCharacterController.
-    /// Works with GenericControllerWrapper for seamless controller swapping.
-    /// </summary>
+
     public class SensorsModule : MonoModuleBase
     {
 
@@ -16,7 +14,7 @@ namespace LOGIYGames
         [SerializeField] private float m_castUpSphereRadius = 0.2f;
         [SerializeField] private float m_castDownSphereRadius = 0.2f;
         [SerializeField] private float m_detectionOriginYOffset = 0f;
-
+        public UnityEvent<bool> GroundedEvent { get; } = new();
 
         [Header("Layer Masks")]
         [SerializeField] private LayerMask m_includeLayers;
@@ -58,7 +56,29 @@ namespace LOGIYGames
         public bool IsObstacleBelow { get; private set; }
         public bool IsObstacleAbove { get; private set; }
         public bool IsOnSlope { get; private set; }
-        public bool IsGrounded { get; private set; }
+        private bool isGrounded;
+        public bool IsGrounded
+        {
+            get
+            {
+                return isGrounded;
+            }
+            private set
+            {
+                if (value != isGrounded)
+                {
+                    if (value)
+                    {
+                        GroundedEvent.Invoke(true);
+                    }
+                    else
+                    {
+                        GroundedEvent.Invoke(false);
+                    }
+                }
+                isGrounded = value;
+            }
+        }
         public bool IsObstacleLegsFront { get; private set; }
         public bool IsInWater { get; private set; }
         /// <summary>

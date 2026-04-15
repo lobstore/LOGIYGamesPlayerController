@@ -12,14 +12,22 @@ namespace LOGIYGames
         public Image loadingProgressBar;
         private Animator m_Animator;
 
-        AsyncOperation newSceneLoadingOperation;
+        AsyncOperation newSceneLoadingOperation = null;
 
-
+        private void Start()
+        {
+            m_Animator = GetComponent<Animator>();
+        }
         private void Update()
         {
             if (newSceneLoadingOperation == null) return;
             loadingPercentrage.text = (newSceneLoadingOperation.progress * 100f) + "%";
             loadingProgressBar.fillAmount = newSceneLoadingOperation.progress;
+            if (newSceneLoadingOperation.isDone)
+            {
+                m_Animator.SetTrigger("OpenScene");
+                newSceneLoadingOperation = null;
+            }
         }
         public void SwitchToScene(int index)
         {

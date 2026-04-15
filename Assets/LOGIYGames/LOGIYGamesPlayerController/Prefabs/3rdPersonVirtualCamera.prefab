@@ -33,7 +33,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5902921758408453199}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.11958614, y: 0, z: 0, w: 0.99282384}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
       Time: 5
     Restrictions: 0
   TiltAxis:
-    Value: 0
+    Value: 13.736436
     Center: 0
     Range: {x: -80, y: 80}
     Wrap: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScanRecursively: 1
   SuppressInputWhileBlending: 1
-  IgnoreTimeScale: 0
+  IgnoreTimeScale: 1
   m_ControllerManager:
     Controllers:
     - Name: Look X (Pan)
@@ -234,27 +234,27 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: 1
+        Gain: 0.1
         LegacyInput: 
-        LegacyGain: 1
-        CancelDeltaTime: 0
+        LegacyGain: 0.1
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
-        AccelTime: 0.2
-        DecelTime: 0.2
+        AccelTime: 0.1
+        DecelTime: 0.1
     - Name: Look Y (Tilt)
       Owner: {fileID: 843236777794795246}
       Enabled: 1
       Input:
         InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: -1
+        Gain: -0.1
         LegacyInput: 
-        LegacyGain: 1
-        CancelDeltaTime: 0
-      InputValue: 0
+        LegacyGain: 0.1
+        CancelDeltaTime: 1
+      InputValue: -0
       Driver:
-        AccelTime: 0.2
-        DecelTime: 0.2
+        AccelTime: 0.1
+        DecelTime: 0.1
   PlayerIndex: -1
   AutoEnableInputs: 0
 --- !u!114 &1843990008812083582

@@ -417,12 +417,16 @@ namespace LOGIYGames.CharacterCore
                 else
                     direction = Direction.Backward;
             }
-            else
+            else if(Mathf.Abs(forwardDot) < Mathf.Abs(rightDot))
             {
                 if (rightDot > 0)
                     direction = Direction.Right;
                 else
                     direction = Direction.Left;
+            }
+            else
+            {
+                direction = Direction.NoMovement;
             }
 
             return direction;

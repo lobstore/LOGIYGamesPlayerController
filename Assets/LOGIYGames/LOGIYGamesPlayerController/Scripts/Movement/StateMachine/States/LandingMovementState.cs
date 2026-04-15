@@ -1,6 +1,7 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
+using System;
 
 namespace LOGIYGames.Movement
 {
@@ -13,12 +14,13 @@ namespace LOGIYGames.Movement
 
         public override void Enter()
         {
+            _durationTimer.Reset(MathF.Abs( controller.LastGroundedReport.GroundedVelocity.y)/10);
             base.Enter();
             Direction dir = _character.GetRelativeMovementDirection();
             _character.EventBus.Publish(new LandedEvent
             {
                 horizontalDirection = dir,
-                fallingSpeed = controller.Velocity.y
+                fallingSpeed = controller.LastGroundedReport.GroundedVelocity.y
             });
         }
     }

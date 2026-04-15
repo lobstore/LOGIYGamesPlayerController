@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 namespace LOGIYGames.Timers
 {
-    public class TimersManager:Singleton<TimersManager>
+    public class TimersManager : Singleton<TimersManager>
     {
         static readonly List<Timer> timers = new();
 
@@ -10,7 +10,7 @@ namespace LOGIYGames.Timers
 
         void Update()
         {
-            foreach (var timer in new List<Timer>(timers) )
+            foreach (var timer in new List<Timer>(timers))
             {
                 timer.Tick();
             }

@@ -1,9 +1,13 @@
 using LOGIYGames.CharacterCore;
-using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LOGIYGames
 {
+    public struct GroundedReport
+    {
+        public Vector3 GroundedVelocity;
+    }
     [RequireComponent(typeof(CharacterController))]
     public class CharacterControllerWrapper : ControllerWrapperBase
     {
@@ -20,7 +24,10 @@ namespace LOGIYGames
         [SerializeField] private float projectingPlanarSpeed;
         [SerializeField] private float slopeSlideMaxSpeed;
         [SerializeField] private float slopeSlideAcceleration;
-
+        public readonly UnityEvent<GroundedReport> OnGroundedEvent = new();
+        GroundedReport lastGroundedReport;
+        override public GroundedReport LastGroundedReport { get => lastGroundedReport; }
+        bool lastIsGrounded;
         #region Public Properties
 
         public override float MaxStepHeight
@@ -73,8 +80,14 @@ namespace LOGIYGames
             {
                 m_characterGravityModule = GetComponent<CharacterGravityModule>();
             }
-
             m_characterController.enableOverlapRecovery = true;
+            m_sensors.GroundedEvent.AddListener(grounded =>
+            {
+                if (grounded)
+                {
+                    lastGroundedReport = new GroundedReport() { GroundedVelocity = m_characterController.velocity };
+                }
+            });
         }
 
         private void LateUpdate()
@@ -83,15 +96,17 @@ namespace LOGIYGames
         }
         private void Update()
         {
-            if (!m_sensors.IsValidSlope() && verticalVelocity.y<0)
+            if (!m_sensors.IsValidSlope() && verticalVelocity.y < 0)
             {
-                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.down* slopeSlideMaxSpeed, m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
+                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.down * slopeSlideMaxSpeed, m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
 
             }
             else
             {
                 totalVelocity = planarVelocity + verticalVelocity;
             }
+
+
         }
         #endregion
 

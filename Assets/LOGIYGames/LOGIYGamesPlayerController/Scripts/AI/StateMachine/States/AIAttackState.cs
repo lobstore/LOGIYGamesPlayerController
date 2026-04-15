@@ -1,7 +1,5 @@
 using System;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace LOGIYGames.AI
 {

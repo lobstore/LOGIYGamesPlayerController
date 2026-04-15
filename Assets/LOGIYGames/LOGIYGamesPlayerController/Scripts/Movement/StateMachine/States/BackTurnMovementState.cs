@@ -15,7 +15,7 @@ namespace LOGIYGames
         {
             base.Enter();
             turnEnd = _character.RotationStrategy.GetRotation();
-            _character.EventBus.Publish(new TurnPerformedEvent
+            _character.EventBus.Publish(new BackTurnPerformedEvent
             {
                 movementSpeed = _character.SpeedMultiplier,
                 angle = _character.DeltaYaw

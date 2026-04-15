@@ -7,7 +7,8 @@
         Forward,
         Backward,
         Up,
-        Down
+        Down,
+        NoMovement
     }
     public enum JumpType { GroundJump, HangJump, WallRunJump }
 }

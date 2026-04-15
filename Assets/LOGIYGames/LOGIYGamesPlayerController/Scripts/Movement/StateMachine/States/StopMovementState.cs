@@ -1,6 +1,7 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
+using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -10,8 +11,8 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
+            Debug.Log(_character.targetDirection);
             Direction dir = _character.GetRelativeMovementDirection();
-
             _character.EventBus.Publish(new MovementStoppedEvent
             {
                 direction = dir,
