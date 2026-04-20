@@ -1,19 +1,20 @@
+using LOGIYGames.CharacterCore;
 using UnityEngine;
 
 namespace LOGIYGames
 {
     public class NoneRotation : IRotationStrategy
     {
-        Transform transform;
+        Character Character;
 
-        public NoneRotation(Transform transform)
+        public NoneRotation(Character character)
         {
-            this.transform = transform;
+            Character = character;
         }
 
         public Quaternion GetRotation()
         {
-            return Quaternion.LookRotation(transform.forward);
+            return Quaternion.LookRotation(Character.transform.forward);
         }
     }
 }

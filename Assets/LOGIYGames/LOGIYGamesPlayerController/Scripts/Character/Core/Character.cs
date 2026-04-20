@@ -387,7 +387,7 @@ namespace LOGIYGames.CharacterCore
         public void Release()
         {
             Input = new NoneInput();
-            RotationStrategy = new NoneRotation(transform);
+            RotationStrategy = new NoneRotation(this);
             MovementStrategy = new NoneMovement();
             OnControlReleased.Invoke();
         }

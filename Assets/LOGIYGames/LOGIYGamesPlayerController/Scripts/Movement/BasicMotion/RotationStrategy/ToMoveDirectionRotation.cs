@@ -1,13 +1,21 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
+﻿using LOGIYGames.CharacterCore;
+using UnityEngine;
 
 namespace LOGIYGames
 {
-    public interface IRotationStrategy
+    public class ToMoveDirectionRotation : IRotationStrategy
     {
+        Character Character;
 
-        public Quaternion GetRotation();
+        public ToMoveDirectionRotation(Character character)
+        {
+            Character = character;
+        }
+
+        public Quaternion GetRotation()
+        {
+            return Quaternion.LookRotation(Character.targetDirection);
+        }
     }
     //public class WallrunState : ContinuousState
     //{

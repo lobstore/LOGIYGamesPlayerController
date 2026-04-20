@@ -20,6 +20,7 @@ namespace LOGIYGames
         public MovementStateData wallClimbMovementStateData;
         public MovementStateData swimMovementStateData;
         public MovementStateData flyMovementStateData;
+        public MovementStateData wallRunMovementStateData;
 
         public JumpStateData groundJumpMovementStateData;
         public JumpStateData wallJumpMovementStateData;
@@ -39,6 +40,7 @@ namespace LOGIYGames
         private LadderUpState _ladderUpMovementState;
         private LadderDownState _ladderDownMovementState;
         private WallClimbMovementState _wallClimbMovementState;
+        private WallRunMovementState _wallRunMovementState;
         private IdleMovementState _idleMovementState;
         private SlipMovementState _slipMovementState;
         private BackTurnMovementState _backTurnMovementState;
@@ -91,6 +93,7 @@ namespace LOGIYGames
             _slipMovementState = new SlipMovementState(character, slipMovementStateData);
             _swimMovementState = new SwimMovementState(character, swimMovementStateData);
             _flyMovementState = new FlyMovementState(character, flyMovementStateData);
+            _wallRunMovementState = new WallRunMovementState(character, wallRunMovementStateData);
             _idleActionState = new IdleActionState(character);
         }
 
@@ -149,6 +152,7 @@ namespace LOGIYGames
             // ----- Falling State Transitions -----
             character.AddMovementStateMachineTransition(_fallingMovementState, _landingMovementState, () => character.Sensors.IsGrounded);
             character.AddMovementStateMachineTransition(_fallingMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && character.JumpCount < groundJumpMovementStateData.MaxJumpCount && _fallingMovementState.IsActionFrameInProgress && _groundJumpMovementState.CanEnter());
+            character.AddMovementStateMachineTransition(_groundJumpMovementState, _wallRunMovementState, () => CanWallRun(character));
             // ----- Landing State Transitions -----
             character.AddMovementStateMachineTransition(_landingMovementState, _runMovementState, () => character.Sensors.IsGrounded && _landingMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude > 0);
             character.AddMovementStateMachineTransition(_landingMovementState, _idleMovementState, () => character.Sensors.IsGrounded && _landingMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude == 0);
@@ -177,12 +181,21 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_fallingMovementState, _wallClimbMovementState, () => character.Sensors.IsObstacleLegsFront && character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") && character.Input.MovementInput.y > 0);
             // ----- From Swimming State Transitions -----
             character.AddMovementStateMachineTransition(_swimMovementState, _idleMovementState, () => character.IsGrounded && character.Input.MovementInput.y == 0);
-            character.AddMovementStateMachineTransition(_swimMovementState, _runMovementState, () => character.IsGrounded && character.Input.MovementInput.y> 0);
+            character.AddMovementStateMachineTransition(_swimMovementState, _runMovementState, () => character.IsGrounded && character.Input.MovementInput.y > 0);
             // ----- From Fly State Transitions -----
             character.AddMovementStateMachineTransition(_flyMovementState, _idleMovementState, () => !character.Input.FocusPressed);
+            // ----- From Wall Run State Transitions -----
+            character.AddMovementStateMachineTransition(_wallRunMovementState, _idleMovementState, () => !CanWallRun(character));
 
         }
-
+        private bool CanWallRun(Character character)
+        {
+            return     (character.Sensors.IsObstacleLegsLeft || character.Sensors.IsObstacleLegsRight)
+                        && !character.Sensors.IsGrounded
+                        && character.Input.MovementInput.y > 0
+                        && !character.Sensors.IsObstacleLegsFront
+                        && Vector3.Angle(character.transform.forward, Camera.main.transform.forward) < 60;
+        }
         private bool CanFall(Character character)
         {
             return !character.Sensors.IsGrounded
@@ -193,7 +206,8 @@ namespace LOGIYGames
                         && !_wallClimbMovementState.IsActiveState
                         && !_wallJumpMovementState.IsDurationTimerRunning
                         && !character.Sensors.IsInWater
-                        && !_flyMovementState.IsActiveState;
+                        && !_flyMovementState.IsActiveState
+                        && !_wallRunMovementState.IsActiveState;
         }
     }
 }
