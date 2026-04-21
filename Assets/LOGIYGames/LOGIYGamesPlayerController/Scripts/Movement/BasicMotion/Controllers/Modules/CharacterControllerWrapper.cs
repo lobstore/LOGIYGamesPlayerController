@@ -27,7 +27,6 @@ namespace LOGIYGames
         public readonly UnityEvent<GroundedReport> OnGroundedEvent = new();
         GroundedReport lastGroundedReport;
         override public GroundedReport LastGroundedReport { get => lastGroundedReport; }
-        bool lastIsGrounded;
         #region Public Properties
 
         public override float MaxStepHeight

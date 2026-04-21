@@ -23,8 +23,6 @@ namespace LOGIYGames
 
         public override Vector3 Velocity => throw new System.NotImplementedException();
 
-
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Awake()
         {
             character = GetComponent<Character>();
@@ -46,7 +44,6 @@ namespace LOGIYGames
             agent.enabled = false;
             if (characterGravityModule != null)
             {
-                //characterGravityModule.Velocity = transform.up * Mathf.Sqrt(force * -2f * Physics.gravity.y);
                 characterGravityModule.Velocity = force ;
             }
         }
@@ -79,7 +76,6 @@ namespace LOGIYGames
                 }
                 characterController.Move(targetVelocity * Time.deltaTime);
             }
-            //characterController.Move(characterGravityModule.Velocity * Time.deltaTime);
         }
         private void ProjectVelocity(Vector3 totalVelocity)
         {

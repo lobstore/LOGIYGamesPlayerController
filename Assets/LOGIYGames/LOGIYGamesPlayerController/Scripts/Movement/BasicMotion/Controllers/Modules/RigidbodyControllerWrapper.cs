@@ -2,12 +2,6 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    /// <summary>
-    /// Wrapper for Rigidbody-based character controller.
-    /// Implements the GenericControllerWrapper interface to allow seamless swapping
-    /// with UnityControllerWrapper and KinematicControllerWrapper.
-    /// Uses Rigidbody.MovePosition and Rigidbody.MoveRotation for physics-based movement.
-    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
     public class RigidbodyControllerWrapper : ControllerWrapperBase
@@ -27,7 +21,6 @@ namespace LOGIYGames
         private CapsuleCollider m_capsuleCollider;
         private SensorsModule m_sensors;
 
-        // Cached values for properties
         private float m_Height;
         private float m_Radius;
         private Vector3 m_Center;

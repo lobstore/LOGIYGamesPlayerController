@@ -47,7 +47,6 @@ namespace LOGIYGames
         {
             if (m_characterGravityModule != null)
             {
-                //m_characterGravityModule.Velocity = transform.up * Mathf.Sqrt(force * -2f * Physics.gravity.y);
                 m_characterGravityModule.Velocity = force;
             }
         }
@@ -70,9 +69,6 @@ namespace LOGIYGames
         public override void SetPosition(Vector3 a_position)
         {
         }
-
-
-        // Update is called once per frame
         void Update()
         {
             m_characterController.Move(m_characterGravityModule.Velocity*Time.deltaTime);

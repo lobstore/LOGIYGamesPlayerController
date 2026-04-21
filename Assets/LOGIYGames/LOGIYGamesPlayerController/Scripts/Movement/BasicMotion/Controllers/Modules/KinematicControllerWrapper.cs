@@ -3,11 +3,6 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    /// <summary>
-    /// Wrapper for KinematicCharacterController's KinematicCharacterMotor.
-    /// Implements the GenericControllerWrapper interface to allow seamless swapping
-    /// with UnityControllerWrapper.
-    /// </summary>
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(KinematicCharacterMotor))]
     public class KinematicControllerWrapper : ControllerWrapperBase, ICharacterController
@@ -75,8 +70,6 @@ namespace LOGIYGames
             m_kinematicMotor.MaxStableSlopeAngle = StableSlope;
             Debug.Assert(m_kinematicMotor != null, "Error (KinematicControllerWrapper): Could not find KinematicCharacterMotor component");
             Debug.Assert(m_capsuleCollider != null, "Error (KinematicControllerWrapper): Could not find CapsuleCollider component");
-            
-            // Assign this as the controller to the motor
             m_kinematicMotor.CharacterController = this;
             
         }
@@ -134,10 +127,6 @@ namespace LOGIYGames
         {
         }
         
-        /// <summary>
-        /// Called when the motor wants to know what its rotation should be.
-        /// KinematicCharacterController handles rotation internally.
-        /// </summary>
         public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
         {
             currentRotation = targetRotation;
@@ -147,8 +136,6 @@ namespace LOGIYGames
         {
             float currentVelocityMagnitude = currentVelocity.magnitude;
             Vector3 effectiveGroundNormal = m_kinematicMotor.GroundingStatus.GroundNormal;
-
-            // Reorient velocity on slope
             currentVelocity = m_kinematicMotor.GetDirectionTangentToSurface(currentVelocity, effectiveGroundNormal) * currentVelocityMagnitude;
             currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, 1f - Mathf.Exp(-StableMovementSharpness * deltaTime));
             if (m_characterGravityModule != null && !m_kinematicMotor.GroundingStatus.IsStableOnGround)

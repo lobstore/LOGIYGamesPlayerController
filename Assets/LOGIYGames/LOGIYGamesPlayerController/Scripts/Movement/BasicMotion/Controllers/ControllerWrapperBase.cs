@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace LOGIYGames
 {
@@ -12,13 +11,13 @@ namespace LOGIYGames
         public abstract float SlopeLimit { get; set; }
         public bool UseProjectionOnPlane;
         public abstract Vector3 Center { get; set; }
-        public virtual Vector3 Position => gameObject.transform.position; 
+        public virtual Vector3 Position => gameObject.transform.position;
         public virtual Quaternion Rotation => gameObject.transform.rotation;
         public virtual Transform Transform => gameObject.transform;
-        public abstract Vector3 Velocity {  get; }
+        public abstract Vector3 Velocity { get; }
         public abstract float Radius { get; set; }
         public abstract void Move(Vector3 a_move);
-        public virtual void ForceMove(Vector3 a_move) {  }
+        public virtual void ForceMove(Vector3 a_move) { }
         public abstract void SetRotation(Quaternion a_targetRotation);
         public abstract void SetPosition(Vector3 a_position);
         public abstract void Jump(Vector3 force);
