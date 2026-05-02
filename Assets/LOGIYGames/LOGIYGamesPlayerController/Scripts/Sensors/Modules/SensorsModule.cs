@@ -27,6 +27,15 @@ namespace LOGIYGames
         private string m_legsRightObstacleName;
         private string m_legsLeftObstacleName;
         private string m_legsForwardObstacleName;
+        [SerializeField] Color rayColor;
+        [SerializeField] Color groundPlaneColor;
+        [SerializeField] Color groundedSphereColor;
+        [SerializeField] Color ungroundedSphereColor;
+        [SerializeField] Color aboveObstacleCollidedSphereColor;
+        [SerializeField] Color aboveObstacleNotCollidedSphereColor;
+        [SerializeField] Color belowObstacleCollidedSphereColor;
+        [SerializeField] Color belowObstacleNotCollidedSphereColor;
+        [SerializeField] Color belowHitSphereColor;
 
         [SerializeField] Collider col;
 
@@ -239,31 +248,31 @@ namespace LOGIYGames
             DrawSphereCasts(DetectionOrigin);
             DrawBelowPlane();
 
-            Debug.DrawRay(DetectionOrigin, transform.forward * 0.5f, Color.red);
-            Debug.DrawRay(DetectionOrigin, transform.right * 0.5f, Color.red);
-            Debug.DrawRay(DetectionOrigin, -transform.right * 0.5f, Color.red);
+            Debug.DrawRay(DetectionOrigin, transform.forward * 0.5f, rayColor);
+            Debug.DrawRay(DetectionOrigin, transform.right * 0.5f, rayColor);
+            Debug.DrawRay(DetectionOrigin, -transform.right * 0.5f, rayColor);
         }
 
         private void DrawBelowPlane()
         {
-            DebugDraw.DrawPlane(m_belowHit.point, m_belowHit.normal, 1, Color.green);
+            DebugDraw.DrawPlane(m_belowHit.point, m_belowHit.normal, 1, groundPlaneColor);
         }
 
         private void DrawSphereCasts(Vector3 origin)
         {
-            Gizmos.color = IsObstacleAbove ? Color.green : Color.red;
+            Gizmos.color = IsObstacleAbove ? aboveObstacleCollidedSphereColor : aboveObstacleNotCollidedSphereColor;
             Gizmos.DrawWireSphere(origin + transform.up * m_upCheckDistance, m_castUpSphereRadius);
 
-            Gizmos.color = IsObstacleBelow ? Color.green : Color.red;
+            Gizmos.color = IsObstacleBelow ? belowObstacleCollidedSphereColor : belowObstacleNotCollidedSphereColor;
             Gizmos.DrawWireSphere(origin + -transform.up * m_belowCheckDistance, m_castDownSphereRadius);
 
-            Gizmos.color = IsGrounded ? Color.green : Color.yellow;
+            Gizmos.color = IsGrounded ? groundedSphereColor : ungroundedSphereColor;
             Gizmos.DrawWireSphere(origin + -transform.up * m_groundCheckDistance, m_castDownSphereRadius);
 
 
             if (IsObstacleBelow)
             {
-                Gizmos.color = Color.blue;
+                Gizmos.color = belowHitSphereColor;
                 Gizmos.DrawWireSphere(m_belowHit.point, m_castDownSphereRadius);
             }
         }

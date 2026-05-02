@@ -19,11 +19,6 @@ public class TurnMovementState : TimedMovementState
             movementSpeed = _character.SpeedMultiplier,
             angle = _character.DeltaYaw
         });
-        _character.ResetVelocity();
-    }
-    protected override void Move()
-    {
-
     }
     protected override void Rotate()
     {

@@ -618,7 +618,7 @@ MonoBehaviour:
     m_Bits: 65
   m_showDebugInfo: 1
   col: {fileID: 6657963720063885413}
-  MaxStableSlopeAngle: 35.9
+  MaxStableSlopeAngle: 90
 --- !u!143 &6657963720063885413
 CharacterController:
   m_ObjectHideFlags: 0
@@ -660,7 +660,7 @@ MonoBehaviour:
   useGravity: 1
   groundMagnit: 4
   gravityDirection: {x: 0, y: -1, z: 0}
-  MaxGravityForce: 9.84
+  MaxGravityForce: 15
   TargetGravityForce: 0
   m_sensors: {fileID: 2268543539570239712}
   m_character: {fileID: 8334357512040222824}
@@ -796,7 +796,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 427882813280634629}
   m_Enabled: 1
-  m_Avatar: {fileID: -7015762578403652589, guid: 84eae5ce6c2238f41b556e702b08d5bc, type: 3}
+  m_Avatar: {fileID: 9000000, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
   m_Controller: {fileID: 9100000, guid: 8eccf9a92ff353147a77f36f4eaef42b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -873,7 +873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterControllerWrapper
   UseProjectionOnPlane: 0
-  projectingPlanarSpeed: 8
+  projectingPlanarVelocityMultiplier: 10
   slopeSlideMaxSpeed: 10
   slopeSlideAcceleration: 2
 --- !u!114 &3336788084049153636
@@ -3707,7 +3707,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6021583798893025641}
-  - component: {fileID: 9170915936996831751}
   - component: {fileID: 6186406791908379824}
   - component: {fileID: 1283272730193767307}
   m_Layer: 3
@@ -3716,7 +3715,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6021583798893025641
 Transform:
   m_ObjectHideFlags: 0
@@ -3737,18 +3736,6 @@ Transform:
   - {fileID: 4206524830533728598}
   m_Father: {fileID: 507906360614569168}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9170915936996831751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2787143992442695444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9612d601dbd390d4796cf684eceb9347, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.ModulesController
 --- !u!114 &6186406791908379824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8154,6 +8141,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6021583798893025641}
+  - {fileID: 9013972504656085114}
   m_Father: {fileID: 3732176754581607695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6924204937434418633
@@ -10913,3 +10901,65 @@ MonoBehaviour:
   m_gravityDir: {x: -0, y: -1, z: 0}
   m_dragForce: 0
   m_jointRadius: 0.019866105
+--- !u!1001 &8832307917435135889
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 507906360614569168}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_Name
+      value: X Bot
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+--- !u!4 &9013972504656085114 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+  m_PrefabInstance: {fileID: 8832307917435135889}
+  m_PrefabAsset: {fileID: 0}

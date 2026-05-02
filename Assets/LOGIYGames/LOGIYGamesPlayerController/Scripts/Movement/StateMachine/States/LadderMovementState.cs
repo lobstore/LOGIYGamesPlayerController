@@ -85,7 +85,6 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            _character.ResetVelocity();
 
             _character.MovementStrategy = new LadderMovement(_character);
             _character.RotationStrategy = new LadderRotation(ladderMovement.Ladder.transform);

@@ -14,5 +14,9 @@ namespace LOGIYGames
         public bool IsAnimationDrivenMovement;
         public bool IsAnimationDrivenRotation;
         public bool UseProjectionOnPlane;
+        public bool ResetVelocityOnEnter;
+        public bool ResetVelocityOnExit;
+        public bool ResetSpeedOnEnter;
+        public bool ResetSpeedOnExit;
     }
 }

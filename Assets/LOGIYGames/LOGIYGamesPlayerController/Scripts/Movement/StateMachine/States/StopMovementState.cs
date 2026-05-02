@@ -11,7 +11,6 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-            Debug.Log(_character.targetDirection);
             Direction dir = _character.GetRelativeMovementDirection();
             _character.EventBus.Publish(new MovementStoppedEvent
             {
@@ -20,10 +19,6 @@ namespace LOGIYGames.Movement
             });
             _character.MovementStrategy = new NoneMovement();
             //_character.RotationStrategy = new NoneRotation(_character.transform);
-        }
-        protected override void Rotate()
-        {
-            
         }
         public override void Exit()
         {

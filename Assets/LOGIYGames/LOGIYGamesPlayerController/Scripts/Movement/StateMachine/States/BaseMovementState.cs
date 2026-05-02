@@ -31,14 +31,22 @@ namespace LOGIYGames.Movement
         }
         public virtual void Enter()
         {
-            //Debug.Log("Entered State" + GetType());
+            IsActiveState = true;
+            Debug.Log("Entered State" + GetType());
+            if (_data.ResetVelocityOnEnter)
+            {
+                _character.ResetVelocity();
+            }
+            if (_data.ResetSpeedOnEnter)
+            {
+                _character.ResetSpeed();
+            }
             _animator.applyRootMotion = _data.IsAnimationDrivenMovement;
             _character.Acceleration = _data.Acceleration;
             _character.Deceleration = _data.Deceleration;
             _character.TurnSmoothTime = _data.TurnSmoothTime;
             _controller.UseProjectionOnPlane = _data.UseProjectionOnPlane;
             actionFrameTimer.Start();
-            IsActiveState = true;
             if (_character.IsGrounded)
             {
                 _character.JumpCount = 0;
@@ -47,13 +55,20 @@ namespace LOGIYGames.Movement
 
         public virtual void Exit()
         {
+            IsActiveState = false;
+            if (_data.ResetVelocityOnExit)
+            {
+                _character.ResetVelocity();
+            }
+            if (_data.ResetSpeedOnExit)
+            {
+                _character.ResetSpeed();
+            }
             _character.RotationStrategy = _character.DefaultRotationStrategy;
             _character.MovementStrategy = _character.DefaultMovementStrategy;
-            IsActiveState = false;
             if (actionFrameTimer.IsRunning)
             {
                 actionFrameTimer.Stop();
-
             }
         }
 
@@ -98,35 +113,6 @@ namespace LOGIYGames.Movement
                 return;
             }
             _character.Rotate(_character.targetRotation, _character.TurnSmoothTime);
-        }
-    }
-    public class WallRunMovementState : BaseMovementState
-    {
-        Vector3 normal;
-        public WallRunMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
-        {
-        }
-        public override void Enter()
-        {
-            base.Enter();
-            _character.RotationStrategy = new ToMoveDirectionRotation(_character);
-            _character.MovementStrategy = new WallRunMovement(_character);
-            _controller.UseGravity = false;
-        }
-        public override void LogicUpdate()
-        {
-            base.LogicUpdate();
-            normal = _character.Sensors.IsObstacleLegsRight ? _character.Sensors.LegsRightHit.normal : _character.Sensors.LegsLeftHit.normal;
-        }
-        public override void PhysicsUpdate()
-        {
-            base.PhysicsUpdate();
-            _controller.ForceMove(-normal);
-        }
-        public override void Exit()
-        {
-            base.Exit();
-            _controller.UseGravity = true;
         }
     }
     //public class WallrunState : ContinuousState

@@ -33,6 +33,7 @@ namespace LOGIYGames.CharacterCore
         private StateMachine _actionStateMachine;
         public StateMachine MovementStateMachine => _movementStateMachine;
         public StateMachine ActionStateMachine => _actionStateMachine;
+
         #endregion
 
         public bool IsFalling { get; set; }
@@ -49,6 +50,7 @@ namespace LOGIYGames.CharacterCore
         private string _lastMovementTransition;
         private string _currentActionStateName;
         private string _lastActionTransition;
+        [SerializeField] Color movementTargetDirectionArrowColor;
         #endregion
 
         #region Velocity Variables
@@ -197,8 +199,7 @@ namespace LOGIYGames.CharacterCore
             _movementStateMachine.Update();
             _actionStateMachine.Update();
             StatesDebug();
-
-
+            DebugDraw.DrawArrow(transform.position,targetDirection*BaseSpeed, movementTargetDirectionArrowColor);
         }
         private void SmoothHeightChanging()
         {
@@ -288,7 +289,7 @@ namespace LOGIYGames.CharacterCore
         }
         public void ForceMove(Vector3 moveDirection)
         {
-            m_motor.Move(moveDirection);
+            m_motor.ForceMove(moveDirection);
         }
         public void SetPosition(Vector3 position)
         {
@@ -331,12 +332,13 @@ namespace LOGIYGames.CharacterCore
 
         public void ResetVelocity()
         {
-            Acceleration = 0;
-            Deceleration = 0;
-            SpeedMultiplier = 0;
             velocity = Vector3.zero;
             targetDirection = Vector3.zero;
             m_motor.ResetVelocity();
+        }
+        public void ResetSpeed()
+        {
+            SpeedMultiplier = 0;
         }
         #endregion
         #region State Machine
@@ -431,5 +433,7 @@ namespace LOGIYGames.CharacterCore
 
             return direction;
         }
+      
     }
+
 }

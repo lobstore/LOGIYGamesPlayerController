@@ -34,8 +34,8 @@ ModelImporter:
       name: Standing Jump Running Landing
       takeName: mixamo.com
       internalID: -203655887218126122
-      firstFrame: 11.1
-      lastFrame: 20.7
+      firstFrame: 14.9
+      lastFrame: 18.4
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

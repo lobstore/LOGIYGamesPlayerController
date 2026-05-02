@@ -9,6 +9,7 @@ namespace LOGIYGames.Animation
     public class CharacterAnimationModule : MonoModuleBase
     {
         [SerializeField] Character character;
+        [SerializeField] ControllerWrapperBase controller;
         [SerializeField] Animator animator;
 
         [SerializeField][Range(0, 0.5f)] private float rotationAnimationsBlendTime;
@@ -94,7 +95,6 @@ namespace LOGIYGames.Animation
             });
             character.EventBus.Subscribe<LandedEvent>((evt) =>
             {
-                print(evt.fallingSpeed);
                 switch (evt.horizontalDirection)
                 {
                     case Direction.Left:
@@ -135,7 +135,6 @@ namespace LOGIYGames.Animation
                         }
                         else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
                         {
-                            print("as");
                             PlayAnimation(_data.Landing_Hard_Forward);
                         }
                         else if (evt.fallingSpeed < -10)
@@ -279,8 +278,6 @@ namespace LOGIYGames.Animation
             );
             character.EventBus.Subscribe<MovementStoppedEvent>((evt) =>
             {
-                print(evt.speed);
-                print(evt.direction);
                 switch (evt.direction)
                 {
                     case Direction.Left:
@@ -347,6 +344,7 @@ namespace LOGIYGames.Animation
         public override void OnFixedUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
+            DebugDraw.DrawArrow(transform.position,animator.velocity, Color.white);
             animator.SetFloat("Speed", character.SpeedMultiplier);
             if (character.RotationStrategy is CameraRelativeRotation or InputRelativeRotation)
             {
@@ -372,6 +370,13 @@ namespace LOGIYGames.Animation
 
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
-
+        private void OnAnimatorMove()
+        {
+            if (animator.applyRootMotion)
+            {
+                controller.Move(animator.velocity);
+                controller.SetRotation(animator.rootRotation);
+            }
+        }
     }
 }

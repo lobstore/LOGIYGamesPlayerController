@@ -21,12 +21,18 @@ namespace LOGIYGames
         private Vector3 totalVelocity;
         Vector3 planarVelocity;
         Vector3 verticalVelocity;
-        [SerializeField] private float projectingPlanarSpeed;
+        [SerializeField] private float projectingPlanarVelocityMultiplier;
         [SerializeField] private float slopeSlideMaxSpeed;
         [SerializeField] private float slopeSlideAcceleration;
         public readonly UnityEvent<GroundedReport> OnGroundedEvent = new();
         GroundedReport lastGroundedReport;
         override public GroundedReport LastGroundedReport { get => lastGroundedReport; }
+
+        [Header("Debug")]
+
+        [SerializeField] Color planarVelocityArrowColor;
+        [SerializeField] Color verticalVelocityArrowColor;
+        [SerializeField] Color totalVelocityArrowColor;
         #region Public Properties
 
         public override float MaxStepHeight
@@ -89,15 +95,13 @@ namespace LOGIYGames
             });
         }
 
-        private void LateUpdate()
-        {
-            DebugDraw.DrawArrow(transform.position, totalVelocity, Color.green);
-        }
+
         private void Update()
         {
+            verticalVelocity = m_characterGravityModule.Velocity;
             if (!m_sensors.IsValidSlope() && verticalVelocity.y < 0)
             {
-                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.down * slopeSlideMaxSpeed, m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
+                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.ClampMagnitude( verticalVelocity, slopeSlideMaxSpeed ), m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
 
             }
             else
@@ -105,7 +109,9 @@ namespace LOGIYGames
                 totalVelocity = planarVelocity + verticalVelocity;
             }
 
-
+            DebugDraw.DrawArrow(transform.position, totalVelocity, totalVelocityArrowColor);
+            DebugDraw.DrawArrow(transform.position, planarVelocity, planarVelocityArrowColor);
+            DebugDraw.DrawArrow(transform.position, verticalVelocity, verticalVelocityArrowColor);
         }
         #endregion
 
@@ -115,7 +121,7 @@ namespace LOGIYGames
         {
 
             planarVelocity = a_move;
-            verticalVelocity = m_characterGravityModule.Velocity;
+
             if (m_sensors.IsOnSlope && UseProjectionOnPlane)
             {
                 ProjectVelocity();
@@ -131,7 +137,7 @@ namespace LOGIYGames
         {
             Vector3 projectedPlanarVelocity = Vector3.zero;
             projectedPlanarVelocity = Vector3.ProjectOnPlane(planarVelocity, m_sensors.BelowHit.normal);
-            planarVelocity = Vector3.Lerp(planarVelocity, projectedPlanarVelocity, Time.deltaTime * projectingPlanarSpeed);
+            planarVelocity = Vector3.Lerp(planarVelocity, projectedPlanarVelocity, Time.deltaTime * projectingPlanarVelocityMultiplier);
         }
 
         public override void SetRotation(Quaternion a_targetRotation)

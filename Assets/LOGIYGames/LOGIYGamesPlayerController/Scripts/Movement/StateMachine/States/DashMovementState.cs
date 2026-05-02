@@ -25,10 +25,5 @@ namespace LOGIYGames
             });
         }
 
-        protected override void Rotate()
-        {
-
-        }
-
     }
 }

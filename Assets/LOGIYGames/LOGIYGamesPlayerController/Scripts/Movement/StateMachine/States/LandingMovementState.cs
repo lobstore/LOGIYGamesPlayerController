@@ -8,14 +8,15 @@ namespace LOGIYGames.Movement
     public class LandingMovementState : TimedMovementState
     {
         ControllerWrapperBase controller;
-        public LandingMovementState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData) {
+        public LandingMovementState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
+        {
             controller = ctx.GetComponent<ControllerWrapperBase>();
         }
 
         public override void Enter()
         {
-            _durationTimer.Reset(MathF.Abs( controller.LastGroundedReport.GroundedVelocity.y)/10);
             base.Enter();
+            _durationTimer.Reset(MathF.Abs(controller.LastGroundedReport.GroundedVelocity.y) / 10);
             Direction dir = _character.GetRelativeMovementDirection();
             _character.EventBus.Publish(new LandedEvent
             {
