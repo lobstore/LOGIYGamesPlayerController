@@ -34,11 +34,7 @@ namespace LOGIYGames
         public TimedMovementStateData ladderExitMovementStateData;
         public TimedMovementStateData stoppingMovementStateData;
 
-        private LadderEnterState _ladderEnterMovementState;
-        private LadderExitState _ladderExitMovementState;
-        private LadderIdleState _ladderIdleMovementState;
-        private LadderUpState _ladderUpMovementState;
-        private LadderDownState _ladderDownMovementState;
+        private LadderMovementState _ladderMovementState;
         private WallClimbMovementState _wallClimbMovementState;
         private WallRunMovementState _wallRunMovementState;
         private IdleMovementState _idleMovementState;
@@ -82,11 +78,7 @@ namespace LOGIYGames
             _backTurnMovementState = new BackTurnMovementState(character, backTurnMovementStateData);
             _landingMovementState = new LandingMovementState(character, landingMovementStateData);
             _dashMovementState = new DashMovementState(character, dashMovementStateData);
-            _ladderEnterMovementState = new LadderEnterState(character, ladderEnterMovementStateData);
-            _ladderExitMovementState = new LadderExitState(character, ladderExitMovementStateData);
-            _ladderIdleMovementState = new LadderIdleState(character, ladderIdleMovementStateData);
-            _ladderUpMovementState = new LadderUpState(character, ladderClimbMovementStateData);
-            _ladderDownMovementState = new LadderDownState(character, ladderClimbMovementStateData);
+            _ladderMovementState = new LadderMovementState(character, ladderClimbMovementStateData);
             _wallClimbMovementState = new WallClimbMovementState(character, wallClimbMovementStateData);
             _stopMovementState = new StopMovementState(character, stoppingMovementStateData);
             _turnMovementState = new TurnMovementState(character, turnMovementStateData);
@@ -99,11 +91,7 @@ namespace LOGIYGames
 
         private bool IsOnLadder()
         {
-            return _ladderDownMovementState.IsActiveState
-                || _ladderIdleMovementState.IsActiveState
-                || _ladderEnterMovementState.IsActiveState
-                || _ladderExitMovementState.IsActiveState
-                || _ladderUpMovementState.IsActiveState;
+            return _ladderMovementState.IsActiveState;
         }
         private void ConfigureTransitions(Character character)
         {
@@ -122,7 +110,7 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_idleMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 45);
             character.AddMovementStateMachineTransition(_idleMovementState, _walkMovementState, () => Input.GetKeyDown(KeyCode.Z));
             character.AddMovementStateMachineTransition(_idleMovementState, _runMovementState, () => character.Input.MovementInput.magnitude > 0f);
-            character.AddMovementStateMachineTransition(_idleMovementState, _ladderEnterMovementState, () => _ladderEnterMovementState.CanEnter() && character.Input.InteractPressed);
+            character.AddMovementStateMachineTransition(_idleMovementState, _ladderMovementState, () => character.GetComponent<LadderMovementController>().Ladder!=null && character.Input.InteractPressed);
             character.AddMovementStateMachineTransition(_idleMovementState, _flyMovementState, () => character.Input.FocusPressed);
             // ----- Walk State Transitions -----
             character.AddMovementStateMachineTransition(_walkMovementState, _idleMovementState, () => Input.GetKeyDown(KeyCode.Z));
@@ -165,15 +153,7 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_turnMovementState, _idleMovementState, () => !_turnMovementState.IsDurationTimerRunning);
             character.AddAnyActionStateMachineTransition(_idleActionState, () => true);
             // ----- From Ladder State Transitions -----
-            character.AddMovementStateMachineTransition(_ladderEnterMovementState, _ladderIdleMovementState, () => _ladderEnterMovementState.IsDurationTimerElapsed);
-            character.AddMovementStateMachineTransition(_ladderIdleMovementState, _ladderExitMovementState, () => _ladderExitMovementState.CanEnter() && character.Input.InteractPressed);
-            character.AddMovementStateMachineTransition(_ladderIdleMovementState, _ladderUpMovementState, () => character.Input.MovementInput.y > 0);
-            character.AddMovementStateMachineTransition(_ladderUpMovementState, _ladderIdleMovementState, () => character.Input.MovementInput.y <= 0);
-            character.AddMovementStateMachineTransition(_ladderIdleMovementState, _ladderDownMovementState, () => character.Input.MovementInput.y < 0);
-            character.AddMovementStateMachineTransition(_ladderDownMovementState, _ladderIdleMovementState, () => character.Input.MovementInput.y >= 0);
-            character.AddMovementStateMachineTransition(_ladderDownMovementState, _ladderExitMovementState, () => _ladderExitMovementState.CanEnter());
-            character.AddMovementStateMachineTransition(_ladderUpMovementState, _ladderExitMovementState, () => _ladderExitMovementState.CanEnter());
-            character.AddMovementStateMachineTransition(_ladderExitMovementState, _idleMovementState, () => _ladderExitMovementState.IsDurationTimerElapsed);
+            character.AddMovementStateMachineTransition(_ladderMovementState, _idleMovementState, () => character.GetComponent<LadderMovementController>().Ladder==null);
             // ----- From Wall Climb State Transitions -----
             character.AddMovementStateMachineTransition(_wallClimbMovementState, _idleMovementState, () => character.Input.InteractPressed || !character.Sensors.IsObstacleLegsFront || !character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") || (character.IsGrounded && character.Input.MovementInput.y < 0));
             character.AddMovementStateMachineTransition(_wallClimbMovementState, _wallJumpMovementState, () => _wallJumpMovementState.CanEnter() && character.Input.JumpPressed);

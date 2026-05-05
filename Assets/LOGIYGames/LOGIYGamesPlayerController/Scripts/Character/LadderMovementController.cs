@@ -8,29 +8,42 @@ namespace LOGIYGames.CharacterCore
     {
         [SerializeField] Character character;
         public Ladder Ladder { get; private set; }
-        public bool LadderInFrontLegs { get; private set; }
-        private void Update()
+        public float t {  get; set; }
+        private void OnTriggerEnter(Collider other)
         {
-            RaycastHit raycastHit;
-            if (!Physics.Raycast(transform.position + Vector3.up * 0.1f, transform.forward, out raycastHit, 0.5f))
+            if (other.TryGetComponent(out Ladder ladder))
             {
-                Ladder = null;
-                LadderInFrontLegs = false;
-                return;
+                Ladder = ladder;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.TryGetComponent(out Ladder ladder))
+            {
+                if (Ladder == ladder)
+                    Exit();
+            }
+        }
+        public void Climb()
+        {
+            Vector3 pos = Ladder.GetPosition(t);
+            // выход сверху/снизу
+            if (t <= 0f || t >= 1f)
+            {
+                Exit();
             }
 
-            Ladder = raycastHit.collider.GetComponent<Ladder>();
-            if (Ladder!=null)
+            // прыжок/выход
+            if (character.Input.JumpPressed)
             {
-                LadderInFrontLegs = true;
+                Exit();
             }
-            else
-            {
-                LadderInFrontLegs = false;
-            }
-
-
-
+            character.transform.position = pos;
+        }
+        private void Exit()
+        {
+            Ladder = null;
         }
     }
 }

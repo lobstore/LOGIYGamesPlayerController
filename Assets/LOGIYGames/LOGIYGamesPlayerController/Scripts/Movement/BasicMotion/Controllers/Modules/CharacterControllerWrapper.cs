@@ -24,7 +24,6 @@ namespace LOGIYGames
         [SerializeField] private float projectingPlanarVelocityMultiplier;
         [SerializeField] private float slopeSlideMaxSpeed;
         [SerializeField] private float slopeSlideAcceleration;
-        public readonly UnityEvent<GroundedReport> OnGroundedEvent = new();
         GroundedReport lastGroundedReport;
         override public GroundedReport LastGroundedReport { get => lastGroundedReport; }
 
@@ -99,9 +98,9 @@ namespace LOGIYGames
         private void Update()
         {
             verticalVelocity = m_characterGravityModule.Velocity;
-            if (!m_sensors.IsValidSlope() && verticalVelocity.y < 0)
+            if (!m_sensors.IsValidSlope() && verticalVelocity.y < 0 && UseProjectionOnPlane)
             {
-                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.ClampMagnitude( verticalVelocity, slopeSlideMaxSpeed ), m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
+                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.ClampMagnitude(verticalVelocity, slopeSlideMaxSpeed), m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
 
             }
             else

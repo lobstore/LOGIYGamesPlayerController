@@ -14,7 +14,7 @@ namespace LOGIYGames
         [SerializeField] private float m_castUpSphereRadius = 0.2f;
         [SerializeField] private float m_castDownSphereRadius = 0.2f;
         [SerializeField] private float m_detectionOriginYOffset = 0f;
-        public UnityEvent<bool> GroundedEvent { get; } = new();
+        public UnityEvent<bool> GroundedEvent = new();
 
         [Header("Layer Masks")]
         [SerializeField] private LayerMask m_includeLayers;

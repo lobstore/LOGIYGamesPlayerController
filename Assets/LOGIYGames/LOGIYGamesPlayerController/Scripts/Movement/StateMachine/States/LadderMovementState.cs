@@ -1,110 +1,40 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
-using LOGIYGames.Shared.Character.Events;
-using LOGIYGames.Shared.Enums;
 using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class LadderUpState : BaseMovementState
+    public class LadderMovementState : BaseMovementState
     {
-        public LadderUpState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        LadderMovementController ladderMovementController;
+        public LadderMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
+            ladderMovementController = _character.GetComponent<LadderMovementController>();
         }
-    }
-    public class LadderDownState : BaseMovementState
-    {
-        public LadderDownState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
-        {
-        }
-    }
-    public class LadderIdleState : BaseMovementState
-    {
-        public LadderIdleState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
-        {
-        }
-    }
-    public class LadderExitState : TimedMovementState
-    {
-        ControllerWrapperBase controller;
-        LadderMovementController ladderMovement;
-        public LadderExitState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
-        {
-            ladderMovement = _character.GetComponent<LadderMovementController>();
-            controller = ctx.GetComponent<ControllerWrapperBase>();
-        }
+        float t;
         public override void Enter()
         {
             base.Enter();
-            _character.ResetVelocity();
-
-            _character.EventBus.Publish(new LadderExitedEvent
-            {
-            });
-
+            t = 0.01f;
+            _character.RotationStrategy = new LadderClimbRotation(ladderMovementController);
+            _character.MovementStrategy = new NoneMovement();
+            _controller .UseGravity = false;
+            _character.IsOnLadder = true;
         }
-        protected override void Move()
+        public override void LogicUpdate()
         {
-
-        }
-        protected override void Rotate()
-        {
-
+            base.LogicUpdate();
+            t += _character.Input.MovementInput.y * _character.SpeedMultiplier * Time.deltaTime;
+            ladderMovementController.t = Mathf.Clamp01(t);
+            ladderMovementController.Climb();
         }
         public override void Exit()
         {
             base.Exit();
-            _character.MovementStrategy = _character.DefaultMovementStrategy;
+            _controller.UseGravity = true;
+            _character.IsOnLadder =false;
             _character.RotationStrategy = _character.DefaultRotationStrategy;
-            _character.transform.SetParent(null);
-            _character.IsOnLadder = false;
-            controller.UseGravity = true;
-
-        }
-        public override bool CanEnter()
-        {
-            return base.CanEnter()
-                && _character.IsOnLadder
-                &&f();
-        }
-        bool f()
-        {
-            return (_character.Input.MovementInput.y > 0&& !ladderMovement.LadderInFrontLegs)|| (_character.Input.MovementInput.y < 0 && _character.IsGrounded);
-        }
-    }
-    public class LadderEnterState : TimedMovementState
-    {
-        ControllerWrapperBase controller;
-        LadderMovementController ladderMovement;
-        public LadderEnterState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
-        {
-            ladderMovement = _character.GetComponent<LadderMovementController>();
-            controller = ctx.GetComponent<ControllerWrapperBase>();
-        }
-
-        public override void Enter()
-        {
-            base.Enter();
-
-            _character.MovementStrategy = new LadderMovement(_character);
-            _character.RotationStrategy = new LadderRotation(ladderMovement.Ladder.transform);
-
-            controller.UseGravity = false;
-
-            _character.transform.position = new Vector3(ladderMovement.Ladder.transform.position.x, _character.transform.position.y, ladderMovement.Ladder.transform.position.z) - ladderMovement.Ladder.transform.forward*0.5f;
-            _character.transform.rotation = ladderMovement.Ladder.transform.rotation;
-            _character.transform.SetParent(ladderMovement.Ladder.transform, true);
-
-            _character.EventBus.Publish(new LadderEnteredEvent
-            {
-            });
-            _character.IsOnLadder = true;
-        }
-        public override bool CanEnter()
-        {
-            return base.CanEnter()
-                && !_character.IsOnLadder
-                && ladderMovement.LadderInFrontLegs;
+            _character.MovementStrategy = _character.DefaultMovementStrategy;
         }
     }
 }

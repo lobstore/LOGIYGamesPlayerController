@@ -43819,6 +43819,7 @@ GameObject:
   - component: {fileID: 2140813953}
   - component: {fileID: 2140813952}
   - component: {fileID: 2140813955}
+  - component: {fileID: 2140813956}
   m_Layer: 0
   m_Name: Ladder
   m_TagString: Untagged
@@ -43834,13 +43835,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140813950}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.008716859, z: -0, w: 0.99996203}
-  m_LocalPosition: {x: 5.63, y: -0.21, z: -12.4}
-  m_LocalScale: {x: 1, y: 2.6363, z: 0.24419}
+  m_LocalRotation: {x: 0.25547916, y: 0.008427564, z: -0.002227061, w: 0.9667753}
+  m_LocalPosition: {x: 5.617, y: 0.007, z: -13.167}
+  m_LocalScale: {x: 1, y: 3.295375, z: 0.24419}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 29.605, y: 0.999, z: 0}
 --- !u!65 &2140813952
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -43856,12 +43857,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 2.6544323}
+  m_Center: {x: 2.1030686e-10, y: 0, z: -0.82721716}
 --- !u!23 &2140813953
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -43931,6 +43932,127 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfc10ae9f7390b4a84c3fbb8e1826b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Ladder
+  spline: {fileID: 2140813956}
+--- !u!114 &2140813956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140813950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
+  m_Spline:
+    m_EditModeType: 1
+    m_Knots: []
+    m_MetaData: []
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Splines:
+  - m_EditModeType: 1
+    m_Knots:
+    - Position:
+        x: 0
+        y: -0.49463266
+        z: -1
+      TangentIn:
+        x: 0
+        y: 0
+        z: 0
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        value:
+          x: 0.00074098253
+          y: 0.70710635
+          z: 0.70710635
+          w: -0.00074098253
+    - Position:
+        x: 0
+        y: -0.12972727
+        z: -1
+      TangentIn:
+        x: 0
+        y: 0
+        z: 0
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        value:
+          x: -0.70670843
+          y: -0.02373159
+          z: -0.02373159
+          w: 0.70670843
+    - Position:
+        x: 0
+        y: 0.3000417
+        z: -1
+      TangentIn:
+        x: 0
+        y: 0
+        z: 0
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        value:
+          x: -0.4454589
+          y: -0.00054416904
+          z: 0.0017886342
+          w: 0.8953004
+    - Position:
+        x: 0
+        y: 0.45
+        z: 1.6
+      TangentIn:
+        x: 0
+        y: 0
+        z: -2.956823
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.13532692
+      Rotation:
+        value:
+          x: 0.008210597
+          y: -0.001790367
+          z: 0.000009562607
+          w: 0.9999647
+    m_MetaData:
+    - Mode: 1
+      Tension: 0.5
+    - Mode: 1
+      Tension: 0.5
+    - Mode: 1
+      Tension: 0.5
+    - Mode: 3
+      Tension: 0.5
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Knots:
+    m_KnotsLink: []
 --- !u!1001 &2145756730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44009,202 +44131,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: totalVelocityArrowColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: totalVelocityArrowColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: totalVelocityArrowColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: totalVelocityArrowColor.r
-      value: 0.11164653
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: planarVelocityArrowColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: planarVelocityArrowColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: planarVelocityArrowColor.g
-      value: 0.9964248
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: planarVelocityArrowColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: verticalVelocityArrowColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: verticalVelocityArrowColor.b
-      value: 0.74054575
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: verticalVelocityArrowColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: verticalVelocityArrowColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: rayColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: rayColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: rayColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: rayColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundPlaneColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundPlaneColor.b
-      value: 0.027679205
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundPlaneColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundPlaneColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowHitSphereColor.a
-      value: 0.4117647
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowHitSphereColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowHitSphereColor.g
-      value: 0.73154736
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowHitSphereColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundedSphereColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundedSphereColor.b
-      value: 0.007030964
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundedSphereColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundedSphereColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_groundCheckDistance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: ungroundedSphereColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: ungroundedSphereColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: ungroundedSphereColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: ungroundedSphereColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: aboveObstacleCollidedSphereColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: aboveObstacleCollidedSphereColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: aboveObstacleCollidedSphereColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: aboveObstacleCollidedSphereColor.r
-      value: 0.07381892
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowObstacleCollidedSphereColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowObstacleCollidedSphereColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowObstacleCollidedSphereColor.g
-      value: 0.96657693
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowObstacleCollidedSphereColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: aboveObstacleNotCollidedSphereColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: aboveObstacleNotCollidedSphereColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: aboveObstacleNotCollidedSphereColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: aboveObstacleNotCollidedSphereColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowObstacleNotCollidedSphereColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowObstacleNotCollidedSphereColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowObstacleNotCollidedSphereColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: belowObstacleNotCollidedSphereColor.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3732176754581607695, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.94318
@@ -44244,26 +44170,6 @@ PrefabInstance:
     - target: {fileID: 3732176754581607695, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: controller
-      value: 
-      objectReference: {fileID: 6718191764129459929}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: movementTargetDirectionArrowColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: movementTargetDirectionArrowColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: movementTargetDirectionArrowColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: movementTargetDirectionArrowColor.r
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44443,17 +44349,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4d1c4cabaa87f439bd975e3bbabc3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
---- !u!114 &6718191764129459929 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dc25859b5be7e44b8bb7ec724b6571e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterControllerWrapper
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

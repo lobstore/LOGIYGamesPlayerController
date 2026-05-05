@@ -17,7 +17,7 @@ namespace LOGIYGames
         [SerializeField] Vector3 gravityDirection = new Vector3(0, -1, 0);
 
         public float MaxGravityForce = 9.84f;
-        public float TargetGravityForce;
+        public float CurrentGravityForce;
 
         public Vector3 Velocity { get => velocity; set => velocity = value; }
         private Vector3 velocity;
@@ -40,7 +40,7 @@ namespace LOGIYGames
 
             if (!useGravity)
             {
-                TargetGravityForce = 0;
+                CurrentGravityForce = 0;
                 Velocity = Vector3.zero;
                 return;
             }
@@ -51,13 +51,13 @@ namespace LOGIYGames
                 Velocity.y < 0 &&
                 m_sensors.IsValidSlope())
             {
-                TargetGravityForce = groundMagnit;
+                CurrentGravityForce = groundMagnit;
             }
             else
             {
-                TargetGravityForce = MaxGravityForce;
+                CurrentGravityForce = MaxGravityForce;
             }
-            Velocity = Vector3.MoveTowards(Velocity, TargetGravityForce * gravityDirection.normalized, Time.deltaTime * GravityAcceleration);
+            Velocity = Vector3.MoveTowards(Velocity, CurrentGravityForce * gravityDirection.normalized, Time.deltaTime * GravityAcceleration);
 
             // Check for overhead obstacles
             if (m_sensors != null && m_sensors.AboveHit.collider != null)

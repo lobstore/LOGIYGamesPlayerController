@@ -23,13 +23,16 @@
   <Project Path="uLipSync.Example.RuntimeProfile.Runtime.csproj" />
   <Project Path="VRM10.MToon10.Editor.csproj" />
   <Project Path="uLipSync.Samples.VRM.Runtime.csproj" />
+  <Project Path="RealStep.Editor.csproj" />
   <Project Path="uLipSync.Samples.VRM.Editor.csproj" />
   <Project Path="UniGLTF.Utils.csproj" />
   <Project Path="FastSpringBone10.csproj" />
   <Project Path="uLipSync.Samples.RuntimeSetup.Runtime.csproj" />
   <Project Path="uLipSync.Samples.Animator.Runtime.csproj" />
   <Project Path="UniHumanoid.Editor.Tests.csproj" />
+  <Project Path="RealStep.Demo.csproj" />
   <Project Path="UniGLTF.UniUnlit.csproj" />
   <Project Path="uLipSync.Samples.WebGL.Runtime.csproj" />
+  <Project Path="RealStep.Runtime.csproj" />
   <Project Path="VRM10.MToon10.Tests.csproj" />
 </Solution>

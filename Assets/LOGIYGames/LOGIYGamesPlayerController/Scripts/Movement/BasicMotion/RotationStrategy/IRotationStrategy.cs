@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 namespace LOGIYGames
 {
@@ -9,6 +7,5 @@ namespace LOGIYGames
 
         public Quaternion GetRotation();
     }
-
 }
 

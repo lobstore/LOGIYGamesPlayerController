@@ -370,6 +370,7 @@ namespace LOGIYGames.Animation
 
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
+        
         private void OnAnimatorMove()
         {
             if (animator.applyRootMotion)
