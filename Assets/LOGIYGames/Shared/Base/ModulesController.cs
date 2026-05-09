@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Netcode;
 using UnityEngine;
 namespace LOGIYGames
 {
@@ -17,14 +16,14 @@ namespace LOGIYGames
                 module.Initialize();
             }
             modules = modules.AsParallel().OrderBy(x => x.ModulePriority).ToList();
-            enabledModules=modules.Where(x => x.Enabled).ToList();
+            enabledModules = modules.Where(x => x.Enabled).ToList();
         }
         void Update()
         {
             foreach (var module in enabledModules)
             {
-                module.OnUpdate(Time.deltaTime); 
-                
+                module.OnUpdate(Time.deltaTime);
+
             }
         }
         private void FixedUpdate()

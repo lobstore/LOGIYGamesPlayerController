@@ -526,8 +526,6 @@ GameObject:
   - component: {fileID: 2268543539570239712}
   - component: {fileID: 6657963720063885413}
   - component: {fileID: 2605798501068234886}
-  - component: {fileID: 1368982890377351462}
-  - component: {fileID: 5787556000829004667}
   - component: {fileID: 3842424064180597113}
   - component: {fileID: 2654077868994141792}
   - component: {fileID: 2815690090559632881}
@@ -691,110 +689,6 @@ MonoBehaviour:
   m_sensors: {fileID: 2268543539570239712}
   m_character: {fileID: 8334357512040222824}
   GravityAcceleration: 10
---- !u!114 &1368982890377351462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdb791f27c5538547bb1e50276b18065, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.EyeBlinkerModule
-  <ModulePriority>k__BackingField: 0
-  _vrm10: {fileID: 6186406791908379824}
-  skinnedMeshRenderer: {fileID: 2485280133021345598}
-  blinkBlendshapeName: Fcl_EYE_Close
-  minBlinkInterval: 3
-  maxBlinkInterval: 6
-  blinkDuration: 0.267
-  blinkCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.3
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.7
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &5787556000829004667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e3a00b4d25e38647bf789b8710a464c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EyesNystagmusModule
-  <ModulePriority>k__BackingField: 0
-  _vrm10: {fileID: 6186406791908379824}
-  maxOffsetRadius: 0.1
-  offsetIntervalRange: {x: 0.3, y: 3}
-  distanceToOffsetCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: -1
-      outSlope: -1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -1
-      outSlope: -1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  SightTransform: {fileID: 1833083733447526842}
-  minDistance: 0.1
-  maxDistance: 5
 --- !u!114 &3842424064180597113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3780,15 +3674,18 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6021583798893025641}
+  - component: {fileID: 6519021881047199560}
   - component: {fileID: 6186406791908379824}
   - component: {fileID: 1283272730193767307}
+  - component: {fileID: 557898758343812616}
+  - component: {fileID: 3861212969667159066}
   m_Layer: 3
   m_Name: CatgirlBattle
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6021583798893025641
 Transform:
   m_ObjectHideFlags: 0
@@ -3809,6 +3706,18 @@ Transform:
   - {fileID: 4206524830533728598}
   m_Father: {fileID: 507906360614569168}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6519021881047199560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2787143992442695444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9612d601dbd390d4796cf684eceb9347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.ModulesController
 --- !u!114 &6186406791908379824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4312,6 +4221,110 @@ MonoBehaviour:
   m_RightLittleProximal: {fileID: 4284306759974269125}
   m_RightLittleIntermediate: {fileID: 8933338581413727161}
   m_RightLittleDistal: {fileID: 6247264697592139656}
+--- !u!114 &557898758343812616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2787143992442695444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e3a00b4d25e38647bf789b8710a464c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EyesNystagmusModule
+  <ModulePriority>k__BackingField: 0
+  _vrm10: {fileID: 6186406791908379824}
+  maxOffsetRadius: 0.1
+  offsetIntervalRange: {x: 0.3, y: 3}
+  distanceToOffsetCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  SightTransform: {fileID: 1833083733447526842}
+  minDistance: 0.1
+  maxDistance: 5
+--- !u!114 &3861212969667159066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2787143992442695444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdb791f27c5538547bb1e50276b18065, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.EyeBlinkerModule
+  <ModulePriority>k__BackingField: 0
+  _vrm10: {fileID: 6186406791908379824}
+  skinnedMeshRenderer: {fileID: 2485280133021345598}
+  blinkBlendshapeName: Fcl_EYE_Close
+  minBlinkInterval: 3
+  maxBlinkInterval: 6
+  blinkDuration: 0.267
+  blinkCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.3
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2821727274983031063
 GameObject:
   m_ObjectHideFlags: 0
@@ -11181,6 +11194,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1082271958561512970, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
       propertyPath: m_Layer

@@ -1,5 +1,4 @@
 using LOGIYGames.Timers;
-using Unity.Netcode;
 using UnityEngine;
 using UniVRM10;
 namespace LOGIYGames
@@ -58,13 +57,13 @@ namespace LOGIYGames
                 return;
             }
         }
-        
+
         private void Start()
         {
 
 
             _cooldonwTimer.OnTimerStop = () => { _blinkTimer.Reset(); _blinkTimer.Start(); };
-            _blinkTimer.OnTimerStop = () => {_nextBlinkTime = Random.Range(minBlinkInterval, maxBlinkInterval); _cooldonwTimer.Reset(_nextBlinkTime); _cooldonwTimer.Start(); };
+            _blinkTimer.OnTimerStop = () => { _nextBlinkTime = Random.Range(minBlinkInterval, maxBlinkInterval); _cooldonwTimer.Reset(_nextBlinkTime); _cooldonwTimer.Start(); };
             _blinkTimer.Start();
 
         }

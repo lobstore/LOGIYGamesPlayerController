@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using LOGIYGames.Timers;
+using System.Collections.Generic;
 using System.Linq;
-using Unity.Netcode;
 using UnityEngine;
-using LOGIYGames.Timers;
 namespace LOGIYGames
 {
     public class NearestInteractableFinder : MonoBehaviour
@@ -14,7 +13,7 @@ namespace LOGIYGames
         [SerializeField] private int maxTrackedObjectNumber;
 
         [SerializeField] private List<Interactable> _trackablesInRange = new();
-        [field:SerializeField] public Interactable CurrentTarget { get; private set; }
+        [field: SerializeField] public Interactable CurrentTarget { get; private set; }
         private StopwatchTimer _timer;
         private StopwatchTimer _movingTargetCooldownTimer;
         private bool _wasMovingTargetLastCheck = false;
@@ -135,7 +134,7 @@ namespace LOGIYGames
                 }
             }
         }
-        
+
         private void OnDrawGizmosSelected()
         {
             if (TryGetComponent<Collider>(out var collider))

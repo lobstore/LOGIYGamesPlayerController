@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using uLipSync;
-using Unity.Netcode;
 using UnityEngine;
 using UniVRM10;
 namespace LOGIYGames
@@ -41,7 +40,7 @@ namespace LOGIYGames
         bool _lipSyncUpdated = false;
         float _volume = 0f;
         float _openCloseVelocity = 0f;
-        public NetworkVariable<float> weightNet { get; set; } = new NetworkVariable<float>(0);
+   
         protected float volume => _volume;
         [SerializeField] Vrm10Instance Vrm10Instance;
         private Vrm10RuntimeExpression _expressions;
