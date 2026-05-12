@@ -8,7 +8,7 @@ namespace LOGIYGames
     {
         [SerializeField] Character InitCharacter;
         [SerializeField] InputActionAsset InputActions;
-        public IControllable CurrentControllable { get; private set; }
+        public Character CurrentCharacter { get; private set; }
         [field: SerializeField] public PlayerMovementInputReader PlayerInputReader { get; private set; }
         protected override void Awake()
         {
@@ -18,16 +18,59 @@ namespace LOGIYGames
         private void Start()
         {
             PlayerInputReader?.Enable();
-            SetCharacter(InitCharacter);
+            SetPlayerControlOnCharacter(InitCharacter);
         }
-        public void SetCharacter(IControllable character)
+        private void Update()
         {
-            CurrentControllable?.Release();
-            CurrentControllable = character;
-            CurrentControllable?.TakeControl(PlayerInputReader);
-            CurrentControllable.MovementStrategy = InitCharacter.DefaultMovementStrategy;
-            CurrentControllable.RotationStrategy = InitCharacter.DefaultRotationStrategy;
-            CameraManager.Instance.SetTargetTo(CurrentControllable.CameraFollow, CurrentControllable.CameraLookAt);
+            Aim();
+            UpdateStrategies();
+        }
+
+        private void UpdateStrategies()
+        {
+            switch (CameraManager.Instance.CameraPerspectiveType)
+            {
+                case CameraPerspectiveType.FirstPerson:
+                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new CameraAlongRotation();
+                    break;
+                case CameraPerspectiveType.ThirdPersonFreeLook:
+                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new CameraRelativeRotation(CurrentCharacter);
+                    break;
+                case CameraPerspectiveType.ThirdPersonLookForward:
+                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new CameraAlongRotation();
+                    break;
+                case CameraPerspectiveType.Top_Down:
+                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new CameraRelativeRotation(CurrentCharacter);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void Aim()
+        {
+            if (CurrentCharacter.Input.FocusPressed && CameraManager.Instance.CameraPerspectiveType == CameraPerspectiveType.ThirdPersonFreeLook)
+            {
+                CameraManager.Instance.CameraPerspectiveType = CameraPerspectiveType.ThirdPersonLookForward;
+            }
+            else if(!CurrentCharacter.Input.FocusPressed && CameraManager.Instance.CameraPerspectiveType == CameraPerspectiveType.ThirdPersonLookForward)
+            {
+                CameraManager.Instance.CameraPerspectiveType = CameraPerspectiveType.ThirdPersonFreeLook;
+            }
+        }
+        public void SetPlayerControlOnCharacter(Character character)
+        {
+            CurrentCharacter?.ReleaseControl();
+            CurrentCharacter = character;
+            UpdateStrategies();
+
+            CurrentCharacter?.TakeControl(PlayerInputReader);
+
+            CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, CurrentCharacter.CameraLookAt);
         }
     }
 }

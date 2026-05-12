@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class WallClimbMovementState : BaseMovementState
+    public class WallClimbMovementState : BaseCharacterMovementState
     {
         SensorsModule sensorModule;
         public WallClimbMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)

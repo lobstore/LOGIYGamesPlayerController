@@ -18,7 +18,7 @@ namespace LOGIYGames.CharacterCore
         public IRotationStrategy DefaultRotationStrategy { get; set; }
         public IMovementStrategy DefaultMovementStrategy { get; set; }
         public IEventDispatcher EventBus { get; private set; }
-        
+
         [Header("References")]
 
         [field: SerializeField] private ControllerWrapperBase m_motor;
@@ -114,26 +114,10 @@ namespace LOGIYGames.CharacterCore
         {
             EventBus = new EventDispatcher();
 
-            switch (CameraManager.Instance.CameraPerspectiveType)
+            if (Input == null)
             {
-                case CameraPerspectiveType.FirstPerson:
-                    DefaultMovementStrategy = new CameraRelativeMovement(this);
-                    DefaultRotationStrategy = new CameraAlongRotation();
-                    break;
-                case CameraPerspectiveType.ThirdPersonFreeLook:
-                    DefaultMovementStrategy = new CameraRelativeMovement(this);
-                    DefaultRotationStrategy = new CameraRelativeRotation(this);
-                    break;
-                case CameraPerspectiveType.ThirdPersonLookForward:
-                    DefaultMovementStrategy = new CameraRelativeMovement(this);
-                    DefaultRotationStrategy = new CameraAlongRotation();
-                    break;
-                case CameraPerspectiveType.Top_Down:
-                    DefaultMovementStrategy = new CameraRelativeMovement(this);
-                    DefaultRotationStrategy = new CameraRelativeRotation(this);
-                    break;
-                default:
-                    break;
+                ReleaseControl();
+
             }
 
             EventsSubscription();
@@ -144,13 +128,8 @@ namespace LOGIYGames.CharacterCore
             m_motor.Height = Height;
             m_motor.Center = new Vector3(0, Height / 2.0f, 0);
             InitializeStateMachine();
-            if (Input == null)
-            {
-                Release();
 
-            }
         }
-
         private void EventsSubscription()
         {
             EventBus.Subscribe<JumpPerformedEvent>((evt) =>
@@ -174,9 +153,6 @@ namespace LOGIYGames.CharacterCore
             EventBus.Subscribe<DashPerformedEvent>(Dash);
             EventBus.Subscribe<SlipPerformedEvent>(SlipJump);
         }
-
-
-
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
@@ -199,7 +175,7 @@ namespace LOGIYGames.CharacterCore
             _movementStateMachine.Update();
             _actionStateMachine.Update();
             StatesDebug();
-            DebugDraw.DrawArrow(transform.position,targetDirection*BaseSpeed, movementTargetDirectionArrowColor);
+            DebugDraw.DrawArrow(transform.position, targetDirection * BaseSpeed, movementTargetDirectionArrowColor);
         }
         private void SmoothHeightChanging()
         {
@@ -315,7 +291,7 @@ namespace LOGIYGames.CharacterCore
         public void GroundJump(JumpPerformedEvent evt)
         {
             Velocity = targetDirection * (evt.planarForce + CurrentSpeed);
-            m_motor.Jump(new Vector3(0, evt.verticalForce,0));
+            m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
             JumpCount++;
         }
         public void WallJump(JumpPerformedEvent evt)
@@ -356,11 +332,11 @@ namespace LOGIYGames.CharacterCore
                 UnityEngine.Debug.LogError("No MovementPreset provided");
             }
         }
-        public void AddMovementStateMachineTransition(BaseMovementState from, BaseMovementState to, Func<bool> condition)
+        public void AddMovementStateMachineTransition(BaseCharacterMovementState from, BaseCharacterMovementState to, Func<bool> condition)
         {
             _movementStateMachine.AddTransition(from, to, new FuncPredicate(condition));
         }
-        public void AddAnyMovementStateMachineTransition(BaseMovementState to, Func<bool> condition)
+        public void AddAnyMovementStateMachineTransition(BaseCharacterMovementState to, Func<bool> condition)
         {
             _movementStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
         }
@@ -384,9 +360,11 @@ namespace LOGIYGames.CharacterCore
         public void TakeControl(ICharacterInputReader inputReader)
         {
             Input = inputReader;
+            RotationStrategy = DefaultRotationStrategy;
+            MovementStrategy = DefaultMovementStrategy;
         }
 
-        public void Release()
+        public void ReleaseControl()
         {
             Input = new NoneInput();
             RotationStrategy = new NoneRotation(this);
@@ -397,7 +375,7 @@ namespace LOGIYGames.CharacterCore
         public Direction GetRelativeMovementDirection()
         {
             Vector3 localDir;
-            if (targetDirection.magnitude>0)
+            if (targetDirection.magnitude > 0)
             {
 
 
@@ -419,7 +397,7 @@ namespace LOGIYGames.CharacterCore
                 else
                     direction = Direction.Backward;
             }
-            else if(Mathf.Abs(forwardDot) < Mathf.Abs(rightDot))
+            else if (Mathf.Abs(forwardDot) < Mathf.Abs(rightDot))
             {
                 if (rightDot > 0)
                     direction = Direction.Right;
@@ -433,7 +411,7 @@ namespace LOGIYGames.CharacterCore
 
             return direction;
         }
-      
+
     }
 
 }

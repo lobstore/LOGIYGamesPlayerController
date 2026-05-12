@@ -111,7 +111,7 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_idleMovementState, _walkMovementState, () => Input.GetKeyDown(KeyCode.Z));
             character.AddMovementStateMachineTransition(_idleMovementState, _runMovementState, () => character.Input.MovementInput.magnitude > 0f);
             character.AddMovementStateMachineTransition(_idleMovementState, _ladderMovementState, () => character.GetComponent<LadderMovementController>().Ladder!=null && character.Input.InteractPressed);
-            character.AddMovementStateMachineTransition(_idleMovementState, _flyMovementState, () => character.Input.FocusPressed);
+            //character.AddMovementStateMachineTransition(_idleMovementState, _flyMovementState, () => character.Input.FocusPressed);
             // ----- Walk State Transitions -----
             character.AddMovementStateMachineTransition(_walkMovementState, _idleMovementState, () => Input.GetKeyDown(KeyCode.Z));
             character.AddMovementStateMachineTransition(_walkMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
@@ -122,7 +122,11 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_slipMovementState, _runMovementState, () => _slipMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude > 0);
             character.AddMovementStateMachineTransition(_runMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && _groundJumpMovementState.CanEnter());
             character.AddMovementStateMachineTransition(_runMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
-            character.AddMovementStateMachineTransition(_runMovementState, _stopMovementState, () => _stopMovementState.CanEnter() && character.Input.MovementInput.magnitude == 0);
+            
+            character.AddMovementStateMachineTransition(_runMovementState, _stopMovementState, () => _runMovementState.IsActionFrameElapsed && _stopMovementState.CanEnter() && character.Input.MovementInput.magnitude == 0);
+            character.AddMovementStateMachineTransition(_runMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 60&& Mathf.Abs(character.DeltaYaw) <160);
+
+
             character.AddMovementStateMachineTransition(_stopMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
             character.AddMovementStateMachineTransition(_stopMovementState, _idleMovementState, () => _stopMovementState.IsDurationTimerElapsed);
             character.AddMovementStateMachineTransition(_stopMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 45);
@@ -151,7 +155,6 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_backTurnMovementState, _runMovementState, () => !_backTurnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude > 0);
             character.AddMovementStateMachineTransition(_backTurnMovementState, _idleMovementState, () => !_backTurnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude == 0);
             character.AddMovementStateMachineTransition(_turnMovementState, _idleMovementState, () => !_turnMovementState.IsDurationTimerRunning);
-            character.AddAnyActionStateMachineTransition(_idleActionState, () => true);
             // ----- From Ladder State Transitions -----
             character.AddMovementStateMachineTransition(_ladderMovementState, _idleMovementState, () => character.GetComponent<LadderMovementController>().Ladder==null);
             // ----- From Wall Climb State Transitions -----
@@ -167,6 +170,7 @@ namespace LOGIYGames
             // ----- From Wall Run State Transitions -----
             character.AddMovementStateMachineTransition(_wallRunMovementState, _idleMovementState, () => !CanWallRun(character));
 
+            character.AddAnyActionStateMachineTransition(_idleActionState, () => true);
         }
         private bool CanWallRun(Character character)
         {

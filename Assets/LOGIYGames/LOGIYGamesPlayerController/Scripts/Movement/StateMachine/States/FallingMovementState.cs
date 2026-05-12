@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
-    public class FallingMovementState : BaseMovementState
+    public class FallingMovementState : BaseCharacterMovementState
     {
         public FallingMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
 

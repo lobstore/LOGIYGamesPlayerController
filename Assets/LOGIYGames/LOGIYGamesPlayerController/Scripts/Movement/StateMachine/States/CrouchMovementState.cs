@@ -2,7 +2,7 @@
 
 namespace LOGIYGames.Movement
 {
-    public class CrouchMovementState : BaseMovementState
+    public class CrouchMovementState : BaseCharacterMovementState
     {
         protected float StandingHeight;
         protected float CrouchHeight;

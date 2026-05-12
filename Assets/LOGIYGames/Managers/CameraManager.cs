@@ -24,8 +24,18 @@ namespace LOGIYGames
         CinemachineCameraController instance_TopDownCameraController;
 
         [SerializeField] InputActionAsset inputActions;
-        public PlayerCameraInputReader CameraInput {  get; private set; }
-        [SerializeField] public CameraPerspectiveType CameraPerspectiveType;
+        public PlayerCameraInputReader CameraInput { get; private set; }
+        [field:SerializeField] private CameraPerspectiveType cameraPerspectiveType;
+
+        public CameraPerspectiveType CameraPerspectiveType
+        {
+            get { return cameraPerspectiveType; }
+            set
+            {
+                cameraPerspectiveType = value;
+                UpdateCameraView();
+            }
+        }
         protected override void Initialize()
         {
             CameraInput = new(inputActions);
@@ -39,6 +49,12 @@ namespace LOGIYGames
         private void Start()
         {
             CameraInput.Enable();
+            UpdateCameraView();
+
+        }
+
+        private void UpdateCameraView()
+        {
             switch (CameraPerspectiveType)
             {
                 case CameraPerspectiveType.FirstPerson:
@@ -56,8 +72,8 @@ namespace LOGIYGames
                 default:
                     break;
             }
- 
         }
+
         int index = 0;
         private void Update()
         {
@@ -67,20 +83,22 @@ namespace LOGIYGames
                 index = index % cinemachineCameraControllers.Count;
                 if (index == 0)
                 {
-                    Set3rdFreeLookView();
+                    CameraPerspectiveType = CameraPerspectiveType.ThirdPersonFreeLook;
                 }
                 else if (index == 1)
                 {
-                    Set1stView();
+                    CameraPerspectiveType = CameraPerspectiveType.FirstPerson;
                 }
                 else if (index == 2)
                 {
-                    SetTopDownView();
-                }else if (index == 3)
+                    CameraPerspectiveType = CameraPerspectiveType.Top_Down;
+                }
+                else if (index == 3)
                 {
-                    Set3rdLookForwardView();
+                    CameraPerspectiveType = CameraPerspectiveType.ThirdPersonLookForward;
                 }
             }
+            UpdateCameraView();
 
         }
         public void SetTargetTo(Transform Follow, Transform LookAt)
@@ -114,25 +132,21 @@ namespace LOGIYGames
         public void Set3rdFreeLookView()
         {
             CurrentCameraController = instance_ThirdPersonCameraController;
-            CameraPerspectiveType = CameraPerspectiveType.ThirdPersonFreeLook;
             SetPriorVirtualCamera(CurrentCameraController);
         }
         public void Set1stView()
         {
             CurrentCameraController = instance_FirstPersonCameraController;
-            CameraPerspectiveType = CameraPerspectiveType.FirstPerson;
             SetPriorVirtualCamera(CurrentCameraController);
         }
         public void SetTopDownView()
         {
             CurrentCameraController = instance_TopDownCameraController;
-            CameraPerspectiveType = CameraPerspectiveType.Top_Down;
             SetPriorVirtualCamera(CurrentCameraController);
         }
         public void Set3rdLookForwardView()
         {
             CurrentCameraController = instance_ThirdPersonCameraController;
-            CameraPerspectiveType = CameraPerspectiveType.ThirdPersonLookForward;
             SetPriorVirtualCamera(CurrentCameraController);
         }
 

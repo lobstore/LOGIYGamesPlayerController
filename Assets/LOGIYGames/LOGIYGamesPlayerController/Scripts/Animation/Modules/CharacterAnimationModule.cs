@@ -202,16 +202,31 @@ namespace LOGIYGames.Animation
             });
             character.EventBus.Subscribe<TurnPerformedEvent>((evt) =>
             {
-
-                if (evt.angle > 0)
+                if (evt.movementSpeed > 0.5)
                 {
-                    PlayAnimation(_data.Idle_BackTurn_Right);
+                    if (evt.angle > 0)
+                    {
+                        PlayAnimation(_data.Run_Turn_90R);
 
+                    }
+                    else
+                    {
+                        PlayAnimation(_data.Run_Turn_90L);
+
+                    }
                 }
                 else
                 {
-                    PlayAnimation(_data.Idle_BackTurn_Left);
+                    if (evt.angle > 0)
+                    {
+                        PlayAnimation(_data.Idle_Turn_90R);
 
+                    }
+                    else
+                    {
+                        PlayAnimation(_data.Idle_Turn_90L);
+
+                    }
                 }
             });
             character.EventBus.Subscribe<BackTurnPerformedEvent>((evt) =>
@@ -247,12 +262,12 @@ namespace LOGIYGames.Animation
                 {
                     if (evt.angle > 0)
                     {
-                        PlayAnimation(_data.Idle_BackTurn_Right);
+                        PlayAnimation(_data.Idle_Turn_90R);
 
                     }
                     else
                     {
-                        PlayAnimation(_data.Idle_BackTurn_Left);
+                        PlayAnimation(_data.Idle_Turn_90L);
 
                     }
                 }

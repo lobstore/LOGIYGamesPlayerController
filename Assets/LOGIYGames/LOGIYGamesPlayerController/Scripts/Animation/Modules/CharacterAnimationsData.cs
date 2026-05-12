@@ -34,8 +34,10 @@ namespace LOGIYGames.Animation
         public int Walk_BackTurn_Right { get; } = Animator.StringToHash(nameof(Walk_BackTurn_Right));
         public int Walk_BackTurn_Left { get; } = Animator.StringToHash(nameof(Walk_BackTurn_Left));
 
-        public int Idle_BackTurn_Right { get; } = Animator.StringToHash(nameof(Idle_BackTurn_Right));
-        public int Idle_BackTurn_Left { get; } = Animator.StringToHash(nameof(Idle_BackTurn_Left));
+        public int Idle_Turn_90R { get; } = Animator.StringToHash(nameof(Idle_Turn_90R));
+        public int Idle_Turn_90L { get; } = Animator.StringToHash(nameof(Idle_Turn_90L));
+        public int Run_Turn_90R { get; } = Animator.StringToHash(nameof(Run_Turn_90R));
+        public int Run_Turn_90L { get; } = Animator.StringToHash(nameof(Run_Turn_90L));
 
         public int Roll_Forward { get; } = Animator.StringToHash(nameof(Roll_Forward));
         public int Roll_Backward { get; } = Animator.StringToHash(nameof(Roll_Backward));

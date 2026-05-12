@@ -2,15 +2,13 @@
 using LOGIYGames.Timers;
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.ProBuilder;
 namespace LOGIYGames.Movement
 {
     /// <summary>
     /// Abstract base class for states with common functionality
     /// </summary>
     [Serializable]
-    public abstract class BaseMovementState : IState
+    public abstract class BaseCharacterMovementState : IState
     {
         protected Character _character;
         protected ControllerWrapperBase _controller;
@@ -21,7 +19,7 @@ namespace LOGIYGames.Movement
         public bool IsActionFrameElapsed => actionFrameTimer.IsFinished;
         public bool IsActionFrameInProgress => actionFrameTimer.IsRunning;
 
-        protected BaseMovementState(Character ctx, MovementStateData stateData)
+        protected BaseCharacterMovementState(Character ctx, MovementStateData stateData)
         {
             _animator = ctx.GetComponent<Animator>();
             _character = ctx;
@@ -115,47 +113,4 @@ namespace LOGIYGames.Movement
             _character.Rotate(_character.targetRotation, _character.TurnSmoothTime);
         }
     }
-    //public class WallrunState : ContinuousState
-    //{
-    //    public WallrunState(MovementStateDriver ctx, StateData stateData) : base(ctx, stateData)
-    //    {
-    //        wallRunGravityMultiplier = 0;
-    //        useWallCliping = true;
-    //    }
-    //    private float wallRunGravityMultiplier;
-    //    private bool useWallCliping;
-    //    Vector3 normal;
-    //    Vector3 magnit => -normal;
-
-    //    public override bool CanBeExecuted()
-    //    {
-    //        return base.CanBeExecuted()
-    //                    && (Sensors.IsObstacleLegsLeft || Sensors.IsObstacleLegsRight)
-    //                    && !Sensors.IsGrounded
-    //                    && MovementInput.y > 0
-    //                    && !Sensors.IsObstacleLegsFront
-    //                    && Vector3.Angle(Character.transform.forward, Camera.main.transform.forward) < 60;
-    //    }
-
-    //    private void Magnit()
-    //    {
-    //        CController.Move(magnit * Time.deltaTime);
-
-    //    }
-    //    protected override void Rotate()
-    //    {
-    //        Character.RotateToDirection(moveDirection, TurnSmoothTime);
-    //    }
-    //    public override void Enter()
-    //    {
-    //        base.Enter();
-    //        CharacterGravity.Velocity = Vector3.zero;
-    //        CharacterGravity.UseGravity = false;
-    //    }
-    //    public override void Exit()
-    //    {
-    //        base.Exit();
-    //        CharacterGravity.UseGravity = true;
-    //    }
-    //}
 }

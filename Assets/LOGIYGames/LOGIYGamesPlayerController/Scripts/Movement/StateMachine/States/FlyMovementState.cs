@@ -1,7 +1,7 @@
 ﻿using LOGIYGames.CharacterCore;
 namespace LOGIYGames.Movement
 {
-    public class FlyMovementState : BaseMovementState
+    public class FlyMovementState : BaseCharacterMovementState
     {
         public FlyMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
