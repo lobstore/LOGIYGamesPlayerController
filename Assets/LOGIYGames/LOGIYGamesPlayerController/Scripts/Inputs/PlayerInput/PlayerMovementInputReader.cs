@@ -17,15 +17,6 @@ namespace LOGIYGames
         InputAction m_FocusAction;
         InputAction m_AttackAction;
         InputAction m_InteractAction;
-
-        public void Enable()
-        {
-            CharacterActionMap.Enable();
-        }
-        public void Disable()
-        {
-            CharacterActionMap.Disable();
-        }
         public PlayerMovementInputReader(InputActionAsset InputActions )
         {
             CharacterActionMap = InputActions.FindActionMap("CharacterInputs");
@@ -39,20 +30,28 @@ namespace LOGIYGames
             m_InteractAction = CharacterActionMap.FindAction("Interact");
         }
 
-        public Vector2 MovementInput => m_MoveAction.ReadValue<Vector2>();
+        public void Enable()
+        {
+            CharacterActionMap.Enable();
+        }
+        public void Disable()
+        {
+            CharacterActionMap.Disable();
+        }
 
-        public bool FocusPressed => m_FocusAction.IsPressed();
+        public CharacterInput GetInput()
+        {
+            CharacterInput input = new();
 
-        public bool JumpPressed => m_JumpAction.WasPressedThisFrame();
+            input.MovementInput = m_MoveAction.ReadValue<Vector2>();
+            input.FocusPressed = m_FocusAction.IsPressed();
+            input.JumpPressed = m_JumpAction.WasPressedThisFrame();
+            input.EvadePressed = m_EvadeAction.WasPressedThisFrame();
+            input.SprintPressing = m_SprintAction.IsPressed();
+            input.AttackPressed = m_AttackAction.WasPressedThisFrame();
+            input.InteractPressed = m_InteractAction.WasPressedThisFrame();
+            return input;
+        }
 
-        public bool EvadePressed => m_EvadeAction.WasPressedThisFrame();
-
-        public bool SprintPressing => m_SprintAction.IsPressed();
-
-        public bool CrouchPressed => m_CrouchAction.IsPressed();
-
-        public bool AttackPressed => m_AttackAction.WasPressedThisFrame();
-
-        public bool InteractPressed => m_InteractAction.WasPressedThisFrame();
     }
 }

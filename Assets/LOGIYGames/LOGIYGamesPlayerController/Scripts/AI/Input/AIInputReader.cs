@@ -12,16 +12,22 @@ namespace LOGIYGames.Scripts.AI
         {
             this.Driver = Driver;
         }
-        public Vector2 MovementInput => Driver.MovementInput;
-        public bool JumpPressed=> Driver.JumpPressed;
-        public bool EvadePressed => Driver.EvadePressed;
-        public bool SprintPressing => Driver.SprintPressed;
-        public bool CrouchPressed => Driver.CrouchPressed;
 
-        public bool FocusPressed => Driver.FocusPressed;
+        public CharacterInput GetInput()
+        {
+            CharacterInput input = new();
 
-        public bool AttackPressed => false;
+            input.MovementInput = Driver.MovementInput;
+            input.JumpPressed = Driver.JumpPressed;
+            input.EvadePressed = Driver.EvadePressed;
+            input.SprintPressing = Driver.SprintPressed;
+            input.CrouchPressed = Driver.CrouchPressed;
+            input.FocusPressed = Driver.FocusPressed;
+            input.AttackPressed = false;
+            input.InteractPressed = false;
 
-        public bool InteractPressed => false;
+
+            return input;
+        }
     }
 }

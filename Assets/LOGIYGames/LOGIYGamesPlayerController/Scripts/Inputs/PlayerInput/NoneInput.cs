@@ -6,20 +6,9 @@ namespace LOGIYGames.CharacterCore
 {
     public class NoneInput : ICharacterInputReader
     {
-        public Vector2 MovementInput => Vector3.zero;
-
-        public bool FocusPressed => false;
-
-        public bool JumpPressed => false;
-
-        public bool EvadePressed => false;
-
-        public bool SprintPressing => false;
-
-        public bool CrouchPressed => false;
-
-        public bool AttackPressed => false;
-
-        public bool InteractPressed => false;
+        public CharacterInput GetInput()
+        {
+            return new CharacterInput();
+        }
     }
 }

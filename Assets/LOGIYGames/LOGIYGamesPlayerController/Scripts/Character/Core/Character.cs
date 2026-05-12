@@ -12,7 +12,8 @@ namespace LOGIYGames.CharacterCore
 
     public class Character : MonoModuleBase, IControllable
     {
-        public ICharacterInputReader Input { get; set; }
+        public ICharacterInputReader InputProvider { get; set; }
+        public CharacterInput Input { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
         public IRotationStrategy DefaultRotationStrategy { get; set; }
@@ -114,7 +115,7 @@ namespace LOGIYGames.CharacterCore
         {
             EventBus = new EventDispatcher();
 
-            if (Input == null)
+            if (InputProvider == null)
             {
                 ReleaseControl();
 
@@ -169,6 +170,7 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+            ReadInput();
             targetRotation = RotationStrategy.GetRotation();
             targetDirection = MovementStrategy.GetMovementDirection().normalized;
             CalculateDeltaYaw();
@@ -176,6 +178,11 @@ namespace LOGIYGames.CharacterCore
             _actionStateMachine.Update();
             StatesDebug();
             DebugDraw.DrawArrow(transform.position, targetDirection * BaseSpeed, movementTargetDirectionArrowColor);
+        }
+
+        private void ReadInput()
+        {
+            Input = InputProvider.GetInput();
         }
         private void SmoothHeightChanging()
         {
@@ -359,14 +366,14 @@ namespace LOGIYGames.CharacterCore
         #region IControllable
         public void TakeControl(ICharacterInputReader inputReader)
         {
-            Input = inputReader;
+            InputProvider = inputReader;
             RotationStrategy = DefaultRotationStrategy;
             MovementStrategy = DefaultMovementStrategy;
         }
 
         public void ReleaseControl()
         {
-            Input = new NoneInput();
+            InputProvider = new NoneInput();
             RotationStrategy = new NoneRotation(this);
             MovementStrategy = new NoneMovement();
             OnControlReleased.Invoke();
@@ -377,8 +384,6 @@ namespace LOGIYGames.CharacterCore
             Vector3 localDir;
             if (targetDirection.magnitude > 0)
             {
-
-
                 localDir = m_motor.transform.InverseTransformDirection(targetDirection);
             }
             else
