@@ -293,6 +293,7 @@ namespace LOGIYGames.Animation
             );
             character.EventBus.Subscribe<MovementStoppedEvent>((evt) =>
             {
+                Debug.Log(evt.direction);
                 switch (evt.direction)
                 {
                     case Direction.Left:
@@ -369,8 +370,8 @@ namespace LOGIYGames.Animation
             }
             else
             {
-                animator.SetFloat("VerticalSpeed", character.transform.InverseTransformDirection(character.targetDirection).z, 0.1f, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", character.transform.InverseTransformDirection(character.targetDirection).x, 0.1f, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, 0.1f, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, 0.1f, Time.deltaTime);
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);

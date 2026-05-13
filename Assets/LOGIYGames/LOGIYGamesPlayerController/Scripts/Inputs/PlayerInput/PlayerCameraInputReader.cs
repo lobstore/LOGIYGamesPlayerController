@@ -7,8 +7,10 @@ namespace LOGIYGames
     {
         InputActionAsset InputActions;
         InputActionMap CameraActionMap;
-        InputAction ZoomAction;
+        public InputAction ZoomAction {  get; private set; }
+        public InputAction LookAction {  get; private set; }
         public float ZoomDelta => ZoomAction.ReadValue<float>();
+        public Vector2 LookInput => LookAction.ReadValue<Vector2>();
 
         public void Enable()
         {
@@ -23,10 +25,12 @@ namespace LOGIYGames
             InputActions = inputActions;
             CameraActionMap = InputActions.FindActionMap("Camera");
             ZoomAction = CameraActionMap.FindAction("Zoom");
+            LookAction = CameraActionMap.FindAction("Look");
         }
     }
     public interface ICameraInputReader
     {
         public float ZoomDelta { get; }
+        public Vector2 LookInput {  get; }
     }
 }

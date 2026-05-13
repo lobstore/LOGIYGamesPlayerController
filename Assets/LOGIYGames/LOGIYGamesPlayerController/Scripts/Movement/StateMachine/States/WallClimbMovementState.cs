@@ -14,6 +14,7 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
+            IsAimAllowed = false;
             _character.MovementStrategy = new WallClimbMovement(sensorModule, _character);
             _character.RotationStrategy = new WallClimbRotaion(sensorModule);
             _controller.UseGravity = false;

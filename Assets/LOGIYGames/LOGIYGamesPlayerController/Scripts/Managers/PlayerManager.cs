@@ -1,4 +1,5 @@
 using LOGIYGames.CharacterCore;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,9 @@ namespace LOGIYGames
         [SerializeField] Character InitCharacter;
         [SerializeField] InputActionAsset InputActions;
         public Character CurrentCharacter { get; private set; }
+        [SerializeField] CinemachineTargetGroup TargetGroup;
+        CinemachineTargetGroup.Target c_Target = new();
+        public bool IsLockedOn { get; private set; }
         [field: SerializeField] public PlayerMovementInputReader PlayerInputReader { get; private set; }
         protected override void Awake()
         {
@@ -18,14 +22,38 @@ namespace LOGIYGames
         private void Start()
         {
             PlayerInputReader?.Enable();
+            c_Target.Radius = 4f;
+            c_Target.Weight = 4f;
             SetPlayerControlOnCharacter(InitCharacter);
         }
         private void Update()
         {
-            Aim();
+            // Aim();
+            if (CurrentCharacter.Input.FocusPressed && !IsLockedOn)
+            {
+                LockTarget();
+            }
+            else if (!CurrentCharacter.Input.FocusPressed && IsLockedOn)
+            {
+                UnlockTarget();
+            }
             UpdateStrategies();
         }
+        private void LockTarget()
+        {
+            if (!CurrentCharacter.Targeting.HasTarget) return;  
+            c_Target.Object = CurrentCharacter.Targeting.CurrentTarget;
+            TargetGroup.Targets.Add(c_Target);
+            CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, TargetGroup.transform);
+            IsLockedOn = true;
+        }
+        private void UnlockTarget()
+        {
+            TargetGroup.Targets.Remove(c_Target);
 
+            CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, CurrentCharacter.CameraLookAt);
+            IsLockedOn = false;
+        }
         private void UpdateStrategies()
         {
             switch (CameraManager.Instance.CameraPerspectiveType)
@@ -67,8 +95,9 @@ namespace LOGIYGames
             CurrentCharacter?.ReleaseControl();
             CurrentCharacter = character;
             UpdateStrategies();
-
             CurrentCharacter?.TakeControl(PlayerInputReader);
+            TargetGroup.Targets.Clear();
+            TargetGroup.Targets.Add(new CinemachineTargetGroup.Target { Object = CurrentCharacter.CameraFollow, Radius = 0.2f, Weight = 10 });
 
             CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, CurrentCharacter.CameraLookAt);
         }

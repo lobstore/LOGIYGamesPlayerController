@@ -98,7 +98,6 @@ namespace LOGIYGames
         private void Update()
         {
             verticalVelocity = m_character.VelocityData.Gravity;
-            m_characterController.Move(verticalVelocity * Time.deltaTime);
 
             DebugDraw.DrawArrow(transform.position, totalVelocity, totalVelocityArrowColor);
             DebugDraw.DrawArrow(transform.position, planarVelocity, planarVelocityArrowColor);
@@ -119,7 +118,7 @@ namespace LOGIYGames
             }
             else
             {
-                totalVelocity = planarVelocity;
+                totalVelocity = planarVelocity + verticalVelocity;
             }
             if (m_sensors.IsOnSlope && UseProjectionOnPlane)
             {

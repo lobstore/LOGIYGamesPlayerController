@@ -2,6 +2,7 @@ using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using System;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.TextCore.Text;
@@ -23,6 +24,7 @@ namespace LOGIYGames.CharacterCore
         public IEventDispatcher EventBus { get; private set; }
 
         [Header("References")]
+
 
         public CharacterTargetingModule Targeting { get; private set; }
 
@@ -120,6 +122,8 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
         public UnityEvent OnControlReleased { get; } = new();
+
+
         private void Awake()
         {
             EventBus = new EventDispatcher();
@@ -130,7 +134,7 @@ namespace LOGIYGames.CharacterCore
                 ReleaseControl();
 
             }
-
+            Targeting.SetTarget( target);
             EventsSubscription();
         }
         private void Start()
@@ -180,6 +184,7 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+            Debug.Log(RotationStrategy.GetType());
             ReadInput();
             targetRotation = RotationStrategy.GetRotation();
             CalculateDeltaYaw();
@@ -188,33 +193,14 @@ namespace LOGIYGames.CharacterCore
             _actionStateMachine.Update();
             StatesDebug();
             DebugDraw.DrawArrow(transform.position, targetDirection * BaseSpeed, movementTargetDirectionArrowColor);
-            if (Input.FocusPressed)
-            {
-                LockTarget();
-            } else
-            {
-                UnlockTarget();
-            }
+
         }
-        private void LockTarget()
+        public void Aim()
         {
-            Transform nearestTarget = null;//FindNearestTarget();
 
-            if (nearestTarget == null)
-                return;
-
-            Targeting.SetTarget(nearestTarget);
-
-            RotationStrategy =
-                new TargetLockRotation(this);
         }
-        private void UnlockTarget()
-        {
-            Targeting.ClearTarget();
+        [SerializeField] Transform target;
 
-            RotationStrategy =
-                DefaultRotationStrategy;
-        }
         private Transform FindNearestTarget()
         {
             Collider[] hits =
@@ -354,7 +340,7 @@ namespace LOGIYGames.CharacterCore
         }
         public void Dash(DashPerformedEvent evt)
         {
-            VelocityData.Locomotion = targetDirection * (evt.planarForce + CurrentSpeed);
+            VelocityData.Locomotion = targetDirection * evt.planarForce;
             m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
         }
         private Vector3 ProjectVelocity()
@@ -363,13 +349,13 @@ namespace LOGIYGames.CharacterCore
         }
         public void GroundJump(JumpPerformedEvent evt)
         {
-            VelocityData.Locomotion = targetDirection * (evt.planarForce + CurrentSpeed);
+            VelocityData.Locomotion = targetDirection * evt.planarForce;
             m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
             JumpCount++;
         }
         public void WallJump(JumpPerformedEvent evt)
         {
-            VelocityData.Locomotion = Sensors.LegsFrontHit.normal * (evt.planarForce + CurrentSpeed);
+            VelocityData.Locomotion = Sensors.LegsFrontHit.normal * evt.planarForce;
             m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
             JumpCount++;
         }

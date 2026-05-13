@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4392871345642403633}
   - component: {fileID: 6856858958671481707}
-  - component: {fileID: 8605814776502108704}
-  - component: {fileID: 843236777794795246}
+  - component: {fileID: -2357260605345059529}
+  - component: {fileID: -1186924577869529211}
   - component: {fileID: 3354564584338512877}
   - component: {fileID: 6902940010051483142}
   - component: {fileID: 4357187487791016319}
@@ -83,7 +83,7 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
---- !u!114 &8605814776502108704
+--- !u!114 &-2357260605345059529
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,62 +92,89 @@ MonoBehaviour:
   m_GameObject: {fileID: 5902921758408453199}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  CameraDistance: 1.05
-  DeadZoneDepth: 0
-  Composition:
-    ScreenPosition: {x: -0.15, y: 0}
-    DeadZone:
-      Enabled: 1
-      Size: {x: 0, y: 0}
-    HardLimits:
-      Enabled: 1
-      Size: {x: 0.8, y: 0.8}
-      Offset: {x: 0, y: 0}
-  CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0.17, z: 0}
-  Damping: {x: 0.4, y: 0.8, z: 0}
-  Lookahead:
-    Enabled: 1
-    Time: 0.2
-    Smoothing: 6
-    IgnoreY: 1
---- !u!114 &843236777794795246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5902921758408453199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62d54399b04b4fa48a73e121d4937dd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ReferenceFrame: 0
-  RecenterTarget: 1
-  PanAxis:
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineOrbitalFollow
+  TargetOffset: {x: 0, y: 0, z: 0}
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  OrbitStyle: 0
+  Radius: 5
+  Orbits:
+    Top:
+      Radius: 2
+      Height: 5
+    Center:
+      Radius: 4
+      Height: 2.25
+    Bottom:
+      Radius: 2.5
+      Height: 0.1
+    SplineCurvature: 0.5
+  RecenteringTarget: 2
+  HorizontalAxis:
     Value: 0
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
     Recentering:
-      Enabled: 1
-      Wait: 2
-      Time: 5
+      Enabled: 0
+      Wait: 1
+      Time: 2
     Restrictions: 0
-  TiltAxis:
-    Value: 13.736436
-    Center: 0
-    Range: {x: -80, y: 80}
+  VerticalAxis:
+    Value: 17.5
+    Center: 17.5
+    Range: {x: -10, y: 45}
     Wrap: 0
     Recentering:
       Enabled: 0
-      Wait: 2
+      Wait: 1
       Time: 2
     Restrictions: 0
+  RadialAxis:
+    Value: 1
+    Center: 1
+    Range: {x: 1, y: 1}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+--- !u!114 &-1186924577869529211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5902921758408453199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f38bda98361e1de48a4ca2bd86ea3c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRotationComposer
+  Composition:
+    ScreenPosition: {x: 0, y: 0}
+    DeadZone:
+      Enabled: 0
+      Size: {x: 0.2, y: 0.2}
+    HardLimits:
+      Enabled: 0
+      Size: {x: 0.8, y: 0.8}
+      Offset: {x: 0, y: 0}
+  CenterOnActivate: 1
+  TargetOffset: {x: 0, y: 0, z: 0}
+  Damping: {x: 0.5, y: 0.5}
+  Lookahead:
+    Enabled: 0
+    Time: 0
+    Smoothing: 0
+    IgnoreY: 0
 --- !u!114 &3354564584338512877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,34 +256,47 @@ MonoBehaviour:
   IgnoreTimeScale: 1
   m_ControllerManager:
     Controllers:
-    - Name: Look X (Pan)
-      Owner: {fileID: 843236777794795246}
+    - Name: Look Orbit X
+      Owner: {fileID: -2357260605345059529}
       Enabled: 1
       Input:
         InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: 0.1
+        Gain: 2
         LegacyInput: 
-        LegacyGain: 0.1
-        CancelDeltaTime: 1
+        LegacyGain: 1
+        CancelDeltaTime: 0
       InputValue: 0
       Driver:
-        AccelTime: 0.1
-        DecelTime: 0.1
-    - Name: Look Y (Tilt)
-      Owner: {fileID: 843236777794795246}
+        AccelTime: 0.2
+        DecelTime: 0.2
+    - Name: Look Orbit Y
+      Owner: {fileID: -2357260605345059529}
       Enabled: 1
       Input:
         InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: -0.1
+        Gain: -2
         LegacyInput: 
-        LegacyGain: 0.1
-        CancelDeltaTime: 1
-      InputValue: -0
+        LegacyGain: 1
+        CancelDeltaTime: 0
+      InputValue: 0
       Driver:
-        AccelTime: 0.1
-        DecelTime: 0.1
+        AccelTime: 0.2
+        DecelTime: 0.2
+    - Name: Orbit Scale
+      Owner: {fileID: -2357260605345059529}
+      Enabled: 1
+      Input:
+        InputAction: {fileID: 6986982598937743682, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
+        Gain: -1
+        LegacyInput: 
+        LegacyGain: 1
+        CancelDeltaTime: 0
+      InputValue: 0
+      Driver:
+        AccelTime: 0
+        DecelTime: 0
   PlayerIndex: -1
-  AutoEnableInputs: 0
+  AutoEnableInputs: 1
 --- !u!114 &1843990008812083582
 MonoBehaviour:
   m_ObjectHideFlags: 0

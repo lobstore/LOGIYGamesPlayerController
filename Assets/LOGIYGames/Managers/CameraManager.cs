@@ -109,9 +109,6 @@ namespace LOGIYGames
                 cam.CameraLookAtTarget = LookAt;
             }
         }
-
-
-
         void SetPriorVirtualCamera(CinemachineCameraController cameraController)
         {
             foreach (var controller in cinemachineCameraControllers)

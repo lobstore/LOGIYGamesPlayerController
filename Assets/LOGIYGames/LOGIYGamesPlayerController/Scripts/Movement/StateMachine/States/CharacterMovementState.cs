@@ -19,6 +19,8 @@ namespace LOGIYGames.Movement
         public bool IsActionFrameElapsed => actionFrameTimer.IsFinished;
         public bool IsActionFrameInProgress => actionFrameTimer.IsRunning;
 
+        protected bool IsAimAllowed { get; set; } = true;
+
         protected CharacterMovementState(Character ctx, MovementStateData stateData)
         {
             _animator = ctx.GetComponent<Animator>();
@@ -94,6 +96,7 @@ namespace LOGIYGames.Movement
         {
             Move();
             Rotate();
+            Aim();
         }
         protected virtual void Move()
         {
@@ -110,6 +113,11 @@ namespace LOGIYGames.Movement
                 return;
             }
             _character.Rotate(_character.targetRotation, _character.TurnSmoothTime);
+        }
+        protected virtual void Aim()
+        {
+            if (IsAimAllowed)
+                _character.Aim();
         }
     }
 }

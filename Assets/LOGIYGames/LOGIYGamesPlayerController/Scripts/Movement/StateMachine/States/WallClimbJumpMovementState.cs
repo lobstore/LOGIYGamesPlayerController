@@ -11,6 +11,7 @@ namespace LOGIYGames.Movement
         public WallClimbJumpMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
+
         }
 
         public override void Enter()
