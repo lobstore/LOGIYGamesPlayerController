@@ -44141,6 +44141,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
+    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: GroundedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2787143992442695444, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -44289,6 +44293,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: CameraPerspectiveType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
+      propertyPath: cameraPerspectiveType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}

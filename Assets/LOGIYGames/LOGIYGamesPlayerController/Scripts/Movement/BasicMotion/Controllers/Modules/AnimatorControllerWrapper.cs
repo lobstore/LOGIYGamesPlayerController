@@ -1,3 +1,4 @@
+using LOGIYGames.CharacterCore;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -7,7 +8,7 @@ namespace LOGIYGames
         [SerializeField] private CharacterController m_characterController;
         [SerializeField] private CharacterGravityModule m_characterGravityModule;
         [SerializeField] private SensorsModule m_sensors;
-
+        [SerializeField] private Character character;
 
         public override float MaxStepHeight
         {
@@ -47,7 +48,7 @@ namespace LOGIYGames
         {
             if (m_characterGravityModule != null)
             {
-                m_characterGravityModule.Velocity = force;
+                character.VelocityData.Gravity= force;
             }
         }
 
@@ -71,7 +72,7 @@ namespace LOGIYGames
         }
         void Update()
         {
-            m_characterController.Move(m_characterGravityModule.Velocity*Time.deltaTime);
+            m_characterController.Move(character.VelocityData.Gravity * Time.deltaTime);
         }
     }
 }

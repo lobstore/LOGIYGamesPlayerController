@@ -1,7 +1,7 @@
 ﻿using LOGIYGames.CharacterCore;
 namespace LOGIYGames.Movement
 {
-    public class SwimMovementState : BaseCharacterMovementState
+    public class SwimMovementState : CharacterMovementState
     {
         public SwimMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {

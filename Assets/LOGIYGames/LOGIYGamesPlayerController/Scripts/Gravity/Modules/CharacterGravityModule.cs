@@ -19,9 +19,6 @@ namespace LOGIYGames
         public float MaxGravityForce = 9.84f;
         public float CurrentGravityForce;
 
-        public Vector3 Velocity { get => velocity; set => velocity = value; }
-        private Vector3 velocity;
-
         public bool UseGravity { get => useGravity; set => useGravity = value; }
 
         [Header("References")]
@@ -41,14 +38,14 @@ namespace LOGIYGames
             if (!useGravity)
             {
                 CurrentGravityForce = 0;
-                Velocity = Vector3.zero;
+                m_character.VelocityData.Gravity = Vector3.zero;
                 return;
             }
 
             // Check if grounded and on valid slope
             if (m_sensors != null &&
                 m_sensors.IsGrounded &&
-                Velocity.y < 0 &&
+                m_character.VelocityData.Gravity.y < 0 &&
                 m_sensors.IsValidSlope())
             {
                 CurrentGravityForce = groundMagnit;
@@ -57,12 +54,12 @@ namespace LOGIYGames
             {
                 CurrentGravityForce = MaxGravityForce;
             }
-            Velocity = Vector3.MoveTowards(Velocity, CurrentGravityForce * gravityDirection.normalized, Time.deltaTime * GravityAcceleration);
+            m_character.VelocityData.Gravity = Vector3.MoveTowards(m_character.VelocityData.Gravity, CurrentGravityForce * gravityDirection.normalized, Time.deltaTime * GravityAcceleration);
 
             // Check for overhead obstacles
             if (m_sensors != null && m_sensors.AboveHit.collider != null)
             {
-                Velocity = GravityDirection.normalized * 0.5f;
+                m_character.VelocityData.Gravity = GravityDirection.normalized * 0.5f;
             }
         }
     }

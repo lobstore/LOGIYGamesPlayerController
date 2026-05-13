@@ -8,7 +8,7 @@ namespace LOGIYGames.Movement
     /// Abstract base class for states with common functionality
     /// </summary>
     [Serializable]
-    public abstract class BaseCharacterMovementState : IState
+    public abstract class CharacterMovementState : IState
     {
         protected Character _character;
         protected ControllerWrapperBase _controller;
@@ -19,7 +19,7 @@ namespace LOGIYGames.Movement
         public bool IsActionFrameElapsed => actionFrameTimer.IsFinished;
         public bool IsActionFrameInProgress => actionFrameTimer.IsRunning;
 
-        protected BaseCharacterMovementState(Character ctx, MovementStateData stateData)
+        protected CharacterMovementState(Character ctx, MovementStateData stateData)
         {
             _animator = ctx.GetComponent<Animator>();
             _character = ctx;
@@ -62,8 +62,7 @@ namespace LOGIYGames.Movement
             {
                 _character.ResetSpeed();
             }
-            _character.RotationStrategy = _character.DefaultRotationStrategy;
-            _character.MovementStrategy = _character.DefaultMovementStrategy;
+            _character.ResetStrategies();
             if (actionFrameTimer.IsRunning)
             {
                 actionFrameTimer.Stop();

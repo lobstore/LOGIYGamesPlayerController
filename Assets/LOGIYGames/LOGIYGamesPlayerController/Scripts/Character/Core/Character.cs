@@ -4,6 +4,8 @@ using LOGIYGames.Shared.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.TextCore.Text;
+using UnityEngine.Windows;
 
 
 
@@ -21,6 +23,9 @@ namespace LOGIYGames.CharacterCore
         public IEventDispatcher EventBus { get; private set; }
 
         [Header("References")]
+
+        public CharacterTargetingModule Targeting { get; private set; }
+
 
         [field: SerializeField] private ControllerWrapperBase m_motor;
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
@@ -55,7 +60,14 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
         #region Velocity Variables
+
+
         [Header("Movement Configuration")]
+        
+        
+        public CharacterVelocityData VelocityData {  get; private set; }
+
+
         public float BaseSpeed;
         /// <summary>
         /// Gets or sets the deceleration value.
@@ -85,9 +97,6 @@ namespace LOGIYGames.CharacterCore
 
         public float CurrentSpeed => SpeedMultiplier * BaseSpeed * Input.MovementInput.magnitude;
 
-        public Vector3 Velocity { get => velocity; set => velocity = value; }
-
-        private Vector3 velocity;
         private float deltaYaw;
         public Quaternion targetRotation { get; set; }
         public Vector3 targetDirection { get; set; }
@@ -114,7 +123,8 @@ namespace LOGIYGames.CharacterCore
         private void Awake()
         {
             EventBus = new EventDispatcher();
-
+            Targeting = new();
+            VelocityData = new();
             if (InputProvider == null)
             {
                 ReleaseControl();
@@ -172,16 +182,72 @@ namespace LOGIYGames.CharacterCore
             base.OnUpdate(deltaTime);
             ReadInput();
             targetRotation = RotationStrategy.GetRotation();
-            targetDirection = MovementStrategy.GetMovementDirection().normalized;
             CalculateDeltaYaw();
+            targetDirection = MovementStrategy.GetMovementDirection();
             _movementStateMachine.Update();
             _actionStateMachine.Update();
             StatesDebug();
             DebugDraw.DrawArrow(transform.position, targetDirection * BaseSpeed, movementTargetDirectionArrowColor);
+            if (Input.FocusPressed)
+            {
+                LockTarget();
+            } else
+            {
+                UnlockTarget();
+            }
         }
+        private void LockTarget()
+        {
+            Transform nearestTarget = null;//FindNearestTarget();
 
+            if (nearestTarget == null)
+                return;
+
+            Targeting.SetTarget(nearestTarget);
+
+            RotationStrategy =
+                new TargetLockRotation(this);
+        }
+        private void UnlockTarget()
+        {
+            Targeting.ClearTarget();
+
+            RotationStrategy =
+                DefaultRotationStrategy;
+        }
+        private Transform FindNearestTarget()
+        {
+            Collider[] hits =
+                Physics.OverlapSphere(
+                    transform.position,
+                    15f);
+
+            Transform bestTarget = null;
+
+            float bestDistance = float.MaxValue;
+
+            foreach (var hit in hits)
+            {
+                float dist =
+                    Vector3.Distance(
+                        transform.position,
+                        hit.transform.position);
+
+                if (dist < bestDistance)
+                {
+                    bestDistance = dist;
+                    bestTarget = hit.transform;
+                }
+            }
+
+            return bestTarget;
+        }
         private void ReadInput()
         {
+            if (InputProvider==null)
+            {
+                return;
+            }
             Input = InputProvider.GetInput();
         }
         private void SmoothHeightChanging()
@@ -228,7 +294,7 @@ namespace LOGIYGames.CharacterCore
             if (turnSpeed > 0f)
             {
                 // Smooth rotation using Slerp
-                Quaternion smoothedRotation = Quaternion.Slerp(m_motor.Rotation, targetRotation, TurnSmoothTime * Time.fixedDeltaTime);
+                Quaternion smoothedRotation = Quaternion.Slerp(m_motor.Rotation, targetRotation, turnSpeed * Time.fixedDeltaTime);
                 m_motor.SetRotation(smoothedRotation);
             }
             else
@@ -253,22 +319,22 @@ namespace LOGIYGames.CharacterCore
         {
             if (Input.MovementInput.magnitude > 0)
             {
-                Velocity = Vector3.Lerp(Velocity, moveDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
+                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, moveDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
 
             }
             else
             {
-                if (Velocity.magnitude > 0.0001f)
+                if (VelocityData.Locomotion.magnitude > 0.0001f)
                 {
 
-                    Velocity = Vector3.Lerp(Velocity, Vector3.zero, Deceleration * Time.deltaTime);
+                    VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, Vector3.zero, Deceleration * Time.deltaTime);
                 }
                 else
                 {
-                    Velocity = Vector3.zero;
+                    VelocityData.Locomotion = Vector3.zero;
                 }
             }
-            m_motor.Move(Velocity);
+            m_motor.Move(VelocityData.Locomotion);
         }
         public void ForceMove(Vector3 moveDirection)
         {
@@ -284,38 +350,38 @@ namespace LOGIYGames.CharacterCore
         }
         private void SlipJump(SlipPerformedEvent evt)
         {
-            Velocity = m_motor.transform.forward * evt.planarForce;
+            VelocityData.Locomotion = m_motor.transform.forward * evt.planarForce;
         }
         public void Dash(DashPerformedEvent evt)
         {
-            Velocity = targetDirection * (evt.planarForce + CurrentSpeed);
+            VelocityData.Locomotion = targetDirection * (evt.planarForce + CurrentSpeed);
             m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
         }
         private Vector3 ProjectVelocity()
         {
-            return Vector3.ProjectOnPlane(Velocity, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-m_motor.transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
+            return Vector3.ProjectOnPlane(VelocityData.Locomotion, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-m_motor.transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
         }
         public void GroundJump(JumpPerformedEvent evt)
         {
-            Velocity = targetDirection * (evt.planarForce + CurrentSpeed);
+            VelocityData.Locomotion = targetDirection * (evt.planarForce + CurrentSpeed);
             m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
             JumpCount++;
         }
         public void WallJump(JumpPerformedEvent evt)
         {
-            Velocity = Sensors.LegsFrontHit.normal * (evt.planarForce + CurrentSpeed);
+            VelocityData.Locomotion = Sensors.LegsFrontHit.normal * (evt.planarForce + CurrentSpeed);
             m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
             JumpCount++;
         }
         public void Roll(RollPerformedEvent evt)
         {
-            Velocity = m_motor.transform.forward * evt.planarForce;
+            VelocityData.Locomotion = m_motor.transform.forward * evt.planarForce;
             m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
         }
 
         public void ResetVelocity()
         {
-            velocity = Vector3.zero;
+            VelocityData.Reset();
             targetDirection = Vector3.zero;
             m_motor.ResetVelocity();
         }
@@ -339,11 +405,11 @@ namespace LOGIYGames.CharacterCore
                 UnityEngine.Debug.LogError("No MovementPreset provided");
             }
         }
-        public void AddMovementStateMachineTransition(BaseCharacterMovementState from, BaseCharacterMovementState to, Func<bool> condition)
+        public void AddMovementStateMachineTransition(CharacterMovementState from, CharacterMovementState to, Func<bool> condition)
         {
             _movementStateMachine.AddTransition(from, to, new FuncPredicate(condition));
         }
-        public void AddAnyMovementStateMachineTransition(BaseCharacterMovementState to, Func<bool> condition)
+        public void AddAnyMovementStateMachineTransition(CharacterMovementState to, Func<bool> condition)
         {
             _movementStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
         }
@@ -367,6 +433,11 @@ namespace LOGIYGames.CharacterCore
         public void TakeControl(ICharacterInputReader inputReader)
         {
             InputProvider = inputReader;
+            ResetStrategies();
+        }
+
+        public void ResetStrategies()
+        {
             RotationStrategy = DefaultRotationStrategy;
             MovementStrategy = DefaultMovementStrategy;
         }
@@ -418,5 +489,22 @@ namespace LOGIYGames.CharacterCore
         }
 
     }
+    [Serializable]
+    public class CharacterTargetingModule
+    {
+        public Transform CurrentTarget { get; private set; }
 
+        public bool HasTarget =>
+            CurrentTarget != null;
+
+        public void SetTarget(Transform target)
+        {
+            CurrentTarget = target;
+        }
+
+        public void ClearTarget()
+        {
+            CurrentTarget = null;
+        }
+    }
 }

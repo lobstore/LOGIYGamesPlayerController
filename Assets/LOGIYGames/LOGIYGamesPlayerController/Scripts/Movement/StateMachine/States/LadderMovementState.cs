@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class LadderMovementState : BaseCharacterMovementState
+    public class LadderMovementState : CharacterMovementState
     {
         LadderMovementController ladderMovementController;
         public LadderMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)

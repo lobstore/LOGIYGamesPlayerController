@@ -2,7 +2,7 @@
 using UnityEngine;
 namespace LOGIYGames.Movement
 {
-    public class WallRunMovementState : BaseCharacterMovementState
+    public class WallRunMovementState : CharacterMovementState
     {
         Vector3 normal;
         public WallRunMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)

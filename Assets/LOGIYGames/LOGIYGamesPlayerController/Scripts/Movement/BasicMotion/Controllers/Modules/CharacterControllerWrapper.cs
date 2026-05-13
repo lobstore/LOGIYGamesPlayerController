@@ -97,16 +97,8 @@ namespace LOGIYGames
 
         private void Update()
         {
-            verticalVelocity = m_characterGravityModule.Velocity;
-            if (!m_sensors.IsValidSlope() && verticalVelocity.y < 0 && UseProjectionOnPlane)
-            {
-                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.ClampMagnitude(verticalVelocity, slopeSlideMaxSpeed), m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
-
-            }
-            else
-            {
-                totalVelocity = planarVelocity + verticalVelocity;
-            }
+            verticalVelocity = m_character.VelocityData.Gravity;
+            m_characterController.Move(verticalVelocity * Time.deltaTime);
 
             DebugDraw.DrawArrow(transform.position, totalVelocity, totalVelocityArrowColor);
             DebugDraw.DrawArrow(transform.position, planarVelocity, planarVelocityArrowColor);
@@ -120,7 +112,15 @@ namespace LOGIYGames
         {
 
             planarVelocity = a_move;
+            if (!m_sensors.IsValidSlope() && verticalVelocity.y < 0 && UseProjectionOnPlane)
+            {
+                totalVelocity = Vector3.Lerp(totalVelocity, Vector3.ProjectOnPlane(Vector3.ClampMagnitude(verticalVelocity, slopeSlideMaxSpeed), m_sensors.BelowHit.normal), Time.deltaTime * slopeSlideAcceleration);
 
+            }
+            else
+            {
+                totalVelocity = planarVelocity;
+            }
             if (m_sensors.IsOnSlope && UseProjectionOnPlane)
             {
                 ProjectVelocity();
@@ -162,7 +162,7 @@ namespace LOGIYGames
         {
             if (m_characterGravityModule != null)
             {
-                m_characterGravityModule.Velocity = force;
+                m_character.VelocityData.Gravity = force;
             }
         }
 

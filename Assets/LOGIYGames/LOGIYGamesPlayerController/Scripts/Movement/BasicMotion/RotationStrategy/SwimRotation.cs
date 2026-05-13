@@ -16,7 +16,7 @@ namespace LOGIYGames
         {
             if (Character.Input.MovementInput.magnitude > 0f)
             {
-                return Quaternion.LookRotation(Character.Velocity);
+                return Quaternion.LookRotation(Character.VelocityData.Locomotion);
             }
             else
             {

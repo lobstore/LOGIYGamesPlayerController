@@ -1,4 +1,5 @@
 using KinematicCharacterController;
+using LOGIYGames.CharacterCore;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -13,6 +14,7 @@ namespace LOGIYGames
         private CapsuleCollider m_capsuleCollider;
         private SensorsModule m_SensorsModule;
         private CharacterGravityModule m_characterGravityModule;
+        private Character character;
         
         #region Public Properties
         public override float MaxStepHeight
@@ -106,7 +108,7 @@ namespace LOGIYGames
             if (m_characterGravityModule != null)
             {
                 m_kinematicMotor.ForceUnground(0.1f);
-                m_characterGravityModule.Velocity =  force;
+                character.VelocityData.Gravity =  force;
             }
         }
         
@@ -140,7 +142,7 @@ namespace LOGIYGames
             currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, 1f - Mathf.Exp(-StableMovementSharpness * deltaTime));
             if (m_characterGravityModule != null && !m_kinematicMotor.GroundingStatus.IsStableOnGround)
             {
-                currentVelocity += m_characterGravityModule.Velocity;
+                currentVelocity += character.VelocityData.Gravity;
             }
         }
         
