@@ -2,11 +2,8 @@ using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using System;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.TextCore.Text;
-using UnityEngine.Windows;
 
 
 
@@ -24,7 +21,8 @@ namespace LOGIYGames.CharacterCore
         public IEventDispatcher EventBus { get; private set; }
 
         [Header("References")]
-
+        //TEST
+        [SerializeField] Transform target;
 
         public CharacterTargetingModule Targeting { get; private set; }
 
@@ -52,6 +50,7 @@ namespace LOGIYGames.CharacterCore
         public bool IsOnLadder { get; set; }
         public bool IsWallClimbing { get; set; }
         public bool IsSwimming { get; set; }
+        public bool IsAimig { get; set; }
 
         #region Inpector Debug Variables
         private string _currentMovementStateName;
@@ -65,9 +64,9 @@ namespace LOGIYGames.CharacterCore
 
 
         [Header("Movement Configuration")]
-        
-        
-        public CharacterVelocityData VelocityData {  get; private set; }
+
+
+        public CharacterVelocityData VelocityData { get; private set; }
 
 
         public float BaseSpeed;
@@ -123,7 +122,6 @@ namespace LOGIYGames.CharacterCore
 
         public UnityEvent OnControlReleased { get; } = new();
 
-
         private void Awake()
         {
             EventBus = new EventDispatcher();
@@ -132,9 +130,10 @@ namespace LOGIYGames.CharacterCore
             if (InputProvider == null)
             {
                 ReleaseControl();
-
             }
-            Targeting.SetTarget( target);
+            //TEST
+            Targeting.SetTarget(target);
+
             EventsSubscription();
         }
         private void Start()
@@ -185,6 +184,7 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnUpdate(deltaTime);
             Debug.Log(RotationStrategy.GetType());
+            UpdateVelocity();
             ReadInput();
             targetRotation = RotationStrategy.GetRotation();
             CalculateDeltaYaw();
@@ -195,45 +195,25 @@ namespace LOGIYGames.CharacterCore
             DebugDraw.DrawArrow(transform.position, targetDirection * BaseSpeed, movementTargetDirectionArrowColor);
 
         }
-        public void Aim()
+        public void LockOn()
         {
-
-        }
-        [SerializeField] Transform target;
-
-        private Transform FindNearestTarget()
-        {
-            Collider[] hits =
-                Physics.OverlapSphere(
-                    transform.position,
-                    15f);
-
-            Transform bestTarget = null;
-
-            float bestDistance = float.MaxValue;
-
-            foreach (var hit in hits)
+            if (Input.FocusPressed)
             {
-                float dist =
-                    Vector3.Distance(
-                        transform.position,
-                        hit.transform.position);
-
-                if (dist < bestDistance)
-                {
-                    bestDistance = dist;
-                    bestTarget = hit.transform;
-                }
+                IsAimig = true;
+                RotationStrategy = new TargetLockRotation(this);
+                MovementStrategy = new CameraRelativeMovement(this);
             }
-
-            return bestTarget;
+            else
+            {
+                RotationStrategy = DefaultRotationStrategy; 
+                MovementStrategy = DefaultMovementStrategy;
+                IsAimig = false;
+            }
         }
+
         private void ReadInput()
         {
-            if (InputProvider==null)
-            {
-                return;
-            }
+            if (InputProvider == null) return;
             Input = InputProvider.GetInput();
         }
         private void SmoothHeightChanging()
@@ -303,9 +283,14 @@ namespace LOGIYGames.CharacterCore
 
         public void Move(Vector3 moveDirection)
         {
-            if (Input.MovementInput.magnitude > 0)
+            m_motor.Move(VelocityData.Locomotion);
+        }
+
+        private void UpdateVelocity()
+        {
+            if (targetDirection.magnitude > 0)
             {
-                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, moveDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
+                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, targetDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
 
             }
             else
@@ -320,8 +305,8 @@ namespace LOGIYGames.CharacterCore
                     VelocityData.Locomotion = Vector3.zero;
                 }
             }
-            m_motor.Move(VelocityData.Locomotion);
         }
+
         public void ForceMove(Vector3 moveDirection)
         {
             m_motor.ForceMove(moveDirection);

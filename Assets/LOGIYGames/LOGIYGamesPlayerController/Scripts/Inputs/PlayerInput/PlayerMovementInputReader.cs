@@ -50,6 +50,7 @@ namespace LOGIYGames
             input.SprintPressing = m_SprintAction.IsPressed();
             input.AttackPressed = m_AttackAction.WasPressedThisFrame();
             input.InteractPressed = m_InteractAction.WasPressedThisFrame();
+            input.CrouchPressed = m_CrouchAction.WasPressedThisFrame();
             return input;
         }
 

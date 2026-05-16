@@ -293,7 +293,6 @@ namespace LOGIYGames.Animation
             );
             character.EventBus.Subscribe<MovementStoppedEvent>((evt) =>
             {
-                Debug.Log(evt.direction);
                 switch (evt.direction)
                 {
                     case Direction.Left:

@@ -117,7 +117,13 @@ namespace LOGIYGames.Movement
         protected virtual void Aim()
         {
             if (IsAimAllowed)
-                _character.Aim();
+            {
+                _character.LockOn();
+            }
+            else
+            {
+                _character.IsAimig = false;
+            }
         }
     }
 }
