@@ -14,7 +14,7 @@ namespace LOGIYGames
 
         public Quaternion GetRotation()
         {
-            return Quaternion.LookRotation(Character.targetDirection);
+            return Quaternion.LookRotation(Character.TargetDirection);
         }
     }
 }

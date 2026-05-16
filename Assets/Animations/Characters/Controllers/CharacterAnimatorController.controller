@@ -3738,7 +3738,7 @@ BlendTree:
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
-  m_BlendType: 1
+  m_BlendType: 3
 --- !u!1102 &355732011570857334
 AnimatorState:
   serializedVersion: 6
@@ -5859,10 +5859,10 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: -755563290163886764}
   m_Tag: 
-  m_SpeedParameter: 
+  m_SpeedParameter: Speed
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_TimeParameter: Speed
 --- !u!1102 &6330394843608715955
 AnimatorState:
   serializedVersion: 6

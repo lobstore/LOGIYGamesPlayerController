@@ -4,12 +4,12 @@ using UnityEngine.EventSystems;
 
 namespace LOGIYGames
 {
-    public class CameraRelativeMovement : IMovementStrategy
+    public class PlanarMovement : IMovementStrategy
     {
 
         Character Character;
 
-        public CameraRelativeMovement(Character character)
+        public PlanarMovement(Character character)
         {
             Character = character;
         }
@@ -17,9 +17,9 @@ namespace LOGIYGames
         public Vector3 GetMovementDirection()
         {
 
-            var fwd = Camera.main.transform.forward;
+            var fwd = Character.Input.LookForward;
             fwd.y = 0;
-            var rght = Camera.main.transform.right;
+            var rght = Character.Input.LookRight;
             rght.y = 0;
             return rght.normalized * Character.Input.MovementInput.x + fwd.normalized * Character.Input.MovementInput.y;
 

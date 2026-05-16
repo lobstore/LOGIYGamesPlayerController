@@ -18,7 +18,7 @@ namespace LOGIYGames
         private bool isLockedOn;
 
         public bool IsLockedOn { get { return isLockedOn; } private set { isLockedOn = value; OnTargetLocked.Invoke(isLockedOn); } }
-        [field: SerializeField] public PlayerMovementInputReader PlayerInputReader { get; private set; }
+        [field: SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
         protected override void Awake()
         {
             base.Awake();
@@ -45,17 +45,19 @@ namespace LOGIYGames
         private void Update()
         {
             // Aim();
-            if (CurrentCharacter.IsAimig && !IsLockedOn)
+            CharacterInput input= PlayerInputReader.GetInput();
+            CurrentCharacter.UpdateInput(input);
+            if (input.FocusPressed && !IsLockedOn)
             {
-                LockTarget();
+                LockOnTarget();
             }
-            else if (!CurrentCharacter.IsAimig && IsLockedOn)
+            else if (!input.FocusPressed && IsLockedOn)
             {
-                UnlockTarget();
+                LockOffTarget();
             }
             UpdateStrategies();
         }
-        private void LockTarget()
+        private void LockOnTarget()
         {
             if (!CurrentCharacter.Targeting.HasTarget) return;
 
@@ -64,7 +66,7 @@ namespace LOGIYGames
 
             IsLockedOn = true;
         }
-        private void UnlockTarget()
+        private void LockOffTarget()
         {
             //TargetGroup.Targets.Remove(c_Target);
 
@@ -76,24 +78,20 @@ namespace LOGIYGames
             switch (CameraManager.Instance.CurrentCameraPerspectiveType)
             {
                 case CameraPerspectiveType.FirstPerson:
-                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new CameraAlongRotation();
+                    CurrentCharacter.DefaultMovementStrategy = new PlanarMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new FirstPersonPlanarRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
-                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new CameraRelativeRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultMovementStrategy = new PlanarMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new ThirdPersonPlanarRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
-                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new CameraAlongRotation();
+                    CurrentCharacter.DefaultMovementStrategy = new PlanarMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new FirstPersonPlanarRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.Top_Down:
-                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new CameraRelativeRotation(CurrentCharacter);
-                    break;
-                case CameraPerspectiveType.LockOn:
-                    CurrentCharacter.DefaultMovementStrategy = new CameraRelativeMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new TargetLockRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultMovementStrategy = new PlanarMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new ThirdPersonPlanarRotation(CurrentCharacter);
                     break;
                 default:
                     break;
@@ -104,7 +102,6 @@ namespace LOGIYGames
             CurrentCharacter?.ReleaseControl();
             CurrentCharacter = character;
             UpdateStrategies();
-            CurrentCharacter?.TakeControl(PlayerInputReader);
 
 
             CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, CurrentCharacter.CameraLookAt);

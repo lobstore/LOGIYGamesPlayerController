@@ -19,8 +19,6 @@ namespace LOGIYGames.Movement
         public bool IsActionFrameElapsed => actionFrameTimer.IsFinished;
         public bool IsActionFrameInProgress => actionFrameTimer.IsRunning;
 
-        protected bool IsAimAllowed { get; set; } = true;
-
         protected CharacterMovementState(Character ctx, MovementStateData stateData)
         {
             _animator = ctx.GetComponent<Animator>();
@@ -32,7 +30,7 @@ namespace LOGIYGames.Movement
         public virtual void Enter()
         {
             IsActiveState = true;
-            Debug.Log("Entered State" + GetType());
+            Debug.Log("Entered State: " + GetType());
             if (_data.ResetVelocityOnEnter)
             {
                 _character.ResetVelocity();
@@ -78,7 +76,7 @@ namespace LOGIYGames.Movement
 
         protected virtual void ChangeSpeed()
         {
-            if (_character.Input.MovementInput.magnitude > 0)
+            if (_character.TargetDirection.magnitude > 0)
             {
                 _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, _data.Speed, _character.Acceleration * Time.deltaTime);
             }
@@ -97,6 +95,7 @@ namespace LOGIYGames.Movement
             Move();
             Rotate();
             Aim();
+
         }
         protected virtual void Move()
         {
@@ -104,7 +103,7 @@ namespace LOGIYGames.Movement
             {
                 return;
             }
-            _character.Move(_character.targetDirection);
+            _character.Move(_character.TargetDirection);
         }
         protected virtual void Rotate()
         {
@@ -112,17 +111,18 @@ namespace LOGIYGames.Movement
             {
                 return;
             }
-            _character.Rotate(_character.targetRotation, _character.TurnSmoothTime);
+            _character.Rotate(_character.TargetRotation, _character.TurnSmoothTime);
         }
         protected virtual void Aim()
         {
-            if (IsAimAllowed)
+            if (!_data.IsAimAllowed) return;
+            if (_character.Input.FocusPressed)
             {
-                _character.LockOn();
+                _character.RotationStrategy = new TargetLockRotation(_character);
             }
             else
             {
-                _character.IsAimig = false;
+                _character.RotationStrategy = _character.DefaultRotationStrategy;
             }
         }
     }

@@ -11,6 +11,8 @@ namespace LOGIYGames
         public float Speed = 0;
         public float ActionFrameDuration = 0;
 
+
+        public bool IsAimAllowed;
         public bool IsAnimationDrivenMovement;
         public bool IsAnimationDrivenRotation;
         public bool UseProjectionOnPlane;

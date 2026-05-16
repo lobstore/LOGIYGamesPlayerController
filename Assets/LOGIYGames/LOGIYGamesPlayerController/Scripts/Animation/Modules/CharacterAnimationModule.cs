@@ -359,18 +359,23 @@ namespace LOGIYGames.Animation
         public override void OnFixedUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
-            DebugDraw.DrawArrow(transform.position,animator.velocity, Color.white);
+            DebugDraw.DrawArrow(transform.position, animator.velocity, Color.white);
             animator.SetFloat("Speed", character.SpeedMultiplier);
-            if (character.RotationStrategy is CameraRelativeRotation or InputRelativeRotation)
+            if (character.RotationStrategy is ThirdPersonPlanarRotation or InputRelativeRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
                 animator.SetFloat("VerticalSpeed", character.Input.MovementInput.magnitude, 0.05f, Time.deltaTime);
             }
-            else
+            else if (character.RotationStrategy is WallClimbRotaion)
             {
-                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, 0.1f, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, 0.1f, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, 0.05f, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, 0.05f, Time.deltaTime);
+            }
+            else 
+            {
+                animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.ScaledTargetDirection).z);
+                animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(character.ScaledTargetDirection).x);
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
@@ -385,7 +390,7 @@ namespace LOGIYGames.Animation
 
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
-        
+
         private void OnAnimatorMove()
         {
             if (animator.applyRootMotion)

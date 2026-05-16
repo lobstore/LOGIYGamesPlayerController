@@ -44195,7 +44195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5964245791863302330, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: AutoMaxStep
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: target
@@ -44338,6 +44338,10 @@ PrefabInstance:
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: <CameraInput>k__BackingField
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
+      propertyPath: currentCameraPerspectiveType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: defaultCameraPerspectiveType

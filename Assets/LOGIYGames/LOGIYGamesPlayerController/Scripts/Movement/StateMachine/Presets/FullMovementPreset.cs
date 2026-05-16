@@ -109,7 +109,7 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_idleMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && character.JumpCount < groundJumpMovementStateData.MaxJumpCount && _groundJumpMovementState.CanEnter());
             character.AddMovementStateMachineTransition(_idleMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 45);
             character.AddMovementStateMachineTransition(_idleMovementState, _walkMovementState, () => Input.GetKeyDown(KeyCode.Z));
-            character.AddMovementStateMachineTransition(_idleMovementState, _runMovementState, () => character.targetDirection.magnitude > 0f);
+            character.AddMovementStateMachineTransition(_idleMovementState, _runMovementState, () => character.TargetDirection.magnitude > 0f);
             character.AddMovementStateMachineTransition(_idleMovementState, _ladderMovementState, () => character.GetComponent<LadderMovementController>().Ladder!=null && character.Input.InteractPressed);
             //character.AddMovementStateMachineTransition(_idleMovementState, _flyMovementState, () => character.Input.FocusPressed);
             // ----- Walk State Transitions -----
@@ -124,7 +124,7 @@ namespace LOGIYGames
             character.AddMovementStateMachineTransition(_runMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
             
             character.AddMovementStateMachineTransition(_runMovementState, _stopMovementState, () => _runMovementState.IsActionFrameElapsed && _stopMovementState.CanEnter() && character.Input.MovementInput.magnitude == 0);
-            character.AddMovementStateMachineTransition(_runMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 60&& Mathf.Abs(character.DeltaYaw) <160);
+            character.AddMovementStateMachineTransition(_runMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 60&& Mathf.Abs(character.DeltaYaw) <160 && !character.IsAimig);
 
 
             character.AddMovementStateMachineTransition(_stopMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
@@ -154,7 +154,8 @@ namespace LOGIYGames
             // TurnBack
             character.AddMovementStateMachineTransition(_backTurnMovementState, _runMovementState, () => !_backTurnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude > 0);
             character.AddMovementStateMachineTransition(_backTurnMovementState, _idleMovementState, () => !_backTurnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude == 0);
-            character.AddMovementStateMachineTransition(_turnMovementState, _idleMovementState, () => !_turnMovementState.IsDurationTimerRunning);
+            character.AddMovementStateMachineTransition(_turnMovementState, _idleMovementState, () => !_turnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude==0);
+            character.AddMovementStateMachineTransition(_turnMovementState, _runMovementState, () => !_turnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude >= 0);
             // ----- From Ladder State Transitions -----
             character.AddMovementStateMachineTransition(_ladderMovementState, _idleMovementState, () => character.GetComponent<LadderMovementController>().Ladder==null);
             // ----- From Wall Climb State Transitions -----

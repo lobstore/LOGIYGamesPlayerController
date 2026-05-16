@@ -69,13 +69,13 @@ namespace LOGIYGames.AI
             navMeshAgent.autoTraverseOffMeshLink = false;
             InputReader = new(this);
             var character = GetComponent<Character>();
-            character.OnControlReleased.AddListener(() =>
-            {
-                character.TakeControl(InputReader);
-                character.RotationStrategy = new InputRelativeRotation(character);
-                character.MovementStrategy = new InputRelativeMovement(character);
+            //character.OnControlReleased.AddListener(() =>
+            //{
+            //    character.UpdateInput(InputReader);
+            //    character.RotationStrategy = new InputRelativeRotation(character);
+            //    character.MovementStrategy = new InputRelativeMovement(character);
 
-            });
+            //});
 
         }
 

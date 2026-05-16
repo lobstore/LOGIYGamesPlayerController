@@ -16,7 +16,6 @@ namespace LOGIYGames.Movement
         public override void Exit()
         {
             base.Exit();
-            _character.MovementStrategy = _character.DefaultMovementStrategy;
             _character.GetComponent<ControllerWrapperBase>().UseGravity = true;
             _character.IsFlying = false;
         }

@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace LOGIYGames
 {
-    public class PlayerMovementInputReader : ICharacterInputReader
+    public class PlayerInputReader : ICharacterInputReader
     {
 
         InputActionMap CharacterActionMap;
@@ -17,7 +17,7 @@ namespace LOGIYGames
         InputAction m_FocusAction;
         InputAction m_AttackAction;
         InputAction m_InteractAction;
-        public PlayerMovementInputReader(InputActionAsset InputActions )
+        public PlayerInputReader(InputActionAsset InputActions )
         {
             CharacterActionMap = InputActions.FindActionMap("CharacterInputs");
             m_MoveAction = CharacterActionMap.FindAction("Move");
@@ -51,6 +51,8 @@ namespace LOGIYGames
             input.AttackPressed = m_AttackAction.WasPressedThisFrame();
             input.InteractPressed = m_InteractAction.WasPressedThisFrame();
             input.CrouchPressed = m_CrouchAction.WasPressedThisFrame();
+            input.LookForward = Camera.main.transform.forward;
+            input.LookRight = Camera.main.transform.right;
             return input;
         }
 
