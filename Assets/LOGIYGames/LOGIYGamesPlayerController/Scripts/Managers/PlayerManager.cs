@@ -99,11 +99,9 @@ namespace LOGIYGames
         }
         public void SetPlayerControlOnCharacter(Character character)
         {
-            CurrentCharacter?.ReleaseControl();
             CurrentCharacter = character;
             UpdateStrategies();
-
-
+            CurrentCharacter.ResetStrategies();
             CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, CurrentCharacter.CameraLookAt);
         }
     }

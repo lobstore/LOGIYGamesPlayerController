@@ -1,7 +1,6 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
-using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -18,13 +17,11 @@ namespace LOGIYGames.Movement
                 speed = _character.SpeedMultiplier
             });
             _character.MovementStrategy = new NoneMovement();
-            //_character.RotationStrategy = new NoneRotation(_character.transform);
         }
         public override void Exit()
         {
             base.Exit();
             _character.MovementStrategy = _character.DefaultMovementStrategy;
-            //_character.RotationStrategy = _character.DefaultRotationStrategy;
         }
     }
 

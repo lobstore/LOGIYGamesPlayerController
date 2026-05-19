@@ -72,6 +72,7 @@ namespace LOGIYGames.Movement
         public virtual void LogicUpdate()
         {
             ChangeSpeed();
+            Rotate();
         }
 
         protected virtual void ChangeSpeed()
@@ -93,7 +94,7 @@ namespace LOGIYGames.Movement
         public virtual void PhysicsUpdate()
         {
             Move();
-            Rotate();
+
             Aim();
 
         }

@@ -12,7 +12,6 @@ namespace LOGIYGames.CharacterCore
 
     public class Character : MonoModuleBase, IControllable
     {
-        public ICharacterInputReader InputProvider { get; set; }
         public CharacterInput Input { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
@@ -51,6 +50,7 @@ namespace LOGIYGames.CharacterCore
         public bool IsWallClimbing { get; set; }
         public bool IsSwimming { get; set; }
         public bool IsAimig { get; set; }
+        public bool IsMantling { get; set; }
         #endregion
         #region Inpector Debug Variables
         private string _currentMovementStateName;
@@ -132,10 +132,6 @@ namespace LOGIYGames.CharacterCore
             EventBus = new EventDispatcher();
             Targeting = new();
             VelocityData = new();
-            if (InputProvider == null)
-            {
-                ReleaseControl();
-            }
             //TEST
             Targeting.SetTarget(target);
 
@@ -171,6 +167,7 @@ namespace LOGIYGames.CharacterCore
             EventBus.Subscribe<RollPerformedEvent>(Roll);
             EventBus.Subscribe<DashPerformedEvent>(Dash);
             EventBus.Subscribe<SlipPerformedEvent>(SlipJump);
+            EventBus.Subscribe<MantlingEvent>((evt) => { Debug.Log(evt.ObstacleHeight); });
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
@@ -188,7 +185,6 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            Debug.Log(RotationStrategy.GetType());
             UpdateVelocity();
             TargetRotation = RotationStrategy.GetRotation();
             CalculateDeltaYaw();
@@ -277,7 +273,6 @@ namespace LOGIYGames.CharacterCore
 
                 ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, TargetDirection.normalized, Acceleration * Time.deltaTime);
                 //VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, targetDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
-                
             }
             else
             {
@@ -343,6 +338,7 @@ namespace LOGIYGames.CharacterCore
         {
             VelocityData.Reset();
             TargetDirection = Vector3.zero;
+            ScaledTargetDirection = Vector3.zero;
             m_motor.ResetVelocity();
         }
         public void ResetSpeed()
@@ -401,20 +397,13 @@ namespace LOGIYGames.CharacterCore
             MovementStrategy = DefaultMovementStrategy;
         }
 
-        public void ReleaseControl()
-        {
-            InputProvider = new NoneInput();
-            RotationStrategy = new NoneRotation(this);
-            MovementStrategy = new NoneMovement();
-            OnControlReleased.Invoke();
-        }
         #endregion
         public Direction GetRelativeMovementDirection()
         {
             Vector3 localDir;
-            if (TargetDirection.magnitude > 0)
+            if (VelocityData.Locomotion.magnitude > 0)
             {
-                localDir = m_motor.transform.InverseTransformDirection(TargetDirection);
+                localDir = m_motor.transform.InverseTransformDirection(VelocityData.Locomotion);
             }
             else
             {

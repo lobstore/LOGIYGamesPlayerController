@@ -10,6 +10,8 @@ namespace LOGIYGames
         public abstract float Height { get; set; }
         public abstract float SlopeLimit { get; set; }
         public bool UseProjectionOnPlane {  get; set; }
+        public virtual bool IsNoClip { private get; set; }
+        public virtual Collider Collider => null;
         public abstract Vector3 Center { get; set; }
         public virtual Vector3 Position => gameObject.transform.position;
         public virtual Quaternion Rotation => gameObject.transform.rotation;

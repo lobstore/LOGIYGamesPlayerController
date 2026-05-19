@@ -2,7 +2,6 @@ using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
-using UnityEngine;
 
 namespace LOGIYGames
 {

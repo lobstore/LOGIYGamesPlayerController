@@ -8,31 +8,41 @@ namespace LOGIYGames
     public class FullMovementPreset : MovementStatesPresetBase
     {
 
-
+        [Header("GroundLocomotion")]
         public MovementStateData idleMovementStateData;
         public MovementStateData runMovementStateData;
         public MovementStateData walkMovementStateData;
         public MovementStateData sprintMovementStateData;
-        public MovementStateData fallingMovementStateData;
         public MovementStateData slidingMovementStateData;
+        [Header("AirLocomotion")]
+        public MovementStateData flyMovementStateData;
+        public MovementStateData fallingMovementStateData;
+        [Header("Waterlocomotion")]
+        public MovementStateData swimMovementStateData;
+        [Header("WallLocomotion")]
+        public MovementStateData wallClimbMovementStateData;
+        public MovementStateData wallRunMovementStateData;
+        [Header("LadderLocomotion")]
         public MovementStateData ladderIdleMovementStateData;
         public MovementStateData ladderClimbMovementStateData;
-        public MovementStateData wallClimbMovementStateData;
-        public MovementStateData swimMovementStateData;
-        public MovementStateData flyMovementStateData;
-        public MovementStateData wallRunMovementStateData;
-
+        public TimedMovementStateData ladderEnterMovementStateData;
+        public TimedMovementStateData ladderExitMovementStateData;
+        [Header("Actions")]
         public JumpStateData groundJumpMovementStateData;
-        public JumpStateData wallJumpMovementStateData;
         public JumpStateData rollMovementStateData;
         public JumpStateData dashMovementStateData;
         public JumpStateData slipMovementStateData;
-        public TimedMovementStateData backTurnMovementStateData;
-        public TimedMovementStateData turnMovementStateData;
-        public TimedMovementStateData landingMovementStateData;
-        public TimedMovementStateData ladderEnterMovementStateData;
-        public TimedMovementStateData ladderExitMovementStateData;
+        public JumpStateData wallJumpMovementStateData;
+        public TimedMovementStateData mantlingMovementStateData;
+
+        [Header("Stopping")]
         public TimedMovementStateData stoppingMovementStateData;
+        [Header("Landing")]
+        public TimedMovementStateData landingMovementStateData;
+        [Header("Turn")]
+        public TurnMovementStateData backTurnMovementStateData;
+        public TurnMovementStateData turnMovementStateData;
+
 
         private LadderMovementState _ladderMovementState;
         private WallClimbMovementState _wallClimbMovementState;
@@ -53,6 +63,8 @@ namespace LOGIYGames
         private StopMovementState _stopMovementState;
         private SwimMovementState _swimMovementState;
         private FlyMovementState _flyMovementState;
+        private MantlingMovementState _mantlingMovementState;
+
 
         private IdleActionState _idleActionState;
 
@@ -86,6 +98,7 @@ namespace LOGIYGames
             _swimMovementState = new SwimMovementState(character, swimMovementStateData);
             _flyMovementState = new FlyMovementState(character, flyMovementStateData);
             _wallRunMovementState = new WallRunMovementState(character, wallRunMovementStateData);
+            _mantlingMovementState = new MantlingMovementState(character, mantlingMovementStateData);
             _idleActionState = new IdleActionState(character);
         }
 
@@ -107,65 +120,72 @@ namespace LOGIYGames
             //NOTE: SEQUENCE IS IMPORTANT
             // ----- Idle State Transitions -----
             character.AddMovementStateMachineTransition(_idleMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && character.JumpCount < groundJumpMovementStateData.MaxJumpCount && _groundJumpMovementState.CanEnter());
-            character.AddMovementStateMachineTransition(_idleMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 45);
+            character.AddMovementStateMachineTransition(_idleMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > turnMovementStateData.MinAngle);
             character.AddMovementStateMachineTransition(_idleMovementState, _walkMovementState, () => Input.GetKeyDown(KeyCode.Z));
-            character.AddMovementStateMachineTransition(_idleMovementState, _runMovementState, () => character.TargetDirection.magnitude > 0f);
-            character.AddMovementStateMachineTransition(_idleMovementState, _ladderMovementState, () => character.GetComponent<LadderMovementController>().Ladder!=null && character.Input.InteractPressed);
+            character.AddMovementStateMachineTransition(_idleMovementState, _runMovementState, () => HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_idleMovementState, _ladderMovementState, () => character.GetComponent<LadderMovementController>().Ladder != null && character.Input.InteractPressed);
             //character.AddMovementStateMachineTransition(_idleMovementState, _flyMovementState, () => character.Input.FocusPressed);
             // ----- Walk State Transitions -----
             character.AddMovementStateMachineTransition(_walkMovementState, _idleMovementState, () => Input.GetKeyDown(KeyCode.Z));
-            character.AddMovementStateMachineTransition(_walkMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
+            character.AddMovementStateMachineTransition(_walkMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > backTurnMovementStateData.MinAngle);
             // ----- Run State Transitions -----
             character.AddMovementStateMachineTransition(_runMovementState, _dashMovementState, () => _dashMovementState.CanEnter() && character.Input.SprintPressing);
             character.AddMovementStateMachineTransition(_runMovementState, _slipMovementState, () => _slipMovementState.CanEnter() && character.Input.CrouchPressed);
-            character.AddMovementStateMachineTransition(_slipMovementState, _idleMovementState, () => _slipMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude == 0);
-            character.AddMovementStateMachineTransition(_slipMovementState, _runMovementState, () => _slipMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude > 0);
+            character.AddMovementStateMachineTransition(_runMovementState, _mantlingMovementState, () => _mantlingMovementState.CanEnter());
+            character.AddMovementStateMachineTransition(_fallingMovementState, _mantlingMovementState, () => _mantlingMovementState.CanEnter());
+            character.AddMovementStateMachineTransition(_groundJumpMovementState, _mantlingMovementState, () => _mantlingMovementState.CanEnter());
+            character.AddMovementStateMachineTransition(_wallJumpMovementState, _mantlingMovementState, () => _mantlingMovementState.CanEnter());
+            character.AddMovementStateMachineTransition(_mantlingMovementState, _idleMovementState, () => _mantlingMovementState.IsDurationTimerElapsed);
+
+
+            character.AddMovementStateMachineTransition(_slipMovementState, _idleMovementState, () => _slipMovementState.IsDurationTimerElapsed && !HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_slipMovementState, _runMovementState, () => _slipMovementState.IsDurationTimerElapsed && HasMovementInput(character));
             character.AddMovementStateMachineTransition(_runMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && _groundJumpMovementState.CanEnter());
-            character.AddMovementStateMachineTransition(_runMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
-            
-            character.AddMovementStateMachineTransition(_runMovementState, _stopMovementState, () => _runMovementState.IsActionFrameElapsed && _stopMovementState.CanEnter() && character.Input.MovementInput.magnitude == 0);
-            character.AddMovementStateMachineTransition(_runMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 60&& Mathf.Abs(character.DeltaYaw) <160 && !character.IsAimig);
+            character.AddMovementStateMachineTransition(_runMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > backTurnMovementStateData.MinAngle);
 
+            character.AddMovementStateMachineTransition(_runMovementState, _stopMovementState, () => _runMovementState.IsActionFrameElapsed && _stopMovementState.CanEnter() && !HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_runMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > turnMovementStateData.MinAngle && Mathf.Abs(character.DeltaYaw) < turnMovementStateData.MaxAngle && !character.IsAimig);
 
-            character.AddMovementStateMachineTransition(_stopMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 120);
+            // ----- Stop State Transitions -----
+            character.AddMovementStateMachineTransition(_stopMovementState, _backTurnMovementState, () => _backTurnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > backTurnMovementStateData.MinAngle);
             character.AddMovementStateMachineTransition(_stopMovementState, _idleMovementState, () => _stopMovementState.IsDurationTimerElapsed);
-            character.AddMovementStateMachineTransition(_stopMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > 45);
+            character.AddMovementStateMachineTransition(_stopMovementState, _turnMovementState, () => _turnMovementState.CanEnter() && Mathf.Abs(character.DeltaYaw) > turnMovementStateData.MinAngle);
             // ----- Sprint State Transitions -----
             character.AddMovementStateMachineTransition(_sprintMovementState, _runMovementState, () => !character.Input.SprintPressing);
             character.AddMovementStateMachineTransition(_sprintMovementState, _stopMovementState, () => _stopMovementState.CanEnter() && (character.Input.MovementInput.magnitude == 0 || Mathf.Abs(character.DeltaYaw) > 120));
             character.AddMovementStateMachineTransition(_sprintMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && character.JumpCount < groundJumpMovementStateData.MaxJumpCount && _groundJumpMovementState.CanEnter());
             // ----- Jump State Transitions -----
-            character.AddMovementStateMachineTransition(_groundJumpMovementState, _runMovementState, () => character.Sensors.IsGrounded && _groundJumpMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude > 0);
-            character.AddMovementStateMachineTransition(_groundJumpMovementState, _idleMovementState, () => character.Sensors.IsGrounded && _groundJumpMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude == 0);
+            character.AddMovementStateMachineTransition(_groundJumpMovementState, _runMovementState, () => character.Sensors.IsGrounded && _groundJumpMovementState.IsDurationTimerElapsed && HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_groundJumpMovementState, _idleMovementState, () => character.Sensors.IsGrounded && _groundJumpMovementState.IsDurationTimerElapsed && !HasMovementInput(character));
             // ----- Dash State Transitions -----
             character.AddMovementStateMachineTransition(_dashMovementState, _sprintMovementState, () => character.Sensors.IsGrounded && character.Input.SprintPressing && !_dashMovementState.IsDurationTimerRunning);
-            character.AddMovementStateMachineTransition(_dashMovementState, _stopMovementState, () => character.Sensors.IsGrounded && character.Input.MovementInput.magnitude == 0 && !_dashMovementState.IsDurationTimerRunning);
-            character.AddMovementStateMachineTransition(_dashMovementState, _runMovementState, () => character.Sensors.IsGrounded && character.Input.MovementInput.magnitude > 0 && !_dashMovementState.IsDurationTimerRunning);
+            character.AddMovementStateMachineTransition(_dashMovementState, _stopMovementState, () => character.Sensors.IsGrounded && !HasMovementInput(character) && !_dashMovementState.IsDurationTimerRunning);
+            character.AddMovementStateMachineTransition(_dashMovementState, _runMovementState, () => character.Sensors.IsGrounded && HasMovementInput(character) && !_dashMovementState.IsDurationTimerRunning);
             // ----- Falling State Transitions -----
             character.AddMovementStateMachineTransition(_fallingMovementState, _landingMovementState, () => character.Sensors.IsGrounded);
             character.AddMovementStateMachineTransition(_fallingMovementState, _groundJumpMovementState, () => character.Input.JumpPressed && character.JumpCount < groundJumpMovementStateData.MaxJumpCount && _fallingMovementState.IsActionFrameInProgress && _groundJumpMovementState.CanEnter());
             character.AddMovementStateMachineTransition(_groundJumpMovementState, _wallRunMovementState, () => CanWallRun(character));
             // ----- Landing State Transitions -----
-            character.AddMovementStateMachineTransition(_landingMovementState, _runMovementState, () => character.Sensors.IsGrounded && _landingMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude > 0);
-            character.AddMovementStateMachineTransition(_landingMovementState, _idleMovementState, () => character.Sensors.IsGrounded && _landingMovementState.IsDurationTimerElapsed && character.Input.MovementInput.magnitude == 0);
+            character.AddMovementStateMachineTransition(_landingMovementState, _runMovementState, () => character.Sensors.IsGrounded && _landingMovementState.IsDurationTimerElapsed && HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_landingMovementState, _idleMovementState, () => character.Sensors.IsGrounded && _landingMovementState.IsDurationTimerElapsed && !HasMovementInput(character));
             // ----- Roll State Transitions -----
-            character.AddMovementStateMachineTransition(_rollMovementState, _runMovementState, () => character.IsGrounded && !_rollMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude > 0);
-            character.AddMovementStateMachineTransition(_rollMovementState, _idleMovementState, () => character.IsGrounded && !_rollMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude == 0);
+            character.AddMovementStateMachineTransition(_rollMovementState, _runMovementState, () => character.IsGrounded && !_rollMovementState.IsDurationTimerRunning && HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_rollMovementState, _idleMovementState, () => character.IsGrounded && !_rollMovementState.IsDurationTimerRunning && !HasMovementInput(character));
             // TurnBack
-            character.AddMovementStateMachineTransition(_backTurnMovementState, _runMovementState, () => !_backTurnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude > 0);
-            character.AddMovementStateMachineTransition(_backTurnMovementState, _idleMovementState, () => !_backTurnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude == 0);
-            character.AddMovementStateMachineTransition(_turnMovementState, _idleMovementState, () => !_turnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude==0);
-            character.AddMovementStateMachineTransition(_turnMovementState, _runMovementState, () => !_turnMovementState.IsDurationTimerRunning && character.Input.MovementInput.magnitude >= 0);
+            character.AddMovementStateMachineTransition(_backTurnMovementState, _runMovementState, () => !_backTurnMovementState.IsDurationTimerRunning && HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_backTurnMovementState, _idleMovementState, () => !_backTurnMovementState.IsDurationTimerRunning && !HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_turnMovementState, _idleMovementState, () => !_turnMovementState.IsDurationTimerRunning && !HasMovementInput(character));
+            character.AddMovementStateMachineTransition(_turnMovementState, _runMovementState, () => !_turnMovementState.IsDurationTimerRunning && HasMovementInput(character));
             // ----- From Ladder State Transitions -----
-            character.AddMovementStateMachineTransition(_ladderMovementState, _idleMovementState, () => character.GetComponent<LadderMovementController>().Ladder==null);
+            character.AddMovementStateMachineTransition(_ladderMovementState, _idleMovementState, () => character.GetComponent<LadderMovementController>().Ladder == null);
             // ----- From Wall Climb State Transitions -----
             character.AddMovementStateMachineTransition(_wallClimbMovementState, _idleMovementState, () => character.Input.InteractPressed || !character.Sensors.IsObstacleLegsFront || !character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") || (character.IsGrounded && character.Input.MovementInput.y < 0));
             character.AddMovementStateMachineTransition(_wallClimbMovementState, _wallJumpMovementState, () => _wallJumpMovementState.CanEnter() && character.Input.JumpPressed);
             character.AddMovementStateMachineTransition(_wallJumpMovementState, _idleMovementState, () => character.IsGrounded);
             character.AddMovementStateMachineTransition(_fallingMovementState, _wallClimbMovementState, () => character.Sensors.IsObstacleLegsFront && character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") && character.Input.MovementInput.y > 0);
             // ----- From Swimming State Transitions -----
-            character.AddMovementStateMachineTransition(_swimMovementState, _idleMovementState, () => character.IsGrounded && character.Input.MovementInput.y == 0);
-            character.AddMovementStateMachineTransition(_swimMovementState, _runMovementState, () => character.IsGrounded && character.Input.MovementInput.y > 0);
+            character.AddMovementStateMachineTransition(_swimMovementState, _idleMovementState, () => character.IsGrounded);
+            //character.AddMovementStateMachineTransition(_swimMovementState, _runMovementState, () => character.IsGrounded);
             // ----- From Fly State Transitions -----
             character.AddMovementStateMachineTransition(_flyMovementState, _idleMovementState, () => !character.Input.FocusPressed);
             // ----- From Wall Run State Transitions -----
@@ -173,6 +193,12 @@ namespace LOGIYGames
 
             character.AddAnyActionStateMachineTransition(_idleActionState, () => true);
         }
+
+        private static bool HasMovementInput(Character character)
+        {
+            return character.Input.MovementInput.magnitude > 0;
+        }
+
         private bool CanWallRun(Character character)
         {
             return     (character.Sensors.IsObstacleLegsLeft || character.Sensors.IsObstacleLegsRight)
@@ -192,7 +218,9 @@ namespace LOGIYGames
                         && !_wallJumpMovementState.IsDurationTimerRunning
                         && !character.Sensors.IsInWater
                         && !_flyMovementState.IsActiveState
-                        && !_wallRunMovementState.IsActiveState;
+                        && !_wallRunMovementState.IsActiveState
+                        && !_mantlingMovementState.IsActiveState
+                        && !_mantlingMovementState.CanEnter(); 
         }
     }
 }

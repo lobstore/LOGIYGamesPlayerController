@@ -7,6 +7,5 @@ namespace LOGIYGames.CharacterCore
         Transform CameraLookAt { get; }
         Transform CameraFollow { get; }
         void UpdateInput(CharacterInput input);
-        void ReleaseControl();
     }
 }

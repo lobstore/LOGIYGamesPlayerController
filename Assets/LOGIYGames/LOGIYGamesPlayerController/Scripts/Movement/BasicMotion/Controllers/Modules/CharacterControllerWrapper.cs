@@ -34,6 +34,23 @@ namespace LOGIYGames
         [SerializeField] Color totalVelocityArrowColor;
         #region Public Properties
 
+        private LayerMask excludeLayers;
+        private LayerMask includeLayers;
+        public override Collider Collider => m_characterController;
+        public override bool IsNoClip
+        {
+            set
+            {
+                if (value == true)
+                {
+                    m_characterController.excludeLayers = Physics.AllLayers;
+                }
+                else
+                {
+                    m_characterController.excludeLayers = excludeLayers;
+                }
+            }
+        }
         public override float MaxStepHeight
         {
             get { return m_characterController.stepOffset; }
@@ -92,6 +109,8 @@ namespace LOGIYGames
                     lastGroundedReport = new GroundedReport() { GroundedVelocity = m_characterController.velocity };
                 }
             });
+            excludeLayers = m_characterController.excludeLayers;
+            includeLayers = m_characterController.includeLayers;
         }
 
 
@@ -124,7 +143,10 @@ namespace LOGIYGames
             {
                 ProjectVelocity();
             }
-
+            if (m_characterController == null || !m_characterController.enabled)
+            {
+                transform.Translate(totalVelocity * Time.deltaTime);
+            } else
             m_characterController.Move(totalVelocity * Time.deltaTime);
         }
         public override void ForceMove(Vector3 a_move)

@@ -19,7 +19,7 @@ namespace LOGIYGames
             distanceTravelled = 0.01f;
             _character.RotationStrategy = new LadderClimbRotation(ladderMovementController);
             _character.MovementStrategy = new NoneMovement();
-            _controller .UseGravity = false;
+            _controller.UseGravity = false;
             _character.IsOnLadder = true;
         }
         public override void LogicUpdate()
@@ -35,7 +35,7 @@ namespace LOGIYGames
         {
             base.Exit();
             _controller.UseGravity = true;
-            _character.IsOnLadder =false;
+            _character.IsOnLadder = false;
             _character.RotationStrategy = _character.DefaultRotationStrategy;
             _character.MovementStrategy = _character.DefaultMovementStrategy;
         }

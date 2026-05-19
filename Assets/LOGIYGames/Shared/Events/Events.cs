@@ -57,4 +57,8 @@ namespace LOGIYGames.Shared.Character.Events
         public Direction direction;
         public float speed;
     }
+    public class MantlingEvent
+    {
+        public float ObstacleHeight;
+    }
 }

@@ -347,6 +347,25 @@ namespace LOGIYGames.Animation
             }
 
             );
+            character.EventBus.Subscribe<MantlingEvent>((evt) =>
+            {
+                if (evt.ObstacleHeight < 0.7f)
+                {
+                    PlayAnimation("StepOn_Little");
+                }
+                else if (evt.ObstacleHeight > 0.7f && evt.ObstacleHeight < 0.9f)
+                {
+                    PlayAnimation("StepOn_High");
+                }
+                else if (evt.ObstacleHeight > 0.9f && evt.ObstacleHeight <= 1.3f)
+                {
+                    PlayAnimation("Mantling_Low");
+                }
+                else if (evt.ObstacleHeight > 1.3f && evt.ObstacleHeight < 1.6f)
+                {
+                    PlayAnimation("Mantling_High");
+                }
+            });
         }
         public void PlayAnimation(string animname)
         {
@@ -372,7 +391,7 @@ namespace LOGIYGames.Animation
                 animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, 0.05f, Time.deltaTime);
                 animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, 0.05f, Time.deltaTime);
             }
-            else 
+            else
             {
                 animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.ScaledTargetDirection).z);
                 animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(character.ScaledTargetDirection).x);
@@ -395,8 +414,9 @@ namespace LOGIYGames.Animation
         {
             if (animator.applyRootMotion)
             {
-                controller.Move(animator.velocity);
-                controller.SetRotation(animator.rootRotation);
+                character.VelocityData.Locomotion = new Vector3( animator.velocity.x, animator.velocity.y, animator.velocity.z);
+                character.Move(character.VelocityData.Total);
+                character.Rotate(animator.rootRotation);
             }
         }
     }
