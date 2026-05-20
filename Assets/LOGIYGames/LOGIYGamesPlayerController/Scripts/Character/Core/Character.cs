@@ -12,6 +12,10 @@ namespace LOGIYGames.CharacterCore
 
     public class Character : MonoModuleBase, IControllable
     {
+        public Vector3 LeftHandPoint;
+        public Vector3 RightHandPoint;
+        public Vector3 RightHandNormal;
+        public Vector3 LeftHandNormal;
         public CharacterInput Input { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
@@ -167,7 +171,10 @@ namespace LOGIYGames.CharacterCore
             EventBus.Subscribe<RollPerformedEvent>(Roll);
             EventBus.Subscribe<DashPerformedEvent>(Dash);
             EventBus.Subscribe<SlipPerformedEvent>(SlipJump);
-            EventBus.Subscribe<MantlingEvent>((evt) => { Debug.Log(evt.ObstacleHeight); });
+            EventBus.Subscribe<MantlingEvent>((evt) =>
+            {
+             
+            });
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {

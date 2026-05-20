@@ -349,21 +349,22 @@ namespace LOGIYGames.Animation
             );
             character.EventBus.Subscribe<MantlingEvent>((evt) =>
             {
-                if (evt.ObstacleHeight < 0.7f)
+                switch (evt.Type)
                 {
-                    PlayAnimation("StepOn_Little");
-                }
-                else if (evt.ObstacleHeight > 0.7f && evt.ObstacleHeight < 0.9f)
-                {
-                    PlayAnimation("StepOn_High");
-                }
-                else if (evt.ObstacleHeight > 0.9f && evt.ObstacleHeight <= 1.3f)
-                {
-                    PlayAnimation("Mantling_Low");
-                }
-                else if (evt.ObstacleHeight > 1.3f && evt.ObstacleHeight < 1.6f)
-                {
-                    PlayAnimation("Mantling_High");
+                    case MantlingType.StepOnLow:
+                        PlayAnimation("StepOn_Little");
+                        break;
+                    case MantlingType.StepOnHigh:
+                        PlayAnimation("StepOn_High");
+                        break;
+                    case MantlingType.BracedLow:
+                        PlayAnimation("Mantling_Low");
+                        break;
+                    case MantlingType.BracedHigh:
+                        PlayAnimation("Mantling_High");
+                        break;
+                    default:
+                        break;
                 }
             });
         }
