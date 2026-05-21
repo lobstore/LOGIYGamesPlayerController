@@ -44,7 +44,7 @@ namespace LOGIYGames
 
         public override Vector3 Velocity => throw new System.NotImplementedException();
 
-        public override void Jump(Vector3 force)
+        public override void AddForce(Vector3 force)
         {
             if (m_characterGravityModule != null)
             {

@@ -12,10 +12,6 @@ namespace LOGIYGames.CharacterCore
 
     public class Character : MonoModuleBase, IControllable
     {
-        public Vector3 LeftHandPoint;
-        public Vector3 RightHandPoint;
-        public Vector3 RightHandNormal;
-        public Vector3 LeftHandNormal;
         public CharacterInput Input { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
@@ -52,6 +48,7 @@ namespace LOGIYGames.CharacterCore
         public bool IsSliding { get; set; }
         public bool IsOnLadder { get; set; }
         public bool IsWallClimbing { get; set; }
+        public bool IsWallRunning { get; set; }
         public bool IsSwimming { get; set; }
         public bool IsAimig { get; set; }
         public bool IsMantling { get; set; }
@@ -156,24 +153,30 @@ namespace LOGIYGames.CharacterCore
                 switch (evt.jumpType)
                 {
                     case JumpType.GroundJump:
-                        GroundJump(evt);
+                        Jump(TargetDirection * evt.planarForce, transform.up * evt.verticalForce);
                         break;
                     case JumpType.HangJump:
-                        WallJump(evt);
+                        Jump(Sensors.LegsFrontHit.normal * evt.planarForce, evt.verticalForce * transform.up);
                         break;
                     case JumpType.WallRunJump:
+                        break;
+                    case JumpType.Roll:
+                        Jump(transform.forward * evt.planarForce, transform.up * evt.verticalForce);
+                        break;
+                    case JumpType.Dash:
+                        Jump(TargetDirection * evt.planarForce, transform.up * evt.verticalForce);
+                        break;
+                    case JumpType.Slip:
+                        Jump(TargetDirection * evt.planarForce, Vector3.zero);
                         break;
                     default:
                         break;
                 }
 
             });
-            EventBus.Subscribe<RollPerformedEvent>(Roll);
-            EventBus.Subscribe<DashPerformedEvent>(Dash);
-            EventBus.Subscribe<SlipPerformedEvent>(SlipJump);
             EventBus.Subscribe<MantlingEvent>((evt) =>
             {
-             
+
             });
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
@@ -279,23 +282,13 @@ namespace LOGIYGames.CharacterCore
             {
 
                 ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, TargetDirection.normalized, Acceleration * Time.deltaTime);
-                //VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, targetDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
+                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, targetDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
             }
             else
             {
-                if (ScaledTargetDirection.magnitude > 0.0001f)
-                {
-
-                    ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, TargetDirection.normalized, Deceleration * Time.deltaTime);
-                    //VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, Vector3.zero, Deceleration * Time.deltaTime);
-                }
-                else
-                {
-                    ScaledTargetDirection = Vector3.zero;
-                    //VelocityData.Locomotion = Vector3.zero;
-                }
+                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, Deceleration * Time.deltaTime);
+                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, Vector3.zero, Deceleration * Time.deltaTime);
             }
-            VelocityData.Locomotion = ScaledTargetDirection.normalized * CurrentSpeed;
         }
 
         public void ForceMove(Vector3 moveDirection)
@@ -306,39 +299,19 @@ namespace LOGIYGames.CharacterCore
         {
             m_motor.SetPosition(position);
         }
-        public void Slide()
+        public void Jump(Vector3 hForce, Vector3 vForce)
         {
-            m_motor.Move(ProjectVelocity());
-        }
-        private void SlipJump(SlipPerformedEvent evt)
-        {
-            VelocityData.Locomotion = m_motor.transform.forward * evt.planarForce;
-        }
-        public void Dash(DashPerformedEvent evt)
-        {
-            VelocityData.Locomotion = TargetDirection * evt.planarForce;
-            m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
+            VelocityData.Locomotion = hForce;
+            VelocityData.Gravity = vForce;
+            m_motor.AddForce(new Vector3(VelocityData.Locomotion.x, VelocityData.Gravity.y, VelocityData.Locomotion.z));
         }
         private Vector3 ProjectVelocity()
         {
             return Vector3.ProjectOnPlane(VelocityData.Locomotion, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-m_motor.transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
         }
-        public void GroundJump(JumpPerformedEvent evt)
+        public void Slide()
         {
-            VelocityData.Locomotion = TargetDirection * evt.planarForce;
-            m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
-            JumpCount++;
-        }
-        public void WallJump(JumpPerformedEvent evt)
-        {
-            VelocityData.Locomotion = Sensors.LegsFrontHit.normal * evt.planarForce;
-            m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
-            JumpCount++;
-        }
-        public void Roll(RollPerformedEvent evt)
-        {
-            VelocityData.Locomotion = m_motor.transform.forward * evt.planarForce;
-            m_motor.Jump(new Vector3(0, evt.verticalForce, 0));
+            m_motor.Move(ProjectVelocity());
         }
 
         public void ResetVelocity()

@@ -9,18 +9,6 @@ namespace LOGIYGames.Shared.Character.Events
         public float verticalForce;
         public float planarForce;
     }
-    public class DashPerformedEvent : JumpPerformedEvent
-    {
-
-
-    }
-    public class RollPerformedEvent : JumpPerformedEvent
-    {
-
-    }
-    public class SlipPerformedEvent : JumpPerformedEvent
-    {
-    }
     public class TurnPerformedEvent
     {
         public float movementSpeed;
@@ -60,5 +48,9 @@ namespace LOGIYGames.Shared.Character.Events
     public partial class MantlingEvent
     {
         public MantlingType Type;
+    }
+    public partial class WallrunEnterEvent
+    {
+        public bool IsRightSide;
     }
 }

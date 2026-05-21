@@ -33,7 +33,7 @@ namespace LOGIYGames
         public JumpStateData dashMovementStateData;
         public JumpStateData slipMovementStateData;
         public JumpStateData wallJumpMovementStateData;
-        public TimedMovementStateData mantlingMovementStateData;
+        public MantlingMovmentStateData mantlingMovementStateData;
 
         [Header("Stopping")]
         public TimedMovementStateData stoppingMovementStateData;

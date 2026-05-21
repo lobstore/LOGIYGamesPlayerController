@@ -17,8 +17,9 @@ namespace LOGIYGames
             base.Enter();
             Direction direction = _character.GetRelativeMovementDirection();
 
-            _character.EventBus.Publish(new DashPerformedEvent
+            _character.EventBus.Publish(new JumpPerformedEvent
             {
+                jumpType = JumpType.Dash,
                 planarForce = _jumpStateData.PlanarJumpForce,
                 direction = direction
             });

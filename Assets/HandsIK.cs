@@ -4,17 +4,18 @@ using UnityEngine;
 namespace LOGIYGames
 {
     [RequireComponent(typeof(Animator))]
-    public class MantleIKController : MonoBehaviour
+    public class HandsIK : MonoBehaviour
     {
         private Animator _animator;
-
-        [SerializeField] private Character character;
+        public Vector3 LeftHandPoint { get; set; }
+        public Vector3 LeftHandNormal { get; set; }
+        public Vector3 RightHandPoint { get; set; }
+        public Vector3 RightHandNormal { get; set; }
 
         [SerializeField]
         private float ikWeightSpeed = 10f;
         float target;
         private float _ikWeight;
-        bool IsEnabled;
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -46,13 +47,13 @@ namespace LOGIYGames
 
             ApplyHandIK(
                 AvatarIKGoal.LeftHand,
-                character?.LeftHandPoint ?? Vector3.zero,
-                character?.LeftHandNormal ?? Vector3.up);
+                LeftHandPoint,
+                LeftHandNormal);
 
             ApplyHandIK(
                 AvatarIKGoal.RightHand,
-                character?.RightHandPoint ?? Vector3.zero,
-                character?.RightHandNormal ?? Vector3.up);
+                RightHandPoint,
+                RightHandNormal);
         }
 
         private void ApplyHandIK(

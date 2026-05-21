@@ -158,7 +158,7 @@ namespace LOGIYGames
 
         #region Jump Method
 
-        public override void Jump(Vector3 force)
+        public override void AddForce(Vector3 force)
         {
             m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z);
             m_rigidbody.AddForce(force, ForceMode.Impulse);

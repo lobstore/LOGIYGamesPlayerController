@@ -39,7 +39,7 @@ namespace LOGIYGames
                 agent.enabled = true;
             }
         }
-        public override void Jump(Vector3 force)
+        public override void AddForce(Vector3 force)
         {
             agent.enabled = false;
             if (characterGravityModule != null)

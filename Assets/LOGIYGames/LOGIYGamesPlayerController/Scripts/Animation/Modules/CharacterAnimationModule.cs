@@ -50,48 +50,34 @@ namespace LOGIYGames.Animation
                         break;
                     case JumpType.WallRunJump:
                         break;
-                    default:
-                        break;
-                }
-
-
-                character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
-            {
-                switch (evt.jumpType)
-                {
-                    case JumpType.GroundJump:
+                    case JumpType.Dash:
                         switch (evt.direction)
                         {
                             case Direction.Left:
-                                PlayAnimation(_data.Jump_Grounded_Left);
+                                PlayAnimation(_data.Dash_Left);
                                 break;
                             case Direction.Right:
-                                PlayAnimation(_data.Jump_Grounded_Right);
+                                PlayAnimation(_data.Dash_Right);
                                 break;
                             case Direction.Forward:
-                                PlayAnimation(_data.Jump_Grounded_Forward);
+                                PlayAnimation(_data.Dash_Forward);
                                 break;
                             case Direction.Backward:
-                                PlayAnimation(_data.Jump_Grounded_Backward);
-                                break;
-                            case Direction.Up:
-                                PlayAnimation(_data.Jump_Grounded_Up);
+                                PlayAnimation(_data.Dash_Backward);
                                 break;
                             default:
                                 break;
                         }
                         break;
-                    case JumpType.HangJump:
-                        PlayAnimation(_data.Jump_Braced_Backward);
+                    case JumpType.Slip:
+                        PlayAnimation("Slipjump");
                         break;
-                    case JumpType.WallRunJump:
+                    case JumpType.Roll:
+                        PlayAnimation(_data.Roll_Forward);
                         break;
                     default:
                         break;
                 }
-
-
-            });
             });
             character.EventBus.Subscribe<LandedEvent>((evt) =>
             {
@@ -177,29 +163,29 @@ namespace LOGIYGames.Animation
                 }
 
             });
-            character.EventBus.Subscribe<RollPerformedEvent>((evt) => { PlayAnimation(_data.Roll_Forward); });
-            character.EventBus.Subscribe<DashPerformedEvent>((evt) =>
-            {
+            //character.EventBus.Subscribe<JumpPerformedEvent>((evt) => { PlayAnimation(_data.Roll_Forward); });
+            //character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
+            //{
 
-                switch (evt.direction)
-                {
-                    case Direction.Left:
-                        PlayAnimation(_data.Dash_Left);
-                        break;
-                    case Direction.Right:
-                        PlayAnimation(_data.Dash_Right);
-                        break;
-                    case Direction.Forward:
-                        PlayAnimation(_data.Dash_Forward);
-                        break;
-                    case Direction.Backward:
-                        PlayAnimation(_data.Dash_Backward);
-                        break;
-                    default:
-                        break;
-                }
+            //    switch (evt.direction)
+            //    {
+            //        case Direction.Left:
+            //            PlayAnimation(_data.Dash_Left);
+            //            break;
+            //        case Direction.Right:
+            //            PlayAnimation(_data.Dash_Right);
+            //            break;
+            //        case Direction.Forward:
+            //            PlayAnimation(_data.Dash_Forward);
+            //            break;
+            //        case Direction.Backward:
+            //            PlayAnimation(_data.Dash_Backward);
+            //            break;
+            //        default:
+            //            break;
+            //    }
 
-            });
+            //});
             character.EventBus.Subscribe<TurnPerformedEvent>((evt) =>
             {
                 if (evt.movementSpeed > 0.5)
@@ -286,11 +272,11 @@ namespace LOGIYGames.Animation
                 }
             }
             );
-            character.EventBus.Subscribe<SlipPerformedEvent>((evt) =>
-            {
-                PlayAnimation("Slipjump");
-            }
-            );
+            //character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
+            //{
+            //    PlayAnimation("Slipjump");
+            //}
+            //);
             character.EventBus.Subscribe<MovementStoppedEvent>((evt) =>
             {
                 switch (evt.direction)
@@ -367,6 +353,17 @@ namespace LOGIYGames.Animation
                         break;
                 }
             });
+            character.EventBus.Subscribe<WallrunEnterEvent>((evt) =>
+            {
+                if (evt.IsRightSide)
+                {
+                    PlayAnimation("Wallrun_RightSide");
+                }
+                else
+                {
+                    PlayAnimation("Wallrun_LeftSide");
+                }
+            });
         }
         public void PlayAnimation(string animname)
         {
@@ -407,6 +404,7 @@ namespace LOGIYGames.Animation
             animator.SetBool("IsWallClimbing", character.IsWallClimbing);
             animator.SetBool("IsSwimming", character.IsSwimming);
             animator.SetBool("IsFlying", character.IsFlying);
+            animator.SetBool("IsWallRunning", character.IsWallRunning);
 
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
@@ -415,7 +413,7 @@ namespace LOGIYGames.Animation
         {
             if (animator.applyRootMotion)
             {
-                character.VelocityData.Locomotion = new Vector3( animator.velocity.x, animator.velocity.y, animator.velocity.z);
+                character.VelocityData.Locomotion = new Vector3(animator.velocity.x, animator.velocity.y, animator.velocity.z);
                 character.Move(character.VelocityData.Total);
                 character.Rotate(animator.rootRotation);
             }

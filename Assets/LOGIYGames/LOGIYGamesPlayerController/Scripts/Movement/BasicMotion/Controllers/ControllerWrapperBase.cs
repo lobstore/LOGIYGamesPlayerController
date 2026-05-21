@@ -22,7 +22,7 @@ namespace LOGIYGames
         public virtual void ForceMove(Vector3 a_move) { }
         public abstract void SetRotation(Quaternion a_targetRotation);
         public abstract void SetPosition(Vector3 a_position);
-        public abstract void Jump(Vector3 force);
+        public abstract void AddForce(Vector3 force);
         public abstract void ResetVelocity();
     }
 }

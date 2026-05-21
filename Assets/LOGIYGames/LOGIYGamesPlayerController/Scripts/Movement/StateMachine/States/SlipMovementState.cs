@@ -1,6 +1,7 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
+using LOGIYGames.Shared.Enums;
 
 namespace LOGIYGames
 {
@@ -14,21 +15,12 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            _character.MovementStrategy = new NoneMovement();
-            _character.EventBus.Publish(new SlipPerformedEvent()
+            _character.EventBus.Publish(new JumpPerformedEvent
             {
+                jumpType = JumpType.Slip,
                 planarForce = _stateData.PlanarJumpForce,
                 verticalForce = _stateData.VerticalJumpForce,
             });
-        }
-        protected override void Rotate()
-        {
-
-        }
-        public override void Exit()
-        {
-            base.Exit();
-            _character.MovementStrategy = _character.DefaultMovementStrategy;
         }
 
     }
