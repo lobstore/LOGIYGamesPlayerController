@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
-    public class WallClimbJumpMovementState : TimedMovementState
+    public class HangJumpMovementState : TimedMovementState
     {
         private JumpStateData _stateData;
-        public WallClimbJumpMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
+        public HangJumpMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
 

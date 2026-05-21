@@ -57,7 +57,7 @@ namespace LOGIYGames
         private FallingMovementState _fallingMovementState;
         private SprintMovementState _sprintMovementState;
         private GroundJumpMovementState _groundJumpMovementState;
-        private WallClimbJumpMovementState _wallJumpMovementState;
+        private HangJumpMovementState _wallJumpMovementState;
         private RollMovementState _rollMovementState;
         private DashMovementState _dashMovementState;
         private StopMovementState _stopMovementState;
@@ -85,7 +85,7 @@ namespace LOGIYGames
             _sprintMovementState = new SprintMovementState(character, sprintMovementStateData);
             _fallingMovementState = new FallingMovementState(character, fallingMovementStateData);
             _groundJumpMovementState = new GroundJumpMovementState(character, groundJumpMovementStateData);
-            _wallJumpMovementState = new WallClimbJumpMovementState(character, wallJumpMovementStateData);
+            _wallJumpMovementState = new HangJumpMovementState(character, wallJumpMovementStateData);
             _rollMovementState = new RollMovementState(character, rollMovementStateData);
             _backTurnMovementState = new BackTurnMovementState(character, backTurnMovementStateData);
             _landingMovementState = new LandingMovementState(character, landingMovementStateData);

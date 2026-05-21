@@ -529,7 +529,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Mantling_Low
-  m_Speed: 1
+  m_Speed: 0.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 5887092751168767619}
@@ -5102,9 +5102,6 @@ AnimatorStateMachine:
   - {fileID: -5388596237994117299}
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: 7767915367919655174}
-    second:
-    - {fileID: -1454230607591849997}
   - first: {fileID: 4341349951785146096}
     second:
     - {fileID: 5645522821523587758}
@@ -5135,6 +5132,9 @@ AnimatorStateMachine:
   - first: {fileID: 3380480326788101725}
     second:
     - {fileID: 8230941520829489959}
+  - first: {fileID: 7767915367919655174}
+    second:
+    - {fileID: -1454230607591849997}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -80, y: 170, z: 0}
   m_EntryPosition: {x: 340, y: -90, z: 0}
@@ -5943,9 +5943,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 1
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.63592243
+  m_TransitionDuration: 0.22485006
+  m_TransitionOffset: 0.14319004
+  m_ExitTime: 0.76031446
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -6067,7 +6067,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: StepOn_High
-  m_Speed: 1.2
+  m_Speed: 0.83
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1597509704804388281}

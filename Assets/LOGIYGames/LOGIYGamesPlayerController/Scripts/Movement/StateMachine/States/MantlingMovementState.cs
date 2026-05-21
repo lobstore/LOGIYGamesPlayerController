@@ -14,15 +14,15 @@ namespace LOGIYGames
         private Vector3 _mantleTargetPosition;
         private Vector3 _mantleStartPosition;
 
-        private Transform _mantleTargetTransform;
-        private Vector3 _localMantlePoint;
-
         private float checkDistance = 1f;
 
         private HandsIK mantleIKController;
 
-        private float lastObstacleHeight;
-        private Vector3 lastObstaclePosition;
+        private float obstacleHeight;
+        private RaycastHit obstacleTopPoint;
+
+        private Transform _mantleTargetTransform;
+        private Vector3 _mantleTargetLocalPoint;
 
         #endregion
 
@@ -33,6 +33,9 @@ namespace LOGIYGames
 
         private Vector3 _leftHandNormal;
         private Vector3 _rightHandNormal;
+
+        private Vector3 _ledgePoint;
+        private Vector3 _ledgeNormal;
 
         #endregion
 
@@ -49,7 +52,7 @@ namespace LOGIYGames
 
         #endregion
 
-        #region State Lifecycle
+        #region Lifecycle
 
         public override void Enter()
         {
@@ -72,7 +75,28 @@ namespace LOGIYGames
 
             _mantleStartPosition = _character.transform.position;
 
-            UpdateMantleTargetPosition();
+            // --- target binding ---
+            _mantleTargetTransform = obstacleTopPoint.collider != null
+                ? obstacleTopPoint.collider.transform
+                : null;
+
+            if (_mantleTargetTransform != null)
+            {
+                _mantleTargetLocalPoint =
+                    _mantleTargetTransform.InverseTransformPoint(obstacleTopPoint.point);
+
+                _mantleTargetPosition = obstacleTopPoint.point;
+            }
+            else
+            {
+                _mantleTargetPosition = obstacleTopPoint.point;
+            }
+
+            // фиксируем базовую точку для рук (но будем обновлять оффсет)
+            _ledgePoint = obstacleTopPoint.point;
+            _ledgeNormal = obstacleTopPoint.normal;
+
+            CalculateHandTargets(_ledgePoint, _ledgeNormal);
             UpdateHandTargets();
 
             _controller.IsNoClip = true;
@@ -85,8 +109,6 @@ namespace LOGIYGames
             DisableHandIK();
             EnableFootIK();
 
-            UpdateMantleTargetPosition();
-
             _character.transform.position = _mantleTargetPosition;
 
             _controller.UseGravity = true;
@@ -97,233 +119,113 @@ namespace LOGIYGames
         {
             base.PhysicsUpdate();
 
-            UpdateMantleTargetPosition();
-            UpdateHandTargets();
+            // --- обновление цели (движущаяся платформа) ---
+            if (_mantleTargetTransform != null)
+            {
+                _mantleTargetPosition =
+                    _mantleTargetTransform.TransformPoint(_mantleTargetLocalPoint);
+            }
 
             _controller.transform.position =
                 Vector3.Lerp(
                     _mantleStartPosition,
                     _mantleTargetPosition,
                     DurationTimerProgress);
-        }
 
-        public override bool CanEnter()
-        {
-            float obstacleHeight =
-                CalculateObstacleHeight(checkDistance);
-
-            return base.CanEnter() &&
-                   obstacleHeight > _controller.MaxStepHeight &&
-                   obstacleHeight < 1.6f;
+            // 🔥 ВАЖНО: обновляем руки каждый кадр
+            UpdateDynamicHandTargets();
         }
 
         #endregion
 
         #region Mantle Detection
 
-        public float CalculateObstacleHeight(float forwardDistance)
+        public override bool CanEnter()
         {
-            Vector3 direction =
-                _controller.transform.forward;
+            obstacleTopPoint = PerformDetection(checkDistance);
 
-            Vector3 p1 =
-                _character.transform.position +
-                Vector3.up * _controller.MaxStepHeight;
-
-            Vector3 p2 =
-                p1 +
-                Vector3.up * _controller.Height -
-                Vector3.up * _controller.MaxStepHeight;
-
-            if (Physics.CapsuleCast(
-                    p1,
-                    p2,
-                    _controller.Radius,
-                    direction,
-                    out RaycastHit forwardHit,
-                    forwardDistance))
-            {
-                return ProcessForwardHit(forwardHit);
-            }
-
-            return 0f;
-        }
-
-        private float ProcessForwardHit(RaycastHit forwardHit)
-        {
-            Vector3 topCheckOrigin =
-                forwardHit.point +
-                _controller.transform.forward * 0.1f +
-                Vector3.up * _controller.Height;
-
-            float downDistance =
-                _controller.Height + 0.5f;
-
-            if (Physics.Raycast(
-                    topCheckOrigin,
-                    Vector3.down,
-                    out RaycastHit downHit,
-                    downDistance))
-            {
-                CacheMantleData(downHit);
-
-                CalculateHandTargets(downHit);
-
-                return Mathf.Max(0f, lastObstacleHeight);
-            }
-
-            return 0f;
-        }
-
-        private void CacheMantleData(RaycastHit downHit)
-        {
-            lastObstacleHeight =
-                downHit.point.y -
-                _controller.transform.position.y;
-
-            lastObstaclePosition = downHit.point;
-
-            _mantleTargetTransform =
-                downHit.collider.transform;
-
-            if (_mantleTargetTransform != null)
-            {
-                _localMantlePoint =
-                    _mantleTargetTransform.InverseTransformPoint(
-                        downHit.point);
-            }
-        }
-
-        #endregion
-
-        #region Mantle Movement
-
-        private void UpdateMantleTargetPosition()
-        {
-            if (_mantleTargetTransform != null)
-            {
-                _mantleTargetPosition =
-                    _mantleTargetTransform.TransformPoint(
-                        _localMantlePoint);
-            }
+            if (obstacleTopPoint.collider != null)
+                obstacleHeight = CalculateObstacleHeight();
             else
-            {
-                _mantleTargetPosition =
-                    lastObstaclePosition;
-            }
+                obstacleHeight = 0;
+
+            return base.CanEnter() &&
+                   obstacleHeight > _controller.MaxStepHeight &&
+                   obstacleHeight <= _controller.Height + 0.3f;
         }
 
-        private MantlingType ChooseMantlingType()
+        private float CalculateObstacleHeight()
         {
-            if (lastObstacleHeight <= 0.6f)
-                return MantlingType.StepOnLow;
+            return obstacleTopPoint.point.y - _controller.transform.position.y;
+        }
 
-            if (lastObstacleHeight <= 0.7f)
-                return MantlingType.StepOnHigh;
+        private RaycastHit PerformDetection(float forwardDistance)
+        {
+            Vector3 origin =
+                _controller.transform.position +
+                _controller.transform.forward * (_controller.Radius + forwardDistance) +
+                _controller.transform.up * (_controller.Height + 0.3f);
 
-            if (lastObstacleHeight <= 1f)
-                return MantlingType.BracedLow;
+            Debug.DrawRay(origin,
+                -_controller.transform.up * (_controller.Height + 0.3f),
+                Color.red);
 
-            return MantlingType.BracedHigh;
+            if (Physics.Raycast(origin,
+                -_controller.transform.up,
+                out RaycastHit hit,
+                _controller.Height + 0.3f))
+            {
+                return hit;
+            }
+
+            return default;
         }
 
         #endregion
 
-        #region IK
+        #region Hands
 
-        private void EnableIK(MantlingType mantlingType)
-        {
-            if (mantleIKController != null &&
-                (mantlingType == MantlingType.BracedLow ||
-                 mantlingType == MantlingType.BracedHigh))
-            {
-                mantleIKController.EnableIK();
-            }
-        }
-
-        private void DisableHandIK()
-        {
-            var ik =
-                _character.GetComponent<HandsIK>();
-
-            if (ik != null)
-            {
-                ik.DisableIK();
-            }
-        }
-
-        private void DisableFootIK()
-        {
-            var footIK =
-                _character.GetComponent<FootIK>();
-
-            if (footIK != null)
-            {
-                footIK.enabled = false;
-            }
-        }
-
-        private void EnableFootIK()
-        {
-            var footIK =
-                _character.GetComponent<FootIK>();
-
-            if (footIK != null)
-            {
-                footIK.enabled = true;
-            }
-        }
-
-        private void CalculateHandTargets(RaycastHit wallHit)
+        private void CalculateHandTargets(Vector3 ledgePoint, Vector3 normal)
         {
             if (mantleIKController == null)
                 return;
 
-            Vector3 ledgePoint = wallHit.point;
-            Vector3 normal = wallHit.normal;
+            Vector3 rightOffset = _character.transform.right * 0.25f;
+            Vector3 handOffset = Vector3.up * 0.05f;
 
-            Vector3 rightOffset =
-                _character.transform.right * 0.25f;
-
-            Vector3 handHeightOffset =
-                Vector3.up * 0.05f;
-
-            Vector3 surfaceOffset =
-                normal * 0f;
-
-            Vector3 leftWorldPoint =
-                ledgePoint -
-                rightOffset +
-                handHeightOffset +
-                surfaceOffset;
-
-            Vector3 rightWorldPoint =
-                ledgePoint +
-                rightOffset +
-                handHeightOffset +
-                surfaceOffset;
-
-            if (_mantleTargetTransform != null)
-            {
-                _leftHandLocalPoint =
-                    _mantleTargetTransform.InverseTransformPoint(
-                        leftWorldPoint);
-
-                _rightHandLocalPoint =
-                    _mantleTargetTransform.InverseTransformPoint(
-                        rightWorldPoint);
-            }
-            else
-            {
-                _leftHandLocalPoint =
-                    leftWorldPoint;
-
-                _rightHandLocalPoint =
-                    rightWorldPoint;
-            }
+            _leftHandLocalPoint = (ledgePoint - rightOffset + handOffset);
+            _rightHandLocalPoint = (ledgePoint + rightOffset + handOffset);
 
             _leftHandNormal = normal;
             _rightHandNormal = normal;
+        }
+
+        // 🔥 динамическое обновление рук
+        private void UpdateDynamicHandTargets()
+        {
+            if (mantleIKController == null)
+                return;
+
+            if (_mantleTargetTransform != null)
+            {
+                _ledgePoint =
+                    _mantleTargetTransform.TransformPoint(_mantleTargetLocalPoint);
+            }
+
+            Vector3 rightOffset = _character.transform.right * 0.25f;
+            Vector3 handOffset = Vector3.up * 0.05f;
+
+            Vector3 leftWorld =
+                _ledgePoint - rightOffset + handOffset;
+
+            Vector3 rightWorld =
+                _ledgePoint + rightOffset + handOffset;
+
+            mantleIKController.LeftHandPoint = leftWorld;
+            mantleIKController.RightHandPoint = rightWorld;
+
+            mantleIKController.LeftHandNormal = _ledgeNormal;
+            mantleIKController.RightHandNormal = _ledgeNormal;
         }
 
         private void UpdateHandTargets()
@@ -331,30 +233,57 @@ namespace LOGIYGames
             if (mantleIKController == null)
                 return;
 
-            if (_mantleTargetTransform != null)
+            mantleIKController.LeftHandPoint = _leftHandLocalPoint;
+            mantleIKController.RightHandPoint = _rightHandLocalPoint;
+
+            mantleIKController.LeftHandNormal = _leftHandNormal;
+            mantleIKController.RightHandNormal = _rightHandNormal;
+        }
+
+        #endregion
+
+        #region IK / Movement helpers
+
+        private void EnableIK(MantlingType type)
+        {
+            if (mantleIKController != null &&
+                (type == MantlingType.BracedLow ||
+                 type == MantlingType.BracedHigh))
             {
-                mantleIKController.LeftHandPoint =
-                    _mantleTargetTransform.TransformPoint(
-                        _leftHandLocalPoint);
-
-                mantleIKController.RightHandPoint =
-                    _mantleTargetTransform.TransformPoint(
-                        _rightHandLocalPoint);
+                mantleIKController.EnableIK();
             }
-            else
-            {
-                mantleIKController.LeftHandPoint =
-                    _leftHandLocalPoint;
+        }
 
-                mantleIKController.RightHandPoint =
-                    _rightHandLocalPoint;
-            }
+        private void DisableHandIK()
+        {
+            var ik = _character.GetComponent<HandsIK>();
+            if (ik != null) ik.DisableIK();
+        }
 
-            mantleIKController.LeftHandNormal =
-                _leftHandNormal;
+        private void DisableFootIK()
+        {
+            var footIK = _character.GetComponent<FootIK>();
+            if (footIK != null) footIK.enabled = false;
+        }
 
-            mantleIKController.RightHandNormal =
-                _rightHandNormal;
+        private void EnableFootIK()
+        {
+            var footIK = _character.GetComponent<FootIK>();
+            if (footIK != null) footIK.enabled = true;
+        }
+
+        private MantlingType ChooseMantlingType()
+        {
+            if (obstacleHeight <= _character.Height * 0.2f)
+                return MantlingType.StepOnLow;
+
+            if (obstacleHeight <= _character.Height * 0.4f)
+                return MantlingType.StepOnHigh;
+
+            if (obstacleHeight <= _character.Height * 0.6f)
+                return MantlingType.BracedLow;
+
+            return MantlingType.BracedHigh;
         }
 
         #endregion
