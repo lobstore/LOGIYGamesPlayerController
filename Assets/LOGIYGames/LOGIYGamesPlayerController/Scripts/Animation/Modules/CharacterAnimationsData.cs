@@ -9,9 +9,6 @@ namespace LOGIYGames.Animation
         public int Dash_Right { get; } = Animator.StringToHash(nameof(Dash_Right));
         public int Dash_Forward { get; } = Animator.StringToHash(nameof(Dash_Forward));
         public int Dash_Backward { get; } = Animator.StringToHash(nameof(Dash_Backward));
-
-        public int Jump_Grounded_Left { get; } = Animator.StringToHash(nameof(Jump_Grounded_Left));
-        public int Jump_Grounded_Right { get; } = Animator.StringToHash(nameof(Jump_Grounded_Right));
         public int Jump_Grounded_Forward { get; } = Animator.StringToHash(nameof(Jump_Grounded_Forward));
         public int Jump_Grounded_Backward { get; } = Animator.StringToHash(nameof(Jump_Grounded_Backward));
         public int Jump_Grounded_Up { get; } = Animator.StringToHash(nameof(Jump_Grounded_Up));

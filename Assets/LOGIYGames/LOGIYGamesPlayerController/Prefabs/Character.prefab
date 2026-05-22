@@ -482,6 +482,7 @@ GameObject:
   - component: {fileID: 2829093751541247377}
   - component: {fileID: 1148253161778860002}
   - component: {fileID: 8834281440563422374}
+  - component: {fileID: 3170350395309969284}
   m_Layer: 3
   m_Name: Character
   m_TagString: Character
@@ -538,7 +539,7 @@ MonoBehaviour:
   movementPreset: {fileID: 11400000, guid: a950937825b83ab4086272ca9dbfed13, type: 2}
   movementTargetDirectionArrowColor: {r: 1, g: 0, b: 0, a: 1}
   BaseSpeed: 4
-  <Height>k__BackingField: 1.67
+  <Height>k__BackingField: 1.8
   cameraLookAt: {fileID: 2640723071682425344}
   cameraFollow: {fileID: 4734613552037350644}
 --- !u!114 &2268543539570239712
@@ -612,7 +613,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.67
-  m_Radius: 0.2
+  m_Radius: 0.3
   m_SlopeLimit: 60
   m_StepOffset: 0.5
   m_SkinWidth: 0.01
@@ -667,7 +668,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 427882813280634629}
   m_Enabled: 1
-  m_Avatar: {fileID: -7015762578403652589, guid: 84eae5ce6c2238f41b556e702b08d5bc, type: 3}
+  m_Avatar: {fileID: 9000000, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
   m_Controller: {fileID: 9100000, guid: 8eccf9a92ff353147a77f36f4eaef42b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -746,6 +747,7 @@ MonoBehaviour:
   projectingPlanarVelocityMultiplier: 10
   slopeSlideMaxSpeed: 10
   slopeSlideAcceleration: 2
+  useGroundMotion: 1
   planarVelocityArrowColor: {r: 1, g: 0.9964248, b: 0, a: 1}
   verticalVelocityArrowColor: {r: 1, g: 0, b: 0.74054575, a: 1}
   totalVelocityArrowColor: {r: 0.11164653, g: 1, b: 0, a: 1}
@@ -788,7 +790,7 @@ MonoBehaviour:
   HipsWeight: 0.8
   LeftFootWeight: 1
   RightFootWeight: 1
-  EnableBodyTilt: 1
+  EnableBodyTilt: 0
   TiltAmount: 0.14835165
   TiltSpeed: 10
   InvertTilt: 1
@@ -852,6 +854,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16
   interactPoint: {fileID: 3732176754581607695}
+--- !u!114 &3170350395309969284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016d58c3531db66499df7b1a5a200a27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.MantleIKController
+  ikWeightSpeed: 5
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0
@@ -3681,7 +3696,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6021583798893025641
 Transform:
   m_ObjectHideFlags: 0
@@ -11193,7 +11208,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1082271958561512970, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
       propertyPath: m_Layer

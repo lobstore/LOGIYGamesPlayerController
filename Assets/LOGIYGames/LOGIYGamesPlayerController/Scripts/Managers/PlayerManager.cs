@@ -10,25 +10,37 @@ namespace LOGIYGames
     {
         [SerializeField] Character InitCharacter;
         [SerializeField] InputActionAsset InputActions;
+
+        public UnityEvent<Character> OnCharacterChanged = new();
         public Character CurrentCharacter { get; private set; }
 
         public readonly UnityEvent<bool> OnTargetLocked = new();
-        public CinemachineTargetGroup TargetGroup {  get; private set; }
+        public CinemachineTargetGroup TargetGroup { get; private set; }
         CinemachineTargetGroup.Target c_Target = new();
         private bool isLockedOn;
 
         public bool IsLockedOn { get { return isLockedOn; } private set { isLockedOn = value; OnTargetLocked.Invoke(isLockedOn); } }
         [field: SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
+
+        [SerializeField] private PlayerHealthView healthView;
+        private PlayerHealthPresenter healthPresenter;
+
         protected override void Awake()
         {
             base.Awake();
             PlayerInputReader = new(InputActions);
+            OnCharacterChanged.AddListener((newChar) =>
+            {
+                healthPresenter?.Dispose();
+                healthPresenter = new PlayerHealthPresenter(newChar.GetComponent<HealthModule>(), healthView);
+            });
         }
         private void Start()
         {
 
-
             SetPlayerControlOnCharacter(InitCharacter);
+            
+            
             c_Target.Object = CurrentCharacter.Targeting.CurrentTarget;
             if (TargetGroup == null)
             {
@@ -41,11 +53,16 @@ namespace LOGIYGames
             PlayerInputReader?.Enable();
             c_Target.Radius = 4f;
             c_Target.Weight = 4f;
+
+
         }
         private void Update()
         {
-            // Aim();
-            CharacterInput input= PlayerInputReader.GetInput();
+            if (Input.anyKey)
+            {
+                CurrentCharacter.GetComponent<HealthModule>().ApplyDamage(new Shared.Data.DamageData { Amount = 10});
+            }
+            CharacterInput input = PlayerInputReader.GetInput();
             CurrentCharacter.UpdateInput(input);
             if (input.FocusPressed && !IsLockedOn)
             {
@@ -68,8 +85,6 @@ namespace LOGIYGames
         }
         private void LockOffTarget()
         {
-            //TargetGroup.Targets.Remove(c_Target);
-
             CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, CurrentCharacter.CameraLookAt);
             IsLockedOn = false;
         }
@@ -103,6 +118,7 @@ namespace LOGIYGames
             UpdateStrategies();
             CurrentCharacter.ResetStrategies();
             CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, CurrentCharacter.CameraLookAt);
+            OnCharacterChanged.Invoke(CurrentCharacter);
         }
     }
 }

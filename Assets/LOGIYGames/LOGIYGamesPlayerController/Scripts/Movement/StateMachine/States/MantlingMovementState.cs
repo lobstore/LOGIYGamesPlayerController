@@ -75,7 +75,6 @@ namespace LOGIYGames
 
             _mantleStartPosition = _character.transform.position;
 
-            // --- target binding ---
             _mantleTargetTransform = obstacleTopPoint.collider != null
                 ? obstacleTopPoint.collider.transform
                 : null;
@@ -92,7 +91,6 @@ namespace LOGIYGames
                 _mantleTargetPosition = obstacleTopPoint.point;
             }
 
-            // фиксируем базовую точку для рук (но будем обновлять оффсет)
             _ledgePoint = obstacleTopPoint.point;
             _ledgeNormal = obstacleTopPoint.normal;
 
@@ -119,7 +117,6 @@ namespace LOGIYGames
         {
             base.PhysicsUpdate();
 
-            // --- обновление цели (движущаяся платформа) ---
             if (_mantleTargetTransform != null)
             {
                 _mantleTargetPosition =
@@ -132,7 +129,6 @@ namespace LOGIYGames
                     _mantleTargetPosition,
                     DurationTimerProgress);
 
-            // 🔥 ВАЖНО: обновляем руки каждый кадр
             UpdateDynamicHandTargets();
         }
 
@@ -199,8 +195,6 @@ namespace LOGIYGames
             _leftHandNormal = normal;
             _rightHandNormal = normal;
         }
-
-        // 🔥 динамическое обновление рук
         private void UpdateDynamicHandTargets()
         {
             if (mantleIKController == null)

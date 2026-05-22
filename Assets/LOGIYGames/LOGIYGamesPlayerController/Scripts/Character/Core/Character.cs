@@ -4,9 +4,6 @@ using LOGIYGames.Shared.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
-
-
-
 namespace LOGIYGames.CharacterCore
 {
 

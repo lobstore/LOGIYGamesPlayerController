@@ -3,45 +3,51 @@ using R3;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    public interface IDamageable
+    public class HealthModule : MonoBehaviour
     {
-        void ApplyDamage(DamageData damage);
-    }
-    public class HealthModule : MonoBehaviour, IDamageable
-    {
-        [SerializeField]
-        private int maxHealth = 100;
+        [SerializeField] private float maxHealth;
+        public ReactiveProperty<float> MaxHealth { get; private set; }
 
-        private ReactiveProperty<int> _currentHealth;
+        public ReactiveProperty<float> CurrentHealth {  get; private set; }
 
-        public ReadOnlyReactiveProperty<int> CurrentHealth
-            => _currentHealth;
 
         private Subject<DamageData> _damageTaken = new();
-        public Observable<DamageData> DamageTaken => _damageTaken;
+        private Subject<float> _healTaken = new();
+        public Observable<DamageData> OnDamageTaken => _damageTaken.AsObservable();
+        public Observable<float> HealTaken => _healTaken.AsObservable();
 
         private Subject<Unit> _died = new();
         public Observable<Unit> Died => _died;
 
         private void Awake()
         {
-            _currentHealth = new ReactiveProperty<int>(maxHealth);
+            MaxHealth = new ReactiveProperty<float>(maxHealth);
+            CurrentHealth = new ReactiveProperty<float>(MaxHealth.CurrentValue);
         }
 
         public void ApplyDamage(DamageData damage)
         {
-            if (_currentHealth.Value <= 0)
+            if (CurrentHealth.Value <= 0)
                 return;
 
-            _currentHealth.Value -= damage.Amount;
+            CurrentHealth.Value -= damage.Amount;
 
             _damageTaken.OnNext(damage);
 
-            if (_currentHealth.Value <= 0)
+            if (CurrentHealth.Value <= 0)
             {
-                _currentHealth.Value = 0;
+                CurrentHealth.Value = 0;
                 _died.OnNext(Unit.Default);
             }
+        }
+        public void ApplyHeal(int amount)
+        {
+            if (CurrentHealth.Value > maxHealth)
+                return;
+
+            _healTaken.OnNext(amount);
+            CurrentHealth.Value += amount;
+
         }
     }
 }

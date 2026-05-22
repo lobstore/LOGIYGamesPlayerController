@@ -13,9 +13,9 @@ namespace LOGIYGames.Animation
         [SerializeField] Animator animator;
 
         [SerializeField][Range(0, 0.5f)] private float rotationAnimationsBlendTime;
+        [SerializeField][Range(0, 0.5f)] private float crossFadeSpeed;
 
         [SerializeField] CharacterAnimationsData _data;
-        [SerializeField] private float crossFadeSpeed;
 
         private void Start()
         {
@@ -26,22 +26,14 @@ namespace LOGIYGames.Animation
                     case JumpType.GroundJump:
                         switch (evt.direction)
                         {
-                            case Direction.Left:
-                                PlayAnimation(_data.Jump_Grounded_Left);
-                                break;
-                            case Direction.Right:
-                                PlayAnimation(_data.Jump_Grounded_Right);
-                                break;
                             case Direction.Forward:
                                 PlayAnimation(_data.Jump_Grounded_Forward);
                                 break;
                             case Direction.Backward:
                                 PlayAnimation(_data.Jump_Grounded_Backward);
                                 break;
-                            case Direction.Up:
-                                PlayAnimation(_data.Jump_Grounded_Up);
-                                break;
                             default:
+                                PlayAnimation(_data.Jump_Grounded_Up);
                                 break;
                         }
                         break;
@@ -163,29 +155,6 @@ namespace LOGIYGames.Animation
                 }
 
             });
-            //character.EventBus.Subscribe<JumpPerformedEvent>((evt) => { PlayAnimation(_data.Roll_Forward); });
-            //character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
-            //{
-
-            //    switch (evt.direction)
-            //    {
-            //        case Direction.Left:
-            //            PlayAnimation(_data.Dash_Left);
-            //            break;
-            //        case Direction.Right:
-            //            PlayAnimation(_data.Dash_Right);
-            //            break;
-            //        case Direction.Forward:
-            //            PlayAnimation(_data.Dash_Forward);
-            //            break;
-            //        case Direction.Backward:
-            //            PlayAnimation(_data.Dash_Backward);
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //});
             character.EventBus.Subscribe<TurnPerformedEvent>((evt) =>
             {
                 if (evt.movementSpeed > 0.5)
@@ -272,11 +241,6 @@ namespace LOGIYGames.Animation
                 }
             }
             );
-            //character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
-            //{
-            //    PlayAnimation("Slipjump");
-            //}
-            //);
             character.EventBus.Subscribe<MovementStoppedEvent>((evt) =>
             {
                 switch (evt.direction)
