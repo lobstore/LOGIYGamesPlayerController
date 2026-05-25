@@ -10,7 +10,7 @@ namespace LOGIYGames
 
         PlayerHealthView HealthView;
         DisposableBag DisposableBag;
-        public PlayerHealthPresenter(HealthModule health, PlayerHealthView healthView)
+        public PlayerHealthPresenter(HealthModel health, PlayerHealthView healthView)
         {
             HealthView = healthView;
             DisposableBag.Add(health.CurrentHealth.Subscribe(value =>

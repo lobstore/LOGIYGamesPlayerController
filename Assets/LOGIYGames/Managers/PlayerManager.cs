@@ -32,7 +32,7 @@ namespace LOGIYGames
             OnCharacterChanged.AddListener((newChar) =>
             {
                 healthPresenter?.Dispose();
-                healthPresenter = new PlayerHealthPresenter(newChar.GetComponent<HealthModule>(), healthView);
+                healthPresenter = new PlayerHealthPresenter(newChar.Health, healthView);
             });
         }
         private void Start()
@@ -60,7 +60,7 @@ namespace LOGIYGames
         {
             if (Input.anyKey)
             {
-                CurrentCharacter.GetComponent<HealthModule>().ApplyDamage(new Shared.Data.DamageData { Amount = 10});
+                CurrentCharacter.ApplyDamage(new Shared.Data.DamageData { Amount = 10});
             }
             CharacterInput input = PlayerInputReader.GetInput();
             CurrentCharacter.UpdateInput(input);

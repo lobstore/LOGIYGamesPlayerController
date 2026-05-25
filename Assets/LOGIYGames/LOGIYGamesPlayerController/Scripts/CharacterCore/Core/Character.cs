@@ -1,6 +1,8 @@
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
+using LOGIYGames.Shared.Data;
 using LOGIYGames.Shared.Enums;
+using R3;
 using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -30,8 +32,9 @@ namespace LOGIYGames.CharacterCore
 
         public int JumpCount;
 
-        [Header("State Machine Configuration")]
+        public HealthModel Health {  get; private set; }
         #region State Machine Configuration
+        [Header("State Machine Configuration")]
         public MovementStatesPresetBase movementPreset;
 
         private readonly Dictionary<Type, CharacterMovementState> _states = new();
@@ -135,6 +138,10 @@ namespace LOGIYGames.CharacterCore
         {
             CameraTarget = GetComponent<CameraTargetModule>();
             EventBus = new EventDispatcher();
+            Health = new HealthModel();
+            Health.MaxHealth.Value = 100;
+            Health.CurrentHealth.Value = 100;
+
             Targeting = new();
             VelocityData = new();
             //TEST
@@ -150,6 +157,30 @@ namespace LOGIYGames.CharacterCore
             InitializeStateMachine();
 
         }
+        #region DamagableSystem
+
+
+        public void ApplyDamage(DamageData damage)
+        {
+            if (Health.CurrentHealth.CurrentValue <= 0)
+                return;
+
+            Health.CurrentHealth.Value -= damage.Amount;
+
+            if (Health.CurrentHealth.CurrentValue <= 0)
+            {
+                Health.CurrentHealth.Value = 0;
+            }
+        }
+        public void ApplyHeal(float amount)
+        {
+            if (Health.CurrentHealth.CurrentValue > Health.MaxHealth.CurrentValue)
+                return;
+
+            Health.CurrentHealth.Value += amount;
+
+        }
+        #endregion
         private void EventsSubscription()
         {
             EventBus.Subscribe<JumpPerformedEvent>((evt) =>
@@ -158,6 +189,7 @@ namespace LOGIYGames.CharacterCore
                 {
                     case JumpType.GroundJump:
                         Jump(TargetDirection * evt.planarForce, transform.up * evt.verticalForce);
+                        JumpCount++;
                         break;
                     case JumpType.HangJump:
                         Jump(Sensors.LegsFrontHit.normal * evt.planarForce, evt.verticalForce * transform.up);
@@ -308,6 +340,7 @@ namespace LOGIYGames.CharacterCore
             VelocityData.Locomotion = hForce;
             VelocityData.Gravity = vForce;
             m_motor.AddForce(new Vector3(VelocityData.Locomotion.x, VelocityData.Gravity.y, VelocityData.Locomotion.z));
+
         }
         private Vector3 ProjectVelocity()
         {

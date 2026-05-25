@@ -1,4 +1,5 @@
-﻿using LOGIYGames.Shared.Enums;
+﻿using LOGIYGames.Shared.Data;
+using LOGIYGames.Shared.Enums;
 
 namespace LOGIYGames.Shared.Character.Events
 {
@@ -45,12 +46,16 @@ namespace LOGIYGames.Shared.Character.Events
         public Direction direction;
         public float speed;
     }
-    public partial class MantlingEvent
+    public class MantlingEvent
     {
         public MantlingType Type;
     }
-    public partial class WallrunEnterEvent
+    public class WallrunEnterEvent
     {
         public bool IsRightSide;
+    }
+    public class DamageTakenEvent
+    {
+        public DamageData DamageData {  get; set; }
     }
 }
