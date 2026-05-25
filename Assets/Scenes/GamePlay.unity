@@ -7736,6 +7736,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4286209532176036, guid: bb94340bd6b78c044b8b6f772e321649, type: 3}
   m_PrefabInstance: {fileID: 76868702}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &226262366 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4734613552037350644, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 354810366595266589}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &233488983 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4776272554816088, guid: 94a3318e328358d4095f16b054b14180, type: 3}
@@ -31312,6 +31317,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4125127838298710, guid: 58c1fb7d3a3c2d6458afaab92dd77586, type: 3}
   m_PrefabInstance: {fileID: 1861378364}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1773758998 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2640723071682425344, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+  m_PrefabInstance: {fileID: 354810366595266589}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1774067043
 GameObject:
   m_ObjectHideFlags: 0
@@ -45116,6 +45126,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7537625313940413956, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: cameraFollow
+      value: 
+      objectReference: {fileID: 226262366}
+    - target: {fileID: 7537625313940413956, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: cameraLookAt
+      value: 
+      objectReference: {fileID: 1773758998}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: target
       value: 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public abstract class Interactable : MonoBehaviour, IInteractable
+    public abstract class InteractableBase : MonoBehaviour, IInteractable
     {
         [SerializeField]
         private InteractionData interactionData;

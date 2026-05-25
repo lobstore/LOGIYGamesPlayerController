@@ -2,11 +2,14 @@ using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using System;
+using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.TextCore.Text;
 namespace LOGIYGames.CharacterCore
 {
-
+    [RequireComponent(typeof( CameraTargetModule))]
     public class Character : MonoModuleBase, IControllable
     {
         public CharacterInput Input { get; private set; }
@@ -19,7 +22,6 @@ namespace LOGIYGames.CharacterCore
         [Header("References")]
         //TEST
         [SerializeField] Transform target;
-
         public CharacterTargetingModule Targeting { get; private set; }
 
 
@@ -31,6 +33,9 @@ namespace LOGIYGames.CharacterCore
         [Header("State Machine Configuration")]
         #region State Machine Configuration
         public MovementStatesPresetBase movementPreset;
+
+        private readonly Dictionary<Type, CharacterMovementState> _states = new();
+
         private StateMachine _movementStateMachine;
         private StateMachine _actionStateMachine;
         public StateMachine MovementStateMachine => _movementStateMachine;
@@ -114,19 +119,21 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
         #region Camera References
-        [Header("Camera Configuration")]
-        [SerializeField] Transform cameraLookAt;
-        [SerializeField] Transform cameraFollow;
-        public Transform CameraLookAt => cameraLookAt;
-        public Transform CameraFollow => cameraFollow;
-        public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
+        public CameraTargetModule CameraTarget {  get; set; }
+
+        public Transform CameraLookAt => CameraTarget.CameraLookAt;
+        public Transform CameraFollow => CameraTarget.CameraFollow;
+
         #endregion
+        public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
+
 
         public UnityEvent OnControlReleased { get; } = new();
 
 
         private void Awake()
         {
+            CameraTarget = GetComponent<CameraTargetModule>();
             EventBus = new EventDispatcher();
             Targeting = new();
             VelocityData = new();
@@ -180,13 +187,13 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnFixedUpdate(fixedDeltaTime);
             _movementStateMachine.FixedUpdate();
-            _actionStateMachine.FixedUpdate();
+            //_actionStateMachine.FixedUpdate();
         }
         public override void OnLateUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
             _movementStateMachine.LateUpdate();
-            _actionStateMachine.LateUpdate();
+            //_actionStateMachine.LateUpdate();
             SmoothHeightChanging();
         }
         public override void OnUpdate(float deltaTime)
@@ -197,7 +204,7 @@ namespace LOGIYGames.CharacterCore
             CalculateDeltaYaw();
             TargetDirection = MovementStrategy.GetMovementDirection();
             _movementStateMachine.Update();
-            _actionStateMachine.Update();
+            //_actionStateMachine.Update();
             StatesDebug();
             DebugDraw.DrawArrow(transform.position, TargetDirection * BaseSpeed, movementTargetDirectionArrowColor);
 
@@ -335,30 +342,38 @@ namespace LOGIYGames.CharacterCore
             }
             else
             {
-                UnityEngine.Debug.LogError("No MovementPreset provided");
+                Debug.LogError("No MovementPreset provided");
             }
         }
-        public void AddMovementStateMachineTransition(CharacterMovementState from, CharacterMovementState to, Func<bool> condition)
+        public void AddState(CharacterMovementState state)
         {
-            _movementStateMachine.AddTransition(from, to, new FuncPredicate(condition));
+            _states[state.GetType()] = state;
+
+            MovementStateMachine.AddState(state);
         }
-        public void AddAnyMovementStateMachineTransition(CharacterMovementState to, Func<bool> condition)
+        public void RemoveState<T>() where T : CharacterMovementState
         {
-            _movementStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
+            _states.Remove(typeof(T));
+
+            MovementStateMachine.RemoveState<T>();
         }
-        public void AddActionStateMachineTransition(ActionBaseState from, ActionBaseState to, Func<bool> condition)
+        public T GetState<T>() where T : CharacterMovementState
         {
-            _actionStateMachine.AddTransition(from, to, new FuncPredicate(condition));
+            if (_states.TryGetValue(typeof(T), out var state))
+                return state as T;
+
+            return null;
         }
-        public void AddAnyActionStateMachineTransition(ActionBaseState to, Func<bool> condition)
+
+        public bool HasState<T>() where T : CharacterMovementState
         {
-            _actionStateMachine.AddAnyTransition(to, new FuncPredicate(condition));
+            return _states.ContainsKey(typeof(T));
         }
         private void StatesDebug()
         {
             _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
             _lastMovementTransition = _movementStateMachine.LastTransition;
-            _currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
+            //_currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
             _lastActionTransition = _actionStateMachine.LastTransition;
         }
         #endregion

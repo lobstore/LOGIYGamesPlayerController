@@ -245,32 +245,32 @@ namespace LOGIYGames.Animation
             {
                 switch (evt.direction)
                 {
-                    case Direction.Left:
-                        if (evt.speed < 0.5)
-                        {
-                            PlayAnimation(_data.Walk_Stop_Left);
-                        }
-                        else if (evt.speed < 1)
-                        {
-                            PlayAnimation(_data.Run_Stop_Left);
-                        }
-                        break;
-                    case Direction.Right:
-                        if (evt.speed < 0.5)
-                        {
-                            PlayAnimation(_data.Walk_Stop_Right);
-                        }
-                        else if (evt.speed < 1)
-                        {
-                            PlayAnimation(_data.Run_Stop_Right);
-                        }
-                        break;
+                    //case Direction.Left:
+                    //    if (evt.speed < 0.5)
+                    //    {
+                    //        PlayAnimation(_data.Walk_Stop_Left);
+                    //    }
+                    //    else if (evt.speed < 1)
+                    //    {
+                    //        PlayAnimation(_data.Run_Stop_Left);
+                    //    }
+                    //    break;
+                    //case Direction.Right:
+                    //    if (evt.speed < 0.5)
+                    //    {
+                    //        PlayAnimation(_data.Walk_Stop_Right);
+                    //    }
+                    //    else if (evt.speed < 1)
+                    //    {
+                    //        PlayAnimation(_data.Run_Stop_Right);
+                    //    }
+                    //    break;
                     case Direction.Forward:
-                        if (evt.speed < 0.5)
+                        if (evt.speed <= 0.5)
                         {
                             PlayAnimation(_data.Walk_Stop_Forward);
                         }
-                        else if (evt.speed < 1)
+                        else if (evt.speed <= 1)
                         {
                             PlayAnimation(_data.Run_Stop_Forward);
                         }

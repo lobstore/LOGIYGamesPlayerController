@@ -24,6 +24,10 @@ namespace LOGIYGames
                 direction = direction
             });
         }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && _character.Input.SprintPressing;
+        }
 
     }
 }

@@ -21,13 +21,5 @@ namespace LOGIYGames
             CameraComposer = GetComponent<CinemachinePositionComposer>();
             FollowZoom = GetComponent<CinemachineFollowZoom>();
         }
-        public void LockOn(Transform target)
-        {
-            Debug.Log("LockedOn " + target.name);
-        }
-        public void LockOff()
-        {
-            Debug.Log("LockedOff");
-        }
     }
 }

@@ -22,6 +22,10 @@ namespace LOGIYGames
                 verticalForce = _stateData.VerticalJumpForce,
             });
         }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && _character.Input.CrouchPressed;
+        }
 
     }
 

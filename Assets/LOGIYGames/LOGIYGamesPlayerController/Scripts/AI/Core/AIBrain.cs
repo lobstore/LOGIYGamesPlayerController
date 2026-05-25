@@ -93,7 +93,7 @@ namespace LOGIYGames.AI
 
         public void AddTransition(IState from, IState to, System.Func<bool> condition)
         {
-            _stateMachine.AddTransition(from, to, new FuncPredicate(condition));
+            //_stateMachine.AddTransition(from, to, new FuncPredicate(condition));
         }
 
         public bool HasLineOfSight()

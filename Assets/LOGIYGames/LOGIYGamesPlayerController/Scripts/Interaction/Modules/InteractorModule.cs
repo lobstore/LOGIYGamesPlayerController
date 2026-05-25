@@ -15,10 +15,7 @@ namespace LOGIYGames
         [SerializeField]
         private Transform interactPoint;
 
-        private ReactiveProperty<IInteractable> _currentInteractable = new();
-
-        public ReadOnlyReactiveProperty<IInteractable> CurrentInteractable
-            => _currentInteractable;
+        public ReactiveProperty<IInteractable> CurrentInteractable = new();
 
         public Subject<IInteractable> Interacted = new();
         private void Start()
@@ -63,17 +60,17 @@ namespace LOGIYGames
                 }
             }
 
-            _currentInteractable.Value = closest;
+            CurrentInteractable.Value = closest;
         }
 
         public void TryInteract()
         {
-            if (_currentInteractable.Value == null)
+            if (CurrentInteractable.Value == null)
                 return;
 
-            _currentInteractable.Value.Interact(gameObject);
+            CurrentInteractable.Value.Interact(gameObject);
 
-            Interacted.OnNext(_currentInteractable.Value);
+            Interacted.OnNext(CurrentInteractable.Value);
         }
 
         private void OnDrawGizmosSelected()

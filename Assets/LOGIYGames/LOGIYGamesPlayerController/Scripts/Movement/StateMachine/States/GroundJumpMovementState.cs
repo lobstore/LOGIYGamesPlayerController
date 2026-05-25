@@ -1,7 +1,6 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
-using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -31,7 +30,10 @@ namespace LOGIYGames.Movement
         }
         public override bool CanEnter()
         {
-            return base.CanEnter() && (_character.Sensors.IsValidSlope() || _character.Sensors.GroundAngle<=0);
+            return base.CanEnter() 
+                && (_character.Sensors.IsValidSlope() || _character.Sensors.GroundAngle<=0) 
+                && _character.Input.JumpPressed 
+                && _character.JumpCount < _stateData.MaxJumpCount;
         }
 
     }

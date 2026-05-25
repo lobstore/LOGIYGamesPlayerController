@@ -5,104 +5,289 @@ namespace LOGIYGames
     public class StateMachine
     {
         public StateNode CurrentNode { get; private set; }
-        Dictionary<Type, StateNode> nodes = new();
-        HashSet<ITransition> anyTransitions = new();
+
         public string LastTransition { get; private set; } = "";
+
+        private readonly Dictionary<Type, StateNode> _nodes = new();
+
+        private readonly HashSet<ITransition> _anyTransitions = new();
+
+        // =====================================================
+        // UPDATE
+        // =====================================================
+
         public void Update()
         {
             var transition = GetTransition();
-            if (transition != null)
-                ChangeState(transition.To);
 
-            CurrentNode.State?.LogicUpdate();
+            if (transition != null)
+            {
+                ChangeState(transition.To);
+            }
+
+            CurrentNode?.State?.LogicUpdate();
         }
 
         public void FixedUpdate()
         {
-            CurrentNode.State?.PhysicsUpdate();
+            CurrentNode?.State?.PhysicsUpdate();
         }
 
         public void LateUpdate()
         {
-            CurrentNode.State?.LateUpdate();
+            CurrentNode?.State?.LateUpdate();
         }
 
-        public void SetState(IState state)
-        {
+        // =====================================================
+        // STATES
+        // =====================================================
 
-            CurrentNode = nodes[state.GetType()];
-            CurrentNode.State?.Enter();
+        public void AddState(IState state)
+        {
+            var type = state.GetType();
+
+            if (_nodes.ContainsKey(type))
+                return;
+
+            _nodes.Add(type, new StateNode(state));
         }
 
-        public void ChangeState(IState state)
+        public void RemoveState<T>()
+            where T : IState
         {
-            if (state == CurrentNode.State) return;
+            var type = typeof(T);
 
-            var previousState = CurrentNode.State;
-            var nextState = nodes[state.GetType()].State;
+            if (!_nodes.ContainsKey(type))
+                return;
 
-            previousState?.Exit();
-            nextState?.Enter();
-            LastTransition = previousState.GetType() + " -> " + nextState.GetType();
-            CurrentNode = nodes[state.GetType()];
+            // Remove all transitions TO this state
+            foreach (var node in _nodes.Values)
+            {
+                node.Transitions.RemoveWhere(
+                    t => t.To == type);
+            }
+
+            // Remove any transitions TO this state
+            _anyTransitions.RemoveWhere(
+                t => t.To == type);
+
+            // Exit current state if needed
+            if (CurrentNode != null &&
+                CurrentNode.State.GetType() == type)
+            {
+                CurrentNode.State.Exit();
+                CurrentNode = null;
+            }
+
+            _nodes.Remove(type);
         }
 
-        ITransition GetTransition()
+        public bool HasState<T>()
+            where T : IState
         {
-            foreach (var transition in anyTransitions)
-                if (transition.Condition.Evaluate())
-                    return transition;
+            return _nodes.ContainsKey(typeof(T));
+        }
 
-            foreach (var transition in CurrentNode.Transitions)
-                if (transition.Condition.Evaluate())
-                    return transition;
+        public T GetState<T>()
+            where T : class, IState
+        {
+            if (_nodes.TryGetValue(typeof(T), out var node))
+            {
+                return node.State as T;
+            }
 
             return null;
         }
 
-        public void AddTransition(IState from, IState to, IPredicate condition)
+        // =====================================================
+        // SET / CHANGE STATE
+        // =====================================================
+
+        public void SetState<T>()
+            where T : IState
         {
-            GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);
+            var type = typeof(T);
+
+            if (!_nodes.TryGetValue(type, out var node))
+                return;
+
+            CurrentNode = node;
+
+            CurrentNode.State.Enter();
         }
 
-        public void AddAnyTransition(IState to, IPredicate condition)
+        public void ChangeState<T>()
+            where T : IState
         {
-            anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
+            ChangeState(typeof(T));
         }
 
-        StateNode GetOrAddNode(IState state)
+        private void ChangeState(Type type)
         {
-            var node = nodes.GetValueOrDefault(state.GetType());
+            if (!_nodes.TryGetValue(type, out var nextNode))
+                return;
 
-            if (node == null)
+            if (CurrentNode == nextNode)
+                return;
+
+            var previousState = CurrentNode?.State;
+
+            previousState?.Exit();
+
+            nextNode.State.Enter();
+
+            LastTransition =
+                $"{previousState?.GetType().Name} -> {nextNode.State.GetType().Name}";
+
+            CurrentNode = nextNode;
+        }
+
+        // =====================================================
+        // TRANSITIONS
+        // =====================================================
+
+        public void AddTransition<TFrom, TTo>(
+            IPredicate condition)
+            where TFrom : IState
+            where TTo : IState
+        {
+            var fromType = typeof(TFrom);
+            var toType = typeof(TTo);
+
+            if (!_nodes.TryGetValue(fromType, out var fromNode))
+                return;
+
+            if (!_nodes.ContainsKey(toType))
+                return;
+
+            fromNode.AddTransition(toType, condition);
+        }
+
+        public void AddAnyTransition<TTo>(
+            IPredicate condition)
+            where TTo : IState
+        {
+            var toType = typeof(TTo);
+
+            if (!_nodes.ContainsKey(toType))
+                return;
+
+            _anyTransitions.Add(
+                new Transition(toType, condition));
+        }
+
+        public void RemoveTransition<TFrom, TTo>()
+            where TFrom : IState
+            where TTo : IState
+        {
+            var fromType = typeof(TFrom);
+            var toType = typeof(TTo);
+
+            if (!_nodes.TryGetValue(fromType, out var fromNode))
+                return;
+
+            fromNode.Transitions.RemoveWhere(
+                t => t.To == toType);
+        }
+
+        public void RemoveAnyTransition<TTo>()
+            where TTo : IState
+        {
+            var toType = typeof(TTo);
+
+            _anyTransitions.RemoveWhere(
+                t => t.To == toType);
+        }
+
+        // =====================================================
+        // HELPERS
+        // =====================================================
+
+        public bool IsInState<T>()
+            where T : IState
+        {
+            if (CurrentNode == null)
+                return false;
+
+            return CurrentNode.State.GetType() == typeof(T);
+        }
+
+        private ITransition GetTransition()
+        {
+            // Any transitions
+            foreach (var transition in _anyTransitions)
             {
-                node = new StateNode(state);
-                nodes.Add(state.GetType(), node);
+                if (!HasTransitionTarget(transition))
+                    continue;
+
+                if (transition.Condition.Evaluate())
+                    return transition;
             }
 
-            return node;
+            // State transitions
+            if (CurrentNode == null)
+                return null;
+
+            foreach (var transition in CurrentNode.Transitions)
+            {
+                if (!HasTransitionTarget(transition))
+                    continue;
+
+                if (transition.Condition.Evaluate())
+                    return transition;
+            }
+
+            return null;
         }
-        public void RemoveNodeIfExist(IState state)
+
+        private bool HasTransitionTarget(
+            ITransition transition)
         {
-            var node = nodes.GetValueOrDefault(state.GetType());
-            if (node == null) return;
-            nodes.Remove(state.GetType());
+            return _nodes.ContainsKey(transition.To);
         }
+
+        // =====================================================
+        // NODE
+        // =====================================================
+
         public class StateNode
         {
             public IState State { get; }
+
             public HashSet<ITransition> Transitions { get; }
 
             public StateNode(IState state)
             {
                 State = state;
+
                 Transitions = new HashSet<ITransition>();
             }
 
-            public void AddTransition(IState to, IPredicate condition)
+            public void AddTransition(
+                Type to,
+                IPredicate condition)
             {
-                Transitions.Add(new Transition(to, condition));
+                Transitions.Add(
+                    new Transition(to, condition));
             }
+        }
+    }
+
+    public class StateNode
+    {
+        public IState State { get; }
+
+        public HashSet<ITransition> Transitions { get; }
+
+        public StateNode(IState state)
+        {
+            State = state;
+            Transitions = new HashSet<ITransition>();
+        }
+
+        public void AddTransition(Type to, IPredicate condition)
+        {
+            Transitions.Add(new Transition(to, condition));
         }
     }
 }

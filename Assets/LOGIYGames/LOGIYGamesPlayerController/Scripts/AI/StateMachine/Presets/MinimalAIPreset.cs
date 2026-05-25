@@ -21,7 +21,7 @@ namespace LOGIYGames
             _attackState = new AIAttackState(AIBrainStateDriver);
             ConfigureTransitions(AIBrainStateDriver);
 
-            AIBrainStateDriver.StateMachine.SetState(_idleState);
+            //AIBrainStateDriver.StateMachine.SetState(_idleState);
         }
         /// <summary>
         /// Configures all AI behavior state transitions

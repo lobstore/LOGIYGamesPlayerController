@@ -1,4 +1,6 @@
-﻿namespace LOGIYGames
+﻿using System;
+
+namespace LOGIYGames
 {
     public interface IPredicate
     {
@@ -6,15 +8,15 @@
     }
     public interface ITransition
     {
-        IState To { get; }
+        Type To { get; }
         IPredicate Condition { get; }
     }
     public class Transition : ITransition
     {
-        public IState To { get; }
+        public Type To { get; }
         public IPredicate Condition { get; }
 
-        public Transition(IState to, IPredicate condition)
+        public Transition(Type to, IPredicate condition)
         {
             To = to;
             Condition = condition;
