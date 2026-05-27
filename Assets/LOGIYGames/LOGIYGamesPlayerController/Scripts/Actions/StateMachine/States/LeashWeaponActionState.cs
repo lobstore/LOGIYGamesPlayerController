@@ -3,7 +3,7 @@ using LOGIYGames.Shared.Character.Events;
 
 namespace LOGIYGames
 {
-    public class LeashWeaponActionState : ActionBaseState
+    public class LeashWeaponActionState : CharacterActionState
     {
         public LeashWeaponActionState(Character character) : base(character)
         {
@@ -12,7 +12,7 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            Character.EventBus.Publish(
+            _character.EventBus.Publish(
                 new LeashWeaponEvent
                 {
                     unleashWeapon = false

@@ -2,7 +2,7 @@ using LOGIYGames.CharacterCore;
 
 namespace LOGIYGames
 {
-    public class IdleActionState : ActionBaseState
+    public class IdleActionState : CharacterActionState
     {
         public IdleActionState(Character character) : base(character)
         {

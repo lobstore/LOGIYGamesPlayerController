@@ -1,17 +1,13 @@
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
-using LOGIYGames.Shared.Data;
 using LOGIYGames.Shared.Enums;
-using R3;
 using System;
 using System.Collections.Generic;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.TextCore.Text;
 namespace LOGIYGames.CharacterCore
 {
-    [RequireComponent(typeof( CameraTargetModule))]
+    [RequireComponent(typeof(CameraTargetModule))]
     public class Character : MonoModuleBase, IControllable
     {
         public CharacterInput Input { get; private set; }
@@ -31,18 +27,22 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
 
         public int JumpCount;
-
-        public HealthModel Health {  get; private set; }
         #region State Machine Configuration
         [Header("State Machine Configuration")]
         public MovementStatesPresetBase movementPreset;
 
-        private readonly Dictionary<Type, CharacterMovementState> _states = new();
+        private readonly Dictionary<Type, CharacterMovementState> _movementStates = new();
 
         private StateMachine _movementStateMachine;
-        private StateMachine _actionStateMachine;
         public StateMachine MovementStateMachine => _movementStateMachine;
-        public StateMachine ActionStateMachine => _actionStateMachine;
+
+        public ComboInputBuffer ComboBuffer { get; private set; }
+        public WeaponController WeaponController
+        {
+            get;
+            private set;
+        }
+
 
         #endregion
         #region Runtime States
@@ -57,6 +57,8 @@ namespace LOGIYGames.CharacterCore
         public bool IsSwimming { get; set; }
         public bool IsAimig { get; set; }
         public bool IsMantling { get; set; }
+
+        public bool CanMove { get; set; } = true;
         #endregion
         #region Inpector Debug Variables
         private string _currentMovementStateName;
@@ -122,7 +124,7 @@ namespace LOGIYGames.CharacterCore
         #endregion
 
         #region Camera References
-        public CameraTargetModule CameraTarget {  get; set; }
+        public CameraTargetModule CameraTarget { get; set; }
 
         public Transform CameraLookAt => CameraTarget.CameraLookAt;
         public Transform CameraFollow => CameraTarget.CameraFollow;
@@ -137,10 +139,10 @@ namespace LOGIYGames.CharacterCore
         private void Awake()
         {
             CameraTarget = GetComponent<CameraTargetModule>();
+            ComboBuffer = new ComboInputBuffer();
+            WeaponController =
+    new WeaponController(this);
             EventBus = new EventDispatcher();
-            Health = new HealthModel();
-            Health.MaxHealth.Value = 100;
-            Health.CurrentHealth.Value = 100;
 
             Targeting = new();
             VelocityData = new();
@@ -160,26 +162,7 @@ namespace LOGIYGames.CharacterCore
         #region DamagableSystem
 
 
-        public void ApplyDamage(DamageData damage)
-        {
-            if (Health.CurrentHealth.CurrentValue <= 0)
-                return;
 
-            Health.CurrentHealth.Value -= damage.Amount;
-
-            if (Health.CurrentHealth.CurrentValue <= 0)
-            {
-                Health.CurrentHealth.Value = 0;
-            }
-        }
-        public void ApplyHeal(float amount)
-        {
-            if (Health.CurrentHealth.CurrentValue > Health.MaxHealth.CurrentValue)
-                return;
-
-            Health.CurrentHealth.Value += amount;
-
-        }
         #endregion
         private void EventsSubscription()
         {
@@ -219,13 +202,11 @@ namespace LOGIYGames.CharacterCore
         {
             base.OnFixedUpdate(fixedDeltaTime);
             _movementStateMachine.FixedUpdate();
-            //_actionStateMachine.FixedUpdate();
         }
         public override void OnLateUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
             _movementStateMachine.LateUpdate();
-            //_actionStateMachine.LateUpdate();
             SmoothHeightChanging();
         }
         public override void OnUpdate(float deltaTime)
@@ -233,10 +214,9 @@ namespace LOGIYGames.CharacterCore
             base.OnUpdate(deltaTime);
             UpdateVelocity();
             TargetRotation = RotationStrategy.GetRotation();
-            CalculateDeltaYaw();
             TargetDirection = MovementStrategy.GetMovementDirection();
+            CalculateDeltaYaw();
             _movementStateMachine.Update();
-            //_actionStateMachine.Update();
             StatesDebug();
             DebugDraw.DrawArrow(transform.position, TargetDirection * BaseSpeed, movementTargetDirectionArrowColor);
 
@@ -363,11 +343,9 @@ namespace LOGIYGames.CharacterCore
             SpeedMultiplier = 0;
         }
         #endregion
-        #region State Machine
         private void InitializeStateMachine()
         {
             _movementStateMachine = new StateMachine();
-            _actionStateMachine = new StateMachine();
             if (movementPreset != null)
             {
                 movementPreset.Init(this);
@@ -378,38 +356,41 @@ namespace LOGIYGames.CharacterCore
                 Debug.LogError("No MovementPreset provided");
             }
         }
-        public void AddState(CharacterMovementState state)
+        #region Movement State Machine
+
+        public void AddMovementState(CharacterMovementState state)
         {
-            _states[state.GetType()] = state;
+            _movementStates[state.GetType()] = state;
 
             MovementStateMachine.AddState(state);
         }
-        public void RemoveState<T>() where T : CharacterMovementState
+        public void RemoveMovementState<T>() where T : CharacterMovementState
         {
-            _states.Remove(typeof(T));
+            _movementStates.Remove(typeof(T));
 
             MovementStateMachine.RemoveState<T>();
         }
-        public T GetState<T>() where T : CharacterMovementState
+        public T GetMovementState<T>() where T : CharacterMovementState
         {
-            if (_states.TryGetValue(typeof(T), out var state))
+            if (_movementStates.TryGetValue(typeof(T), out var state))
                 return state as T;
 
             return null;
         }
 
-        public bool HasState<T>() where T : CharacterMovementState
+        public bool HasMovementState<T>() where T : CharacterMovementState
         {
-            return _states.ContainsKey(typeof(T));
+            return _movementStates.ContainsKey(typeof(T));
         }
+        #endregion
+        #region Action State Machine
+        #endregion
         private void StatesDebug()
         {
             _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
             _lastMovementTransition = _movementStateMachine.LastTransition;
-            //_currentActionStateName = _actionStateMachine.CurrentNode.State.ToString();
-            _lastActionTransition = _actionStateMachine.LastTransition;
         }
-        #endregion
+
         #region IControllable
         public void UpdateInput(CharacterInput inputReader)
         {
@@ -462,6 +443,7 @@ namespace LOGIYGames.CharacterCore
         }
 
     }
+
     [Serializable]
     public class CharacterTargetingModule
     {

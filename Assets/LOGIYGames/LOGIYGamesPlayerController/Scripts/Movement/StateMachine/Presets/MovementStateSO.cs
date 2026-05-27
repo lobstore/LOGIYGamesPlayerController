@@ -10,7 +10,7 @@ namespace LOGIYGames
         {
             var state = CreateState(character);
 
-            character.AddState(state);
+            character.AddMovementState(state);
         }
 
         protected abstract CharacterMovementState CreateState(Character character);

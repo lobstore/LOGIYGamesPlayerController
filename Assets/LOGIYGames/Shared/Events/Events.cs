@@ -58,4 +58,8 @@ namespace LOGIYGames.Shared.Character.Events
     {
         public DamageData DamageData {  get; set; }
     }
+    public class SkillUsedEvent
+    {
+       public Ability AbilityData { get; set; }
+    }
 }
