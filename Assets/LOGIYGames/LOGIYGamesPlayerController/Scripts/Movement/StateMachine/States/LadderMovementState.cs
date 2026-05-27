@@ -7,7 +7,7 @@ namespace LOGIYGames
     public class LadderMovementState : CharacterMovementState
     {
         LadderMovementController ladderMovementController;
-        public LadderMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public LadderMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
         {
             ladderMovementController = _character.GetComponent<LadderMovementController>();
         }

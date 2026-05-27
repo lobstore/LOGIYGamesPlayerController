@@ -6,8 +6,8 @@ namespace LOGIYGames
 {
     public class YAxisMovement : IMovementStrategy
     {
-        private Character _character;
-        public YAxisMovement(Character character)
+        private CharacterModule _character;
+        public YAxisMovement(CharacterModule character)
         {
             _character = character;
         }

@@ -6,7 +6,7 @@ namespace LOGIYGames.Movement
     public class WallRunMovementState : CharacterMovementState
     {
         Vector3 normal;
-        public WallRunMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public WallRunMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
         public override void Enter()

@@ -9,7 +9,7 @@ namespace LOGIYGames
     {
         public JumpStateData stateData;
 
-        protected override CharacterMovementState CreateState(Character character)
+        protected override CharacterMovementState CreateState(CharacterModule character)
         {
             return new GroundJumpMovementState(character, stateData);
         }

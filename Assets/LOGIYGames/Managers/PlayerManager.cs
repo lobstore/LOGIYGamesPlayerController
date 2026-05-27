@@ -8,11 +8,11 @@ namespace LOGIYGames
 {
     public class PlayerManager : Singleton<PlayerManager>
     {
-        [SerializeField] Character InitCharacter;
+        [SerializeField] CharacterModule InitCharacter;
         [SerializeField] InputActionAsset InputActions;
 
-        public UnityEvent<Character> OnCharacterChanged = new();
-        public Character CurrentCharacter { get; private set; }
+        public UnityEvent<CharacterModule> OnCharacterChanged = new();
+        public CharacterModule CurrentCharacter { get; private set; }
 
         public readonly UnityEvent<bool> OnTargetLocked = new();
         public CinemachineTargetGroup TargetGroup { get; private set; }
@@ -108,7 +108,7 @@ namespace LOGIYGames
                     break;
             }
         }
-        public void SetPlayerControlOnCharacter(Character character)
+        public void SetPlayerControlOnCharacter(CharacterModule character)
         {
             CurrentCharacter = character;
             UpdateStrategies();

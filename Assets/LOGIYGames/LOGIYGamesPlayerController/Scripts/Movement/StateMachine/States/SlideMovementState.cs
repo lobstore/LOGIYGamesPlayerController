@@ -6,7 +6,7 @@ namespace LOGIYGames
 {
     public class SlideMovementState : CharacterMovementState
     {
-        public SlideMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public SlideMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
 

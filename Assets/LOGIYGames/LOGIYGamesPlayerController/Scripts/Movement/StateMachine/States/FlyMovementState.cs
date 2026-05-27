@@ -3,7 +3,7 @@ namespace LOGIYGames.Movement
 {
     public class FlyMovementState : CharacterMovementState
     {
-        public FlyMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public FlyMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
         public override void Enter()

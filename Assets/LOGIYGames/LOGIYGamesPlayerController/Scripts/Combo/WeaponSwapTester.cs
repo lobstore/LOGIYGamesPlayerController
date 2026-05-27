@@ -6,17 +6,12 @@ namespace LOGIYGames
     public class WeaponSwapTester : MonoBehaviour
     {
         [SerializeField]
-        private Character character;
+        private CharacterModule character;
 
         [SerializeField]
         private WeaponDataSO sword;
-
         [SerializeField]
-        private WeaponDataSO spear;
-
-        [SerializeField]
-        private WeaponDataSO greatsword;
-
+        private WeaponDataSO unarmed;
         [SerializeField]
         private WeaponDataSO defaultWeapon;
 
@@ -40,14 +35,7 @@ namespace LOGIYGames
             {
                 character
                     .WeaponController
-                    .EquipWeapon(spear);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                character
-                    .WeaponController
-                    .EquipWeapon(greatsword);
+                    .EquipWeapon(unarmed);
             }
         }
     }

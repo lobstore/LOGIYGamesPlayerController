@@ -8,7 +8,7 @@ namespace LOGIYGames.Movement
     public class LandingMovementState : TimedMovementState
     {
         ControllerWrapperBase controller;
-        public LandingMovementState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
+        public LandingMovementState(CharacterModule ctx, TimedMovementStateData stateData) : base(ctx, stateData)
         {
             controller = ctx.GetComponent<ControllerWrapperBase>();
         }

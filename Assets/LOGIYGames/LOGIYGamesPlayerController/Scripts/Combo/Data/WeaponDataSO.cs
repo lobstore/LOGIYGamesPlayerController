@@ -19,7 +19,7 @@ namespace LOGIYGames.CharacterCore
 
         [Header("Moveset")]
 
-        public ComboMovesetSO Moveset;
+        public ComboMovesetSO ComboSet;
 
         // =====================================================
         // ANIMATIONS

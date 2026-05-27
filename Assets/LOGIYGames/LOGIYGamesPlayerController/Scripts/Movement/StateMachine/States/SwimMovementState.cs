@@ -3,7 +3,7 @@ namespace LOGIYGames.Movement
 {
     public class SwimMovementState : CharacterMovementState
     {
-        public SwimMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public SwimMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
 

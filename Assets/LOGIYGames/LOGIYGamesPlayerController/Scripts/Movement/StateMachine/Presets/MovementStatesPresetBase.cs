@@ -8,6 +8,6 @@ namespace LOGIYGames
 
     public abstract class MovementStatesPresetBase : ScriptableObject
     {
-        public abstract void Init(Character movementStateDriver);
+        public abstract void Init(CharacterModule movementStateDriver);
     }
 }

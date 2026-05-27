@@ -5,7 +5,7 @@ namespace LOGIYGames.Movement
 {
     public class RunMovementState : CharacterMovementState
     {
-        public RunMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public RunMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData) { }
     }
     
 }

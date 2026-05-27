@@ -7,9 +7,9 @@ namespace LOGIYGames
     public class PlanarMovement : IMovementStrategy
     {
 
-        Character Character;
+        CharacterModule Character;
 
-        public PlanarMovement(Character character)
+        public PlanarMovement(CharacterModule character)
         {
             Character = character;
         }

@@ -1,6 +1,4 @@
 using LOGIYGames.Shared.Enums;
-using LOGIYGames.Timers;
-using System.Collections.Generic;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
@@ -12,258 +10,201 @@ namespace LOGIYGames.CharacterCore
             private set;
         }
 
-        private readonly Character
-            _character;
+        private readonly CharacterModule
+            character;
 
         private readonly Animator
-            _animator;
-
-        private CountdownTimer
-            _attackTimer;
+            animator;
 
         private AttackNodeSO
-            _queuedAttack;
+            queuedAttack;
 
-        private bool _finished;
+        private bool comboWindowOpened;
+        public bool CanCancel
+        {
+            get;
+            private set;
+        }
+        private bool finished;
 
         public ComboController(
-            Character character)
+            CharacterModule owner)
         {
-            _character = character;
+            character = owner;
 
-            _animator =
-                character.GetComponent<Animator>();
+            animator =
+                owner.GetComponent<Animator>();
         }
 
-        // =====================================================
-        // HELPERS
-        // =====================================================
-
-        private float ElapsedTime =>
-            CurrentAttack.Duration
-            - _attackTimer.CurrentTime;
-
-        // =====================================================
+        // ========================================================
         // START COMBO
-        // =====================================================
+        // ========================================================
 
         public void StartCombo(
+            AttackNodeSO attack)
+        {
+            finished = false;
+
+            queuedAttack = null;
+
+            PlayAttack(attack);
+        }
+
+        // ========================================================
+        // PLAY ATTACK
+        // ========================================================
+
+        private void PlayAttack(
             AttackNodeSO attack)
         {
             if (attack == null)
                 return;
 
-            _finished = false;
+            CurrentAttack = attack;
 
-            _queuedAttack = null;
+            animator.applyRootMotion =
+                attack.UseRootMotion;
 
-            PlayAttack(attack);
+            animator.CrossFade(
+                attack.AnimationStateName,
+                attack.CrossFade);
+
+
+            if (attack.ForwardImpulse > 0)
+            {
+                character.VelocityData
+                    .Locomotion +=
+                    character.transform.forward
+                    * attack.ForwardImpulse;
+            }
         }
 
-        // =====================================================
-        // UPDATE
-        // =====================================================
-
-        public void Tick()
-        {
-            if (CurrentAttack == null)
-                return;
-
-            ReadBufferedInput();
-
-            TryTransition();
-
-            TryFinish();
-        }
-
-
-        // =====================================================
+        // ========================================================
         // INPUT
-        // =====================================================
+        // ========================================================
 
-        private void ReadBufferedInput()
+        public void HandleInput(
+            AttackInputType input)
         {
-            if (!_character.ComboBuffer
-                    .HasInput())
+            if (!comboWindowOpened)
                 return;
-
-            if (!CanQueueInput())
-                return;
-
-            AttackInputType input =
-                _character.ComboBuffer
-                    .ConsumeInput();
 
             foreach (AttackTransition
                      transition
-                     in CurrentAttack.Transitions)
+                     in CurrentAttack
+                         .Transitions)
             {
-                if (transition.Input != input)
+                if (transition.Input
+                    != input)
                     continue;
 
-                _queuedAttack =
+                queuedAttack =
                     transition.NextAttack;
 
                 return;
             }
         }
 
-        // =====================================================
-        // TRANSITION
-        // =====================================================
+        // ========================================================
+        // EVENTS
+        // ========================================================
 
-        private void TryTransition()
+        public void OnAnimationEvent(
+            AnimationEventType type)
         {
-            if (_queuedAttack == null)
+            switch (type)
+            {
+                case AnimationEventType
+                    .EnableHitbox:
+
+                    //Weapon.Hitbox
+
+                    break;
+
+                case AnimationEventType
+                    .DisableHitbox:
+
+                    //Weapon.Hitbox
+
+                    break;
+
+                case AnimationEventType
+                    .OpenComboWindow:
+
+                    comboWindowOpened = true;
+
+                    break;
+
+                case AnimationEventType
+                    .CloseComboWindow:
+
+                    comboWindowOpened = false;
+
+                    break;
+
+                case AnimationEventType
+                    .EnableCancelWindow:
+
+                    CanCancel = true;
+
+                    break;
+
+                case AnimationEventType
+                    .DisableCancelWindow:
+
+                    CanCancel = false;
+
+                    break;
+                case AnimationEventType
+                    .EndAnimation:
+
+                    TryContinueCombo();
+
+                    break;
+            }
+        }
+
+        // ========================================================
+        // NEXT ATTACK
+        // ========================================================
+
+        private void TryContinueCombo()
+        {
+            if (queuedAttack == null)
+            {
+                finished = true;
+
                 return;
+            }
 
-            if (!CanTransition())
-                return;
+            PlayAttack(queuedAttack);
 
-            PlayAttack(_queuedAttack);
-
-            _queuedAttack = null;
+            queuedAttack = null;
         }
 
-        // =====================================================
-        // PLAY ATTACK
-        // =====================================================
-
-        private void PlayAttack(
-            AttackNodeSO attack)
-        {
-            DisposeCurrentTimer();
-
-            CurrentAttack = attack;
-
-            _attackTimer =
-                new CountdownTimer(
-                    attack.Duration);
-
-            _attackTimer.Start();
-
-            _animator.applyRootMotion =
-                attack.UseRootMotion;
-
-            _animator.CrossFade(
-                attack.AnimationStateName,
-                attack.CrossFade);
-
-            ApplyImpulse(attack);
-        }
-
-        // =====================================================
-        // IMPULSE
-        // =====================================================
-
-        private void ApplyImpulse(
-            AttackNodeSO attack)
-        {
-            if (Mathf.Approximately(
-                    attack.ForwardImpulse,
-                    0))
-                return;
-
-            Vector3 impulse =
-                _character.transform.forward
-                * attack.ForwardImpulse;
-
-            _character.VelocityData
-                .Locomotion += impulse;
-        }
-
-        // =====================================================
-        // WINDOWS
-        // =====================================================
-
-        private bool CanQueueInput()
-        {
-            return ElapsedTime
-                   >= CurrentAttack
-                       .ComboWindowStart
-                   &&
-                   ElapsedTime
-                   <= CurrentAttack
-                       .ComboWindowEnd;
-        }
-
-        private bool CanTransition()
-        {
-            return ElapsedTime
-                   >= CurrentAttack
-                       .TransitionTime;
-        }
-
-        public bool CanCancel()
-        {
-            if (CurrentAttack == null)
-                return false;
-
-            return ElapsedTime
-                   >= CurrentAttack
-                       .CancelTime;
-        }
-
-        // =====================================================
-        // FINISH
-        // =====================================================
-
-        private void TryFinish()
-        {
-            if (_queuedAttack != null)
-                return;
-
-            if (!_attackTimer.IsFinished)
-                return;
-
-            _finished = true;
-        }
+        // ========================================================
+        // HELPERS
+        // ========================================================
 
         public bool IsFinished()
         {
-            return _finished;
+            return finished;
         }
 
-        // =====================================================
-        // TIMER CONTROL
-        // =====================================================
-
-        public void Pause()
-        {
-            _attackTimer?.Pause();
-        }
-
-        public void Resume()
-        {
-            _attackTimer?.Resume();
-        }
-
-        // =====================================================
+        // ========================================================
         // STOP
-        // =====================================================
+        // ========================================================
 
         public void Stop()
         {
-            DisposeCurrentTimer();
+            comboWindowOpened = false;
+
+            queuedAttack = null;
 
             CurrentAttack = null;
 
-            _queuedAttack = null;
+            finished = false;
 
-            _finished = false;
-
-        }
-
-        private void DisposeCurrentTimer()
-        {
-            if (_attackTimer == null)
-                return;
-
-            _attackTimer.Stop();
-
-            _attackTimer.Dispose();
-
-            _attackTimer = null;
         }
     }
 }

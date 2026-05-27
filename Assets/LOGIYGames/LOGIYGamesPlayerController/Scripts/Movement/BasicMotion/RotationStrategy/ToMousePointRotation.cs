@@ -5,8 +5,8 @@ namespace LOGIYGames
 {
     public class ToMousePointRotation : IRotationStrategy
     {
-        Character Character { get; set; }
-        public ToMousePointRotation(Character character)
+        CharacterModule Character { get; set; }
+        public ToMousePointRotation(CharacterModule character)
         {
             Character = character;
         }

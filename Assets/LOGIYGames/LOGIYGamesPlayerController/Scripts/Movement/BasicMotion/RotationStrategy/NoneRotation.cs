@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class NoneRotation : IRotationStrategy
     {
-        Character Character;
+        CharacterModule Character;
 
-        public NoneRotation(Character character)
+        public NoneRotation(CharacterModule character)
         {
             Character = character;
         }

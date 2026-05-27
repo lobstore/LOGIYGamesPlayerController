@@ -4,7 +4,7 @@ namespace LOGIYGames
 {
     public class IdleActionState : CharacterActionState
     {
-        public IdleActionState(Character character) : base(character)
+        public IdleActionState(CharacterModule character) : base(character)
         {
         }
     }

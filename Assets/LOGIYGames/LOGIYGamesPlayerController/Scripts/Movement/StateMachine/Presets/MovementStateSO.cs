@@ -6,13 +6,13 @@ namespace LOGIYGames
 {
     public abstract class MovementStateSO : ScriptableObject
     {
-        public void Build(Character character)
+        public void Build(CharacterModule character)
         {
             var state = CreateState(character);
 
             character.AddMovementState(state);
         }
 
-        protected abstract CharacterMovementState CreateState(Character character);
+        protected abstract CharacterMovementState CreateState(CharacterModule character);
     }
 }

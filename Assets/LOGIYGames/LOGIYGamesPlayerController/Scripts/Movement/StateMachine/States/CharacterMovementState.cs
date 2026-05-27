@@ -10,7 +10,7 @@ namespace LOGIYGames.Movement
     [Serializable]
     public abstract class CharacterMovementState : IState
     {
-        protected Character _character;
+        protected CharacterModule _character;
         protected ControllerWrapperBase _controller;
         protected MovementStateData _data;
         protected Animator _animator;
@@ -19,7 +19,7 @@ namespace LOGIYGames.Movement
         public bool IsActionFrameElapsed => actionFrameTimer.IsFinished;
         public bool IsActionFrameInProgress => actionFrameTimer.IsRunning;
 
-        protected CharacterMovementState(Character ctx, MovementStateData stateData)
+        protected CharacterMovementState(CharacterModule ctx, MovementStateData stateData)
         {
             _animator = ctx.GetComponent<Animator>();
             _character = ctx;
@@ -95,7 +95,7 @@ namespace LOGIYGames.Movement
         {
             Move();
 
-            Aim();
+           // Aim();
 
         }
         protected virtual void Move()

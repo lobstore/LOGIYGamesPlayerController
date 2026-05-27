@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class FlyMovement : IMovementStrategy
     {
-        Character Character;
+        CharacterModule Character;
 
-        public FlyMovement(Character character)
+        public FlyMovement(CharacterModule character)
         {
             Character = character;
         }

@@ -4,7 +4,7 @@ namespace LOGIYGames
 {
     public class CombatActionState : CharacterActionState
     {
-        public CombatActionState(Character character) : base(character)
+        public CombatActionState(CharacterModule character) : base(character)
         {
         }
     }

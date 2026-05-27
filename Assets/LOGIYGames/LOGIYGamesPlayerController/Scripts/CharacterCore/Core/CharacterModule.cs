@@ -8,7 +8,7 @@ using UnityEngine.Events;
 namespace LOGIYGames.CharacterCore
 {
     [RequireComponent(typeof(CameraTargetModule))]
-    public class Character : MonoModuleBase, IControllable
+    public class CharacterModule : MonoModuleBase, IControllable
     {
         public CharacterInput Input { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
@@ -18,15 +18,23 @@ namespace LOGIYGames.CharacterCore
         public IEventDispatcher EventBus { get; private set; }
 
         [Header("References")]
-        //TEST
-        [SerializeField] Transform target;
-        public CharacterTargetingModule Targeting { get; private set; }
 
 
         [field: SerializeField] private ControllerWrapperBase m_motor;
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
 
         public int JumpCount;
+
+        #region Modules
+        public CharacterTargetingModule Targeting { get; private set; }
+        public ComboInputBuffer ComboBuffer { get; private set; }
+        public ComboController ComboController { get; private set; }
+        public WeaponController WeaponController
+        {
+            get;
+            private set;
+        }
+        #endregion
         #region State Machine Configuration
         [Header("State Machine Configuration")]
         public MovementStatesPresetBase movementPreset;
@@ -35,14 +43,6 @@ namespace LOGIYGames.CharacterCore
 
         private StateMachine _movementStateMachine;
         public StateMachine MovementStateMachine => _movementStateMachine;
-
-        public ComboInputBuffer ComboBuffer { get; private set; }
-        public WeaponController WeaponController
-        {
-            get;
-            private set;
-        }
-
 
         #endregion
         #region Runtime States
@@ -140,14 +140,12 @@ namespace LOGIYGames.CharacterCore
         {
             CameraTarget = GetComponent<CameraTargetModule>();
             ComboBuffer = new ComboInputBuffer();
-            WeaponController =
-    new WeaponController(this);
+            WeaponController = new WeaponController(this);
+            ComboController = new ComboController(this);
             EventBus = new EventDispatcher();
 
             Targeting = new();
             VelocityData = new();
-            //TEST
-            Targeting.SetTarget(target);
 
             EventsSubscription();
         }
@@ -195,6 +193,11 @@ namespace LOGIYGames.CharacterCore
             });
             EventBus.Subscribe<MantlingEvent>((evt) =>
             {
+
+            });
+            EventBus.Subscribe<Shared.Character.Events.AnimationEvent>(e =>
+            {
+                ComboController.OnAnimationEvent(e.AnimationEventType);
 
             });
         }

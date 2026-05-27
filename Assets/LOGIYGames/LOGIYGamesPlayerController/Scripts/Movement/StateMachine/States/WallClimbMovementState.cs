@@ -7,7 +7,7 @@ namespace LOGIYGames
     public class WallClimbMovementState : CharacterMovementState
     {
         SensorsModule sensorModule;
-        public WallClimbMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public WallClimbMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
         {
             sensorModule = ctx.GetComponent<SensorsModule>();
         }

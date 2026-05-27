@@ -9,59 +9,50 @@ namespace LOGIYGames.CharacterCore
             private set;
         }
 
-        private readonly Character
-            _character;
+        private readonly CharacterModule
+            character;
 
         private readonly Animator
-            _animator;
+            animator;
 
         public WeaponController(
-            Character character)
+            CharacterModule owner)
         {
-            _character = character;
+            character = owner;
 
-            _animator =
-                character.GetComponent<Animator>();
+            animator =
+                owner.GetComponent<Animator>();
         }
 
-        // =====================================================
+        // ========================================================
         // EQUIP
-        // =====================================================
+        // ========================================================
 
         public void EquipWeapon(
-            WeaponDataSO weapon)
+            WeaponDataSO data)
         {
-            if (weapon == null)
-                return;
+            CurrentWeapon = data;
 
-            CurrentWeapon = weapon;
-
-            ApplyAnimatorOverride();
+            if (CurrentWeapon
+                    .AnimatorOverride
+                != null)
+            {
+                animator.runtimeAnimatorController =
+                    CurrentWeapon
+                        .AnimatorOverride;
+            }
         }
 
-        // =====================================================
-        // HELPERS
-        // =====================================================
+        // ========================================================
+        // GET MOVESET
+        // ========================================================
 
-        public ComboMovesetSO GetMoveset()
+        public ComboMovesetSO GetWeaponCombo()
         {
             if (CurrentWeapon == null)
                 return null;
 
-            return CurrentWeapon.Moveset;
-        }
-
-        private void ApplyAnimatorOverride()
-        {
-            if (CurrentWeapon == null)
-                return;
-
-            if (CurrentWeapon.AnimatorOverride
-                == null)
-                return;
-
-            _animator.runtimeAnimatorController =
-                CurrentWeapon.AnimatorOverride;
+            return CurrentWeapon.ComboSet;
         }
     }
 }

@@ -68,7 +68,7 @@ namespace LOGIYGames.AI
             navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.autoTraverseOffMeshLink = false;
             InputReader = new(this);
-            var character = GetComponent<Character>();
+            var character = GetComponent<CharacterModule>();
             //character.OnControlReleased.AddListener(() =>
             //{
             //    character.UpdateInput(InputReader);

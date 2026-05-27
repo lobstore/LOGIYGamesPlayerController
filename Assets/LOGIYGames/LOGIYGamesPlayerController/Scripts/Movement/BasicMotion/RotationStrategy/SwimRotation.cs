@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class SwimRotation : IRotationStrategy
     {
-        Character Character;
+        CharacterModule Character;
 
-        public SwimRotation(Character character)
+        public SwimRotation(CharacterModule character)
         {
             Character = character;
         }

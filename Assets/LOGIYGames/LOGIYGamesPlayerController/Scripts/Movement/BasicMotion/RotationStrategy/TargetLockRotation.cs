@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class TargetLockRotation : IRotationStrategy
     {
-        private readonly Character _character;
+        private readonly CharacterModule _character;
 
-        public TargetLockRotation(Character character)
+        public TargetLockRotation(CharacterModule character)
         {
             _character = character;
         }

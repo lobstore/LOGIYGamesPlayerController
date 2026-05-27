@@ -5,8 +5,8 @@ namespace LOGIYGames
 {
     public abstract class CharacterActionState : IState
     {
-        protected Character _character;
-        protected CharacterActionState(Character character)
+        protected CharacterModule _character;
+        protected CharacterActionState(CharacterModule character)
         {
             _character = character;
         }

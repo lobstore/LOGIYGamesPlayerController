@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class InputRelativeMovement : IMovementStrategy
     {
-        Character Character;
+        CharacterModule Character;
 
-        public InputRelativeMovement(Character character)
+        public InputRelativeMovement(CharacterModule character)
         {
             Character = character;
         }

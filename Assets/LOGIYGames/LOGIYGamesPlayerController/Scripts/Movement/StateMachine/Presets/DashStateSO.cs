@@ -8,7 +8,7 @@ namespace LOGIYGames
     public class DashStateSO : MovementStateSO
     {
         public JumpStateData stateData;
-        protected override CharacterMovementState CreateState(Character character)
+        protected override CharacterMovementState CreateState(CharacterModule character)
         {
             return new DashMovementState(character, stateData);
         }

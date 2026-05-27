@@ -7,7 +7,7 @@ namespace LOGIYGames.Movement
     public class GroundJumpMovementState : TimedMovementState
     {
         private JumpStateData _stateData;
-        public GroundJumpMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
+        public GroundJumpMovementState(CharacterModule ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
         }

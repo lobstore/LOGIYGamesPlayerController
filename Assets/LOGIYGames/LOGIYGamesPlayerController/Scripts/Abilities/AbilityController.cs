@@ -1,37 +1,28 @@
 using LOGIYGames.Animation;
+using LOGIYGames.CharacterCore;
 using LOGIYGames.Timers;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class AbilityController : MonoBehaviour
+    public class AbilityController
     {
         [SerializeField] List<Ability> abilities;
         [SerializeField] GameObject Target;
 
         Ability Current;
 
+        CharacterModule character;
+
         CharacterAnimationModule animator;
 
         CountdownTimer castingTimer;
 
-        private void Awake()
+        public AbilityController(CharacterModule owner)
         {
-            animator = GetComponent<CharacterAnimationModule>();
-
-        }
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                Cast(abilities[0]);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-
-                Cast(abilities[1]);
-            }
+            character = owner;
+            animator = owner.GetComponent<CharacterAnimationModule>();
         }
         public void Cast(Ability skill)
         {

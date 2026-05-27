@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class ToMoveDirectionRotation : IRotationStrategy
     {
-        Character Character;
+        CharacterModule Character;
 
-        public ToMoveDirectionRotation(Character character)
+        public ToMoveDirectionRotation(CharacterModule character)
         {
             Character = character;
         }

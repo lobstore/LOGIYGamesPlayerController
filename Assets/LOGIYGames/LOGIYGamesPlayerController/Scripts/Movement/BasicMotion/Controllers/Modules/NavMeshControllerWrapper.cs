@@ -11,7 +11,7 @@ namespace LOGIYGames
         NavMeshAgent agent;
         CharacterGravityModule characterGravityModule;
         CharacterController characterController;
-        Character character;
+        CharacterModule character;
         private Vector3 targetVelocity;
 
         public override float MaxStepHeight { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
@@ -25,7 +25,7 @@ namespace LOGIYGames
 
         void Awake()
         {
-            character = GetComponent<Character>();
+            character = GetComponent<CharacterModule>();
             sensorModule = GetComponent<SensorsModule>();
             agent = GetComponent<NavMeshAgent>();
             characterGravityModule = GetComponent<CharacterGravityModule>();

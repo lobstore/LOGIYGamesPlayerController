@@ -45150,10 +45150,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6718191764129459944}
+      addedObject: {fileID: 6718191764129459943}
     - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6718191764129459943}
+      addedObject: {fileID: 6718191764129459960}
+    - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6718191764129459961}
   m_SourcePrefab: {fileID: 100100000, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
 --- !u!1001 &2324911943303090081
 PrefabInstance:
@@ -45361,7 +45364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.HealthModule
   maxHealth: 100
---- !u!114 &6718191764129459944
+--- !u!114 &6718191764129459960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45370,13 +45373,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 201072666}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85eeb62e1dd99d24889bfb32edd726f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 763f59375a962c041b83f37bcab26ea8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.AbilityController
-  abilities:
-  - {fileID: 11400000, guid: c4fe7cb4c7cd14548bb34390a2797522, type: 2}
-  - {fileID: 11400000, guid: 71d0fd2e3278c2541a7054c608d504c7, type: 2}
-  Target: {fileID: 201072666}
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.WeaponSwapTester
+  character: {fileID: 6718191764129459927}
+  sword: {fileID: 11400000, guid: 0b5a4e80a2ab00543809f6e722225588, type: 2}
+  unarmed: {fileID: 11400000, guid: 51560e11c2cc578428836426c491169f, type: 2}
+  defaultWeapon: {fileID: 11400000, guid: 51560e11c2cc578428836426c491169f, type: 2}
+--- !u!114 &6718191764129459961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201072666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.AnimationEventReceiver
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

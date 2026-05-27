@@ -47,7 +47,7 @@ namespace LOGIYGames
         // INIT
         // =========================================================
 
-        public override void Init(Character character)
+        public override void Init(CharacterModule character)
         {
             RegisterStates(character);
 
@@ -60,7 +60,7 @@ namespace LOGIYGames
         // STATE REGISTRATION
         // =========================================================
 
-        private void RegisterStates(Character character)
+        private void RegisterStates(CharacterModule character)
         {
             character.AddMovementState(new FallingMovementState(character, fallingMovementStateData));
 
@@ -94,7 +94,7 @@ namespace LOGIYGames
             });
         }
 
-        private void ConfigureTransitions(Character character)
+        private void ConfigureTransitions(CharacterModule character)
         {
             // =========================================================
             // ANY TRANSITIONS
@@ -723,11 +723,7 @@ namespace LOGIYGames
                  IdleMovementState>(
                 new FuncPredicate(() =>
                 {
-                    var combo =
-                        character.GetMovementState
-                            <ComboMovementState>();
-
-                    return combo.IsFinished()
+                    return character.ComboController.IsFinished()
                            &&
                            !HasMovementInput(character);
                 }));
@@ -744,11 +740,7 @@ namespace LOGIYGames
                  RunMovementState>(
                 new FuncPredicate(() =>
                 {
-                    var combo =
-                        character.GetMovementState
-                            <ComboMovementState>();
-
-                    return combo.IsFinished()
+                    return character.ComboController.IsFinished()
                            &&
                            HasMovementInput(character);
                 }));
@@ -783,12 +775,12 @@ namespace LOGIYGames
         // HELPERS
         // =========================================================
 
-        private static bool HasMovementInput(Character character)
+        private static bool HasMovementInput(CharacterModule character)
         {
             return character.Input.MovementInput.magnitude > 0;
         }
 
-        private bool CanFall(Character character)
+        private bool CanFall(CharacterModule character)
         {
             var groundJump = character.GetMovementState<GroundJumpMovementState>();
             var roll = character.GetMovementState<RollMovementState>();
@@ -813,7 +805,7 @@ namespace LOGIYGames
             && (mantling == null || !mantling.CanEnter())
             && (groundJump == null || !groundJump.CanEnter());
         }
-        private bool CanWallRun(Character character)
+        private bool CanWallRun(CharacterModule character)
         {
             return (character.Sensors.IsObstacleLegsLeft
                 || character.Sensors.IsObstacleLegsRight)

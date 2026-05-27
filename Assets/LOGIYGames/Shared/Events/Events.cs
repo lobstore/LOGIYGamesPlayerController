@@ -62,4 +62,9 @@ namespace LOGIYGames.Shared.Character.Events
     {
        public Ability AbilityData { get; set; }
     }
+
+    public class AnimationEvent
+    {
+       public AnimationEventType AnimationEventType { get; set; }
+    }
 }
