@@ -1,4 +1,5 @@
 using LOGIYGames.Shared.Enums;
+using System.Collections.Generic;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
@@ -10,53 +11,81 @@ namespace LOGIYGames.CharacterCore
             private set;
         }
 
+        public bool CanCancel
+        {
+            get;
+            private set;
+        }
+
+        // =====================================================
+        // REFERENCES
+        // =====================================================
+
         private readonly CharacterModule
             character;
 
         private readonly Animator
             animator;
 
+        private readonly InputCommandBuffer
+            commandBuffer;
+
+        // =====================================================
+        // STATE
+        // =====================================================
+
         private AttackNodeSO
             queuedAttack;
 
+        private IReadOnlyList<AttackInputType>
+            queuedSequence;
+
         private bool comboWindowOpened;
-        public bool CanCancel
-        {
-            get;
-            private set;
-        }
+
         private bool finished;
 
+        // =====================================================
+        // CONSTRUCTOR
+        // =====================================================
+
         public ComboController(
-            CharacterModule owner)
+            CharacterModule owner,
+            InputCommandBuffer commandBuffer)
         {
             character = owner;
 
             animator =
                 owner.GetComponent<Animator>();
+
+            this.commandBuffer =
+                commandBuffer;
         }
 
-        // ========================================================
+        // =====================================================
         // START COMBO
-        // ========================================================
+        // =====================================================
 
         public void StartCombo(
-            AttackNodeSO attack)
+            AttackNodeSO attack,
+            IReadOnlyList<AttackInputType>
+                usedSequence = null)
         {
             finished = false;
 
             queuedAttack = null;
 
+            queuedSequence = null;
             PlayAttack(attack);
         }
 
-        // ========================================================
+        // =====================================================
         // PLAY ATTACK
-        // ========================================================
+        // =====================================================
 
         private void PlayAttack(
             AttackNodeSO attack)
         {
+            commandBuffer.Clear();
             if (attack == null)
                 return;
 
@@ -69,7 +98,6 @@ namespace LOGIYGames.CharacterCore
                 attack.AnimationName,
                 attack.CrossFade);
 
-
             if (attack.ForwardImpulse > 0)
             {
                 character.VelocityData
@@ -77,37 +105,23 @@ namespace LOGIYGames.CharacterCore
                     character.transform.forward
                     * attack.ForwardImpulse;
             }
+
         }
 
-        // ========================================================
+        // =====================================================
         // INPUT
-        // ========================================================
+        // =====================================================
 
         public void HandleInput(
             AttackInputType input)
         {
-            if (!comboWindowOpened)
-                return;
-
-            foreach (AttackTransition
-                     transition
-                     in CurrentAttack
-                         .Transitions)
-            {
-                if (transition.Input
-                    != input)
-                    continue;
-
-                queuedAttack =
-                    transition.NextAttack;
-
-                return;
-            }
+            commandBuffer.AddCommand(
+                new AttackInputCommand(input));
         }
 
-        // ========================================================
+        // =====================================================
         // EVENTS
-        // ========================================================
+        // =====================================================
 
         public void OnAnimationEvent(
             AnimationEventType type)
@@ -117,14 +131,10 @@ namespace LOGIYGames.CharacterCore
                 case AnimationEventType
                     .EnableHitbox:
 
-                    //Weapon.Hitbox
-
                     break;
 
                 case AnimationEventType
                     .DisableHitbox:
-
-                    //Weapon.Hitbox
 
                     break;
 
@@ -139,6 +149,9 @@ namespace LOGIYGames.CharacterCore
                     .CloseComboWindow:
 
                     comboWindowOpened = false;
+
+                    ResolveTransition();
+
 
                     break;
 
@@ -155,6 +168,7 @@ namespace LOGIYGames.CharacterCore
                     CanCancel = false;
 
                     break;
+
                 case AnimationEventType
                     .EndAnimation:
 
@@ -163,10 +177,57 @@ namespace LOGIYGames.CharacterCore
                     break;
             }
         }
+        private void ResolveTransition()
+        {
+            AttackTransition
+                bestTransition = null;
 
-        // ========================================================
+            int bestMatchLength = 0;
+
+            foreach (AttackTransition
+                     transition
+                     in CurrentAttack
+                         .Transitions)
+            {
+                if (transition.Sequence == null
+                    || transition.Sequence.Inputs == null
+                    || transition.Sequence.Inputs.Count == 0)
+                {
+                    continue;
+                }
+
+                int matchLength =
+                    commandBuffer.GetMatchLength(
+                        transition.Sequence.Inputs);
+
+                if (matchLength <= 0)
+                    continue;
+
+                // choose best match
+                if (matchLength
+                    > bestMatchLength)
+                {
+                    bestMatchLength =
+                        matchLength;
+
+                    bestTransition =
+                        transition;
+                }
+            }
+
+            if (bestTransition == null)
+                return;
+
+            queuedAttack =
+                bestTransition.NextAttack;
+
+            queuedSequence =
+                bestTransition.Sequence
+                    .Inputs;
+        }
+        // =====================================================
         // NEXT ATTACK
-        // ========================================================
+        // =====================================================
 
         private void TryContinueCombo()
         {
@@ -174,26 +235,30 @@ namespace LOGIYGames.CharacterCore
             {
                 finished = true;
 
+                commandBuffer.Clear();
+
                 return;
             }
 
             PlayAttack(queuedAttack);
 
+
+
             queuedAttack = null;
         }
 
-        // ========================================================
+        // =====================================================
         // HELPERS
-        // ========================================================
+        // =====================================================
 
         public bool IsFinished()
         {
             return finished;
         }
 
-        // ========================================================
+        // =====================================================
         // STOP
-        // ========================================================
+        // =====================================================
 
         public void Stop()
         {
@@ -201,10 +266,13 @@ namespace LOGIYGames.CharacterCore
 
             queuedAttack = null;
 
+            queuedSequence = null;
+
             CurrentAttack = null;
 
             finished = false;
 
+            CanCancel = false;
         }
     }
 }

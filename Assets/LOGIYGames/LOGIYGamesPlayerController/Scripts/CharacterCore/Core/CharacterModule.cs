@@ -27,7 +27,7 @@ namespace LOGIYGames.CharacterCore
 
         #region Modules
         public CharacterTargetingModule Targeting { get; private set; }
-        public ComboInputBuffer ComboBuffer { get; private set; }
+        public InputCommandBuffer ComboBuffer { get; private set; }
         public ComboController ComboController { get; private set; }
         public WeaponController WeaponController
         {
@@ -139,9 +139,10 @@ namespace LOGIYGames.CharacterCore
         private void Awake()
         {
             CameraTarget = GetComponent<CameraTargetModule>();
-            ComboBuffer = new ComboInputBuffer();
+            ComboBuffer = new InputCommandBuffer();
             WeaponController = new WeaponController(this);
-            ComboController = new ComboController(this);
+            ComboController = new ComboController(this, ComboBuffer);
+            GetComponent<ComboBufferDebugView>().Buffer = ComboBuffer;
             EventBus = new EventDispatcher();
 
             Targeting = new();
@@ -399,7 +400,10 @@ namespace LOGIYGames.CharacterCore
         {
             Input = inputReader;
         }
-
+        public void ResetInput()
+        {
+            Input = new CharacterInput();
+        }
         public void ResetStrategies()
         {
             RotationStrategy = DefaultRotationStrategy;

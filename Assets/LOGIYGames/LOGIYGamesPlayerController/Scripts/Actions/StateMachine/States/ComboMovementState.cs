@@ -13,7 +13,7 @@ namespace LOGIYGames
             MovementStateData data)
             : base(character, data)
         {
-                ;
+            ;
         }
 
         // ========================================================
@@ -24,7 +24,7 @@ namespace LOGIYGames
         {
             base.Enter();
             _character.MovementStrategy = new NoneMovement();
-            _character.RotationStrategy= new NoneRotation(_character);
+            _character.RotationStrategy = new NoneRotation(_character);
             ComboMovesetSO moveset =
                 _character
                     .WeaponController
@@ -34,7 +34,12 @@ namespace LOGIYGames
                 return;
 
             _character.ComboController.StartCombo(
-                moveset.EntryAttack);
+    moveset.EntryAttack,
+    new[]
+    {
+        AttackInputType.Light
+    });
+            _character.ResetInput();
         }
 
         // ========================================================
@@ -69,16 +74,14 @@ namespace LOGIYGames
                     .Input
                     .AttackPressed)
             {
-                _character.ComboController.HandleInput(
-                    AttackInputType.Light);
+                _character.ComboBuffer.AddCommand(new AttackInputCommand(AttackInputType.Light));
             }
 
             if (_character
                     .Input
-                    .HeavyAttackPressed)
+                    .EvadePressed)
             {
-                _character.ComboController.HandleInput(
-                    AttackInputType.Heavy);
+                _character.ComboBuffer.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
             }
         }
         public bool CanCancel()

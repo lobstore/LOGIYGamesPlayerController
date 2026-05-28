@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace LOGIYGames.CharacterCore
 {
+    [Serializable]
     public struct CharacterInput
     {
         public Vector2 MovementInput;
