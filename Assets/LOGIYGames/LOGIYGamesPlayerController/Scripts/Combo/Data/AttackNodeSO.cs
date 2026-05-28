@@ -1,3 +1,4 @@
+using LOGIYGames.Shared.Data;
 using System.Collections.Generic;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
@@ -13,27 +14,11 @@ namespace LOGIYGames.CharacterCore
 
         [Header("Animation")]
 
-        public string AnimationStateName;
+        public string AnimationName;
 
         public float CrossFade = 0.1f;
 
         public bool UseRootMotion = true;
-
-        // =====================================================
-        // TIMING
-        // =====================================================
-
-        [Header("Timing")]
-
-        public float Duration = 1f;
-
-        public float ComboWindowStart = 0.25f;
-
-        public float ComboWindowEnd = 0.7f;
-
-        public float TransitionTime = 0.85f;
-
-        public float CancelTime = 0.6f;
 
         // =====================================================
         // MOVEMENT
@@ -49,12 +34,10 @@ namespace LOGIYGames.CharacterCore
 
         [Header("Damage")]
 
-        public int Damage = 10;
-
-        public float PoiseDamage = 10f;
+        DamageData BaseDamageData;
 
         // =====================================================
-        // ACTIONS
+        // SEQUENCE
         // =====================================================
 
         [Header("Transitions")]

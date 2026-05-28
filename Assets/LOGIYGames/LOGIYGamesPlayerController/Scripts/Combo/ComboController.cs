@@ -66,7 +66,7 @@ namespace LOGIYGames.CharacterCore
                 attack.UseRootMotion;
 
             animator.CrossFade(
-                attack.AnimationStateName,
+                attack.AnimationName,
                 attack.CrossFade);
 
 
