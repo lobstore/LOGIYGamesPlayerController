@@ -2,8 +2,8 @@ using LOGIYGames.Shared.Enums;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    public class ComboAnimationEventReceiver
-    : MonoBehaviour
+    public class AnimationEventReceiver
+        : MonoBehaviour
     {
         private CharacterModule character;
 
@@ -11,6 +11,38 @@ namespace LOGIYGames.CharacterCore
         {
             character =
                 GetComponent<CharacterModule>();
+        }
+
+        // ========================================================
+        // ABILITY
+        // ========================================================
+
+        public void AbilityStarted()
+        {
+            SendEvent(
+                AnimationEventType
+                    .AbilityStarted);
+        }
+
+        public void AbilityActionStarted()
+        {
+            SendEvent(
+                AnimationEventType
+                    .AbilityActionStart);
+        }
+
+        public void AbilityActionEnded()
+        {
+            SendEvent(
+                AnimationEventType
+                    .AbilityActionEnd);
+        }
+
+        public void AbilityFinished()
+        {
+            SendEvent(
+                AnimationEventType
+                    .AbilityFinished);
         }
 
         // ========================================================
@@ -48,32 +80,30 @@ namespace LOGIYGames.CharacterCore
                 AnimationEventType
                     .CloseComboWindow);
         }
-
-        // ========================================================
-        // ATTACK END
-        // ========================================================
-
         public void FinishAttack()
         {
-
             SendEvent(
-    AnimationEventType
-        .EndAnimation);
-
+                AnimationEventType
+                    .AttackFinished);
         }
+        // ========================================================
+        // CANCEL
+        // ========================================================
+
         public void EnableCancel()
         {
             SendEvent(
                 AnimationEventType
-                    .EnableCancelWindow);
+                    .OpenCancelWindow);
         }
 
         public void DisableCancel()
         {
             SendEvent(
                 AnimationEventType
-                    .DisableCancelWindow);
+                    .CloseCancelWindow);
         }
+
         // ========================================================
         // SEND
         // ========================================================
@@ -81,10 +111,13 @@ namespace LOGIYGames.CharacterCore
         private void SendEvent(
             AnimationEventType type)
         {
-            character.EventBus.Publish(new Shared.Character.Events.AnimationEvent()
-            {
-                AnimationEventType = type
-            });
+            character.EventBus.Publish(
+                new Shared.Character.Events
+                    .CharacterAnimationEvent()
+                {
+                    AnimationEventType = type
+                });
         }
     }
+
 }

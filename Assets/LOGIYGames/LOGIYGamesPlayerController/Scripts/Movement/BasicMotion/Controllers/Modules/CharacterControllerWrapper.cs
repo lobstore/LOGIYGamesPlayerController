@@ -1,6 +1,5 @@
 using LOGIYGames.CharacterCore;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace LOGIYGames
 {
@@ -150,10 +149,21 @@ namespace LOGIYGames
 
             UpdateGroundMotion();
             ApplyGroundMotion();
+            if (totalVelocity!= Vector3.zero)
+            {
+                DebugDraw.DrawArrow(transform.position, totalVelocity, totalVelocityArrowColor);
 
-            DebugDraw.DrawArrow(transform.position, totalVelocity, totalVelocityArrowColor);
-            DebugDraw.DrawArrow(transform.position, planarVelocity, planarVelocityArrowColor);
-            DebugDraw.DrawArrow(transform.position, verticalVelocity, verticalVelocityArrowColor);
+            }
+            if (planarVelocity!= Vector3.zero)
+            {
+                DebugDraw.DrawArrow(transform.position, planarVelocity, planarVelocityArrowColor);
+
+            }
+            if (verticalVelocity != Vector3.zero)
+            {
+                DebugDraw.DrawArrow(transform.position, verticalVelocity, verticalVelocityArrowColor);
+
+            }
         }
 
         #endregion

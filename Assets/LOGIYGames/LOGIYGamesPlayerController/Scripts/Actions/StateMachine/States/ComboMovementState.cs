@@ -4,16 +4,16 @@ using LOGIYGames.Shared.Enums;
 
 namespace LOGIYGames
 {
-    public class ComboMovementState
-        : CharacterMovementState
+    public class ComboMovementState : CharacterMovementState
     {
-
-        public ComboMovementState(
-            CharacterModule character,
-            MovementStateData data)
-            : base(character, data)
+        ComboController combo;
+        WeaponController weapon;
+        InputCommandBuffer buffer;
+        public ComboMovementState(CharacterModule character, MovementStateData data) : base(character, data)
         {
-            ;
+            combo = character.ComboController;
+            weapon = character.WeaponController;
+            buffer = character.ComboBuffer;
         }
 
         // ========================================================
@@ -25,68 +25,42 @@ namespace LOGIYGames
             base.Enter();
             _character.MovementStrategy = new NoneMovement();
             _character.RotationStrategy = new NoneRotation(_character);
-            ComboMovesetSO moveset =
-                _character
-                    .WeaponController
-                    .GetWeaponCombo();
+            ComboMovesetSO moveset = weapon.GetWeaponCombo();
 
             if (moveset == null)
                 return;
 
-            _character.ComboController.StartCombo(
-    moveset.EntryAttack,
-    new[]
-    {
-        AttackInputType.Light
-    });
+            _character.ComboController.BeginCombo(moveset.EntryAttack);
             _character.ResetInput();
         }
-
-        // ========================================================
-        // EXIT
-        // ========================================================
-
         public override void Exit()
         {
             base.Exit();
 
-            _character.ComboController.Stop();
+            combo.Reset();
         }
-
-        // ========================================================
-        // UPDATE
-        // ========================================================
 
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-
             ReadInput();
         }
 
-        // ========================================================
-        // INPUT
-        // ========================================================
-
         private void ReadInput()
         {
-            if (_character
-                    .Input
-                    .AttackPressed)
+            if (_character.Input.AttackPressed)
             {
-                _character.ComboBuffer.AddCommand(new AttackInputCommand(AttackInputType.Light));
+                buffer.AddCommand(new AttackInputCommand(AttackInputType.Light));
             }
 
-            if (_character
-                    .Input
-                    .EvadePressed)
+            if (_character.Input.EvadePressed)
             {
-                _character.ComboBuffer.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
+                buffer.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
             }
         }
-        public bool CanCancel()
+        public bool CanExit()
         {
-            return _character.ComboController.CanCancel;
+            return combo.IsFinished();
         }
 
 

@@ -94,9 +94,6 @@ namespace LOGIYGames.Movement
         public virtual void PhysicsUpdate()
         {
             Move();
-
-           // Aim();
-
         }
         protected virtual void Move()
         {
@@ -113,18 +110,6 @@ namespace LOGIYGames.Movement
                 return;
             }
             _character.Rotate(_character.TargetRotation, _character.TurnSmoothTime);
-        }
-        protected virtual void Aim()
-        {
-            if (!_data.IsAimAllowed) return;
-            if (_character.Input.FocusPressed)
-            {
-                _character.RotationStrategy = new TargetLockRotation(_character);
-            }
-            else
-            {
-                _character.RotationStrategy = _character.DefaultRotationStrategy;
-            }
         }
     }
 }

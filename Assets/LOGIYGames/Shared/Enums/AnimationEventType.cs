@@ -2,23 +2,42 @@
 {
     public enum AnimationEventType
     {
+        None,
+
+        // ========================================================
+        // ABILITY
+        // ========================================================
+
+        AbilityStarted,
+        AbilityActionStart,
+        AbilityActionEnd,
+        AbilityFinished,
+
+        // ========================================================
+        // HITBOX
+        // ========================================================
+
         EnableHitbox,
         DisableHitbox,
+
+        // ========================================================
+        // COMBO
+        // ========================================================
 
         OpenComboWindow,
         CloseComboWindow,
 
-        EnableCancelWindow,
-        DisableCancelWindow,
+        // ========================================================
+        // CANCEL
+        // ========================================================
 
-        EnableRotation,
-        DisableRotation,
+        OpenCancelWindow,
+        CloseCancelWindow,
 
-        EnableMovement,
-        DisableMovement,
-
-        EndAnimation
-
-
+        // ========================================================
+        // GENERAL
+        // ========================================================
+        AttackStarted,
+        AttackFinished
     }
 }

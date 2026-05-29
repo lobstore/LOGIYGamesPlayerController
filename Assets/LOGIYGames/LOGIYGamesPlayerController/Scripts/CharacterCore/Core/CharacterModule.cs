@@ -29,11 +29,11 @@ namespace LOGIYGames.CharacterCore
         public CharacterTargetingModule Targeting { get; private set; }
         public InputCommandBuffer ComboBuffer { get; private set; }
         public ComboController ComboController { get; private set; }
-        public WeaponController WeaponController
-        {
-            get;
-            private set;
-        }
+        public WeaponController WeaponController { get; private set; }
+
+        public Ability Ability;
+
+        public AbilityController AbilityController { get; private set; }
         #endregion
         #region State Machine Configuration
         [Header("State Machine Configuration")]
@@ -138,12 +138,13 @@ namespace LOGIYGames.CharacterCore
 
         private void Awake()
         {
+            EventBus = new EventDispatcher();
             CameraTarget = GetComponent<CameraTargetModule>();
             ComboBuffer = new InputCommandBuffer();
             WeaponController = new WeaponController(this);
             ComboController = new ComboController(this, ComboBuffer);
+            AbilityController = new AbilityController(this);
             GetComponent<ComboBufferDebugView>().Buffer = ComboBuffer;
-            EventBus = new EventDispatcher();
 
             Targeting = new();
             VelocityData = new();
@@ -196,11 +197,7 @@ namespace LOGIYGames.CharacterCore
             {
 
             });
-            EventBus.Subscribe<Shared.Character.Events.AnimationEvent>(e =>
-            {
-                ComboController.OnAnimationEvent(e.AnimationEventType);
 
-            });
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
@@ -222,7 +219,12 @@ namespace LOGIYGames.CharacterCore
             CalculateDeltaYaw();
             _movementStateMachine.Update();
             StatesDebug();
-            DebugDraw.DrawArrow(transform.position, TargetDirection * BaseSpeed, movementTargetDirectionArrowColor);
+            var velo = TargetDirection * BaseSpeed;
+            if (velo.magnitude > 0)
+            {
+                DebugDraw.DrawArrow(transform.position, velo, movementTargetDirectionArrowColor);
+
+            }
 
         }
 

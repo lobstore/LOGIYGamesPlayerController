@@ -114,7 +114,7 @@ namespace LOGIYGames
             UpdateStrategies();
             CurrentCharacter.ResetStrategies();
             CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraFollow, CurrentCharacter.CameraLookAt);
-            OnCharacterChanged.Invoke(CurrentCharacter);
+            OnCharacterChanged?.Invoke(CurrentCharacter);
         }
     }
 }

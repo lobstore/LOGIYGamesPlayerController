@@ -1,4 +1,3 @@
-using LOGIYGames.CharacterCore;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -45,15 +44,9 @@ namespace LOGIYGames
             if (_animator == null)
                 return;
 
-            ApplyHandIK(
-                AvatarIKGoal.LeftHand,
-                LeftHandPoint,
-                LeftHandNormal);
+            ApplyHandIK(AvatarIKGoal.LeftHand, LeftHandPoint, LeftHandNormal);
 
-            ApplyHandIK(
-                AvatarIKGoal.RightHand,
-                RightHandPoint,
-                RightHandNormal);
+            ApplyHandIK(AvatarIKGoal.RightHand, RightHandPoint, RightHandNormal);
         }
 
         private void ApplyHandIK(

@@ -22,6 +22,7 @@ namespace LOGIYGames
         public MovementStateData walkMovementStateData;
         public MovementStateData sprintMovementStateData;
         public MovementStateData comboStateData;
+        public MovementStateData abilityStateData;
 
         [Header("AirLocomotion")]
         public MovementStateData fallingMovementStateData;
@@ -83,6 +84,7 @@ namespace LOGIYGames
             character.AddMovementState(new SwimMovementState(character, swimMovementStateData));
 
             character.AddMovementState(new LadderMovementState(character, ladderMovementStatData));
+            character.AddMovementState(new AbilityMovementState(character, abilityStateData));
 
             character.AddMovementState(
     new ComboMovementState(
@@ -113,6 +115,9 @@ namespace LOGIYGames
 
             character.MovementStateMachine.AddAnyTransition<SwimMovementState>(
                 new FuncPredicate(() => character.Sensors.IsInWater));
+            character.MovementStateMachine.AddAnyTransition<AbilityMovementState>(
+            new FuncPredicate(() => character.Input.CrouchPressed));
+
             #region Movement
             // =========================================================
             // IDLE
@@ -683,6 +688,7 @@ namespace LOGIYGames
                 new FuncPredicate(() => !CanWallRun(character)));
             #endregion
             #endregion
+            #region Combo
             /*
             ========================================================
             IDLE -> COMBO
@@ -690,9 +696,7 @@ namespace LOGIYGames
             */
 
 
-            character.MovementStateMachine.AddTransition
-                <IdleMovementState,
-                 ComboMovementState>(
+            character.MovementStateMachine.AddTransition<IdleMovementState, ComboMovementState>(
                 new FuncPredicate(() =>
                     character.Input.AttackPressed));
 
@@ -704,11 +708,9 @@ namespace LOGIYGames
             */
 
 
-            character.MovementStateMachine.AddTransition
-                <RunMovementState,
-                 ComboMovementState>(
-                new FuncPredicate(() =>
-                    character.Input.AttackPressed));
+            character.MovementStateMachine.AddTransition<RunMovementState, ComboMovementState>(
+                    new FuncPredicate(() => character.Input.AttackPressed)
+                );
 
 
             /*
@@ -718,14 +720,10 @@ namespace LOGIYGames
             */
 
 
-            character.MovementStateMachine.AddTransition
-                <ComboMovementState,
-                 IdleMovementState>(
+            character.MovementStateMachine.AddTransition<ComboMovementState, IdleMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return character.ComboController.IsFinished()
-                           &&
-                           !HasMovementInput(character);
+                    return character.ComboController.IsFinished() && !HasMovementInput(character);
                 }));
 
 
@@ -740,9 +738,7 @@ namespace LOGIYGames
                  RunMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return character.ComboController.IsFinished()
-                           &&
-                           HasMovementInput(character);
+                    return character.ComboController.IsFinished() && HasMovementInput(character);
                 }));
 
 
@@ -765,10 +761,20 @@ namespace LOGIYGames
                         character.GetMovementState
                             <RollMovementState>();
 
-                    return combo.CanCancel()
-                           &&
-                           roll.CanEnter();
+                    return combo.CanExit() && roll.CanEnter();
                 }));
+            #endregion
+            #region Ability
+            character.MovementStateMachine.AddTransition
+    <AbilityMovementState, IdleMovementState>(
+            new FuncPredicate(() =>
+            {
+                var ability = character.GetMovementState<AbilityMovementState>();
+                return ability.CanExit();
+            }
+        ));
+
+            #endregion
         }
 
         // =========================================================
@@ -791,6 +797,7 @@ namespace LOGIYGames
             var fly = character.GetMovementState<FlyMovementState>();
             var wallRun = character.GetMovementState<WallRunMovementState>();
             var mantling = character.GetMovementState<MantlingMovementState>();
+            var skill = character.GetMovementState<AbilityMovementState>();
 
             return !character.IsGrounded
                 && (groundJump == null || !groundJump.IsDurationTimerRunning)
@@ -803,7 +810,8 @@ namespace LOGIYGames
             && (wallRun == null || !wallRun.IsActiveState)
             && (mantling == null || !mantling.IsActiveState)
             && (mantling == null || !mantling.CanEnter())
-            && (groundJump == null || !groundJump.CanEnter());
+            && (groundJump == null || !groundJump.CanEnter())
+            && (skill == null || !skill.IsActiveState);
         }
         private bool CanWallRun(CharacterModule character)
         {

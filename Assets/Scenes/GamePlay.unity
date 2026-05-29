@@ -45143,6 +45143,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1486741850}
+    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      propertyPath: Ability
+      value: 
+      objectReference: {fileID: 11400000, guid: c4fe7cb4c7cd14548bb34390a2797522, type: 2}
     m_RemovedComponents:
     - {fileID: 1148253161778860002, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
     m_RemovedGameObjects: []
@@ -45157,6 +45161,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6718191764129459961}
+    - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6718191764129459977}
   m_SourcePrefab: {fileID: 100100000, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
 --- !u!1001 &2324911943303090081
 PrefabInstance:
@@ -45392,6 +45399,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.AnimationEventReceiver
+--- !u!114 &6718191764129459977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201072666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d202b3c68bffea14c9476b0f27cbade2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.ComboBufferDebugView
+  position: {x: 20, y: 20}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 8ceb711ae824366409638b5c4792fcce
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -16,8 +16,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -49,14 +47,35 @@ ModelImporter:
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
-      keepOriginalPositionY: 1
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: AbilityStarted
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.26368216
+        functionName: AbilityAction
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.91569763
+        functionName: AbilityFinished
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -87,6 +106,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8

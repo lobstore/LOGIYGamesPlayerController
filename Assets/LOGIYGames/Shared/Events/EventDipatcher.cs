@@ -1,3 +1,4 @@
+using LOGIYGames.Shared.Character.Events;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,15 +6,15 @@ namespace LOGIYGames
 {
     public interface IEventDispatcher
     {
-        void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : class;
-        void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : class;
-        void Publish<TEvent>(TEvent eventData) where TEvent : class;
+        void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : EventBase;
+        void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : EventBase;
+        void Publish<TEvent>(TEvent eventData) where TEvent : EventBase;
     }
     public class EventDispatcher : IEventDispatcher
     {
         private readonly Dictionary<Type, Delegate> _subscriptions = new();
 
-        public void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : class
+        public void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : EventBase
         {
             var eventType = typeof(TEvent);
             if (_subscriptions.TryGetValue(eventType, out var existingDelegate))
@@ -26,7 +27,7 @@ namespace LOGIYGames
             }
         }
 
-        public void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : class
+        public void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : EventBase
         {
             var eventType = typeof(TEvent);
             if (_subscriptions.TryGetValue(eventType, out var existingDelegate))
@@ -39,7 +40,7 @@ namespace LOGIYGames
             }
         }
 
-        public void Publish<TEvent>(TEvent eventData) where TEvent : class
+        public void Publish<TEvent>(TEvent eventData) where TEvent : EventBase
         {
             var eventType = typeof(TEvent);
             if (_subscriptions.TryGetValue(eventType, out var existingDelegate))

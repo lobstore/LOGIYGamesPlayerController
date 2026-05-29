@@ -1,21 +1,40 @@
-using System;
+using LOGIYGames.Shared.Enums;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace LOGIYGames
 {
-    [CreateAssetMenu(fileName = "New Ability", menuName = "Ability")]
+    [CreateAssetMenu(
+        fileName = "New Ability",
+        menuName = "Ability/Ability")]
     public class Ability : ScriptableObject
     {
+        [Header("Info")]
         public string label;
 
-        public List<EffectFactory> effects = new();
+        // ========================================================
+        // CAST
+        // ========================================================
 
-        public string executionAnimationName;
-        public string castingAnimationName;
+        [Header("Casting")]
+        public string castingAnimation;
 
-        public float castDuration;
-        public float cooldown;
+        public float castDuration = 1f;
+
+        // ========================================================
+        // EXECUTION
+        // ========================================================
+
+        [Header("Execution")]
+        public string executionAnimation;
+
+        // ========================================================
+        // EFFECTS
+        // ========================================================
+
+        [Header("Effects")]
+        public List<EffectFactory> effects =
+            new();
 
     }
 }

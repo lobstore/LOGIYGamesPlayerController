@@ -340,7 +340,11 @@ namespace LOGIYGames.Animation
         public override void OnFixedUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
-            DebugDraw.DrawArrow(transform.position, animator.velocity, Color.white);
+            if (animator.velocity != Vector3.zero)
+            {
+                DebugDraw.DrawArrow(transform.position, animator.velocity, Color.white);
+
+            }
             animator.SetFloat("Speed", character.SpeedMultiplier);
             if (character.RotationStrategy is ThirdPersonPlanarRotation or InputRelativeRotation)
             {
