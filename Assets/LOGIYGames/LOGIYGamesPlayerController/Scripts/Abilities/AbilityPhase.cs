@@ -1,15 +1,11 @@
 namespace LOGIYGames
 {
-    public partial class AbilityController
+    public enum AbilityPhase
     {
-        public enum AbilityPhase
-        {
-            None,
-            Started,
-            Casting,
-            Executing,
-            Finished
-        }
-
+        None,
+        Started,
+        Casting,
+        Executing,
+        Finished
     }
 }

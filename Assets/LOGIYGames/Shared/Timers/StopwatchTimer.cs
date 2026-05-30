@@ -11,7 +11,7 @@ namespace LOGIYGames.Timers
         {
             if (IsRunning)
             {
-                CurrentTime += Time.deltaTime;
+                CurrentTime.Value += Time.deltaTime;
             }
         }
         public override bool IsFinished => IsStopped;

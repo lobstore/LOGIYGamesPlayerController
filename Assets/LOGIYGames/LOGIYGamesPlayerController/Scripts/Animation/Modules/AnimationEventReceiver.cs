@@ -1,3 +1,4 @@
+using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
@@ -19,30 +20,32 @@ namespace LOGIYGames.CharacterCore
 
         public void AbilityStarted()
         {
-            SendEvent(
-                AnimationEventType
-                    .AbilityStarted);
+            SendAbilityAnimationEvent(
+                AbilityEventType
+                    .Started);
         }
+
+
 
         public void AbilityActionStarted()
         {
-            SendEvent(
-                AnimationEventType
-                    .AbilityActionStart);
+            SendAbilityAnimationEvent(
+                AbilityEventType
+                    .ActionStart);
         }
 
         public void AbilityActionEnded()
         {
-            SendEvent(
-                AnimationEventType
-                    .AbilityActionEnd);
+            SendAbilityAnimationEvent(
+                AbilityEventType
+                    .ActionEnd);
         }
 
         public void AbilityFinished()
         {
-            SendEvent(
-                AnimationEventType
-                    .AbilityFinished);
+            SendAbilityAnimationEvent(
+                AbilityEventType
+                    .Finished);
         }
 
         // ========================================================
@@ -51,15 +54,15 @@ namespace LOGIYGames.CharacterCore
 
         public void EnableHitbox()
         {
-            SendEvent(
-                AnimationEventType
+            SendComboAnimationEvent(
+                ComboEventType
                     .EnableHitbox);
         }
 
         public void DisableHitbox()
         {
-            SendEvent(
-                AnimationEventType
+            SendComboAnimationEvent(
+                ComboEventType
                     .DisableHitbox);
         }
 
@@ -69,21 +72,21 @@ namespace LOGIYGames.CharacterCore
 
         public void OpenComboWindow()
         {
-            SendEvent(
-                AnimationEventType
+            SendComboAnimationEvent(
+                ComboEventType
                     .OpenComboWindow);
         }
 
         public void CloseComboWindow()
         {
-            SendEvent(
-                AnimationEventType
+            SendComboAnimationEvent(
+                ComboEventType
                     .CloseComboWindow);
         }
         public void FinishAttack()
         {
-            SendEvent(
-                AnimationEventType
+            SendComboAnimationEvent(
+                ComboEventType
                     .AttackFinished);
         }
         // ========================================================
@@ -92,31 +95,34 @@ namespace LOGIYGames.CharacterCore
 
         public void EnableCancel()
         {
-            SendEvent(
-                AnimationEventType
+            SendComboAnimationEvent(
+                ComboEventType
                     .OpenCancelWindow);
         }
 
         public void DisableCancel()
         {
-            SendEvent(
-                AnimationEventType
+            SendComboAnimationEvent(
+                ComboEventType
                     .CloseCancelWindow);
         }
 
         // ========================================================
         // SEND
         // ========================================================
-
-        private void SendEvent(
-            AnimationEventType type)
+        private void SendAbilityAnimationEvent(AbilityEventType type)
         {
-            character.EventBus.Publish(
-                new Shared.Character.Events
-                    .CharacterAnimationEvent()
-                {
-                    AnimationEventType = type
-                });
+            character.EventBus.Publish(new AbilityTimedEvent()
+            {
+                AbilityEventType = type
+            });
+        }
+        private void SendComboAnimationEvent(ComboEventType type)
+        {
+            character.EventBus.Publish(new ComboAnimationEvent()
+            {
+                ComboEventType = type
+            });
         }
     }
 

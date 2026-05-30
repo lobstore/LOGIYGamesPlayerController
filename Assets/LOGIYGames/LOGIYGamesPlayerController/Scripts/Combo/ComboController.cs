@@ -24,9 +24,9 @@ namespace LOGIYGames.CharacterCore
         }
         private void SubscribeEvents()
         {
-            character.EventBus.Subscribe<CharacterAnimationEvent>(e =>
+            character.EventBus.Subscribe<ComboAnimationEvent>(e =>
             {
-                OnAnimationEvent(e.AnimationEventType);
+                OnAnimationEvent(e.ComboEventType);
             });
         }
         public void BeginCombo(AttackNodeSO attack)
@@ -46,32 +46,32 @@ namespace LOGIYGames.CharacterCore
                 character.VelocityData.Locomotion += character.transform.forward * attack.ForwardImpulse;
 
         }
-        public void OnAnimationEvent(AnimationEventType type)
+        public void OnAnimationEvent(ComboEventType type)
         {
             switch (type)
             {
-                case AnimationEventType.AttackStarted:
+                case ComboEventType.AttackStarted:
                     OnAttackStarted();
                     break;
-                case AnimationEventType.EnableHitbox:
+                case ComboEventType.EnableHitbox:
                     OnHitboxEnabled();
                     break;
-                case AnimationEventType.DisableHitbox:
+                case ComboEventType.DisableHitbox:
                     OnHiboxDisabled();
                     break;
-                case AnimationEventType.OpenComboWindow:
+                case ComboEventType.OpenComboWindow:
                     OnComboWindowOpened();
                     break;
-                case AnimationEventType.CloseComboWindow:
+                case ComboEventType.CloseComboWindow:
                     OnComboWindowClosed();
                     break;
-                case AnimationEventType.OpenCancelWindow:
+                case ComboEventType.OpenCancelWindow:
                     OnCancelWindowOpened();
                     break;
-                case AnimationEventType.CloseCancelWindow:
+                case ComboEventType.CloseCancelWindow:
                     OnCancelWindowClosed();
                     break;
-                case AnimationEventType.AttackFinished:
+                case ComboEventType.AttackFinished:
                     OnAttackFinished();
                     break;
             }

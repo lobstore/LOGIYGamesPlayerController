@@ -1,4 +1,4 @@
-using LOGIYGames.Shared.Enums;
+using LOGIYGames.Shared.Character.Events;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +18,6 @@ namespace LOGIYGames
 
         [Header("Casting")]
         public string castingAnimation;
-
         public float castDuration = 1f;
 
         // ========================================================
@@ -26,15 +25,21 @@ namespace LOGIYGames
         // ========================================================
 
         [Header("Execution")]
-        public string executionAnimation;
+
+        public float executionDuration = 1f;
+        // ========================================================
+        // TIMELINE
+        // ========================================================
+
+        [Header("Timeline")]
+        public List<AbilityTimedEvent> TimedEvents = new();
 
         // ========================================================
         // EFFECTS
         // ========================================================
 
-        [Header("Effects")]
-        public List<EffectFactory> effects =
-            new();
-
+        [Header("Legacy Effects")]
+        public List<EffectFactory> Effects = new();
     }
+
 }

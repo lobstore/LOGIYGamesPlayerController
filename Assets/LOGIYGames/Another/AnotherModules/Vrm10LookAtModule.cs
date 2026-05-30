@@ -163,7 +163,7 @@ namespace LOGIYGames
 
         void PerformTurningSight(Vector3 target)
         {
-            var sightProgress = Mathf.Clamp01(turningDurationTimer.CurrentTime / sightTurningDuration);
+            var sightProgress = Mathf.Clamp01(turningDurationTimer.CurrentTime.CurrentValue / sightTurningDuration);
             float curveValue = sightAnimationCurve.Evaluate(sightProgress);
             EyeSight.position = Vector3.Lerp(EyeSight.position, target, curveValue);
 

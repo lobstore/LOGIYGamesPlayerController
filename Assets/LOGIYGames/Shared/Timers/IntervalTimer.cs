@@ -16,23 +16,23 @@ namespace LOGIYGames.Timers
             nextInterval = totalTime - interval;
         }
 
-        public override bool IsFinished => CurrentTime<=0;
+        public override bool IsFinished => CurrentTime.CurrentValue<=0;
 
         public override void Tick()
         {
-            if (IsRunning&&CurrentTime>0)
+            if (IsRunning&&CurrentTime.CurrentValue>0)
             {
-                CurrentTime -= Time.deltaTime;
+                CurrentTime.Value -= Time.deltaTime;
 
-                while (CurrentTime <= nextInterval && nextInterval >= 0)
+                while (CurrentTime.CurrentValue <= nextInterval && nextInterval >= 0)
                 {
                     OnInterval.Invoke();
                     nextInterval-=interval;
                 }
             }
-            if (IsRunning&&CurrentTime<=0)
+            if (IsRunning&&CurrentTime.CurrentValue<=0)
             {
-                CurrentTime = 0;
+                CurrentTime.Value = 0;
                 Stop();
             }
         }

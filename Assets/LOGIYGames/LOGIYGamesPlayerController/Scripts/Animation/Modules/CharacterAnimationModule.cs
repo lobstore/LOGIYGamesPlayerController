@@ -16,7 +16,7 @@ namespace LOGIYGames.Animation
         [SerializeField][Range(0, 0.5f)] private float crossFadeSpeed;
 
         [SerializeField] CharacterAnimationsData _data;
-
+        public bool UseRootMotion { get => animator.applyRootMotion; set => animator.applyRootMotion = value;  }
         private void Start()
         {
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>

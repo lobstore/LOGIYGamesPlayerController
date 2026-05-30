@@ -80,8 +80,8 @@ namespace LOGIYGames.Movement
         public bool IsCooldownTimerRunning => _cooldownTimer?.IsRunning == true;
         public float DurationTimerProgress => _durationTimer?.Progress ?? 0f;
         public float CooldownTimerProgress => _cooldownTimer?.Progress ?? 0f;
-        public float DurationTimerRemaining => _durationTimer?.CurrentTime ?? 0f;
-        public float CooldownTimerRemaining => _cooldownTimer?.CurrentTime ?? 0f;
+        public float DurationTimerRemaining => _durationTimer?.CurrentTime.CurrentValue ?? 0f;
+        public float CooldownTimerRemaining => _cooldownTimer?.CurrentTime.CurrentValue ?? 0f;
     }
 
 }

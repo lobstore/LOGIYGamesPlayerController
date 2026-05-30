@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using R3;
 using System;
 using UnityEngine;
 namespace LOGIYGames.Timers
@@ -8,10 +9,11 @@ namespace LOGIYGames.Timers
     {
         protected bool IsStopped;
         protected float initialTime;
-        public float CurrentTime { get; set; }
+        public ReactiveProperty<float> CurrentTime { get; set; } = new();
+        public virtual float ElapsedTime => CurrentTime.CurrentValue;
         public bool IsRunning { get; protected set; }
 
-        public virtual float Progress => Mathf.Clamp(CurrentTime / initialTime, 0, 1);
+        public virtual float Progress => Mathf.Clamp(CurrentTime.CurrentValue / initialTime, 0, 1);
 
         public Action OnTimerStart = delegate { };
         public Action OnTimerStop = delegate { };
@@ -24,7 +26,7 @@ namespace LOGIYGames.Timers
 
         public void Start()
         {
-            CurrentTime = initialTime;
+            CurrentTime.Value = initialTime;
             if (!IsRunning)
             {
                 IsRunning = true;
@@ -48,7 +50,7 @@ namespace LOGIYGames.Timers
 
         public void Resume() => IsRunning = true;
         public void Pause() => IsRunning = false;
-        public virtual void Reset() => CurrentTime = initialTime;
+        public virtual void Reset() => CurrentTime.Value = initialTime;
         public virtual void Reset(float newTime)
         {
             initialTime = newTime;
