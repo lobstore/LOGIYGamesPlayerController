@@ -1,27 +1,32 @@
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
-using System.Collections.Generic;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    public partial class ComboController
+    public class ComboController
     {
         public AttackNodeSO CurrentAttack { get; private set; }
         public bool CanCancel { get; private set; }
-        private CharacterModule character;
-        private Animator animator;
-        private InputCommandBuffer commandBuffer;
-        private AttackNodeSO queuedAttack;
-
         public bool IsNextQueued { get; private set; }
         public ComboPhase Phase { get; private set; }
-        public ComboController(CharacterModule owner, InputCommandBuffer commandBuffer)
+
+        private readonly CharacterModule character;
+        private readonly Animator animator;
+        private readonly InputCommandBuffer commandBuffer;
+
+        private AttackNodeSO queuedAttack;
+
+        public ComboController(
+            CharacterModule owner,
+            InputCommandBuffer commandBuffer)
         {
             character = owner;
             animator = owner.GetComponent<Animator>();
             this.commandBuffer = commandBuffer;
+
             SubscribeEvents();
         }
+
         private void SubscribeEvents()
         {
             character.EventBus.Subscribe<ComboAnimationEvent>(e =>
@@ -29,23 +34,60 @@ namespace LOGIYGames.CharacterCore
                 OnAnimationEvent(e.ComboEventType);
             });
         }
+
         public void BeginCombo(AttackNodeSO attack)
         {
+            Reset();
+
             Phase = ComboPhase.Started;
-            queuedAttack = null;
+
             StartAttack(attack);
         }
+
         private void StartAttack(AttackNodeSO attack)
         {
             commandBuffer.Clear();
-            if (attack == null) return;
-            CurrentAttack = attack;
-            animator.applyRootMotion = attack.UseRootMotion;
-            animator.CrossFade(attack.AnimationName, attack.CrossFade);
-            if (attack.ForwardImpulse > 0)
-                character.VelocityData.Locomotion += character.transform.forward * attack.ForwardImpulse;
 
+            if (attack == null)
+            {
+                FinishCombo();
+                return;
+            }
+
+
+            if (string.IsNullOrWhiteSpace(attack.Animation.AnimationName))
+            {
+                FinishCombo();
+                return;
+            }
+
+            int stateHash = Animator.StringToHash(attack.Animation.AnimationName);
+
+            // Проверяем наличие состояния в Base Layer
+            if (!animator.HasState(0, stateHash))
+            {
+                Debug.LogError(
+                    $"ComboController: Animator state '{attack.Animation.AnimationName}' not found.");
+
+                FinishCombo();
+                return;
+            }
+
+            CurrentAttack = attack;
+
+            animator.applyRootMotion = attack.Animation.UseRootMotion;
+
+            animator.CrossFade(
+                attack.Animation.AnimationName,
+                attack.Animation.CrossFade);
+
+            if (attack.ForwardImpulse > 0f)
+            {
+                character.VelocityData.Locomotion +=
+                    character.transform.forward * attack.ForwardImpulse;
+            }
         }
+
         public void OnAnimationEvent(ComboEventType type)
         {
             switch (type)
@@ -53,83 +95,98 @@ namespace LOGIYGames.CharacterCore
                 case ComboEventType.AttackStarted:
                     OnAttackStarted();
                     break;
+
                 case ComboEventType.EnableHitbox:
                     OnHitboxEnabled();
                     break;
+
                 case ComboEventType.DisableHitbox:
-                    OnHiboxDisabled();
+                    OnHitboxDisabled();
                     break;
+
                 case ComboEventType.OpenComboWindow:
                     OnComboWindowOpened();
                     break;
+
                 case ComboEventType.CloseComboWindow:
                     OnComboWindowClosed();
                     break;
+
                 case ComboEventType.OpenCancelWindow:
                     OnCancelWindowOpened();
                     break;
+
                 case ComboEventType.CloseCancelWindow:
                     OnCancelWindowClosed();
                     break;
+
                 case ComboEventType.AttackFinished:
                     OnAttackFinished();
                     break;
             }
         }
+
         #region Event Handlers
+
+        private void OnAttackStarted()
+        {
+        }
+
         private void OnHitboxEnabled()
         {
-
         }
-        private void OnHiboxDisabled()
+
+        private void OnHitboxDisabled()
         {
-
         }
+
         private void OnComboWindowOpened()
         {
-
         }
+
         private void OnComboWindowClosed()
         {
             ResolveTransition();
         }
+
         private void OnCancelWindowOpened()
         {
             CanCancel = true;
         }
+
         private void OnCancelWindowClosed()
         {
             CanCancel = false;
         }
-        private void OnAttackStarted()
-        {
 
-        }
         private void OnAttackFinished()
         {
             TryContinueCombo();
         }
+
         #endregion
+
         private void ResolveTransition()
         {
             AttackTransition bestTransition = null;
-
             int bestMatchLength = 0;
 
             foreach (AttackTransition transition in CurrentAttack.Transitions)
             {
-                if (transition.Sequence == null
-                    || transition.Sequence.Inputs == null
-                    || transition.Sequence.Inputs.Count == 0)
+                if (transition.Sequence == null ||
+                    transition.Sequence.Inputs == null ||
+                    transition.Sequence.Inputs.Count == 0)
                 {
                     continue;
                 }
 
-                int matchLength = commandBuffer.GetMatchLength(transition.Sequence.Inputs);
+                int matchLength =
+                    commandBuffer.GetMatchLength(
+                        transition.Sequence.Inputs);
 
-                if (matchLength <= 0) continue;
+                if (matchLength <= 0)
+                    continue;
 
-                // choose best match
                 if (matchLength > bestMatchLength)
                 {
                     bestMatchLength = matchLength;
@@ -139,34 +196,63 @@ namespace LOGIYGames.CharacterCore
 
             if (bestTransition == null)
             {
+                queuedAttack = null;
                 IsNextQueued = false;
                 return;
             }
+
             queuedAttack = bestTransition.NextAttack;
             IsNextQueued = true;
         }
+
         private void TryContinueCombo()
         {
             if (queuedAttack == null)
             {
-                Phase = ComboPhase.Finished;
-                commandBuffer.Clear();
+                FinishCombo();
                 return;
             }
-            StartAttack(queuedAttack);
+
+            AttackNodeSO nextAttack = queuedAttack;
+
             queuedAttack = null;
+            IsNextQueued = false;
+
+            StartAttack(nextAttack);
+
         }
+
+        private void FinishCombo()
+        {
+
+            queuedAttack = null;
+            CurrentAttack = null;
+            CanCancel = false;
+            IsNextQueued = false;
+
+            commandBuffer.Clear();
+
+            Phase = ComboPhase.Finished;
+
+        }
+
         public bool IsFinished()
         {
             return Phase == ComboPhase.Finished;
         }
+
         public void Reset()
         {
+
             queuedAttack = null;
             CurrentAttack = null;
             CanCancel = false;
-            Phase = ComboPhase.None;
             IsNextQueued = false;
+
+            commandBuffer.Clear();
+
+            Phase = ComboPhase.None;
+
         }
     }
 }

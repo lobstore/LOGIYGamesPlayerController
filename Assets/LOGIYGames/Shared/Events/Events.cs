@@ -76,7 +76,7 @@ namespace LOGIYGames.Shared.Character.Events
     [Serializable]
     public class SkillUsedEvent : EventBase
     {
-       public Ability AbilityData { get; set; }
+       public AbilityData AbilityData { get; set; }
     }
     [Serializable]
     public class ComboAnimationEvent : EventBase
@@ -89,15 +89,15 @@ namespace LOGIYGames.Shared.Character.Events
         public float EventTime;
     }
     [Serializable]
-    public class AbilityTimedEvent : TimedEvent
+    public class AnimationTimedEvent : TimedEvent
     {
-        public AbilityEventType AbilityEventType;
-
-        public string animationName;
-        public float CrossFade = 0.1f;
-        public float MotionSpeed = 1f;
-
-        public bool UseRootMotion = true;
-        public List<EffectFactory> effects = new();
+        public AnimationData animationData;
     }
+    [Serializable]
+    public class TargetingTimedEvent : TimedEvent
+    {
+        public AbilityVFXData vFXData;
+        public TargetingFactory TargetingFactory;
+    }
+
 }

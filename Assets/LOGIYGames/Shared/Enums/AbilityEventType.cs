@@ -3,8 +3,10 @@
     public enum AbilityEventType
     {
         Started,
-        ActionStart,
-        ActionEnd,
+        AnimationStart,
+        AnimationEnd,
+        EffectsStart,
+        EffectsEnd,
         Finished
     }
 }

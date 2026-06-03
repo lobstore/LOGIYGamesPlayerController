@@ -31,7 +31,7 @@ namespace LOGIYGames.CharacterCore
         public ComboController ComboController { get; private set; }
         public WeaponController WeaponController { get; private set; }
 
-        public Ability Ability;
+        public List<AbilityData> Abilities = new();
 
         public AbilityController AbilityController { get; private set; }
         #endregion
@@ -212,6 +212,14 @@ namespace LOGIYGames.CharacterCore
         }
         public override void OnUpdate(float deltaTime)
         {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                AbilityController.SetAbility( Abilities[0]);
+            }
+            else if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                AbilityController.SetAbility(Abilities[1]);
+            }
             base.OnUpdate(deltaTime);
             UpdateVelocity();
             TargetRotation = RotationStrategy.GetRotation();
@@ -225,7 +233,6 @@ namespace LOGIYGames.CharacterCore
                 DebugDraw.DrawArrow(transform.position, velo, movementTargetDirectionArrowColor);
 
             }
-
         }
 
         private void SmoothHeightChanging()

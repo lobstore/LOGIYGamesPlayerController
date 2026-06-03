@@ -1,4 +1,3 @@
-using LOGIYGames.Animation;
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
@@ -12,16 +11,15 @@ namespace LOGIYGames
     public class AbilityController
     {
 
-        IDisposable timerSubscribtion;
+        IDisposable executionTimerSubscribtion;
 
-        public Ability CurrentAbility { get; private set; }
+        public AbilityData CurrentAbility { get; private set; } = null;
 
         private CharacterModule character;
         private Animator animator;
 
         private CountdownTimer castTimer;
         private CountdownTimer executionTimer;
-
         public float CastingProgress => castTimer?.Progress ?? 0f;
 
         public AbilityPhase Phase { get; private set; }
@@ -30,50 +28,51 @@ namespace LOGIYGames
         {
             character = owner;
             animator = owner.GetComponent<Animator>();
-
-            SubscribeEvents();
         }
 
-        private void SubscribeEvents()
+        public void SetAbility(AbilityData abilityData)
         {
-            //character.EventBus.Subscribe<AbilityTimelineEvent>(e => { TriggerTimedEvent(e.AbilityEventType); });
-
+            if (CurrentAbility == null)
+            {
+                CurrentAbility = abilityData;
+            }
         }
-
-
-        public void BeginAbility(
-            Ability ability,
-            GameObject target = null)
+        public void BeginAbility()
         {
-            if (CurrentAbility != null)
-                return;
-
-            CurrentAbility = ability;
 
             Phase = AbilityPhase.Started;
             castTimer = new CountdownTimer(CurrentAbility.castDuration);
 
             executionTimer = new CountdownTimer(CurrentAbility.executionDuration);
 
-            int nextEventIndex;
+            int nextTargetingEventIndex;
+            int nextAnimationEventIndex;
 
             executionTimer.OnTimerStart += () =>
             {
-                nextEventIndex = 0;
-
-                timerSubscribtion = executionTimer.CurrentTime.Subscribe(currentTime =>
+                nextTargetingEventIndex = 0;
+                nextAnimationEventIndex = 0;
+                executionTimerSubscribtion = executionTimer.CurrentTime.Subscribe(currentTime =>
                 {
-                    while (nextEventIndex < CurrentAbility.TimedEvents.Count && executionTimer.ElapsedTime >= CurrentAbility.TimedEvents[nextEventIndex].EventTime)
+                    while (nextTargetingEventIndex < CurrentAbility.TargetingFactories.Count && executionTimer.ElapsedTime >= CurrentAbility.TargetingFactories[nextTargetingEventIndex].EventTime)
                     {
-                        TriggerTimedEvent(CurrentAbility.TimedEvents[nextEventIndex]);
-                        nextEventIndex++;
+                        OnTargetingStarted(CurrentAbility.TargetingFactories[nextTargetingEventIndex]);
+                        nextTargetingEventIndex++;
+                    }
+                });
+                executionTimerSubscribtion = executionTimer.CurrentTime.Subscribe(currentTime =>
+                {
+                    while (nextAnimationEventIndex < CurrentAbility.Animations.Count && executionTimer.ElapsedTime >= CurrentAbility.Animations[nextAnimationEventIndex].EventTime)
+                    {
+                        OnAnimationStarted(CurrentAbility.Animations[nextAnimationEventIndex]);
+                        nextAnimationEventIndex++;
                     }
                 });
             };
             executionTimer.OnTimerStop += () =>
             {
-                nextEventIndex = 0;
-                timerSubscribtion.Dispose();
+                nextTargetingEventIndex = 0;
+                executionTimerSubscribtion.Dispose();
                 Phase = AbilityPhase.Finished;
             };
 
@@ -95,73 +94,29 @@ namespace LOGIYGames
         private void StartExecution()
         {
             Phase = AbilityPhase.Executing;
-
-
-
             executionTimer.Start();
         }
 
-        private void TriggerTimedEvent(AbilityTimedEvent e)
+        private void OnTargetingStarted(TargetingTimedEvent evt)
         {
-            switch (e.AbilityEventType)
+            var targetingStrategy = evt.TargetingFactory.Create(evt.vFXData);
+            targetingStrategy.Start(new AbilityContext
             {
-                case AbilityEventType.Started:
-                    OnAbilityStarted(e);
-                    break;
+                Source = character.gameObject,
+                Target = null
+            });
 
-                case AbilityEventType.ActionStart:
-                    OnAbilityActionStarted(e);
-                    break;
+        }
 
-                case AbilityEventType.ActionEnd:
-                    OnAbilityActionEnded(e);
-                    break;
-
-                case AbilityEventType.Finished:
-                    OnAbilityFinished(e);
-                    break;
+        private void OnAnimationStarted(AnimationTimedEvent e)
+        {
+            animator.applyRootMotion = e.animationData.UseRootMotion;
+            animator.SetFloat("MotionSpeed", e.animationData.MotionSpeed);
+            if (!string.IsNullOrEmpty(e.animationData.AnimationName))
+            {
+                animator.CrossFade(e.animationData.AnimationName, e.animationData.CrossFade);
             }
         }
-
-        #region Event Handlers
-
-        private void OnAbilityStarted(AbilityTimedEvent e)
-        {
-            Debug.Log(
-                $"Ability Started: {CurrentAbility.name}");
-        }
-
-        private void OnAbilityActionStarted(AbilityTimedEvent e)
-        {
-            animator.applyRootMotion = e.UseRootMotion;
-            animator.SetFloat("MotionSpeed", e.MotionSpeed);
-            if (!string.IsNullOrEmpty(e.animationName))
-            {
-                animator.CrossFade(e.animationName, e.CrossFade);
-            }
-
-            Debug.Log(
-                $"Ability Action Started: {CurrentAbility.name}");
-        }
-
-        private void OnAbilityActionEnded(AbilityTimedEvent e)
-        {
-   
-            Debug.Log(
-                $"Ability Action Ended: {CurrentAbility.name}");
-        }
-
-        private void OnAbilityFinished(AbilityTimedEvent e)
-        {
-            Debug.Log(
-                $"Ability Finished: {CurrentAbility.name}");
-            animator.SetFloat("MotionSpeed", 1);
-            CurrentAbility = null;
-
-            Phase = AbilityPhase.Finished;
-        }
-
-        #endregion
 
         public bool IsFinished()
         {

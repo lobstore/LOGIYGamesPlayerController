@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -7,8 +8,7 @@ namespace LOGIYGames
         public GameObject Source;
 
         public GameObject Target;
-
-        public Ability Ability;
+        public List<IEffect> Effects;
     }
 
 }

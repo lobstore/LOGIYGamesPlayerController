@@ -116,7 +116,7 @@ namespace LOGIYGames
             character.MovementStateMachine.AddAnyTransition<SwimMovementState>(
                 new FuncPredicate(() => character.Sensors.IsInWater));
             character.MovementStateMachine.AddAnyTransition<AbilityMovementState>(
-            new FuncPredicate(() => character.Input.CrouchPressed));
+            new FuncPredicate(() => character.AbilityController.CurrentAbility != null && character.AbilityController.Phase != AbilityPhase.Finished));
 
             #region Movement
             // =========================================================
@@ -698,7 +698,7 @@ namespace LOGIYGames
 
             character.MovementStateMachine.AddTransition<IdleMovementState, ComboMovementState>(
                 new FuncPredicate(() =>
-                    character.Input.AttackPressed));
+                    character.Input.AttackPressed && character.WeaponController.CurrentWeapon != null));
 
 
             /*

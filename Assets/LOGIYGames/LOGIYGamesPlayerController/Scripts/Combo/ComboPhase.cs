@@ -1,13 +1,10 @@
 namespace LOGIYGames.CharacterCore
 {
-    public partial class ComboController
+    public enum ComboPhase
     {
-        public enum ComboPhase
-        {
-            None,
-            Started,
-            Attack,
-            Finished
-        }
+        None,
+        Started,
+        Attack,
+        Finished
     }
 }

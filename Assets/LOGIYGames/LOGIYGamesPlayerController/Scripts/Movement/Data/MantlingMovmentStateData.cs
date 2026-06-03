@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace LOGIYGames
 {
@@ -6,5 +7,6 @@ namespace LOGIYGames
     public class MantlingMovmentStateData : TimedMovementStateData
     {
         public float CheckDistance;
+        public LayerMask IncludeLayers;
     }
 }

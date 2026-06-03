@@ -31,14 +31,14 @@ namespace LOGIYGames.CharacterCore
         {
             SendAbilityAnimationEvent(
                 AbilityEventType
-                    .ActionStart);
+                    .AnimationStart);
         }
 
         public void AbilityActionEnded()
         {
             SendAbilityAnimationEvent(
                 AbilityEventType
-                    .ActionEnd);
+                    .AnimationEnd);
         }
 
         public void AbilityFinished()
@@ -112,9 +112,10 @@ namespace LOGIYGames.CharacterCore
         // ========================================================
         private void SendAbilityAnimationEvent(AbilityEventType type)
         {
-            character.EventBus.Publish(new AbilityTimedEvent()
+            character.EventBus.Publish(new AnimationTimedEvent()
             {
-                AbilityEventType = type
+               // AbilityEventType = type
+               
             });
         }
         private void SendComboAnimationEvent(ComboEventType type)

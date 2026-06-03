@@ -1,4 +1,5 @@
 using LOGIYGames.Shared.Data;
+using LOGIYGames.Shared.Enums;
 using System.Collections.Generic;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
@@ -14,11 +15,7 @@ namespace LOGIYGames.CharacterCore
 
         [Header("Animation")]
 
-        public string AnimationName;
-
-        public float CrossFade = 0.1f;
-
-        public bool UseRootMotion = true;
+        public AnimationData Animation;
 
         // =====================================================
         // MOVEMENT

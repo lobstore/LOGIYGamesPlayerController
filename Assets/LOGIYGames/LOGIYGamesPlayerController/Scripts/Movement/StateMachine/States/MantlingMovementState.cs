@@ -23,7 +23,7 @@ namespace LOGIYGames
 
         private Transform _mantleTargetTransform;
         private Vector3 _mantleTargetLocalPoint;
-
+        LayerMask mantlingLayers;
         #endregion
 
         #region Hand IK Cache
@@ -48,6 +48,7 @@ namespace LOGIYGames
         {
             checkDistance = stateData.CheckDistance;
             mantleIKController = _character.GetComponent<HandsIK>();
+            mantlingLayers = stateData.IncludeLayers;
         }
 
         #endregion
@@ -138,7 +139,9 @@ namespace LOGIYGames
 
         public override bool CanEnter()
         {
-            obstacleTopPoint = PerformDetection(checkDistance);
+
+            if (!HasEnoughSpaceAhead()) return false;
+            obstacleTopPoint = PerformDetectionTopDown(checkDistance);
 
             if (obstacleTopPoint.collider != null)
                 obstacleHeight = CalculateObstacleHeight();
@@ -154,8 +157,29 @@ namespace LOGIYGames
         {
             return obstacleTopPoint.point.y - _controller.transform.position.y;
         }
+        private bool HasEnoughSpaceAhead()
+        {
+            float radius = _controller.Radius;
+            float height = _controller.Height;
 
-        private RaycastHit PerformDetection(float forwardDistance)
+            Vector3 bottom =
+                _controller.transform.position +
+                _controller.transform.up * (_controller.Height + 0.3f) +
+                _controller.transform.forward * radius * 2f +
+                _controller.transform.up * radius;
+
+            Vector3 top =
+                bottom + _controller.transform.up * (height - radius * 2f);
+
+            return !Physics.CheckCapsule(
+                bottom,
+                top,
+                radius,
+                mantlingLayers,
+                QueryTriggerInteraction.Ignore);
+        }
+
+        private RaycastHit PerformDetectionTopDown(float forwardDistance)
         {
             Vector3 origin =
                 _controller.transform.position +
@@ -169,7 +193,7 @@ namespace LOGIYGames
             if (Physics.Raycast(origin,
                 -_controller.transform.up,
                 out RaycastHit hit,
-                _controller.Height + 0.3f))
+                _controller.Height + 0.3f, mantlingLayers))
             {
                 return hit;
             }
