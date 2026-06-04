@@ -37,7 +37,8 @@ namespace LOGIYGames
         [SerializeField] Color belowObstacleNotCollidedSphereColor;
         [SerializeField] Color belowHitSphereColor;
 
-        [SerializeField] Collider col;
+        [SerializeField] ControllerWrapperBase controller;
+        Collider col => controller.Collider;
 
         // Detection origin calculated from capsule bounds
         public Vector3 DetectionOrigin
@@ -110,11 +111,11 @@ namespace LOGIYGames
 
         private void Awake()
         {
-            if (col == null)
-            {
-                col = GetComponent<Collider>();
-
-            }
+            m_castDownSphereRadius = controller.Radius;
+            m_castUpSphereRadius = controller.Radius;
+            m_upCheckDistance = controller.Height/2;
+            m_groundCheckDistance = controller.Height/2;
+            m_groundCheckDistance = controller.Height / 2;
         }
 
         public override void OnUpdate(float deltaTime)

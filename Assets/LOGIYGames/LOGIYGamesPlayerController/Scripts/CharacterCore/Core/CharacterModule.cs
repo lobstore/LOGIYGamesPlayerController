@@ -37,7 +37,7 @@ namespace LOGIYGames.CharacterCore
         #endregion
         #region State Machine Configuration
         [Header("State Machine Configuration")]
-        public MovementStatesPresetBase movementPreset;
+        public MovementBuilder movementPreset;
 
         private readonly Dictionary<Type, CharacterMovementState> _movementStates = new();
 
@@ -361,7 +361,7 @@ namespace LOGIYGames.CharacterCore
             _movementStateMachine = new StateMachine();
             if (movementPreset != null)
             {
-                movementPreset.Init(this);
+                movementPreset.Build(this);
 
             }
             else

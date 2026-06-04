@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public abstract class MovementStateSO : ScriptableObject
+    public abstract class MovementStateFactory : ScriptableObject
     {
-        public void Build(CharacterModule character)
+        public void Create(CharacterModule character)
         {
             var state = CreateState(character);
 

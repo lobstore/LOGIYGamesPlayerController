@@ -4,13 +4,14 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    [CreateAssetMenu(fileName = "DashState", menuName = "Character States/DashState")]
-    public class DashStateSO : MovementStateSO
+    [CreateAssetMenu(fileName = "GroundJumpState", menuName = "MovementStateMachine/States/GroundJumpState")]
+    public class GroundJumpStateFactory : MovementStateFactory
     {
         public JumpStateData stateData;
+
         protected override CharacterMovementState CreateState(CharacterModule character)
         {
-            return new DashMovementState(character, stateData);
+            return new GroundJumpMovementState(character, stateData);
         }
     }
 }

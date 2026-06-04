@@ -5,13 +5,11 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    [CreateAssetMenu(
-        fileName = "BaseMovementPreset",
-        menuName = "MovementStateMachine/MovementStatesPreset/BaseMovementPreset")]
-    public partial class BaseMovementPreset : MovementStatesPresetBase
+    [CreateAssetMenu(fileName = "BaseMovementPreset", menuName = "MovementStateMachine/MovementStatesPreset/BaseMovementPreset")]
+    public partial class BaseMovementPreset : MovementBuilder
     {
 
-        [SerializeField] List<MovementStateSO> additionalStartupStates;
+        [SerializeField] List<MovementStateFactory> additionalStartupStates;
 
         [Header("BASE STATES")]
 
@@ -48,7 +46,7 @@ namespace LOGIYGames
         // INIT
         // =========================================================
 
-        public override void Init(CharacterModule character)
+        public override void Build(CharacterModule character)
         {
             RegisterStates(character);
 
@@ -92,7 +90,7 @@ namespace LOGIYGames
         comboStateData));
             additionalStartupStates.ForEach((e) =>
             {
-                e.Build(character);
+                e.Create(character);
             });
         }
 

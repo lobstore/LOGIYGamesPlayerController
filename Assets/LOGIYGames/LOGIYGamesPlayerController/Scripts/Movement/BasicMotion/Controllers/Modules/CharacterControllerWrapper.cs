@@ -12,7 +12,7 @@ namespace LOGIYGames
     public class CharacterControllerWrapper : ControllerWrapperBase
     {
         #region Unity Controller
-
+        [SerializeField]
         private CharacterController m_characterController;
         private CharacterGravityModule m_characterGravityModule;
         private CharacterModule m_character;
@@ -120,6 +120,7 @@ namespace LOGIYGames
         {
             m_sensors = GetComponent<SensorsModule>();
             m_character = GetComponent<CharacterModule>();
+            if (m_characterController == null)
             m_characterController = GetComponent<CharacterController>();
             m_characterGravityModule = GetComponent<CharacterGravityModule>();
 
