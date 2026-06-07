@@ -116,7 +116,9 @@ namespace LOGIYGames.CharacterCore
 
         #endregion
 
-        #region Height Properties
+        #region Collider Properties
+        public float Radius { get => m_motor.Radius; set => m_motor.Radius = value; }
+        public float MaxStepHeight { get => m_motor.MaxStepHeight; set => m_motor.MaxStepHeight = value; }
 
         [field: SerializeField] public float Height { get; set; }
         public float HeightChangingSmoothTime { get; private set; } = 4f;
@@ -153,7 +155,16 @@ namespace LOGIYGames.CharacterCore
         }
         private void Start()
         {
-
+            if (RotationStrategy == null)
+            {
+                DefaultRotationStrategy = new NoneRotation(this);
+                RotationStrategy = DefaultRotationStrategy;
+            }
+            if (MovementStrategy == null)
+            {
+                DefaultMovementStrategy = new NoneMovement();
+                MovementStrategy = DefaultMovementStrategy;
+            }
             m_motor.Height = Height;
             m_motor.Center = new Vector3(0, Height / 2.0f, 0);
             InitializeStateMachine();

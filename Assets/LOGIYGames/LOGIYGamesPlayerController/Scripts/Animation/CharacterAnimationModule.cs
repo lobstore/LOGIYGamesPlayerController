@@ -217,12 +217,12 @@ namespace LOGIYGames.Animation
                 {
                     if (evt.angle > 0)
                     {
-                        PlayAnimation(_data.Idle_Turn_90R);
+                        PlayAnimation(_data.Walk_BackTurn_Left);
 
                     }
                     else
                     {
-                        PlayAnimation(_data.Idle_Turn_90L);
+                        PlayAnimation(_data.Walk_BackTurn_Left);
 
                     }
                 }

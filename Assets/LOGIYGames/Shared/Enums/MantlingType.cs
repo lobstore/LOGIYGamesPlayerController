@@ -4,6 +4,7 @@
     {
         StepOnLow,
         StepOnHigh,
+        Vault,
         BracedLow,
         BracedHigh,
     }

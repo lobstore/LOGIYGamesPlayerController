@@ -655,7 +655,7 @@ namespace LOGIYGames
                 {
                     var mantling = character.GetMovementState<MantlingMovementState>();
 
-                    return mantling.IsDurationTimerElapsed;
+                    return mantling.CanExit();
                 }));
             #endregion
             // =========================================================
