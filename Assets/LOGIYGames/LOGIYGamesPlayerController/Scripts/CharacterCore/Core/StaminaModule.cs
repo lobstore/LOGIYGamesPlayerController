@@ -15,13 +15,10 @@ namespace LOGIYGames.CharacterCore
         [SerializeField]
         private float regenDelay = 1.5f;
 
-        private ReactiveProperty<float> _currentStamina;
-
-        public ReadOnlyReactiveProperty<float> CurrentStamina
-            => _currentStamina;
-
+        public ReactiveProperty<float> CurrentStamina { get; private set; } = new();
+        public ReactiveProperty<float> MaxStamina { get; private set; } = new();
         public float Normalized
-            => _currentStamina.Value / maxStamina;
+            => CurrentStamina.Value / maxStamina;
 
         public Subject<float> StaminaUsed = new();
         public Subject<float> StaminaRestored = new();
@@ -31,11 +28,14 @@ namespace LOGIYGames.CharacterCore
 
         private void Awake()
         {
-            _currentStamina = new ReactiveProperty<float>(maxStamina);
+            MaxStamina. Value = maxStamina;
+            CurrentStamina.Value = 0;
 
             _regenDelayTimer = new CountdownTimer(regenDelay);
 
             _regenDelayTimer.OnTimerStop += BeginRegen;
+
+
         }
 
         public override void OnUpdate(float deltaTime)
@@ -49,7 +49,7 @@ namespace LOGIYGames.CharacterCore
 
         public bool CanUse(float amount)
         {
-            return _currentStamina.Value >= amount;
+            return CurrentStamina.Value >= amount;
         }
 
         public bool TryUse(float amount)
@@ -60,7 +60,7 @@ namespace LOGIYGames.CharacterCore
                 return false;
             }
 
-            _currentStamina.Value -= amount;
+            CurrentStamina.Value -= amount;
 
             StaminaUsed.OnNext(amount);
 
@@ -71,12 +71,12 @@ namespace LOGIYGames.CharacterCore
 
         public void Restore(float amount)
         {
-            float previous = _currentStamina.Value;
+            float previous = CurrentStamina.Value;
 
-            _currentStamina.Value =
-                Mathf.Min(_currentStamina.Value + amount, maxStamina);
+            CurrentStamina.Value =
+                Mathf.Min(CurrentStamina.Value + amount, maxStamina);
 
-            float restored = _currentStamina.Value - previous;
+            float restored = CurrentStamina.Value - previous;
 
             if (restored > 0)
             {
@@ -93,7 +93,7 @@ namespace LOGIYGames.CharacterCore
         private bool CanRegenerate()
         {
             return !_regenDelayTimer.IsRunning
-                   && _currentStamina.Value < maxStamina;
+                   && CurrentStamina.Value < maxStamina;
         }
 
         private void Regenerate(float time)

@@ -1,4 +1,5 @@
 using LOGIYGames.CharacterCore;
+using R3;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,17 +23,18 @@ namespace LOGIYGames
         public bool IsLockedOn { get { return isLockedOn; } private set { isLockedOn = value; OnTargetLocked.Invoke(isLockedOn); } }
         [field: SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
 
-        [SerializeField] private PlayerHealthView healthView;
-        private PlayerHealthPresenter healthPresenter;
-
+        [SerializeField] private PlayerProfileView profileView;
+        private PlayerProfilePresenter profilePresenter;
+        ReactiveProperty<string> Name = new();
         protected override void Awake()
         {
             base.Awake();
             PlayerInputReader = new(InputActions);
             OnCharacterChanged.AddListener((newChar) =>
             {
-                healthPresenter?.Dispose();
-                healthPresenter = new PlayerHealthPresenter(newChar.GetComponent<HealthModule>(), healthView);
+                profilePresenter?.Dispose();
+                Name.Value = newChar.name;
+                profilePresenter = new PlayerProfilePresenter(newChar.GetComponent<HealthModule>(), newChar.GetComponent<StaminaModule>(), Name, profileView);
             });
         }
         private void Start()

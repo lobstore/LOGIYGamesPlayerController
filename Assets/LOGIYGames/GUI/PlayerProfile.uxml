@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/LOGIYGames/GUI/PlaySceneUI.uss?fileID=7433441132597879392&amp;guid=2f6b9d6ae1f5b564e939dd92c05a6bf1&amp;type=3#PlaySceneUI"/>
+    <ui:VisualElement name="CharacterInfo" style="flex-grow: 1; position: absolute; width: 290px; top: 25px; left: 25px; background-color: rgba(85, 255, 92, 0.573); border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 42px; border-bottom-left-radius: 8px;">
+        <ui:Label text="Label" name="CharacterName" style="-unity-text-align: middle-left; white-space: pre; text-overflow: clip; scale: 1 1; font-size: 14px; padding-top: 0; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 14px; background-color: rgb(0, 225, 255);"/>
+        <ui:VisualElement name="Container" style="margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: row; flex-shrink: 0;">
+            <ui:Image name="CharacterImage" style="height: 50px; aspect-ratio: 1; background-color: rgb(255, 255, 255); border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px;"/>
+            <ui:VisualElement name="Bars" style="flex-grow: 1;">
+                <ui:ProgressBar value="23.2" title="100" name="Healthbar" enabled="true" language-direction="Inherit" high-value="100" class="Playerbar" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 222px;"/>
+                <ui:ProgressBar value="22" title="100" name="Staminabar" class="Playerbar" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 207px;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Effects" style="align-self: stretch; align-content: flex-start; align-items: flex-start; justify-content: flex-start; margin-left: 5px; margin-top: 0; margin-right: 5px; margin-bottom: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; position: relative; bottom: auto; right: auto; left: auto; top: 0; flex-direction: row; flex-wrap: wrap;"/>
+    </ui:VisualElement>
+</ui:UXML>

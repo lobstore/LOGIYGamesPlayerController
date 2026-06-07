@@ -184,6 +184,7 @@ namespace LOGIYGames.CharacterCore
                     case JumpType.GroundJump:
                         Jump(TargetDirection * evt.planarForce, transform.up * evt.verticalForce);
                         JumpCount++;
+                        GetComponent<StaminaModule>().TryUse(20);
                         break;
                     case JumpType.HangJump:
                         Jump(Sensors.LegsFrontHit.normal * evt.planarForce, evt.verticalForce * transform.up);

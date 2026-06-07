@@ -1,0 +1,24 @@
+:root {
+}
+
+.EffectItem {
+    width: 20px;
+    aspect-ratio: 1;
+    margin-right: 2.5px;
+    margin-bottom: 2.5px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+#Healthbar .unity-progress-bar__progress {
+    background-color: rgb(255, 8, 0);
+}
+
+#Staminabar .unity-progress-bar__progress {
+    background-color: rgb(255, 141, 0);
+}
+
+.Playerbar .unity-progress-bar__background {
+}

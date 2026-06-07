@@ -1,6 +1,7 @@
 using LOGIYGames.Shared.Data;
 using R3;
 using System;
+using Unity.Properties;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
