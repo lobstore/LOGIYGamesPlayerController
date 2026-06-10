@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 namespace LOGIYGames.Timers
 {
-    public class TimersManager : Singleton<TimersManager>
+    public class TimersManager : PersistentSingleton<TimersManager>
     {
         static readonly List<Timer> timers = new();
 

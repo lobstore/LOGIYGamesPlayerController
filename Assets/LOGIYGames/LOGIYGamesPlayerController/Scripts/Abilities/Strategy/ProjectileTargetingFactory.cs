@@ -8,7 +8,7 @@ namespace LOGIYGames
     public class ProjectileTargetingFactory : TargetingFactory
     {
         public float speed;
-        public override TargetingStrategy Create(AbilityVFXData vFXData )
+        public override TargetingStrategy Create()
         {
             var effects = new List<IEffect>();
             foreach (var effect in Effects)

@@ -56,16 +56,16 @@ ModelImporter:
       curves: []
       events:
       - time: 0.4157706
-        functionName: PlaySoundEvent
-        data: Run_Foot_L
-        objectReferenceParameter: {fileID: 11500000, guid: 6ec4434dd62ab7b44841025de12ec831, type: 3}
+        functionName: LFootStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.8801765
-        functionName: PlaySoundEvent
-        data: Run_Foot_R
-        objectReferenceParameter: {fileID: 11500000, guid: 6ec4434dd62ab7b44841025de12ec831, type: 3}
+        functionName: RFootStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

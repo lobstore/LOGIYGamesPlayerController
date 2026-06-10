@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 namespace LOGIYGames
 {
-    public class LevelLoader : Singleton<LevelLoader>
+    public class LevelLoader : PersistentSingleton<LevelLoader>
     {
         public TextMeshProUGUI loadingPercentrage;
         public Image loadingProgressBar;

@@ -413,15 +413,15 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.43291605
-        functionName: EnableHitbox
+      - time: 0.38102925
+        functionName: OpenHitWindow
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.4737209
-        functionName: OpenComboWindow
+      - time: 0.47641513
+        functionName: CloseHitWindow
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
         floatParameter: 0
@@ -436,6 +436,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.89372087
         functionName: FinishAttack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.37380192
+        functionName: RHandAttack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
         floatParameter: 0

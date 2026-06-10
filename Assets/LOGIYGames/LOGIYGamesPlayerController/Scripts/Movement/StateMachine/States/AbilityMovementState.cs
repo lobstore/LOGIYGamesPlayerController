@@ -1,6 +1,7 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
+using UnityEngine;
 
 namespace LOGIYGames
 {
@@ -23,7 +24,7 @@ namespace LOGIYGames
         public override void Exit()
         {
             base.Exit();
-            abilityController.Reset();
+            abilityController.Exit();
         }
         public bool CanExit()
         {

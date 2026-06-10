@@ -23133,16 +23133,16 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0
-    functionName: PlaySoundEvent
-    data: Jump_Foot_L
+  - time: 0.06666667
+    functionName: RFootStep
+    data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.033333335
-    functionName: PlaySoundEvent
-    data: Jump_Foot_R
+  - time: 0.1
+    functionName: LFootStep
+    data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

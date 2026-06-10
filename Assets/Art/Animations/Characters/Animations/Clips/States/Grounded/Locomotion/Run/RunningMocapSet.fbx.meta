@@ -1705,16 +1705,16 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.07094594
-        functionName: PlaySoundEvent
-        data: Run_Foot_R
+      - time: 0.07692308
+        functionName: RFootStep
+        data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.31216213
-        functionName: PlaySoundEvent
-        data: Run_Foot_L
+      - time: 0.2884616
+        functionName: LFootStep
+        data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

@@ -96,7 +96,6 @@ namespace LOGIYGames.Shared.Character.Events
     [Serializable]
     public class TargetingTimedEvent : TimedEvent
     {
-        public AbilityVFXData vFXData;
         public TargetingFactory TargetingFactory;
     }
 

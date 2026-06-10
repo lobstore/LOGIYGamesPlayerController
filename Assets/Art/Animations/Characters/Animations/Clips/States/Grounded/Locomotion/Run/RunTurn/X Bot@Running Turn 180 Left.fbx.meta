@@ -56,8 +56,8 @@ ModelImporter:
       curves: []
       events:
       - time: 0.33486485
-        functionName: PlaySoundEvent
-        data: Run_Foot_R
+        functionName: RFootStep
+        data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

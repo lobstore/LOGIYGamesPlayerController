@@ -462,35 +462,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0
-        functionName: AbilityStarted
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.35895348
-        functionName: AbilityActionStarted
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.6108656
-        functionName: AbilityActionEnded
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 1
-        functionName: AbilityFinished
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1

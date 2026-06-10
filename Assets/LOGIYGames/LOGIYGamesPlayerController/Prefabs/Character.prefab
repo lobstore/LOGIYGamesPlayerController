@@ -475,15 +475,18 @@ GameObject:
   - component: {fileID: 2605798501068234886}
   - component: {fileID: 3842424064180597113}
   - component: {fileID: 2654077868994141792}
-  - component: {fileID: 2815690090559632881}
+  - component: {fileID: 4172097682158500128}
   - component: {fileID: 1176126297597612246}
   - component: {fileID: 3336788084049153636}
   - component: {fileID: 5964245791863302330}
   - component: {fileID: 2829093751541247377}
-  - component: {fileID: 1148253161778860002}
   - component: {fileID: 8834281440563422374}
   - component: {fileID: 3170350395309969284}
   - component: {fileID: 7537625313940413956}
+  - component: {fileID: 6060120445340774513}
+  - component: {fileID: 7157920177242386313}
+  - component: {fileID: 998225325678431383}
+  - component: {fileID: 5010907610595090611}
   m_Layer: 3
   m_Name: Character
   m_TagString: Character
@@ -534,10 +537,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
   <ModulePriority>k__BackingField: 0
-  target: {fileID: 0}
   m_motor: {fileID: 1176126297597612246}
   <Sensors>k__BackingField: {fileID: 2268543539570239712}
   JumpCount: 0
+  Abilities:
+  - {fileID: 11400000, guid: c4fe7cb4c7cd14548bb34390a2797522, type: 2}
+  - {fileID: 11400000, guid: 67204a15c7aa23544b55367a81dbfd8d, type: 2}
   movementPreset: {fileID: 11400000, guid: a950937825b83ab4086272ca9dbfed13, type: 2}
   movementTargetDirectionArrowColor: {r: 1, g: 0, b: 0, a: 1}
   BaseSpeed: 4
@@ -592,7 +597,7 @@ MonoBehaviour:
   belowObstacleCollidedSphereColor: {r: 1, g: 0.96657693, b: 0, a: 1}
   belowObstacleNotCollidedSphereColor: {r: 1, g: 0, b: 0, a: 1}
   belowHitSphereColor: {r: 0, g: 0.73154736, b: 1, a: 0.4117647}
-  col: {fileID: 6657963720063885413}
+  controller: {fileID: 1176126297597612246}
   MaxStableSlopeAngle: 90
 --- !u!143 &6657963720063885413
 CharacterController:
@@ -681,7 +686,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2815690090559632881
+--- !u!114 &4172097682158500128
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -690,48 +695,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 427882813280634629}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ec4434dd62ab7b44841025de12ec831, type: 3}
+  m_Script: {fileID: 11500000, guid: f082e9c7812aaf14e87b0c0912c21324, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterAudioModule
-  _audioPoints:
-  - pointName: Run_Foot_R
-    attachTransform: {fileID: 8278627846603522541}
-    defaultClip: {fileID: 8300000, guid: 82354d1fee336984994fbdcc8154c89c, type: 3}
-    volume: 1
-    pitchVariation: 0.2
-    loop: 0
-    spatialBlend: 1
-    minDistance: 1
-    maxDistance: 40
-  - pointName: Run_Foot_L
-    attachTransform: {fileID: 6488060869766363552}
-    defaultClip: {fileID: 8300000, guid: 3069c9f7e833f8e4099228c28f9d65dd, type: 3}
-    volume: 1
-    pitchVariation: 0.2
-    loop: 0
-    spatialBlend: 1
-    minDistance: 1
-    maxDistance: 40
-  - pointName: Jump_Foot_L
-    attachTransform: {fileID: 3996238919914688228}
-    defaultClip: {fileID: 8300000, guid: 3d8f480d252db9449b2f978284506f8e, type: 3}
-    volume: 0.7
-    pitchVariation: 0.2
-    loop: 0
-    spatialBlend: 1
-    minDistance: 1
-    maxDistance: 40
-  - pointName: Jump_Foot_R
-    attachTransform: {fileID: 1671891445862025183}
-    defaultClip: {fileID: 8300000, guid: b796f7e3b1a4d7344b7ee8d6c077a68f, type: 3}
-    volume: 0.7
-    pitchVariation: 0.2
-    loop: 0
-    spatialBlend: 1
-    minDistance: 1
-    maxDistance: 40
-  _masterVolume: 1
-  _audioMixerGroup: {fileID: -7141789664723626200, guid: a8054da8ca7d10c46872a77427942bb9, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.AnimationEventReceiver
+  OnLFoot:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2131248450159323197}
+        m_TargetAssemblyTypeName: LOGIYGames.FootstepsController, Assembly-CSharp
+        m_MethodName: PlayFootstepSoundL
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Run_Foot_L
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnRFoot:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2131248450159323197}
+        m_TargetAssemblyTypeName: LOGIYGames.FootstepsController, Assembly-CSharp
+        m_MethodName: PlayFootstepSoundR
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Run_Foot_R
+          m_BoolArgument: 0
+        m_CallState: 2
+  animator: {fileID: 2654077868994141792}
 --- !u!114 &1176126297597612246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -744,6 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dc25859b5be7e44b8bb7ec724b6571e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterControllerWrapper
+  m_characterController: {fileID: 6657963720063885413}
   projectingPlanarVelocityMultiplier: 10
   slopeSlideMaxSpeed: 10
   slopeSlideAcceleration: 2
@@ -821,21 +819,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.StaminaModule
   <ModulePriority>k__BackingField: 0
   maxStamina: 100
-  regenPerSecond: 20
+  regenPerSecond: 10
   regenDelay: 1.5
---- !u!114 &1148253161778860002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d9ae7306aff8fa48bbdff9fcea3fc10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.HealthModule
-  maxHealth: 100
 --- !u!114 &8834281440563422374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -879,8 +864,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f6c8a26c213f14dbeaaebc54da5442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.CameraTargetModule
-  cameraLookAt: {fileID: 0}
-  cameraFollow: {fileID: 0}
+  <ModulePriority>k__BackingField: 0
+  cameraLookAt: {fileID: 2640723071682425344}
+  cameraFollow: {fileID: 4734613552037350644}
+--- !u!114 &6060120445340774513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaefc6231bffa1f46a9284d26ef94267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.HealthModule
+  maxHealth: 100
+--- !u!114 &7157920177242386313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 763f59375a962c041b83f37bcab26ea8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.WeaponSwapTester
+  character: {fileID: 8334357512040222824}
+  sword: {fileID: 11400000, guid: 0b5a4e80a2ab00543809f6e722225588, type: 2}
+  unarmed: {fileID: 11400000, guid: 51560e11c2cc578428836426c491169f, type: 2}
+  defaultWeapon: {fileID: 11400000, guid: 51560e11c2cc578428836426c491169f, type: 2}
+--- !u!114 &998225325678431383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d202b3c68bffea14c9476b0f27cbade2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.ComboBufferDebugView
+  position: {x: 20, y: 20}
+--- !u!114 &5010907610595090611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18ecae79825e0c41ba15c25105ca868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Perception.StimEmitter
+  walkSpeed: 1.5
+  runSpeed: 1
+  sprintSpeed: 4
+  walkRadius: 8
+  runRadius: 8
+  sprintRadius: 18
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0
@@ -11343,7 +11389,10 @@ PrefabInstance:
     - {fileID: 5866666021909216657, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2131248450159323197}
   m_SourcePrefab: {fileID: 100100000, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
 --- !u!4 &6488060869766363552 stripped
 Transform:
@@ -11355,6 +11404,48 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 608321761475470972, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
   m_PrefabInstance: {fileID: 8832307917435135889}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8526370247364205248 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+  m_PrefabInstance: {fileID: 8832307917435135889}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2131248450159323197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8526370247364205248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c525a5ea61f193b40a3e598022d5a44e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.FootstepsController
+  lFoot: {fileID: 6488060869766363552}
+  rFoot: {fileID: 8278627846603522541}
+  soundData:
+    clip: {fileID: 8300000, guid: 3069c9f7e833f8e4099228c28f9d65dd, type: 3}
+    mixerGroup: {fileID: -7141789664723626200, guid: a8054da8ca7d10c46872a77427942bb9, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 0
+    mute: 0
+    bypassEffects: 0
+    bypassListenerEffects: 0
+    bypassReverbZones: 0
+    priority: 128
+    volume: 1
+    pitch: 1
+    panStereo: 0
+    spatialBlend: 0
+    reverbZoneMix: 1
+    dopplerLevel: 1
+    spread: 0
+    minDistance: 1
+    maxDistance: 500
+    ignoreListenerVolume: 0
+    ignoreListenerPause: 0
+    rolloffMode: 0
 --- !u!4 &9013972504656085114 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}

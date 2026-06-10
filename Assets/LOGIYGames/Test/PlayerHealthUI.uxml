@@ -1,5 +1,0 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/LOGIYGames/Test/Health.uss?fileID=7433441132597879392&amp;guid=f89f499f4d5ff2f44a29983c589886fe&amp;type=3#Health"/>
-    <ui:Label text="Label" name="health-text" focusable="true"/>
-    <ui:ProgressBar value="22" title="my-progress" name="health-fill" class="HealthBar" style="-unity-font-style: normal;"/>
-</ui:UXML>

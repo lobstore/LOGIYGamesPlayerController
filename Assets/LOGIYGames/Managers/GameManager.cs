@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace LOGIYGames
 {
-    public class GameManager : Singleton<GameManager>
+    public class GameManager : PersistentSingleton<GameManager>
     {
         [SerializeField] InputActionAsset InputActions;
 
@@ -13,7 +13,7 @@ namespace LOGIYGames
 
         InputAction UIEngageAction;
 
-        public bool UIEngaged {  get; private set; }
+        public bool UIEngaged { get; private set; }
         override protected void Awake()
         {
             base.Awake();
@@ -29,7 +29,7 @@ namespace LOGIYGames
                     if (UIEngaged)
                     {
                         CameraActionMap.Disable();
-                        CharacterActionMap.Disable() ;
+                        CharacterActionMap.Disable();
                         Cursor.lockState = CursorLockMode.None;
                     }
                     else

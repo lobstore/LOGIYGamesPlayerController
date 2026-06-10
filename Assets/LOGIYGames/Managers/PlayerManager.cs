@@ -1,5 +1,6 @@
 using LOGIYGames.CharacterCore;
 using R3;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace LOGIYGames
 {
-    public class PlayerManager : Singleton<PlayerManager>
+    public class PlayerManager : PersistentSingleton<PlayerManager>
     {
         [SerializeField] CharacterModule InitCharacter;
         [SerializeField] InputActionAsset InputActions;
@@ -24,7 +25,11 @@ namespace LOGIYGames
         [field: SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
 
         [SerializeField] private PlayerProfileView profileView;
+        [SerializeField] private GameObject abilityPrefab;
         private PlayerProfilePresenter profilePresenter;
+        [SerializeField] private Transform skillsContainer;
+        private List<PlayerSkillPresenter> skillPresenters = new List<PlayerSkillPresenter>();
+        private List<PlayerAbilityView> skillViews = new List<PlayerAbilityView>();
         ReactiveProperty<string> Name = new();
         protected override void Awake()
         {
@@ -32,17 +37,43 @@ namespace LOGIYGames
             PlayerInputReader = new(InputActions);
             OnCharacterChanged.AddListener((newChar) =>
             {
+
                 profilePresenter?.Dispose();
                 Name.Value = newChar.name;
                 profilePresenter = new PlayerProfilePresenter(newChar.GetComponent<HealthModule>(), newChar.GetComponent<StaminaModule>(), Name, profileView);
+
+
+                if (skillPresenters.Count > 0)
+                {
+                    skillPresenters.Clear();
+                }
+                if (skillViews.Count>0)
+                {
+                    foreach (var item in skillViews)
+                    {
+                        Destroy(item);
+                    }
+                    skillViews.Clear();
+                }
+                if (newChar.Abilities.Count > 0)
+                {
+                    foreach (var item in newChar.Abilities)
+                    {
+                        var obj = Instantiate(abilityPrefab);
+                        obj.transform.SetParent(skillsContainer);
+                        var view = obj.GetComponent<PlayerAbilityView>();
+                        skillViews.Add(view);
+                        skillPresenters.Add(new PlayerSkillPresenter(item, view));
+                    }
+                }
             });
         }
         private void Start()
         {
 
             SetPlayerControlOnCharacter(InitCharacter);
-            
-            
+
+
             c_Target.Object = CurrentCharacter.Targeting.CurrentTarget;
             if (TargetGroup == null)
             {

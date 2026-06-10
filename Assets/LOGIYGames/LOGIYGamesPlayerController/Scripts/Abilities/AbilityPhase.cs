@@ -2,10 +2,10 @@ namespace LOGIYGames
 {
     public enum AbilityPhase
     {
-        None,
+        Ready,
         Started,
         Casting,
         Executing,
-        Finished
+        Cooldown
     }
 }

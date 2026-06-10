@@ -114,7 +114,7 @@ namespace LOGIYGames
             character.MovementStateMachine.AddAnyTransition<SwimMovementState>(
                 new FuncPredicate(() => character.Sensors.IsInWater));
             character.MovementStateMachine.AddAnyTransition<AbilityMovementState>(
-            new FuncPredicate(() => character.AbilityController.CurrentAbility != null && character.AbilityController.Phase != AbilityPhase.Finished));
+            new FuncPredicate(() => character.AbilityController.CurrentAbility != null && character.AbilityController.CurrentAbility.Phase == AbilityPhase.Ready));
 
             #region Movement
             // =========================================================

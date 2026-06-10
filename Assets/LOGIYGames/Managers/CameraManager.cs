@@ -12,7 +12,7 @@ namespace LOGIYGames
         LockOn,
         Top_Down
     }
-    public class CameraManager : Singleton<CameraManager>
+    public class CameraManager : PersistentSingleton<CameraManager>
     {
         [SerializeField] List<CinemachineCameraController> cinemachineCameraControllers = new();
         public CinemachineCameraController CurrentCameraController { get; private set; }
@@ -43,7 +43,7 @@ namespace LOGIYGames
                 UpdateCameraView();
             }
         }
-        protected override void Initialize()
+        private void Initialize()
         {
             CameraInput = new(inputActions);
             instance_FirstPersonCameraController = Instantiate(FirstPersonCameraController, null);
@@ -58,12 +58,14 @@ namespace LOGIYGames
         }
         private void Start()
         {
+            Initialize();
             CameraInput.Enable();
             UpdateCameraView();
-            PlayerManager.Instance.OnTargetLocked.AddListener((evt)=>{
+            PlayerManager.Instance.OnTargetLocked.AddListener((evt) =>
+            {
                 if (evt)
                 {
-                    if (PlayerManager.Instance.CurrentCharacter.Targeting.CurrentTarget!=null)
+                    if (PlayerManager.Instance.CurrentCharacter.Targeting.CurrentTarget != null)
                     {
                         CurrentCameraPerspectiveType = CameraPerspectiveType.LockOn;
                     }

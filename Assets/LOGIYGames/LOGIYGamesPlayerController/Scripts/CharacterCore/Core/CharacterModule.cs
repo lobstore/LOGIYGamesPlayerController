@@ -31,7 +31,8 @@ namespace LOGIYGames.CharacterCore
         public ComboController ComboController { get; private set; }
         public WeaponController WeaponController { get; private set; }
 
-        public List<AbilityData> Abilities = new();
+        public List<AbilityData> abilities = new();
+        public List<Ability> Abilities { get; private set; } = new();
 
         public AbilityController AbilityController { get; private set; }
         #endregion
@@ -140,6 +141,7 @@ namespace LOGIYGames.CharacterCore
 
         private void Awake()
         {
+
             EventBus = new EventDispatcher();
             CameraTarget = GetComponent<CameraTargetModule>();
             ComboBuffer = new InputCommandBuffer();
@@ -150,7 +152,10 @@ namespace LOGIYGames.CharacterCore
 
             Targeting = new();
             VelocityData = new();
-
+            foreach (var item in abilities)
+            {
+                Abilities.Add(new Ability(AbilityController,item));
+            }
             EventsSubscription();
         }
         private void Start()
@@ -170,11 +175,6 @@ namespace LOGIYGames.CharacterCore
             InitializeStateMachine();
 
         }
-        #region DamagableSystem
-
-
-
-        #endregion
         private void EventsSubscription()
         {
             EventBus.Subscribe<JumpPerformedEvent>((evt) =>
@@ -226,7 +226,7 @@ namespace LOGIYGames.CharacterCore
         {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1))
             {
-                AbilityController.SetAbility( Abilities[0]);
+                AbilityController.SetAbility(Abilities[0]);
             }
             else if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -235,8 +235,8 @@ namespace LOGIYGames.CharacterCore
             base.OnUpdate(deltaTime);
             UpdateVelocity();
             TargetRotation = RotationStrategy.GetRotation();
-            TargetDirection = MovementStrategy.GetMovementDirection();
             CalculateDeltaYaw();
+            TargetDirection = MovementStrategy.GetMovementDirection();
             _movementStateMachine.Update();
             StatesDebug();
             var velo = TargetDirection * BaseSpeed;
@@ -447,7 +447,6 @@ namespace LOGIYGames.CharacterCore
             float rightDot = Vector3.Dot(localDir, Vector3.right);
             float upDot = Vector3.Dot(localDir, Vector3.up);
             Direction direction;
-            // Сравниваем проекции, чтобы определить направление
             if (Mathf.Abs(forwardDot) > Mathf.Abs(rightDot))
             {
                 if (forwardDot > 0)
