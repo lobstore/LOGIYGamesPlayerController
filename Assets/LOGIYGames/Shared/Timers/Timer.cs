@@ -13,7 +13,7 @@ namespace LOGIYGames.Timers
         public virtual float ElapsedTime => CurrentTime.CurrentValue;
         public bool IsRunning { get; protected set; }
 
-        public float Progress => Mathf.Clamp(CurrentTime.CurrentValue / initialTime, 0, 1);
+        public virtual float Progress => Mathf.Clamp(CurrentTime.CurrentValue / initialTime, 0, 1);
 
         public Action OnTimerStart = delegate { };
         public Action OnTimerStop = delegate { };

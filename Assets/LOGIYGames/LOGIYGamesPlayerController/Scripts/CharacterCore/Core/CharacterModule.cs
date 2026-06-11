@@ -27,24 +27,16 @@ namespace LOGIYGames.CharacterCore
 
         #region Modules
         public CharacterTargetingModule Targeting { get; private set; }
-        public InputCommandBuffer ComboBuffer { get; private set; }
         public ComboController ComboController { get; private set; }
         public WeaponController WeaponController { get; private set; }
-
-        public List<AbilityData> abilities = new();
-        public List<Ability> Abilities { get; private set; } = new();
-
         public AbilityController AbilityController { get; private set; }
         #endregion
         #region State Machine Configuration
         [Header("State Machine Configuration")]
+        public StateMachineDebugModule MovementStateMachineDebugModule { get; private set; }
         public MovementBuilder movementPreset;
-
-        private readonly Dictionary<Type, CharacterMovementState> _movementStates = new();
-
-        private StateMachine _movementStateMachine;
-        public StateMachine MovementStateMachine => _movementStateMachine;
-
+        private Dictionary<Type, CharacterMovementState> m_movementStates = new();
+        public StateMachine MovementStateMachine { get; private set; }
         #endregion
         #region Runtime States
         public bool IsFalling { get; set; }
@@ -58,69 +50,22 @@ namespace LOGIYGames.CharacterCore
         public bool IsSwimming { get; set; }
         public bool IsAimig { get; set; }
         public bool IsMantling { get; set; }
-
-        public bool CanMove { get; set; } = true;
         #endregion
-        #region Inpector Debug Variables
-        private string _currentMovementStateName;
-        private string _lastMovementTransition;
-        private string _currentActionStateName;
-        private string _lastActionTransition;
-        [SerializeField] Color movementTargetDirectionArrowColor;
-        #endregion
-
         #region Velocity Variables
-
-
         [Header("Movement Configuration")]
-
-
         public CharacterVelocityData VelocityData { get; private set; }
-
-
         public float BaseSpeed;
-        /// <summary>
-        /// Gets or sets the deceleration value.
-        /// </summary>
-        /// <remarks>
-        /// Deceleration does not work if the <see cref="useInertia"/> variable is set to <c>false</c>.
-        /// </remarks>
-        public float Deceleration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the acceleration value.
-        /// </summary>
-        /// <remarks>
-        /// Acceleration does not work if the <see cref="useInertia"/> variable is set to <c>false</c>.
-        /// </remarks>
-        public float Acceleration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the internal speed multiplier.
-        /// </summary>
-        /// <remarks>
-        /// This multiplier can be used to adjust the movement speed in base conditions, such as when moving walk or sprint.
-        /// </remarks>
-        public float SpeedMultiplier { get; set; }
-
+        public AccelerationData AccelerationData { get; set; }
+        public float Speed{ get; set; }
+        public float CurrentSpeed => Speed * BaseSpeed;
         public float TurnSmoothTime { get; set; } = 5f;
-
-        public float CurrentSpeed => SpeedMultiplier * BaseSpeed;
-
-        private float deltaYaw;
-        private Quaternion targetRotation;
-        private Vector3 targetDirection;
-        private Vector3 scaledTargetDirection;
-        public Quaternion TargetRotation { get => targetRotation; set => targetRotation = value; }
-        public Vector3 TargetDirection { get => targetDirection; set => targetDirection = value; }
-        public Vector3 ScaledTargetDirection { get => scaledTargetDirection; set => scaledTargetDirection = value; }
+        public Quaternion TargetRotation { get; set; }
+        public Vector3 TargetDirection { get; set; }
 
         #endregion
-
         #region Collider Properties
         public float Radius { get => m_motor.Radius; set => m_motor.Radius = value; }
         public float MaxStepHeight { get => m_motor.MaxStepHeight; set => m_motor.MaxStepHeight = value; }
-
         [field: SerializeField] public float Height { get; set; }
         public float HeightChangingSmoothTime { get; private set; } = 4f;
 
@@ -128,13 +73,11 @@ namespace LOGIYGames.CharacterCore
 
         #region Camera References
         public CameraTargetModule CameraTarget { get; set; }
-
         public Transform CameraLookAt => CameraTarget.CameraLookAt;
         public Transform CameraFollow => CameraTarget.CameraFollow;
 
         #endregion
-        public float DeltaYaw { get => deltaYaw; set => deltaYaw = value; }
-
+        public float DeltaYaw { get; set; }
 
         public UnityEvent OnControlReleased { get; } = new();
 
@@ -144,36 +87,23 @@ namespace LOGIYGames.CharacterCore
 
             EventBus = new EventDispatcher();
             CameraTarget = GetComponent<CameraTargetModule>();
-            ComboBuffer = new InputCommandBuffer();
-            WeaponController = new WeaponController(this);
-            ComboController = new ComboController(this, ComboBuffer);
-            AbilityController = new AbilityController(this);
-            GetComponent<ComboBufferDebugView>().Buffer = ComboBuffer;
+            WeaponController = GetComponent<WeaponController>();
+            ComboController = GetComponent<ComboController>();
+            AbilityController = GetComponent<AbilityController>();
+
 
             Targeting = new();
             VelocityData = new();
-            foreach (var item in abilities)
-            {
-                Abilities.Add(new Ability(AbilityController,item));
-            }
+            AccelerationData = new();
+
             EventsSubscription();
         }
         private void Start()
         {
-            if (RotationStrategy == null)
-            {
-                DefaultRotationStrategy = new NoneRotation(this);
-                RotationStrategy = DefaultRotationStrategy;
-            }
-            if (MovementStrategy == null)
-            {
-                DefaultMovementStrategy = new NoneMovement();
-                MovementStrategy = DefaultMovementStrategy;
-            }
             m_motor.Height = Height;
             m_motor.Center = new Vector3(0, Height / 2.0f, 0);
             InitializeStateMachine();
-
+            MovementStateMachineDebugModule = new StateMachineDebugModule(MovementStateMachine);
         }
         private void EventsSubscription()
         {
@@ -203,48 +133,30 @@ namespace LOGIYGames.CharacterCore
                     default:
                         break;
                 }
-
             });
-            EventBus.Subscribe<MantlingEvent>((evt) =>
-            {
-
-            });
-
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
-            _movementStateMachine.FixedUpdate();
+            MovementStateMachine.FixedUpdate();
         }
         public override void OnLateUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
-            _movementStateMachine.LateUpdate();
+            MovementStateMachine.LateUpdate();
             SmoothHeightChanging();
         }
         public override void OnUpdate(float deltaTime)
         {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                AbilityController.SetAbility(Abilities[0]);
-            }
-            else if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                AbilityController.SetAbility(Abilities[1]);
-            }
+
             base.OnUpdate(deltaTime);
             UpdateVelocity();
             TargetRotation = RotationStrategy.GetRotation();
             CalculateDeltaYaw();
             TargetDirection = MovementStrategy.GetMovementDirection();
-            _movementStateMachine.Update();
-            StatesDebug();
-            var velo = TargetDirection * BaseSpeed;
-            if (velo.magnitude > 0)
-            {
-                DebugDraw.DrawArrow(transform.position, velo, movementTargetDirectionArrowColor);
+            MovementStateMachine.Update();
+            MovementStateMachineDebugModule.Update();
 
-            }
         }
 
         private void SmoothHeightChanging()
@@ -263,34 +175,21 @@ namespace LOGIYGames.CharacterCore
         }
 
         #region Rotation Methods
-
-        /// <summary>
-        /// Rotates character to face the desired direction.
-        /// </summary>
         public void RotateToDirection(Vector3 desiredDirection, float turnSmoothTime = 0)
         {
             Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, m_motor.transform.up);
             Rotate(targetRotation, turnSmoothTime);
         }
-
-        /// <summary>
-        /// Rotates character to face a position.
-        /// </summary>
         public void RotateToPosition(Vector3 position, float turnSmoothTime = 0)
         {
             Vector3 desiredDirection = position - m_motor.transform.position;
             RotateToDirection(desiredDirection.normalized, turnSmoothTime);
         }
 
-        /// <summary>
-        /// Rotates character to a target rotation.
-        /// Delegates to controller wrapper for proper KinematicCharacterController integration.
-        /// </summary>
         public void Rotate(Quaternion targetRotation, float turnSpeed = 0)
         {
             if (turnSpeed > 0f)
             {
-                // Smooth rotation using Slerp
                 Quaternion smoothedRotation = Quaternion.Slerp(m_motor.Rotation, targetRotation, turnSpeed * Time.fixedDeltaTime);
                 m_motor.SetRotation(smoothedRotation);
             }
@@ -302,33 +201,31 @@ namespace LOGIYGames.CharacterCore
 
         private void CalculateDeltaYaw()
         {
-            deltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, TargetRotation.eulerAngles.y);
-            if (Mathf.Abs(deltaYaw) < 0.01f)
+            DeltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, TargetRotation.eulerAngles.y);
+            if (Mathf.Abs(DeltaYaw) < 0.01f)
             {
-                deltaYaw = 0;
+                DeltaYaw = 0;
             }
         }
 
         #endregion
         #region Movement Methods
 
-        public void Move(Vector3 moveDirection)
+        public void Move()
         {
             m_motor.Move(VelocityData.Locomotion);
         }
 
         private void UpdateVelocity()
         {
-            if (TargetDirection.magnitude > 0)
+            if (Input.MovementInput.magnitude > 0)
             {
 
-                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, TargetDirection.normalized, Acceleration * Time.deltaTime);
-                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, targetDirection.normalized * CurrentSpeed, Acceleration * Time.deltaTime);
+                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, TargetDirection.normalized * CurrentSpeed, AccelerationData.Acceleration * Time.deltaTime);
             }
             else
             {
-                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, Deceleration * Time.deltaTime);
-                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, Vector3.zero, Deceleration * Time.deltaTime);
+                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, Vector3.zero, AccelerationData.Deceleration * Time.deltaTime);
             }
         }
 
@@ -349,7 +246,7 @@ namespace LOGIYGames.CharacterCore
         }
         private Vector3 ProjectVelocity()
         {
-            return Vector3.ProjectOnPlane(VelocityData.Locomotion, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-m_motor.transform.up * SpeedMultiplier, Sensors.BelowHit.normal);
+            return Vector3.ProjectOnPlane(VelocityData.Locomotion, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-m_motor.transform.up * Speed, Sensors.BelowHit.normal);
         }
         public void Slide()
         {
@@ -360,17 +257,13 @@ namespace LOGIYGames.CharacterCore
         {
             VelocityData.Reset();
             TargetDirection = Vector3.zero;
-            ScaledTargetDirection = Vector3.zero;
             m_motor.ResetVelocity();
         }
-        public void ResetSpeed()
-        {
-            SpeedMultiplier = 0;
-        }
+        public void ResetSpeed() => AccelerationData = new();
         #endregion
         private void InitializeStateMachine()
         {
-            _movementStateMachine = new StateMachine();
+            MovementStateMachine = new StateMachine();
             if (movementPreset != null)
             {
                 movementPreset.Build(this);
@@ -385,19 +278,19 @@ namespace LOGIYGames.CharacterCore
 
         public void AddMovementState(CharacterMovementState state)
         {
-            _movementStates[state.GetType()] = state;
+            m_movementStates[state.GetType()] = state;
 
             MovementStateMachine.AddState(state);
         }
         public void RemoveMovementState<T>() where T : CharacterMovementState
         {
-            _movementStates.Remove(typeof(T));
+            m_movementStates.Remove(typeof(T));
 
             MovementStateMachine.RemoveState<T>();
         }
         public T GetMovementState<T>() where T : CharacterMovementState
         {
-            if (_movementStates.TryGetValue(typeof(T), out var state))
+            if (m_movementStates.TryGetValue(typeof(T), out var state))
                 return state as T;
 
             return null;
@@ -405,16 +298,11 @@ namespace LOGIYGames.CharacterCore
 
         public bool HasMovementState<T>() where T : CharacterMovementState
         {
-            return _movementStates.ContainsKey(typeof(T));
+            return m_movementStates.ContainsKey(typeof(T));
         }
         #endregion
         #region Action State Machine
         #endregion
-        private void StatesDebug()
-        {
-            _currentMovementStateName = _movementStateMachine.CurrentNode.State.ToString();
-            _lastMovementTransition = _movementStateMachine.LastTransition;
-        }
 
         #region IControllable
         public void UpdateInput(CharacterInput inputReader)
@@ -469,24 +357,5 @@ namespace LOGIYGames.CharacterCore
             return direction;
         }
 
-    }
-
-    [Serializable]
-    public class CharacterTargetingModule
-    {
-        public Transform CurrentTarget { get; private set; }
-
-        public bool HasTarget =>
-            CurrentTarget != null;
-
-        public void SetTarget(Transform target)
-        {
-            CurrentTarget = target;
-        }
-
-        public void ClearTarget()
-        {
-            CurrentTarget = null;
-        }
     }
 }

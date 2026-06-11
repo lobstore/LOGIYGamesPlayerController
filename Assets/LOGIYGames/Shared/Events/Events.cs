@@ -1,4 +1,5 @@
-﻿using LOGIYGames.Shared.Data;
+﻿using LOGIYGames.Movement;
+using LOGIYGames.Shared.Data;
 using LOGIYGames.Shared.Enums;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,8 @@ namespace LOGIYGames.Shared.Character.Events
         public float angle;
     }
     [Serializable]
-    public class BackTurnPerformedEvent : EventBase
+    public class BackTurnPerformedEvent : TurnPerformedEvent
     {
-        public float movementSpeed;
-        public float angle;
     }
     [Serializable]
     public class LeashWeaponEvent : EventBase
@@ -56,7 +55,7 @@ namespace LOGIYGames.Shared.Character.Events
     public class MovementStoppedEvent : EventBase
     {
         public Direction direction;
-        public float speed;
+        public float movementSpeed;
     }
     [Serializable]
     public class MantlingEvent : EventBase

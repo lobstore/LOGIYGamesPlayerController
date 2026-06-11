@@ -12,13 +12,13 @@ public class TurnMovementState : TimedMovementState
     Quaternion turnEnd;
     public override void Enter()
     {
-        base.Enter();
         turnEnd = _character.RotationStrategy.GetRotation();
         _character.EventBus.Publish(new TurnPerformedEvent
         {
-            movementSpeed = _character.SpeedMultiplier,
+            movementSpeed = _character.Speed,
             angle = _character.DeltaYaw
         });
+        base.Enter();
     }
     protected override void Rotate()
     {

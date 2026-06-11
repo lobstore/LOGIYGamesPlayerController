@@ -13,23 +13,23 @@ namespace LOGIYGames
         Quaternion turnEnd;
         public override void Enter()
         {
-            base.Enter();
             turnEnd = _character.RotationStrategy.GetRotation();
             _character.EventBus.Publish(new BackTurnPerformedEvent
             {
-                movementSpeed = _character.SpeedMultiplier,
+                movementSpeed = _character.Speed,
                 angle = _character.DeltaYaw
             });
+            base.Enter();
         }
         protected override void Rotate()
         {
-            if (_data.IsAnimationDrivenRotation) return;
+            if (Data.IsAnimationDrivenRotation) return;
             _character.Rotate(turnEnd, _character.TurnSmoothTime);
         }
         public override void Exit()
         {
             base.Exit();
-            if (_data.IsAnimationDrivenRotation) return;
+            if (Data.IsAnimationDrivenRotation) return;
             _character.Rotate(turnEnd);
         }
     }

@@ -17,7 +17,10 @@ namespace LOGIYGames
         InputAction m_FocusAction;
         InputAction m_AttackAction;
         InputAction m_InteractAction;
-        public PlayerInputReader(InputActionAsset InputActions )
+        Camera Camera;
+
+
+        public PlayerInputReader(InputActionAsset InputActions)
         {
             CharacterActionMap = InputActions.FindActionMap("CharacterInputs");
             m_MoveAction = CharacterActionMap.FindAction("Move");
@@ -28,6 +31,8 @@ namespace LOGIYGames
             m_FocusAction = CharacterActionMap.FindAction("Focus");
             m_AttackAction = CharacterActionMap.FindAction("Attack");
             m_InteractAction = CharacterActionMap.FindAction("Interact");
+            Camera = Camera.main;
+
         }
 
         public void Enable()
@@ -42,7 +47,6 @@ namespace LOGIYGames
         public CharacterInput GetInput()
         {
             CharacterInput input = new();
-
             input.MovementInput = m_MoveAction.ReadValue<Vector2>();
             input.FocusPressed = m_FocusAction.IsPressed();
             input.JumpPressed = m_JumpAction.WasPressedThisFrame();
@@ -51,8 +55,8 @@ namespace LOGIYGames
             input.AttackPressed = m_AttackAction.WasPressedThisFrame();
             input.InteractPressed = m_InteractAction.WasPressedThisFrame();
             input.CrouchPressed = m_CrouchAction.WasPressedThisFrame();
-            input.LookForward = Camera.main.transform.forward;
-            input.LookRight = Camera.main.transform.right;
+            input.LookForward = Camera.transform.forward;
+            input.LookRight = Camera.transform.right;
             return input;
         }
 

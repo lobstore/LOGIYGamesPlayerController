@@ -15,14 +15,16 @@ namespace LOGIYGames.Movement
         {
             base.Enter();
             Direction direction = _character.GetRelativeMovementDirection();
+            float planarForce = _stateData.PlanarJumpForce;
             if (_character.Input.MovementInput.magnitude ==0)
             {
                 direction = Direction.Up;
+                planarForce = 0;
             }
             _character.EventBus.Publish(new JumpPerformedEvent
             {
                 verticalForce = _stateData.VerticalJumpForce,
-                planarForce = _stateData.PlanarJumpForce,
+                planarForce = planarForce,
                 direction = direction,
                 jumpType = JumpType.GroundJump
 

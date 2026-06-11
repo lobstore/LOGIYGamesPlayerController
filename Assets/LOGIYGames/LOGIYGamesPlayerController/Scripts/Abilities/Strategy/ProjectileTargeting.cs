@@ -4,12 +4,10 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class ProjectileTargeting : TargetingStrategy
+    public class ProjectileTargeting : ObjectTargeting
     {
-        List<IEffect> effects;
         private float projectileSpeed;
-        AbilityVFXData vFXData;
-        public ProjectileTargeting(List<IEffect> effects, AbilityVFXData vFXData, float projectileSpeed)
+        public ProjectileTargeting(List<IEffect> effects, AbilityVFXData vFXData, float projectileSpeed) : base(effects, vFXData)
         {
             this.effects = effects;
             this.projectileSpeed = projectileSpeed;
@@ -38,7 +36,7 @@ namespace LOGIYGames
             obj.GetComponent<Transform>().localScale = vFXData.vfxScale;
 
             obj.GetComponent<ProjectileAbilityController>()
-                .Initialize(context, projectileSpeed);
+                .Initialize(context, vFXData.vfxLifetime, projectileSpeed);
         }
 
         public override void Update()

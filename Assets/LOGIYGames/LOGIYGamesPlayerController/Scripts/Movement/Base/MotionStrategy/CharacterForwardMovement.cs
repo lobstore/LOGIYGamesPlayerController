@@ -4,12 +4,12 @@ using UnityEngine.EventSystems;
 
 namespace LOGIYGames
 {
-    public class PlanarMovement : IMovementStrategy
+    public class CharacterForwardMovement : IMovementStrategy
     {
 
         CharacterModule Character;
 
-        public PlanarMovement(CharacterModule character)
+        public CharacterForwardMovement(CharacterModule character)
         {
             Character = character;
         }
@@ -21,10 +21,9 @@ namespace LOGIYGames
             fwd.y = 0;
             var rght = Character.Input.LookRight;
             rght.y = 0;
-            return rght.normalized * Character.Input.MovementInput.x + fwd.normalized * Character.Input.MovementInput.y;
-
+            //return rght.normalized * Character.Input.MovementInput.x + fwd.normalized * Character.Input.MovementInput.y;
+            return Character.transform.forward;
         }
     }
-
 }
 

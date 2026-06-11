@@ -487,6 +487,9 @@ GameObject:
   - component: {fileID: 7157920177242386313}
   - component: {fileID: 998225325678431383}
   - component: {fileID: 5010907610595090611}
+  - component: {fileID: 1030516243872166310}
+  - component: {fileID: 6550930880353304642}
+  - component: {fileID: 52468696790114736}
   m_Layer: 3
   m_Name: Character
   m_TagString: Character
@@ -540,9 +543,6 @@ MonoBehaviour:
   m_motor: {fileID: 1176126297597612246}
   <Sensors>k__BackingField: {fileID: 2268543539570239712}
   JumpCount: 0
-  Abilities:
-  - {fileID: 11400000, guid: c4fe7cb4c7cd14548bb34390a2797522, type: 2}
-  - {fileID: 11400000, guid: 67204a15c7aa23544b55367a81dbfd8d, type: 2}
   movementPreset: {fileID: 11400000, guid: a950937825b83ab4086272ca9dbfed13, type: 2}
   movementTargetDirectionArrowColor: {r: 1, g: 0, b: 0, a: 1}
   BaseSpeed: 4
@@ -726,6 +726,36 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Run_Foot_R
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnRHandAttack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7230562057293208504}
+        m_TargetAssemblyTypeName: LOGIYGames.ComboEffectsController, Assembly-CSharp
+        m_MethodName: PlaySFX_RHand
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnLHandAttack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7230562057293208504}
+        m_TargetAssemblyTypeName: LOGIYGames.ComboEffectsController, Assembly-CSharp
+        m_MethodName: PlaySFX_LHand
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
   animator: {fileID: 2654077868994141792}
@@ -927,6 +957,45 @@ MonoBehaviour:
   walkRadius: 8
   runRadius: 8
   sprintRadius: 18
+--- !u!114 &1030516243872166310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85eeb62e1dd99d24889bfb32edd726f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.AbilityController
+  abilities:
+  - {fileID: 11400000, guid: c4fe7cb4c7cd14548bb34390a2797522, type: 2}
+  - {fileID: 11400000, guid: 6b92f290501655d4883ea2f60209f7be, type: 2}
+--- !u!114 &6550930880353304642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65ccbf0fae16b04d998bb97fe684d1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.ComboController
+--- !u!114 &52468696790114736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bb5b49d7769e5a489ce202b5a99b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.WeaponController
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0
@@ -11393,10 +11462,23 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2131248450159323197}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7230562057293208504}
   m_SourcePrefab: {fileID: 100100000, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+--- !u!4 &2355045703211151954 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+  m_PrefabInstance: {fileID: 8832307917435135889}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6488060869766363552 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6874584590210671055, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+  m_PrefabInstance: {fileID: 8832307917435135889}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7144685428757272665 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
   m_PrefabInstance: {fileID: 8832307917435135889}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8278627846603522541 stripped
@@ -11436,13 +11518,129 @@ MonoBehaviour:
     priority: 128
     volume: 1
     pitch: 1
+    minPitchDelta: -0.05
+    maxPitchDelta: 0.05
+    panStereo: 0
+    spatialBlend: 1
+    reverbZoneMix: 1
+    dopplerLevel: 1
+    spread: 180
+    minDistance: 5
+    maxDistance: 50
+    ignoreListenerVolume: 0
+    ignoreListenerPause: 0
+    rolloffMode: 0
+--- !u!114 &7230562057293208504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8526370247364205248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ff51301055ab642b58f2b6697dffc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  rHand: {fileID: 7144685428757272665}
+  lHand: {fileID: 2355045703211151954}
+  rFoot: {fileID: 0}
+  lFoot: {fileID: 0}
+  head: {fileID: 0}
+  attackActionSounds:
+  - clip: {fileID: 8300000, guid: eed2451bbd4264da8b6c27c92df62faf, type: 3}
+    mixerGroup: {fileID: -7141789664723626200, guid: a8054da8ca7d10c46872a77427942bb9, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 0
+    mute: 0
+    bypassEffects: 0
+    bypassListenerEffects: 0
+    bypassReverbZones: 0
+    priority: 128
+    volume: 1
+    pitch: 1
+    minPitchDelta: -0.1
+    maxPitchDelta: 0.1
     panStereo: 0
     spatialBlend: 0
     reverbZoneMix: 1
     dopplerLevel: 1
-    spread: 0
-    minDistance: 1
-    maxDistance: 500
+    spread: 360
+    minDistance: 0
+    maxDistance: 100
+    ignoreListenerVolume: 0
+    ignoreListenerPause: 0
+    rolloffMode: 0
+  - clip: {fileID: 8300000, guid: 6ccbc3d284bd849d49fb1f8f94ab2888, type: 3}
+    mixerGroup: {fileID: -7141789664723626200, guid: a8054da8ca7d10c46872a77427942bb9, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 0
+    mute: 0
+    bypassEffects: 0
+    bypassListenerEffects: 0
+    bypassReverbZones: 0
+    priority: 128
+    volume: 1
+    pitch: 1
+    minPitchDelta: -0.1
+    maxPitchDelta: 0.1
+    panStereo: 0
+    spatialBlend: 0
+    reverbZoneMix: 1
+    dopplerLevel: 1
+    spread: 360
+    minDistance: 0
+    maxDistance: 100
+    ignoreListenerVolume: 0
+    ignoreListenerPause: 0
+    rolloffMode: 0
+  - clip: {fileID: 8300000, guid: 687990b2a12cc4b6db34fdeceb9b8636, type: 3}
+    mixerGroup: {fileID: -7141789664723626200, guid: a8054da8ca7d10c46872a77427942bb9, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 0
+    mute: 0
+    bypassEffects: 0
+    bypassListenerEffects: 0
+    bypassReverbZones: 0
+    priority: 128
+    volume: 1
+    pitch: 1
+    minPitchDelta: -0.1
+    maxPitchDelta: 0.1
+    panStereo: 0
+    spatialBlend: 0
+    reverbZoneMix: 1
+    dopplerLevel: 1
+    spread: 360
+    minDistance: 0
+    maxDistance: 100
+    ignoreListenerVolume: 0
+    ignoreListenerPause: 0
+    rolloffMode: 0
+  - clip: {fileID: 8300000, guid: 687990b2a12cc4b6db34fdeceb9b8636, type: 3}
+    mixerGroup: {fileID: -7141789664723626200, guid: a8054da8ca7d10c46872a77427942bb9, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 0
+    mute: 0
+    bypassEffects: 0
+    bypassListenerEffects: 0
+    bypassReverbZones: 0
+    priority: 128
+    volume: 0
+    pitch: 1
+    minPitchDelta: 1
+    maxPitchDelta: 1
+    panStereo: 0
+    spatialBlend: 0
+    reverbZoneMix: 1
+    dopplerLevel: 1
+    spread: 360
+    minDistance: 0
+    maxDistance: 100
     ignoreListenerVolume: 0
     ignoreListenerPause: 0
     rolloffMode: 0

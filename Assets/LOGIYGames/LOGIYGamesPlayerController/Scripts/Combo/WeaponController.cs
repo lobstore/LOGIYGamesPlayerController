@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    public class WeaponController
+    public class WeaponController :MonoBehaviour
     {
         public WeaponDataSO CurrentWeapon
         {
@@ -9,19 +9,14 @@ namespace LOGIYGames.CharacterCore
             private set;
         }
 
-        private readonly CharacterModule
-            character;
+        private CharacterModule character;
 
-        private readonly Animator
-            animator;
+        private Animator animator;
 
-        public WeaponController(
-            CharacterModule owner)
+        private void Awake()
         {
-            character = owner;
-
-            animator =
-                owner.GetComponent<Animator>();
+            character = GetComponent<CharacterModule>();
+            animator = GetComponent<Animator>();
         }
 
         // ========================================================

@@ -1,4 +1,5 @@
 using LOGIYGames.CharacterCore;
+using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using System;
@@ -16,7 +17,9 @@ namespace LOGIYGames.Animation
         [SerializeField][Range(0, 0.5f)] private float crossFadeSpeed;
 
         [SerializeField] CharacterAnimationsData _data;
-        public bool UseRootMotion { get => animator.applyRootMotion; set => animator.applyRootMotion = value;  }
+        public bool UseRootMotion { get => animator.applyRootMotion; set => animator.applyRootMotion = value; }
+
+        public Vector3 ScaledTargetDirection { get; set; }
         private void Start()
         {
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
@@ -157,7 +160,7 @@ namespace LOGIYGames.Animation
             });
             character.EventBus.Subscribe<TurnPerformedEvent>((evt) =>
             {
-                if (evt.movementSpeed > 0.5)
+                if (evt.movementSpeed > GetStateSpeed<WalkMovementState>())
                 {
                     if (evt.angle > 0)
                     {
@@ -186,7 +189,7 @@ namespace LOGIYGames.Animation
             });
             character.EventBus.Subscribe<BackTurnPerformedEvent>((evt) =>
             {
-                if (evt.movementSpeed > 0.5)
+                if (evt.movementSpeed > GetStateSpeed<WalkMovementState>())
                 {
                     if (evt.angle > 0)
                     {
@@ -198,26 +201,12 @@ namespace LOGIYGames.Animation
                         PlayAnimation(_data.Run_BackTurn_Left);
 
                     }
-                    PlayAnimation(_data.Sprint_BackTurn_Left);
                 }
-                else if (evt.movementSpeed < 0.5 && evt.movementSpeed > 0.2f)
+                else if (evt.movementSpeed < GetStateSpeed<RunMovementState>())
                 {
                     if (evt.angle > 0)
                     {
                         PlayAnimation(_data.Walk_BackTurn_Right);
-
-                    }
-                    else
-                    {
-                        PlayAnimation(_data.Walk_BackTurn_Left);
-
-                    }
-                }
-                else if (evt.movementSpeed < 0.2)
-                {
-                    if (evt.angle > 0)
-                    {
-                        PlayAnimation(_data.Walk_BackTurn_Left);
 
                     }
                     else
@@ -245,46 +234,26 @@ namespace LOGIYGames.Animation
             {
                 switch (evt.direction)
                 {
-                    //case Direction.Left:
-                    //    if (evt.speed < 0.5)
-                    //    {
-                    //        PlayAnimation(_data.Walk_Stop_Left);
-                    //    }
-                    //    else if (evt.speed < 1)
-                    //    {
-                    //        PlayAnimation(_data.Run_Stop_Left);
-                    //    }
-                    //    break;
-                    //case Direction.Right:
-                    //    if (evt.speed < 0.5)
-                    //    {
-                    //        PlayAnimation(_data.Walk_Stop_Right);
-                    //    }
-                    //    else if (evt.speed < 1)
-                    //    {
-                    //        PlayAnimation(_data.Run_Stop_Right);
-                    //    }
-                    //    break;
                     case Direction.Forward:
-                        if (evt.speed <= 0.5)
+                        if (evt.movementSpeed <= GetStateSpeed<WalkMovementState>())
                         {
                             PlayAnimation(_data.Walk_Stop_Forward);
                         }
-                        else if (evt.speed <= 1)
+                        else if (evt.movementSpeed <= GetStateSpeed<RunMovementState>())
                         {
                             PlayAnimation(_data.Run_Stop_Forward);
                         }
-                        else if (evt.speed > 1)
+                        else if (evt.movementSpeed > GetStateSpeed<RunMovementState>())
                         {
                             PlayAnimation(_data.Sprint_Stop_Forward);
                         }
                         break;
                     case Direction.Backward:
-                        if (evt.speed < 0.5)
+                        if (evt.movementSpeed < GetStateSpeed<WalkMovementState>())
                         {
                             PlayAnimation(_data.Walk_Stop_Backward);
                         }
-                        else if (evt.speed < 1)
+                        else if (evt.movementSpeed < GetStateSpeed<RunMovementState>())
                         {
                             PlayAnimation(_data.Run_Stop_Backward);
                         }
@@ -345,8 +314,8 @@ namespace LOGIYGames.Animation
                 DebugDraw.DrawArrow(transform.position, animator.velocity, Color.white);
 
             }
-            animator.SetFloat("Speed", character.SpeedMultiplier);
-            if (character.RotationStrategy is ThirdPersonPlanarRotation or InputRelativeRotation)
+            animator.SetFloat("Speed", character.Speed, 0.05f, Time.deltaTime);
+            if (character.RotationStrategy is InputPlanarRotation or InputRelativeRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
@@ -359,8 +328,8 @@ namespace LOGIYGames.Animation
             }
             else
             {
-                animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(character.ScaledTargetDirection).z);
-                animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(character.ScaledTargetDirection).x);
+                animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(ScaledTargetDirection).z, 0.05f, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(ScaledTargetDirection).x, 0.05f, Time.deltaTime);
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
@@ -376,15 +345,32 @@ namespace LOGIYGames.Animation
 
             animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
+        private void Update()
+        {
+            if (character.Input.MovementInput.magnitude > 0)
+            {
 
+                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, character.TargetDirection.normalized, character.AccelerationData.Acceleration * Time.deltaTime);
+            }
+            else
+            {
+
+                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, character.AccelerationData.Deceleration * Time.deltaTime);
+            }
+        }
         private void OnAnimatorMove()
         {
             if (animator.applyRootMotion)
             {
                 character.VelocityData.Locomotion = new Vector3(animator.velocity.x, animator.velocity.y, animator.velocity.z);
-                character.Move(character.VelocityData.Total);
+                character.Move();
                 character.Rotate(animator.rootRotation);
             }
+        }
+
+        private float GetStateSpeed<T>() where T : CharacterMovementState
+        {
+            return character.MovementStateMachine.GetState<T>().Data.Speed;
         }
     }
 }

@@ -8,12 +8,10 @@ namespace LOGIYGames
     {
         ComboController combo;
         WeaponController weapon;
-        InputCommandBuffer buffer;
         public ComboMovementState(CharacterModule character, MovementStateData data) : base(character, data)
         {
             combo = character.ComboController;
             weapon = character.WeaponController;
-            buffer = character.ComboBuffer;
         }
 
         // ========================================================
@@ -37,7 +35,7 @@ namespace LOGIYGames
         {
             base.Exit();
 
-            combo.Reset();
+            combo.ResetCombo();
         }
 
         public override void LogicUpdate()
@@ -50,12 +48,12 @@ namespace LOGIYGames
         {
             if (_character.Input.AttackPressed)
             {
-                buffer.AddCommand(new AttackInputCommand(AttackInputType.Light));
+                combo.AddCommand(new AttackInputCommand(AttackInputType.Light));
             }
 
             if (_character.Input.EvadePressed)
             {
-                buffer.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
+                combo.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
             }
         }
         public bool CanExit()

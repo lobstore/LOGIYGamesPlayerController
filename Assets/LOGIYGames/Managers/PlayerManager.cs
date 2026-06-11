@@ -27,7 +27,7 @@ namespace LOGIYGames
         [SerializeField] private PlayerProfileView profileView;
         [SerializeField] private GameObject abilityPrefab;
         private PlayerProfilePresenter profilePresenter;
-        [SerializeField] private Transform skillsContainer;
+        [SerializeField] private RectTransform skillsContainer;
         private List<PlayerSkillPresenter> skillPresenters = new List<PlayerSkillPresenter>();
         private List<PlayerAbilityView> skillViews = new List<PlayerAbilityView>();
         ReactiveProperty<string> Name = new();
@@ -42,7 +42,10 @@ namespace LOGIYGames
                 Name.Value = newChar.name;
                 profilePresenter = new PlayerProfilePresenter(newChar.GetComponent<HealthModule>(), newChar.GetComponent<StaminaModule>(), Name, profileView);
 
-
+                for (int i = 0; i < skillsContainer.childCount; i++)
+                {
+                    Destroy(skillsContainer.GetChild(i));
+                }
                 if (skillPresenters.Count > 0)
                 {
                     skillPresenters.Clear();
@@ -55,12 +58,14 @@ namespace LOGIYGames
                     }
                     skillViews.Clear();
                 }
-                if (newChar.Abilities.Count > 0)
+
+                if (newChar.AbilityController.Abilities.Count > 0)
                 {
-                    foreach (var item in newChar.Abilities)
+                    foreach (var item in newChar.AbilityController.Abilities)
                     {
                         var obj = Instantiate(abilityPrefab);
-                        obj.transform.SetParent(skillsContainer);
+                        obj.transform.SetParent(skillsContainer,true);
+                        obj.transform.localScale = Vector3.one;
                         var view = obj.GetComponent<PlayerAbilityView>();
                         skillViews.Add(view);
                         skillPresenters.Add(new PlayerSkillPresenter(item, view));
@@ -122,20 +127,20 @@ namespace LOGIYGames
             switch (CameraManager.Instance.CurrentCameraPerspectiveType)
             {
                 case CameraPerspectiveType.FirstPerson:
-                    CurrentCharacter.DefaultMovementStrategy = new PlanarMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
                     CurrentCharacter.DefaultRotationStrategy = new FirstPersonPlanarRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
-                    CurrentCharacter.DefaultMovementStrategy = new PlanarMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new ThirdPersonPlanarRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new InputPlanarRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
-                    CurrentCharacter.DefaultMovementStrategy = new PlanarMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
                     CurrentCharacter.DefaultRotationStrategy = new FirstPersonPlanarRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.Top_Down:
-                    CurrentCharacter.DefaultMovementStrategy = new PlanarMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new ThirdPersonPlanarRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new InputPlanarRotation(CurrentCharacter);
                     break;
                 default:
                     break;

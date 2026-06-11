@@ -3,30 +3,33 @@ using LOGIYGames.Shared.Enums;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    public class ComboController
+    public class ComboController : MonoBehaviour
     {
         public AttackNodeSO CurrentAttack { get; private set; }
         public bool CanCancel { get; private set; }
         public bool IsNextQueued { get; private set; }
         public ComboPhase Phase { get; private set; }
 
-        private readonly CharacterModule character;
-        private readonly Animator animator;
-        private readonly InputCommandBuffer commandBuffer;
+        private CharacterModule character;
+        private Animator animator;
+        private InputCommandBuffer commandBuffer;
 
         private AttackNodeSO queuedAttack;
 
-        public ComboController(
-            CharacterModule owner,
-            InputCommandBuffer commandBuffer)
+        private void Start()
         {
-            character = owner;
-            animator = owner.GetComponent<Animator>();
-            this.commandBuffer = commandBuffer;
-
+            character = GetComponent<CharacterModule>();
+            animator = GetComponent<Animator>();
+            commandBuffer = new InputCommandBuffer();
+            GetComponent<ComboBufferDebugView>().Buffer = commandBuffer;
             SubscribeEvents();
         }
 
+
+        public void AddCommand(IInputCommand input)
+        {
+            commandBuffer.AddCommand(input);
+        }
         private void SubscribeEvents()
         {
             character.EventBus.Subscribe<ComboAnimationEvent>(e =>
@@ -37,7 +40,7 @@ namespace LOGIYGames.CharacterCore
 
         public void BeginCombo(AttackNodeSO attack)
         {
-            Reset();
+            ResetCombo();
 
             Phase = ComboPhase.Started;
 
@@ -241,7 +244,7 @@ namespace LOGIYGames.CharacterCore
             return Phase == ComboPhase.Finished;
         }
 
-        public void Reset()
+        public void ResetCombo()
         {
 
             queuedAttack = null;

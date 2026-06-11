@@ -49,7 +49,7 @@ namespace LOGIYGames
             CooldownTimer.OnTimerStop += () =>
             {
                 Phase = AbilityPhase.Ready;
-                Reset();
+          
             };
             Phase = AbilityPhase.Ready;
         }
@@ -65,7 +65,7 @@ namespace LOGIYGames
 
         public void Start()
         {
-
+            ResetTimers();
             Phase = AbilityPhase.Started;
             StartCastingPhase();
         }
@@ -81,13 +81,13 @@ namespace LOGIYGames
         {
             if (!string.IsNullOrEmpty(Data.castingAnimation))
             {
-                controller.animator.CrossFade(Data.castingAnimation, 0.1f);
+                controller.Animator.CrossFade(Data.castingAnimation, 0.1f);
             }
             Phase = AbilityPhase.Casting;
             castTimer.Start();
         }
 
-        public void Reset()
+        private void ResetTimers()
         {
             castTimer.Reset();
             executionTimer.Reset();
@@ -101,18 +101,18 @@ namespace LOGIYGames
            
             targetingStrategy.Start(new AbilityContext
             {
-                Source = controller.character.gameObject,
+                Source = controller.gameObject,
                 Target = null
             });
 
         }
         private void OnAnimationStarted(AnimationTimedEvent e)
         {
-            controller.animator.applyRootMotion = e.animationData.UseRootMotion;
-            controller.animator.SetFloat("MotionSpeed", e.animationData.MotionSpeed);
+            controller.Animator.applyRootMotion = e.animationData.UseRootMotion;
+            controller.Animator.SetFloat("MotionSpeed", e.animationData.MotionSpeed);
             if (!string.IsNullOrEmpty(e.animationData.AnimationName))
             {
-                controller.animator.CrossFade(e.animationData.AnimationName, e.animationData.CrossFade);
+                controller.Animator.CrossFade(e.animationData.AnimationName, e.animationData.CrossFade);
             }
         }
 

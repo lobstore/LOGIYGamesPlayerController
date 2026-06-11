@@ -12,7 +12,7 @@ namespace LOGIYGames.Movement
     {
         protected CharacterModule _character;
         protected ControllerWrapperBase _controller;
-        protected MovementStateData _data;
+        public MovementStateData Data { get; protected set; }
         protected Animator _animator;
         protected CountdownTimer actionFrameTimer;
         public bool IsActiveState { get; private set; }
@@ -23,27 +23,22 @@ namespace LOGIYGames.Movement
         {
             _animator = ctx.GetComponent<Animator>();
             _character = ctx;
-            _data = stateData;
+            Data = stateData;
             _controller = ctx.GetComponent<ControllerWrapperBase>();
-            actionFrameTimer = new CountdownTimer(_data.ActionFrameDuration);
+            actionFrameTimer = new CountdownTimer(Data.ActionFrameDuration);
         }
         public virtual void Enter()
         {
             IsActiveState = true;
             Debug.Log("Entered State: " + GetType());
-            if (_data.ResetVelocityOnEnter)
+            if (Data.ResetVelocityOnEnter)
             {
                 _character.ResetVelocity();
             }
-            if (_data.ResetSpeedOnEnter)
-            {
-                _character.ResetSpeed();
-            }
-            _animator.applyRootMotion = _data.IsAnimationDrivenMovement;
-            _character.Acceleration = _data.Acceleration;
-            _character.Deceleration = _data.Deceleration;
-            _character.TurnSmoothTime = _data.TurnSmoothTime;
-            _controller.UseProjectionOnPlane = _data.UseProjectionOnPlane;
+            _animator.applyRootMotion = Data.IsAnimationDrivenMovement;
+            _character.AccelerationData = Data.AccelerationData;
+            _character.TurnSmoothTime = Data.TurnSmoothTime;
+            _controller.UseProjectionOnPlane = Data.UseProjectionOnPlane;
             actionFrameTimer.Start();
             if (_character.IsGrounded)
             {
@@ -54,11 +49,11 @@ namespace LOGIYGames.Movement
         public virtual void Exit()
         {
             IsActiveState = false;
-            if (_data.ResetVelocityOnExit)
+            if (Data.ResetVelocityOnExit)
             {
                 _character.ResetVelocity();
             }
-            if (_data.ResetSpeedOnExit)
+            if (Data.ResetSpeedOnExit)
             {
                 _character.ResetSpeed();
             }
@@ -71,20 +66,8 @@ namespace LOGIYGames.Movement
 
         public virtual void LogicUpdate()
         {
-            ChangeSpeed();
+            UpdateSpeed();
             Rotate();
-        }
-
-        protected virtual void ChangeSpeed()
-        {
-            if (_character.TargetDirection.magnitude > 0)
-            {
-                _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, _data.Speed, _character.Acceleration * Time.deltaTime);
-            }
-            else
-            {
-                _character.SpeedMultiplier = Mathf.Lerp(_character.SpeedMultiplier, 0, _character.Deceleration * Time.deltaTime);
-            }
         }
 
         public virtual void LateUpdate()
@@ -97,19 +80,34 @@ namespace LOGIYGames.Movement
         }
         protected virtual void Move()
         {
-            if (_data.IsAnimationDrivenMovement)
+            if (Data.IsAnimationDrivenMovement)
             {
                 return;
             }
-            _character.Move(_character.TargetDirection);
+            _character.Move();
         }
         protected virtual void Rotate()
         {
-            if (_data.IsAnimationDrivenRotation)
+            if (Data.IsAnimationDrivenRotation)
             {
                 return;
             }
             _character.Rotate(_character.TargetRotation, _character.TurnSmoothTime);
+        }
+        /// <summary>
+        /// Smooth change speed for animations purpose
+        /// </summary>
+        private void UpdateSpeed()
+        {
+            if (_character.Input.MovementInput.magnitude > 0)
+            {
+                _character.Speed = Mathf.Lerp(_character.Speed, Data.Speed, Time.deltaTime * _character.AccelerationData.Acceleration);
+
+            }
+            else
+            {
+                _character.Speed = Mathf.Lerp(_character.Speed, 0, Time.deltaTime * _character.AccelerationData.Deceleration);
+            }
         }
     }
 }

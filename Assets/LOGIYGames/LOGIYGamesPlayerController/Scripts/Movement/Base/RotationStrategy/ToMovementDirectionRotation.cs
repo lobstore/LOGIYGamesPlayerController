@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class SwimRotation : IRotationStrategy
+    public class ToMovementDirectionRotation : IRotationStrategy
     {
         CharacterModule Character;
 
-        public SwimRotation(CharacterModule character)
+        public ToMovementDirectionRotation(CharacterModule character)
         {
             Character = character;
         }

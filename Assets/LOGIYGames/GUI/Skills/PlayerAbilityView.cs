@@ -14,11 +14,17 @@ namespace LOGIYGames
 
         public void Bind(PlayerSkillPresenter presenter)
         {
-            subscriprions.Add(presenter.Cooldown.Subscribe(
+            subscriprions.Add(presenter.CooldownProgress.Subscribe(
                 (currentTime) =>
                 {
 
                     UpdateSkillCooldownFill(currentTime);
+                }
+                ));
+            subscriprions.Add(presenter.CooldownTime.Subscribe(
+                (currentTime) =>
+                {
+
                     UpdateSkillCooldownText(currentTime);
                 }
                 ));
@@ -35,10 +41,6 @@ namespace LOGIYGames
         private void UpdateSkillCooldownFill(float value)
         {
             cooldownFill.fillAmount = Mathf.Clamp01(value);
-            if (value <= 0.01f || value == 1)
-            {
-                cooldownFill.fillAmount = 0;
-            }
         }
         private void UpdateSkillIcon(Sprite skillIcon)
         {
@@ -46,8 +48,9 @@ namespace LOGIYGames
         }
         private void UpdateSkillCooldownText(float skillCooldown)
         {
-            cooldownTimeText.text = skillCooldown.ToString();
-            if (cooldownFill.fillAmount <=0)
+            int rounded = Mathf.RoundToInt(skillCooldown);
+            cooldownTimeText.text = rounded.ToString();
+            if (cooldownFill.fillAmount <= 0)
             {
                 cooldownTimeText.enabled = false;
             }

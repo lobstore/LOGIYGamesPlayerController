@@ -6,7 +6,8 @@ namespace LOGIYGames
 {
     public class PlayerSkillPresenter : IDisposable
     {
-        public ReactiveProperty<float> Cooldown = new ReactiveProperty<float>();
+        public ReactiveProperty<float> CooldownProgress = new ReactiveProperty<float>();
+        public ReactiveProperty<float> CooldownTime = new ReactiveProperty<float>();
         public ReactiveProperty<Sprite> Icon = new ReactiveProperty<Sprite>();
         DisposableBag DisposableBag;
         private Ability Ability;
@@ -17,7 +18,12 @@ namespace LOGIYGames
             this.view = view;
             DisposableBag.Add(ability.CooldownTimer.CurrentTime.Subscribe((_) =>
             {
-                Cooldown.Value = ability.CooldownTimer.Progress;
+                CooldownProgress.Value = 1- ability.CooldownTimer.Progress;
+
+            }));
+            DisposableBag.Add(ability.CooldownTimer.CurrentTime.Subscribe((time) =>
+            {
+                CooldownTime.Value = time;
 
             }));
             Icon.Value = ability.Data.icon;

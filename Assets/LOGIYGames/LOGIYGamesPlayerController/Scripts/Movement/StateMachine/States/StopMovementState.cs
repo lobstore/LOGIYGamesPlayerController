@@ -1,6 +1,7 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
+using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -9,14 +10,13 @@ namespace LOGIYGames.Movement
         public StopMovementState(CharacterModule ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
         public override void Enter()
         {
-            base.Enter();
             Direction dir = _character.GetRelativeMovementDirection();
             _character.EventBus.Publish(new MovementStoppedEvent
             {
+                movementSpeed = _character.Speed,
                 direction = dir,
-                speed = _character.SpeedMultiplier
             });
-            _character.MovementStrategy = new NoneMovement();
+            base.Enter();
         }
         public override void Exit()
         {

@@ -1,19 +1,25 @@
-using LOGIYGames.CharacterCore;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class AbilityController
+    public class AbilityController : MonoBehaviour
     {
         public Ability CurrentAbility { get; private set; } = null;
+        public List<AbilityData> abilities = new();
+        public List<Ability> Abilities { get; private set; } = new();
+        public Animator Animator { get; private set; }
 
-        public CharacterModule character { get; private set; }
-        public Animator animator { get; private set; }
-
-        public AbilityController(CharacterModule owner)
+        private void Awake()
         {
-            character = owner;
-            animator = owner.GetComponent<Animator>();
+            foreach (var item in abilities)
+            {
+                Abilities.Add(new Ability(this, item));
+            }
+        }
+        private void Start()
+        {
+            Animator = GetComponent<Animator>();
         }
 
         public void SetAbility(Ability ability)
@@ -27,7 +33,17 @@ namespace LOGIYGames
         {
             CurrentAbility.Start();
         }
-
+        private void Update()
+        {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                SetAbility(Abilities[0]);
+            }
+            else if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SetAbility(Abilities[1]);
+            }
+        }
 
         public bool IsFinished()
         {
@@ -36,7 +52,7 @@ namespace LOGIYGames
 
         public void Exit()
         {
-            animator.SetFloat("MotionSpeed", 1);
+            Animator.SetFloat("MotionSpeed", 1);
             CurrentAbility = null;
 
         }

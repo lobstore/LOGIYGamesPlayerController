@@ -25,7 +25,7 @@ namespace LOGIYGames
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            distanceTravelled += _character.SpeedMultiplier * _character.Input.MovementInput.y * Time.deltaTime;
+            distanceTravelled += _character.Speed * _character.Input.MovementInput.y * Time.deltaTime;
             t = distanceTravelled / ladderMovementController.Ladder.Lenght;
             //t += _character.Input.MovementInput.y * _character.SpeedMultiplier * Time.deltaTime;
             ladderMovementController.t = Mathf.Clamp01(t);

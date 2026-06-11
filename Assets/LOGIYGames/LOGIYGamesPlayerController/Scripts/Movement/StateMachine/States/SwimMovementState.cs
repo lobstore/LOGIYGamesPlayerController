@@ -10,8 +10,8 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-            _character.RotationStrategy = new SwimRotation(_character);
-            _character.MovementStrategy = new SwimMovement(_character);
+            _character.RotationStrategy = new ToMovementDirectionRotation(_character);
+            _character.MovementStrategy = new Input360LookMovement(_character);
             _character.IsSwimming = true;
             _character.GetComponent<ControllerWrapperBase>().UseGravity = false;
         }

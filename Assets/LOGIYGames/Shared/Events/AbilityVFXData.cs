@@ -10,6 +10,7 @@ namespace LOGIYGames.Shared.Character.Events
         public Vector3 vfxPositionOffset;
         public Quaternion vfxRotationOffset;
         public Vector3 vfxScale;
+        public float vfxLifetime;
     }
 
 }

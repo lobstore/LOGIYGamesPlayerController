@@ -250,10 +250,9 @@ namespace LOGIYGames
                 <RunMovementState, TurnMovementState>(
                 new FuncPredicate(() =>
                 {
-                    var turn = character.GetMovementState<TurnMovementState>();
 
                     return
-                        turn.CanEnter() &&
+                        character.GetMovementState<TurnMovementState>().CanEnter() &&
                         Mathf.Abs(character.DeltaYaw) > turnMovementStateData.MinAngle &&
                         Mathf.Abs(character.DeltaYaw) < turnMovementStateData.MaxAngle &&
                         !character.IsAimig;
@@ -261,9 +260,8 @@ namespace LOGIYGames
             character.MovementStateMachine.AddTransition<RunMovementState, RollMovementState>(
                 new FuncPredicate(() =>
                 {
-                    var roll = character.GetMovementState<RollMovementState>();
 
-                    return roll.CanEnter();
+                    return character.GetMovementState<RollMovementState>().CanEnter();
                 }));
             #endregion
             // =========================================================
