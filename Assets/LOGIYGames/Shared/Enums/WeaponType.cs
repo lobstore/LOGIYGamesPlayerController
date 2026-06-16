@@ -6,6 +6,12 @@
         Sword,
         Greatsword,
         Spear,
-        Axe
+        Axe,
+        Bow,
+        Pistol,
+        Riffle,
+        Sniper,
+        Grenade,
+        Launcher
     }
 }

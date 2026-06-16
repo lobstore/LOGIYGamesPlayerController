@@ -9,7 +9,7 @@ namespace LOGIYGames
     }
 
     [RequireComponent(typeof(CharacterController))]
-    public class CharacterControllerWrapper : ControllerWrapperBase
+    public class CharacterControllerWrapper : MovementWrapperBase
     {
         #region Unity Controller
         [SerializeField]
@@ -44,15 +44,6 @@ namespace LOGIYGames
 
         private Vector3 groundDeltaPosition;
         private Quaternion groundDeltaRotation;
-
-        #endregion
-
-        #region Debug
-
-        [Header("Debug")]
-        [SerializeField] Color planarVelocityArrowColor;
-        [SerializeField] Color verticalVelocityArrowColor;
-        [SerializeField] Color totalVelocityArrowColor;
 
         #endregion
 
@@ -150,21 +141,7 @@ namespace LOGIYGames
 
             UpdateGroundMotion();
             ApplyGroundMotion();
-            if (totalVelocity!= Vector3.zero)
-            {
-                DebugDraw.DrawArrow(transform.position, totalVelocity, totalVelocityArrowColor);
 
-            }
-            if (planarVelocity!= Vector3.zero)
-            {
-                DebugDraw.DrawArrow(transform.position, planarVelocity, planarVelocityArrowColor);
-
-            }
-            if (verticalVelocity != Vector3.zero)
-            {
-                DebugDraw.DrawArrow(transform.position, verticalVelocity, verticalVelocityArrowColor);
-
-            }
         }
 
         #endregion

@@ -6,7 +6,7 @@ namespace LOGIYGames
 {
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(KinematicCharacterMotor))]
-    public class KinematicControllerWrapper : ControllerWrapperBase, ICharacterController
+    public class KinematicControllerWrapper : MovementWrapperBase, ICharacterController
     {
         [Header("Kinematic Controller Settings")]
         

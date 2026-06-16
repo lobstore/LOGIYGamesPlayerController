@@ -2,42 +2,18 @@ using LOGIYGames.Shared.Enums;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    [CreateAssetMenu(
-        menuName = "Combat/Weapon")]
-    public class WeaponDataSO
-        : ScriptableObject
+
+    [CreateAssetMenu]
+    public class WeaponDataSO : ScriptableObject
     {
-        [Header("Info")]
+        public GameObject Prefab;
 
-        public string WeaponName;
-
-        public WeaponType WeaponType;
-
-        // =====================================================
-        // MOVESET
-        // =====================================================
-
-        [Header("Moveset")]
+        public RuntimeAnimatorController AnimatorOverride;
 
         public ComboMovesetSO ComboSet;
 
-        // =====================================================
-        // ANIMATIONS
-        // =====================================================
+        public WeaponType WeaponType;
 
-        [Header("Animations")]
-
-        public AnimatorOverrideController
-            AnimatorOverride;
-
-        // =====================================================
-        // STATS
-        // =====================================================
-
-        [Header("Stats")]
-
-        public int BaseDamage = 10;
-
-        public float StaminaMultiplier = 1f;
+        public bool TwoHandsRequired;
     }
 }

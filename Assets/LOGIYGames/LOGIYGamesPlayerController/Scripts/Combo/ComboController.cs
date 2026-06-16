@@ -6,6 +6,7 @@ namespace LOGIYGames.CharacterCore
     public class ComboController : MonoBehaviour
     {
         public AttackNodeSO CurrentAttack { get; private set; }
+        private AttackNodeSO queuedAttack;
         public bool CanCancel { get; private set; }
         public bool IsNextQueued { get; private set; }
         public ComboPhase Phase { get; private set; }
@@ -14,18 +15,20 @@ namespace LOGIYGames.CharacterCore
         private Animator animator;
         private InputCommandBuffer commandBuffer;
 
-        private AttackNodeSO queuedAttack;
-
-        private void Start()
+        public ComboMovesetSO comboMovesetSO {  get; private set; }
+        private void Awake()
         {
             character = GetComponent<CharacterModule>();
             animator = GetComponent<Animator>();
             commandBuffer = new InputCommandBuffer();
             GetComponent<ComboBufferDebugView>().Buffer = commandBuffer;
-            SubscribeEvents();
+
         }
 
-
+        private void Start()
+        {
+            SubscribeEvents();
+        }
         public void AddCommand(IInputCommand input)
         {
             commandBuffer.AddCommand(input);
@@ -36,15 +39,34 @@ namespace LOGIYGames.CharacterCore
             {
                 OnAnimationEvent(e.ComboEventType);
             });
+            character.EventBus.Subscribe<WeaponEquipEvent>((evt) =>
+            {
+                Debug.Log(evt.WeaponEquipState);
+                Debug.Log(evt.WeaponData);
+                Debug.Log(evt.WeaponData);
+                switch (evt.WeaponEquipState)
+                {
+                    case WeaponEquipState.Equiped:
+                        comboMovesetSO = evt.WeaponData.ComboSet;
+                        break;
+                    case WeaponEquipState.Unequiped:
+                        comboMovesetSO = null;
+                        ResetCombo();
+                        break;
+                    default:
+                        break;
+                }
+
+            });
         }
 
-        public void BeginCombo(AttackNodeSO attack)
+        public void BeginCombo()
         {
             ResetCombo();
 
             Phase = ComboPhase.Started;
 
-            StartAttack(attack);
+            StartAttack(comboMovesetSO.EntryAttack);
         }
 
         private void StartAttack(AttackNodeSO attack)
@@ -228,12 +250,7 @@ namespace LOGIYGames.CharacterCore
         private void FinishCombo()
         {
 
-            queuedAttack = null;
-            CurrentAttack = null;
-            CanCancel = false;
-            IsNextQueued = false;
-
-            commandBuffer.Clear();
+            ResetCombo();
 
             Phase = ComboPhase.Finished;
 
@@ -243,19 +260,27 @@ namespace LOGIYGames.CharacterCore
         {
             return Phase == ComboPhase.Finished;
         }
+        public void ReadInput()
+        {
+            if (character.Input.AttackPressed)
+            {
+                commandBuffer.AddCommand(new AttackInputCommand(AttackInputType.Light));
+            }
 
+            if (character.Input.EvadePressed)
+            {
+                commandBuffer.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
+            }
+        }
         public void ResetCombo()
         {
-
             queuedAttack = null;
             CurrentAttack = null;
+
             CanCancel = false;
             IsNextQueued = false;
-
             commandBuffer.Clear();
-
             Phase = ComboPhase.None;
-
         }
     }
 }

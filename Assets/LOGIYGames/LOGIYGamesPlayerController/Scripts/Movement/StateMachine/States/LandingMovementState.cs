@@ -7,10 +7,10 @@ namespace LOGIYGames.Movement
 {
     public class LandingMovementState : TimedMovementState
     {
-        ControllerWrapperBase controller;
+        MovementWrapperBase controller;
         public LandingMovementState(CharacterModule ctx, TimedMovementStateData stateData) : base(ctx, stateData)
         {
-            controller = ctx.GetComponent<ControllerWrapperBase>();
+            controller = ctx.GetComponent<MovementWrapperBase>();
         }
 
         public override void Enter()

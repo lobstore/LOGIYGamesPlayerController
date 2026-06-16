@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace LOGIYGames
 {
-    public class NavMeshControllerWrapper : ControllerWrapperBase
+    public class NavMeshControllerWrapper : MovementWrapperBase
     {
         SensorsModule sensorModule;
         NavMeshAgent agent;

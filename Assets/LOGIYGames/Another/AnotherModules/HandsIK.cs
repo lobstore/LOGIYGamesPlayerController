@@ -13,8 +13,12 @@ namespace LOGIYGames
 
         [SerializeField]
         private float ikWeightSpeed = 10f;
-        float target;
-        private float _ikWeight;
+        float lHandTarget;
+        float rHandTarget;
+        private float lHandWeight;
+        private float rHandWeight;
+
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -22,20 +26,42 @@ namespace LOGIYGames
 
         public void EnableIK()
         {
-            target = 1;
+            EnableRHandIK();
+            EnableLHandIK();
         }
 
         public void DisableIK()
         {
-            target = 0;
+            DisableRHandIK();
+            DisableLHandIK();
         }
 
+        public void EnableRHandIK()
+        {
+            rHandTarget = 1;
+        }
+        public void EnableLHandIK()
+        {
+            lHandTarget = 1;
+        }
+        public void DisableRHandIK()
+        {
+            rHandTarget = 0;
+        }
+        public void DisableLHandIK()
+        {
+            lHandTarget = 0;
+        }
         private void Update()
         {
 
-            _ikWeight = Mathf.MoveTowards(
-                _ikWeight,
-                target,
+            lHandWeight = Mathf.MoveTowards(
+                lHandWeight,
+                lHandTarget,
+                Time.deltaTime * ikWeightSpeed);
+            rHandWeight = Mathf.MoveTowards(
+                rHandWeight,
+                rHandTarget,
                 Time.deltaTime * ikWeightSpeed);
         }
 
@@ -44,18 +70,18 @@ namespace LOGIYGames
             if (_animator == null)
                 return;
 
-            ApplyHandIK(AvatarIKGoal.LeftHand, LeftHandPoint, LeftHandNormal);
+            ApplyHandIK(AvatarIKGoal.LeftHand, LeftHandPoint, LeftHandNormal, lHandWeight);
 
-            ApplyHandIK(AvatarIKGoal.RightHand, RightHandPoint, RightHandNormal);
+            ApplyHandIK(AvatarIKGoal.RightHand, RightHandPoint, RightHandNormal, rHandWeight);
         }
 
         private void ApplyHandIK(
             AvatarIKGoal goal,
             Vector3 targetPoint,
-            Vector3 normal)
+            Vector3 normal, float weight)
         {
-            _animator.SetIKPositionWeight(goal, _ikWeight);
-            _animator.SetIKRotationWeight(goal, _ikWeight);
+            _animator.SetIKPositionWeight(goal, weight);
+            _animator.SetIKRotationWeight(goal, weight);
 
             _animator.SetIKPosition(goal, targetPoint);
 

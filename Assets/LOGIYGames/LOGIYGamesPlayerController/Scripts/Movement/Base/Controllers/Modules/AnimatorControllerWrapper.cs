@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class AnimatorControllerWrapper : ControllerWrapperBase
+    public class AnimatorControllerWrapper : MovementWrapperBase
     {
         [SerializeField] private CharacterController m_characterController;
         [SerializeField] private CharacterGravityModule m_characterGravityModule;

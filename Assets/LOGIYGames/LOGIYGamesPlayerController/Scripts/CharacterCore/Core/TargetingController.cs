@@ -3,7 +3,7 @@ using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
     [Serializable]
-    public class CharacterTargetingModule
+    public class TargetingController
     {
         public Transform CurrentTarget { get; private set; }
 

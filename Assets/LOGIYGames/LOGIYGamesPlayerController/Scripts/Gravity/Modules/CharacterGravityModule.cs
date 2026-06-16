@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    /// <summary>
-    /// Handles gravity for characters using either Unity CharacterController or KinematicCharacterController.
-    /// Works with GenericControllerWrapper for seamless controller swapping.
-    /// </summary>
     public class CharacterGravityModule : MonoModuleBase
     {
         [Header("Physics")]
@@ -42,7 +38,6 @@ namespace LOGIYGames
                 return;
             }
 
-            // Check if grounded and on valid slope
             if (m_sensors != null &&
                 m_sensors.IsGrounded &&
                 m_character.VelocityData.Gravity.y < 0 &&
@@ -56,7 +51,6 @@ namespace LOGIYGames
             }
             m_character.VelocityData.Gravity = Vector3.MoveTowards(m_character.VelocityData.Gravity, CurrentGravityForce * gravityDirection.normalized, Time.deltaTime * GravityAcceleration);
 
-            // Check for overhead obstacles
             if (m_sensors != null && m_sensors.AboveHit.collider != null)
             {
                 m_character.VelocityData.Gravity = GravityDirection.normalized * 0.5f;

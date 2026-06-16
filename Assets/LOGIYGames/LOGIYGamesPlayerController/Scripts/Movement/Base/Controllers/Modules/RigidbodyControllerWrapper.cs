@@ -4,7 +4,7 @@ namespace LOGIYGames
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
-    public class RigidbodyControllerWrapper : ControllerWrapperBase
+    public class RigidbodyControllerWrapper : MovementWrapperBase
     {
         [Header("Rigidbody Controller Settings")]
         [SerializeField] private float groundDrag;

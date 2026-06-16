@@ -1,6 +1,5 @@
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 namespace LOGIYGames
 {
     public class CameraZoom : MonoBehaviour
@@ -38,7 +37,7 @@ namespace LOGIYGames
 
         private void Zoom()
         {
-            if (zoomDelta!=0)
+            if (zoomDelta != 0)
             {
                 currentTargetDistance = Mathf.Clamp(currentTargetDistance + zoomDelta * zoomSensitivity, minimumDistance, maximumDistance);
 

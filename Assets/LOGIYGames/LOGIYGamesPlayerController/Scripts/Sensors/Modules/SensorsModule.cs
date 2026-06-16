@@ -37,7 +37,7 @@ namespace LOGIYGames
         [SerializeField] Color belowObstacleNotCollidedSphereColor;
         [SerializeField] Color belowHitSphereColor;
 
-        [SerializeField] ControllerWrapperBase controller;
+        [SerializeField] MovementWrapperBase controller;
         Collider col => controller.Collider;
 
         // Detection origin calculated from capsule bounds

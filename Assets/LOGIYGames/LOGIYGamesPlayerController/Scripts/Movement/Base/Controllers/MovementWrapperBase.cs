@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public abstract class ControllerWrapperBase : MonoBehaviour
+    public abstract class MovementWrapperBase : MonoBehaviour
     {
         public virtual GroundedReport LastGroundedReport { get; }
         public abstract bool UseGravity { get; set; }

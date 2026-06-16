@@ -47,14 +47,13 @@ namespace LOGIYGames
             {
                 if (existingDelegate is Action<TEvent> typedDelegate)
                 {
-                    // Безопасный вызов
                     try
                     {
                         typedDelegate.Invoke(eventData);
                     }
                     catch (Exception e)
                     {
-                        Debug.LogException(e); // Логирование ошибки подписчика
+                        Debug.LogException(e);
                     }
                 }
             }

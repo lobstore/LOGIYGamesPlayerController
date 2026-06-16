@@ -20,15 +20,14 @@ namespace LOGIYGames.CharacterCore
         [Header("References")]
 
 
-        [field: SerializeField] private ControllerWrapperBase m_motor;
+        [field: SerializeField] private MovementWrapperBase m_motor;
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
 
         public int JumpCount;
 
         #region Modules
-        public CharacterTargetingModule Targeting { get; private set; }
+        public TargetingController Targeting { get; private set; }
         public ComboController ComboController { get; private set; }
-        public WeaponController WeaponController { get; private set; }
         public AbilityController AbilityController { get; private set; }
         #endregion
         #region State Machine Configuration
@@ -84,13 +83,13 @@ namespace LOGIYGames.CharacterCore
 
         private void Awake()
         {
-
             EventBus = new EventDispatcher();
             CameraTarget = GetComponent<CameraTargetModule>();
-            WeaponController = GetComponent<WeaponController>();
             ComboController = GetComponent<ComboController>();
             AbilityController = GetComponent<AbilityController>();
+            InitializeStateMachine();
 
+  
 
             Targeting = new();
             VelocityData = new();
@@ -102,7 +101,7 @@ namespace LOGIYGames.CharacterCore
         {
             m_motor.Height = Height;
             m_motor.Center = new Vector3(0, Height / 2.0f, 0);
-            InitializeStateMachine();
+
             MovementStateMachineDebugModule = new StateMachineDebugModule(MovementStateMachine);
         }
         private void EventsSubscription()

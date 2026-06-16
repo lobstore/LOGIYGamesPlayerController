@@ -694,7 +694,7 @@ namespace LOGIYGames
 
             character.MovementStateMachine.AddTransition<IdleMovementState, ComboMovementState>(
                 new FuncPredicate(() =>
-                    character.Input.AttackPressed && character.WeaponController.CurrentWeapon != null));
+                    character.Input.AttackPressed && character.ComboController.comboMovesetSO != null));
 
 
             /*
@@ -705,7 +705,8 @@ namespace LOGIYGames
 
 
             character.MovementStateMachine.AddTransition<RunMovementState, ComboMovementState>(
-                    new FuncPredicate(() => character.Input.AttackPressed)
+                new FuncPredicate(() =>
+                    character.Input.AttackPressed && character.ComboController.comboMovesetSO != null)
                 );
 
 

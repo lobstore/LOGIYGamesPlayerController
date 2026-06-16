@@ -10,13 +10,13 @@ namespace LOGIYGames.Movement
         {
             base.Enter();
             _character.MovementStrategy = new Input360LookMovement(_character);
-            _character.GetComponent<ControllerWrapperBase>().UseGravity = false;
+            _character.GetComponent<MovementWrapperBase>().UseGravity = false;
             _character.IsFlying = true;
         }
         public override void Exit()
         {
             base.Exit();
-            _character.GetComponent<ControllerWrapperBase>().UseGravity = true;
+            _character.GetComponent<MovementWrapperBase>().UseGravity = true;
             _character.IsFlying = false;
         }
     }

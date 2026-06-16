@@ -20,8 +20,7 @@ namespace Perception {
 
         void Update() {
             if (!player || !body) return;
-            var vel = player.VelocityData.Locomotion;
-            var speed = vel.magnitude;
+            var speed = player.VelocityData.Locomotion.magnitude;
             if (speed < walkSpeed) return;
             var loud = speed >= sprintSpeed;
             

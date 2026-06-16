@@ -13,12 +13,12 @@ namespace LOGIYGames.Movement
             _character.RotationStrategy = new ToMovementDirectionRotation(_character);
             _character.MovementStrategy = new Input360LookMovement(_character);
             _character.IsSwimming = true;
-            _character.GetComponent<ControllerWrapperBase>().UseGravity = false;
+            _character.GetComponent<MovementWrapperBase>().UseGravity = false;
         }
         public override void Exit()
         {
             base.Exit();
-            _character.GetComponent<ControllerWrapperBase>().UseGravity = true;
+            _character.GetComponent<MovementWrapperBase>().UseGravity = true;
             _character.IsSwimming = false;
         }
     }

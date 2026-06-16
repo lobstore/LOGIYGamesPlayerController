@@ -11,7 +11,7 @@ namespace LOGIYGames.Movement
     public abstract class CharacterMovementState : IState
     {
         protected CharacterModule _character;
-        protected ControllerWrapperBase _controller;
+        protected MovementWrapperBase _controller;
         public MovementStateData Data { get; protected set; }
         protected Animator _animator;
         protected CountdownTimer actionFrameTimer;
@@ -24,7 +24,7 @@ namespace LOGIYGames.Movement
             _animator = ctx.GetComponent<Animator>();
             _character = ctx;
             Data = stateData;
-            _controller = ctx.GetComponent<ControllerWrapperBase>();
+            _controller = ctx.GetComponent<MovementWrapperBase>();
             actionFrameTimer = new CountdownTimer(Data.ActionFrameDuration);
         }
         public virtual void Enter()

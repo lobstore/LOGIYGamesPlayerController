@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace LOGIYGames.Animation
 {
-    public class CharacterAnimationModule : MonoModuleBase
+    public class CharacterAnimationController : MonoModuleBase
     {
         [SerializeField] CharacterModule character;
-        [SerializeField] ControllerWrapperBase controller;
+        [SerializeField] MovementWrapperBase controller;
         [SerializeField] Animator animator;
 
         [SerializeField][Range(0, 0.5f)] private float rotationAnimationsBlendTime;
@@ -20,6 +20,9 @@ namespace LOGIYGames.Animation
         public bool UseRootMotion { get => animator.applyRootMotion; set => animator.applyRootMotion = value; }
 
         public Vector3 ScaledTargetDirection { get; set; }
+
+        [SerializeField] AnimatorOverrideController unarmedOverride;
+
         private void Start()
         {
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
@@ -263,9 +266,7 @@ namespace LOGIYGames.Animation
                         break;
                 }
 
-            }
-
-            );
+            });
             character.EventBus.Subscribe<MantlingEvent>((evt) =>
             {
                 switch (evt.Type)
@@ -297,39 +298,88 @@ namespace LOGIYGames.Animation
                     PlayAnimation("Wallrun_LeftSide");
                 }
             });
+            character.EventBus.Subscribe<WeaponEquipEvent>((evt) =>
+            {
+                switch (evt.WeaponEquipState)
+                {
+                    case WeaponEquipState.Equiped:
+                        animator.runtimeAnimatorController = evt.WeaponData.AnimatorOverride;
+                        if (evt.WeaponData.TwoHandsRequired)
+                        {
+                            PlayAnimation("Equip", 3);
+                        }
+                        else
+                        {
+                            switch (evt.WeaponSlotType)
+                            {
+                                case WeaponSlotType.RightHand:
+                                    PlayAnimation("Equip", 1);
+                                    break;
+                                case WeaponSlotType.LeftHand:
+                                    PlayAnimation("Equip", 2);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+                    case WeaponEquipState.Unequiped:
+                        animator.runtimeAnimatorController = unarmedOverride;
+                        if (evt.WeaponData.TwoHandsRequired)
+                        {
+                            PlayAnimation("Unequip", 3);
+
+                        }
+                        else
+                        {
+                            switch (evt.WeaponSlotType)
+                            {
+                                case WeaponSlotType.RightHand:
+                                    PlayAnimation("Unequip", 1);
+                                    break;
+                                case WeaponSlotType.LeftHand:
+                                    PlayAnimation("Unequip", 2);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        );
         }
-        public void PlayAnimation(string animname)
+        public void PlayAnimation(string animname, int layer = 0)
         {
-            animator.CrossFade(animname, crossFadeSpeed);
+            animator.CrossFade(animname, crossFadeSpeed, layer);
         }
-        public void PlayAnimation(int animhash)
+        public void PlayAnimation(int animhash, int layer = 0)
         {
-            animator.CrossFade(animhash, crossFadeSpeed);
+            animator.CrossFade(animhash, crossFadeSpeed, layer);
         }
         public override void OnFixedUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
-            if (animator.velocity != Vector3.zero)
-            {
-                DebugDraw.DrawArrow(transform.position, animator.velocity, Color.white);
 
-            }
-            animator.SetFloat("Speed", character.Speed, 0.05f, Time.deltaTime);
+            animator.SetFloat("Speed", character.Speed, crossFadeSpeed, Time.deltaTime);
             if (character.RotationStrategy is InputPlanarRotation or InputRelativeRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
-                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.magnitude, 0.05f, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.magnitude, crossFadeSpeed, Time.deltaTime);
             }
             else if (character.RotationStrategy is WallClimbRotaion)
             {
-                animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, 0.05f, Time.deltaTime);
-                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, 0.05f, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, crossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, crossFadeSpeed, Time.deltaTime);
             }
             else
             {
-                animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(ScaledTargetDirection).z, 0.05f, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(ScaledTargetDirection).x, 0.05f, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(ScaledTargetDirection).z, crossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(ScaledTargetDirection).x, crossFadeSpeed, Time.deltaTime);
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
@@ -349,12 +399,10 @@ namespace LOGIYGames.Animation
         {
             if (character.Input.MovementInput.magnitude > 0)
             {
-
                 ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, character.TargetDirection.normalized, character.AccelerationData.Acceleration * Time.deltaTime);
             }
             else
             {
-
                 ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, character.AccelerationData.Deceleration * Time.deltaTime);
             }
         }

@@ -5,6 +5,7 @@ using LOGIYGames.Shared.Enums;
 using RealStep;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LOGIYGames
 {
@@ -16,6 +17,9 @@ namespace LOGIYGames
 
         private List<MantlingStrategy> Mantlings = new();
         private MantlingStrategy CurrentMantling;
+
+        public UnityEvent OnMantlingStart = new UnityEvent();
+        public UnityEvent OnMantlingEnd = new UnityEvent();
         #endregion
 
         #region Hand IK Cache
@@ -52,6 +56,7 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
+            OnMantlingStart.Invoke();
             CurrentMantling.Enter();
 
             MantlingType mantlingType = CurrentMantling.MantlingType;
@@ -87,6 +92,7 @@ namespace LOGIYGames
             CurrentMantling.Exit();
             _controller.UseGravity = true;
             _controller.IsNoClip = false;
+            OnMantlingEnd.Invoke();
         }
 
         public override void PhysicsUpdate()
