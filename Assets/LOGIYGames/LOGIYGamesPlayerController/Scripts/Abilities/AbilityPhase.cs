@@ -3,7 +3,7 @@ namespace LOGIYGames
     public enum AbilityPhase
     {
         Ready,
-        Started,
+        Targeting,
         Casting,
         Executing,
         Cooldown

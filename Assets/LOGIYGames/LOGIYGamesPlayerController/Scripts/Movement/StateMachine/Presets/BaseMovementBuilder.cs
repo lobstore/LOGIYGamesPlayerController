@@ -6,7 +6,7 @@ using UnityEngine;
 namespace LOGIYGames
 {
     [CreateAssetMenu(fileName = "BaseMovementPreset", menuName = "MovementStateMachine/MovementStatesPreset/BaseMovementPreset")]
-    public partial class BaseMovementPreset : MovementBuilder
+    public partial class BaseMovementBuilder : MovementBuilder
     {
 
         [SerializeField] List<MovementStateFactory> additionalStartupStates;

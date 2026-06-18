@@ -28,8 +28,9 @@ namespace Perception {
         static readonly Color idle = new(0.2f, 0.8f, 0.3f), 
             suspicious = new(1f, 0.85f, 0.1f), 
             alert = new(1f, 0.2f, 0.15f);
-        
+
         #endregion
+        CharacterModule player;
 
         void LateUpdate() {
             ScanSight();
@@ -78,9 +79,8 @@ namespace Perception {
         }
 
         void ScanSight() {
-            var player = GameObject.FindAnyObjectByType<CharacterModule>();
+
             if (!player) return;
-            
             var target = player.transform;
             var eye = transform.position + Vector3.up;
             var to = target.position + Vector3.up - eye;
@@ -138,6 +138,7 @@ namespace Perception {
 
         void Awake() {
             rend = GetComponent<Renderer>();
+            player = GameObject.FindAnyObjectByType<CharacterModule>();
             if (rend) mat = rend.material;
         }
         

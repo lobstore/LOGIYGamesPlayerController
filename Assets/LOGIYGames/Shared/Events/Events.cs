@@ -1,14 +1,12 @@
-﻿using LOGIYGames.Movement;
-using LOGIYGames.Shared.Data;
+﻿using LOGIYGames.Shared.Data;
 using LOGIYGames.Shared.Enums;
 using System;
-using System.Collections.Generic;
 
 namespace LOGIYGames.Shared.Character.Events
 {
     public abstract class EventBase { }
     [Serializable]
-    public class JumpPerformedEvent: EventBase
+    public class JumpPerformedEvent : EventBase
     {
         public JumpType jumpType;
         public Direction direction;
@@ -70,32 +68,21 @@ namespace LOGIYGames.Shared.Character.Events
     [Serializable]
     public class DamageTakenEvent : EventBase
     {
-        public DamageData DamageData {  get; set; }
+        public DamageData DamageData { get; set; }
     }
     [Serializable]
     public class SkillUsedEvent : EventBase
     {
-       public AbilityData AbilityData { get; set; }
+        public AbilityFactory AbilityData { get; set; }
     }
     [Serializable]
     public class ComboAnimationEvent : EventBase
     {
-       public ComboEventType ComboEventType { get; set; }
+        public ComboEventType ComboEventType { get; set; }
     }
     [Serializable]
-    public class TimedEvent : EventBase
+    public class AnimationEvent : EventBase
     {
-        public float EventTime;
+        public AnimationData AnimationData;
     }
-    [Serializable]
-    public class AnimationTimedEvent : TimedEvent
-    {
-        public AnimationData animationData;
-    }
-    [Serializable]
-    public class TargetingTimedEvent : TimedEvent
-    {
-        public TargetingFactory TargetingFactory;
-    }
-
 }

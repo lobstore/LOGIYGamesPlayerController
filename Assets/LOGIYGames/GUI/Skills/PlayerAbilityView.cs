@@ -17,14 +17,12 @@ namespace LOGIYGames
             subscriprions.Add(presenter.CooldownProgress.Subscribe(
                 (currentTime) =>
                 {
-
                     UpdateSkillCooldownFill(currentTime);
                 }
                 ));
             subscriprions.Add(presenter.CooldownTime.Subscribe(
                 (currentTime) =>
                 {
-
                     UpdateSkillCooldownText(currentTime);
                 }
                 ));

@@ -24,11 +24,10 @@ namespace LOGIYGames
         public override void Exit()
         {
             base.Exit();
-            abilityController.Exit();
         }
         public bool CanExit()
         {
-            return abilityController.IsFinished();
+            return abilityController.CurrentAbility == null;
         }
     }
 }

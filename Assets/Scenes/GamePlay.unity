@@ -302,51 +302,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 451893459940278245, guid: ea5ce9032ac52294da30bd3d5b38248a, type: 3}
   m_PrefabInstance: {fileID: 3305209943694974445}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &188530654
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 188530656}
-  - component: {fileID: 188530655}
-  m_Layer: 3
-  m_Name: LeftWeaponHolder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &188530655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 188530654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6644b7a54929114698bc33547bc3269, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.WeaponSlot
-  weaponSlot: 1
---- !u!4 &188530656
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 188530654}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.00000004157334, y: 0.079847805, z: 0.040569216}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1486725399}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!43 &204551226
 Mesh:
   m_ObjectHideFlags: 0
@@ -6485,7 +6440,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.717}
   m_AnchorMax: {x: 0.36054382, y: 1}
-  m_AnchoredPosition: {x: -0.8734436, y: -0.27392578}
+  m_AnchoredPosition: {x: -0.8734741, y: -0.27392578}
   m_SizeDelta: {x: -1.745697, y: 0.5477905}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1205543505
@@ -7175,11 +7130,6 @@ MonoBehaviour:
   rotationAxis: {x: 0, y: 1, z: 0}
   rotationSpeed: 30
   drawGizmos: 1
---- !u!4 &1359775172 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7144685428757272665, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1370683364
 GameObject:
   m_ObjectHideFlags: 0
@@ -7427,11 +7377,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!4 &1486725399 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2355045703211151954, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1564827563
 GameObject:
   m_ObjectHideFlags: 0
@@ -7643,11 +7588,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594022423}
   m_CullTransparentMesh: 1
---- !u!1 &1615420524 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1618853641
 GameObject:
   m_ObjectHideFlags: 0
@@ -8653,51 +8593,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &1948931593
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1948931594}
-  - component: {fileID: 1948931595}
-  m_Layer: 3
-  m_Name: LeftWeaponHolder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1948931594
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1948931593}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.000000243724, y: 0.09348823, z: 0.04056923}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1359775172}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &1948931595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1948931593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6644b7a54929114698bc33547bc3269, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.WeaponSlot
-  weaponSlot: 0
 --- !u!43 &1964720772
 Mesh:
   m_ObjectHideFlags: 0
@@ -10610,29 +10505,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 52468696790114736, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: handsIK
-      value: 
-      objectReference: {fileID: 6718191764129459959}
-    - target: {fileID: 52468696790114736, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: handHolder
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 52468696790114736, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: sheathHolder
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_Name
       value: Henry
-      objectReference: {fileID: 0}
-    - target: {fileID: 2268543539570239712, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: MaxStableSlopeAngle
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 2605798501068234886, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: groundMagnit
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3732176754581607695, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10674,70 +10549,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3842424064180597113, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: unarmedOverride
-      value: 
-      objectReference: {fileID: 22100000, guid: 3673290a59a56d0439ae291614a50a7d, type: 2}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: animator
-      value: 
-      objectReference: {fileID: 6718191764129459996}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: controller
-      value: 
-      objectReference: {fileID: 6718191764129459994}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: characterModule
-      value: 
-      objectReference: {fileID: 6718191764129459927}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: totalVelocityArrowColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: totalVelocityArrowColor.b
-      value: 0.028357267
-      objectReference: {fileID: 0}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: totalVelocityArrowColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: totalVelocityArrowColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: animatorVelocityArrowColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: animatorVelocityArrowColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: animatorVelocityArrowColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8332372990304411095, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: animatorVelocityArrowColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 52468696790114736, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-    - {fileID: 7157920177242386313, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-    - {fileID: 8834281440563422374, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 2355045703211151954, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 188530656}
-    - targetCorrespondingSourceObject: {fileID: 7144685428757272665, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1948931594}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 427882813280634629, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6718191764129459982}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
 --- !u!1001 &1539397806351433313
 PrefabInstance:
@@ -11166,54 +10981,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
   m_PrefabInstance: {fileID: 354810366595266589}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615420524}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d4d1c4cabaa87f439bd975e3bbabc3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
---- !u!114 &6718191764129459959 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3170350395309969284, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615420524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 016d58c3531db66499df7b1a5a200a27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.MantleIKController
---- !u!114 &6718191764129459982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615420524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c84ca77cb1628bf4794a674906b5e043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterEquipmentController
-  rightHandSlot: {fileID: 1948931595}
-  leftHandSlot: {fileID: 188530655}
-  defaultWeapon: {fileID: 11400000, guid: 0b5a4e80a2ab00543809f6e722225588, type: 2}
---- !u!114 &6718191764129459994 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1176126297597612246, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615420524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dc25859b5be7e44b8bb7ec724b6571e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterControllerWrapper
---- !u!95 &6718191764129459996 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 2654077868994141792, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

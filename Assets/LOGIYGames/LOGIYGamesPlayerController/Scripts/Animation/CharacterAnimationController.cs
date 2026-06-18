@@ -349,8 +349,7 @@ namespace LOGIYGames.Animation
                         break;
                 }
 
-            }
-        );
+            });
         }
         public void PlayAnimation(string animname, int layer = 0)
         {

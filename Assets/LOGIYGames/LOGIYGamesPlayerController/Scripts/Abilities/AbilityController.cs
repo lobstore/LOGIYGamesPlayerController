@@ -1,37 +1,72 @@
+using LOGIYGames.CharacterCore;
+using LOGIYGames.Timers;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LOGIYGames
 {
     public class AbilityController : MonoBehaviour
     {
+        private CharacterModule characterModule;
         public Ability CurrentAbility { get; private set; } = null;
-        public List<AbilityData> abilities = new();
+        [field: SerializeField] public List<AbilityFactory> AbilityFactories { get; private set; } = new();
         public List<Ability> Abilities { get; private set; } = new();
-        public Animator Animator { get; private set; }
+        public UnityEvent OnCastFinished { get; private set; } = new();
+        public UnityEvent OnCastStarted { get; private set; } = new();
+        public CountdownTimer CastTimer { get; private set; }
+        public CountdownTimer ExecutionTimer { get; private set; }
 
+        public Animator Animator { get; private set; }
+        public TargetingManager TargetingManager;
         private void Awake()
         {
-            foreach (var item in abilities)
-            {
-                Abilities.Add(new Ability(this, item));
-            }
-        }
-        private void Start()
-        {
             Animator = GetComponent<Animator>();
-        }
+            foreach (var factory in AbilityFactories)
+            {
+                Abilities.Add(factory.Create());
+            }
+            CastTimer = new CountdownTimer();
+            ExecutionTimer = new CountdownTimer();
+            CastTimer.OnTimerStart += () =>
+            {
+                OnCastStarted?.Invoke();
+                Animator.SetFloat("MotionSpeed", CurrentAbility.Data.castingAnimation.MotionSpeed);
+                Animator.CrossFade(CurrentAbility.Data.castingAnimation.AnimationName, CurrentAbility.Data.castingAnimation.CrossFade);
+            };
+            CastTimer.OnTimerStop += () =>
+            {
+                if (CastTimer.IsFinished)
+                {
+                    OnCastFinished?.Invoke();
+                    Animator.SetFloat("MotionSpeed", 1);
+                    ExecutionTimer.Start();
+                }
+            };
+            ExecutionTimer.OnTimerStart += () =>
+            {
+                CurrentAbility.Target(this);
+            };
+            ExecutionTimer.OnTimerStop += () =>
+            {
+                Animator.SetFloat("MotionSpeed", 1);
 
+                CurrentAbility = null;
+            };
+        }
         public void SetAbility(Ability ability)
         {
-            if (CurrentAbility == null && ability.Phase != AbilityPhase.Cooldown)
+            if (CurrentAbility == null && ability.Phase == AbilityPhase.Ready)
             {
                 CurrentAbility = ability;
             }
         }
         public void BeginAbility()
         {
-            CurrentAbility.Start();
+            if (CurrentAbility == null) { return; }
+            CastTimer.Reset(CurrentAbility.Data.CastDuration);
+            ExecutionTimer.Reset(CurrentAbility.Data.ExecutionDuration);
+            StartCasting();
         }
         private void Update()
         {
@@ -44,17 +79,17 @@ namespace LOGIYGames
                 SetAbility(Abilities[1]);
             }
         }
-
-        public bool IsFinished()
+        public void StartCasting()
         {
-            return CurrentAbility.Phase == AbilityPhase.Cooldown;
+            CastTimer.Start();
         }
-
-        public void Exit()
+        public void StopCasting()
         {
-            Animator.SetFloat("MotionSpeed", 1);
-            CurrentAbility = null;
-
+            CastTimer.Stop();
+        }
+        public void ResetCasting(float newCastTime = 0)
+        {
+            CastTimer.Reset(newCastTime);
         }
     }
 }

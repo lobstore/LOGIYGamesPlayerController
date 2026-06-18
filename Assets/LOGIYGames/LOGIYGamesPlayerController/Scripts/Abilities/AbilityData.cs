@@ -1,29 +1,22 @@
-using LOGIYGames.Shared.Character.Events;
+using LOGIYGames.Shared.Enums;
 using System.Collections.Generic;
 using UnityEngine;
 namespace LOGIYGames
 {
-    [CreateAssetMenu( fileName = "New Ability Data", menuName = "Ability/AbilityData")]
-    public class AbilityData : ScriptableObject
+    [CreateAssetMenu(fileName = "New Ability Data", menuName = "Ability/AbilityData")]
+    public class AbilityData: ScriptableObject
     {
-        [Header("Info")]
-        public string label;
-        public Sprite icon;
+        public Sprite Icon;
 
-        [Header("Timeline")]
+        public float CastDuration;
+        public float ExecutionDuration;
+        public float CooldownDuration;
 
-        public string castingAnimation;
-        public float castDuration = 1f;
-        public float cooldown;
+        public AnimationData castingAnimation;
 
-        public float executionDuration = 1f;
+        [Header("Effects")]
+        public List<EffectFactory> Effects = new();
 
-        [Header("Animations")]
-        public List<AnimationTimedEvent> Animations;
-
-
-        [Header("Targetings")]
-        public List<TargetingTimedEvent> TargetingFactories;
-
+        public TargetingFactory TargetingStrategy;
     }
 }

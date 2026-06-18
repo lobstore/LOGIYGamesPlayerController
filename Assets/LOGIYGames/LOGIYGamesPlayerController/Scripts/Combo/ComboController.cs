@@ -41,9 +41,6 @@ namespace LOGIYGames.CharacterCore
             });
             character.EventBus.Subscribe<WeaponEquipEvent>((evt) =>
             {
-                Debug.Log(evt.WeaponEquipState);
-                Debug.Log(evt.WeaponData);
-                Debug.Log(evt.WeaponData);
                 switch (evt.WeaponEquipState)
                 {
                     case WeaponEquipState.Equiped:

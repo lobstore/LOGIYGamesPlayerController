@@ -8,7 +8,7 @@ namespace LOGIYGames
         public GameObject Source;
 
         public GameObject Target;
-        public List<IEffect> Effects;
+        public Ability Ability;
     }
 
 }

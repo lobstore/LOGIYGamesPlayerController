@@ -8,12 +8,7 @@ namespace LOGIYGames
     {
         public override TargetingStrategy Create()
         {
-            var effects = new List<IEffect>();
-            foreach (var effect in Effects)
-            {
-                effects.Add(effect.CreateEffect());
-            }
-            return new ObjectTargeting(effects, vFXData);
+            return new ObjectStrategy(vFXData);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace LOGIYGames
                 CooldownTime.Value = time;
 
             }));
-            Icon.Value = ability.Data.icon;
+            Icon.Value = ability.Data.Icon;
             view.Bind(this);
         }
 

@@ -20,14 +20,14 @@ namespace LOGIYGames.CharacterCore
             character = GetComponent<CharacterModule>();
         }
 
-        public void RFootStep(AnimationEvent @event)
+        public void RFootStep(UnityEngine.AnimationEvent @event)
         {
             if (IsHeaviestAnimClip(@event.animatorClipInfo.clip))
             {
                 OnRFoot?.Invoke();
             }
         }
-        public void LFootStep(AnimationEvent @event)
+        public void LFootStep(UnityEngine.AnimationEvent @event)
         {
             if (IsHeaviestAnimClip(@event.animatorClipInfo.clip))
             {
@@ -155,7 +155,7 @@ namespace LOGIYGames.CharacterCore
 
         private void SendAbilityAnimationEvent(AbilityEventType type)
         {
-            character.EventBus.Publish(new AnimationTimedEvent()
+            character.EventBus.Publish(new Shared.Character.Events.AnimationEvent()
             {
                 // AbilityEventType = type
 

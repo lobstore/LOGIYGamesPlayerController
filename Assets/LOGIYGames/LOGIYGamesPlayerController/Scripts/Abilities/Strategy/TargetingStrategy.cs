@@ -1,12 +1,12 @@
-using LOGIYGames.CharacterCore;
-using UnityEngine;
-
 namespace LOGIYGames
 {
     public abstract class TargetingStrategy
     {
-        public abstract void Start(AbilityContext context);
-        public abstract void Update();
-        public abstract void Cancel();
+        protected Ability Ability;
+        protected AbilityController AbilityController;
+        public bool IsTargeting {  get; private set; }
+        public abstract void Start(Ability ability, AbilityController abilityController);
+        public virtual void Update() { }
+        public virtual void Cancel() { }
     }
 }

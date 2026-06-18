@@ -473,8 +473,8 @@ GameObject:
   - component: {fileID: 2268543539570239712}
   - component: {fileID: 6657963720063885413}
   - component: {fileID: 2605798501068234886}
-  - component: {fileID: 3842424064180597113}
   - component: {fileID: 2654077868994141792}
+  - component: {fileID: 3842424064180597113}
   - component: {fileID: 4172097682158500128}
   - component: {fileID: 1176126297597612246}
   - component: {fileID: 3336788084049153636}
@@ -489,6 +489,7 @@ GameObject:
   - component: {fileID: 6550930880353304642}
   - component: {fileID: 8332372990304411095}
   - component: {fileID: 3587852132894530033}
+  - component: {fileID: 649944240874449276}
   m_Layer: 3
   m_Name: Character
   m_TagString: Character
@@ -643,26 +644,6 @@ MonoBehaviour:
   m_sensors: {fileID: 2268543539570239712}
   m_character: {fileID: 8334357512040222824}
   GravityAcceleration: 10
---- !u!114 &3842424064180597113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 704ef5ff3087d854fb10691512313206, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.AnimationsModule
-  <ModulePriority>k__BackingField: 0
-  character: {fileID: 8334357512040222824}
-  controller: {fileID: 1176126297597612246}
-  animator: {fileID: 2654077868994141792}
-  rotationAnimationsBlendTime: 0.2
-  crossFadeSpeed: 0.1
-  _data: {fileID: 11400000, guid: 8d5fcd2a8fa1f0745a6d8d8359a06121, type: 2}
-  unarmedOverride: {fileID: 22100000, guid: 3673290a59a56d0439ae291614a50a7d, type: 2}
 --- !u!95 &2654077868994141792
 Animator:
   serializedVersion: 7
@@ -685,6 +666,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3842424064180597113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704ef5ff3087d854fb10691512313206, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.AnimationsModule
+  <ModulePriority>k__BackingField: 0
+  character: {fileID: 8334357512040222824}
+  controller: {fileID: 1176126297597612246}
+  animator: {fileID: 2654077868994141792}
+  rotationAnimationsBlendTime: 0.2
+  crossFadeSpeed: 0.1
+  _data: {fileID: 11400000, guid: 8d5fcd2a8fa1f0745a6d8d8359a06121, type: 2}
+  unarmedOverride: {fileID: 22100000, guid: 3673290a59a56d0439ae291614a50a7d, type: 2}
 --- !u!114 &4172097682158500128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -931,9 +932,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85eeb62e1dd99d24889bfb32edd726f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.AbilityController
-  abilities:
-  - {fileID: 11400000, guid: c4fe7cb4c7cd14548bb34390a2797522, type: 2}
-  - {fileID: 11400000, guid: 6b92f290501655d4883ea2f60209f7be, type: 2}
+  <AbilityFactories>k__BackingField:
+  - {fileID: 11400000, guid: 1b8312ba0a79f414699c7a25d085248a, type: 2}
+  - {fileID: 11400000, guid: a30ce83e531581b4287ea369a7c269ef, type: 2}
+  TargetingManager: {fileID: 649944240874449276}
 --- !u!114 &6550930880353304642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -979,6 +981,18 @@ MonoBehaviour:
   rightHandSlot: {fileID: 3754089005485572689}
   leftHandSlot: {fileID: 5706043407428586019}
   defaultWeapon: {fileID: 11400000, guid: 0b5a4e80a2ab00543809f6e722225588, type: 2}
+--- !u!114 &649944240874449276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51a34d44c60a15048955ed69814c585c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.TargetingManager
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0
