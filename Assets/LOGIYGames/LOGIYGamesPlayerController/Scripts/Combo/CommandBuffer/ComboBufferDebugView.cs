@@ -1,18 +1,13 @@
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    public class ComboBufferDebugView
-    : MonoBehaviour
+    public class ComboBufferDebugView : MonoBehaviour
     {
         [SerializeField]
         private Vector2 position =
             new Vector2(20, 20);
 
-        public InputCommandBuffer Buffer
-        {
-            get;
-            set;
-        }
+        [SerializeField] private ComboController ComboController;
 
         private GUIStyle style;
 
@@ -27,7 +22,7 @@ namespace LOGIYGames.CharacterCore
 
         private void OnGUI()
         {
-            if (Buffer == null)
+            if (ComboController.CommandBuffer== null)
                 return;
 
             GUI.Label(
@@ -36,7 +31,7 @@ namespace LOGIYGames.CharacterCore
                     position.y,
                     1000,
                     100),
-                $"INPUT BUFFER: {Buffer.GetDebugBuffer()}",
+                $"INPUT BUFFER: {ComboController.CommandBuffer.GetDebugBuffer()}",
                 style);
         }
     }

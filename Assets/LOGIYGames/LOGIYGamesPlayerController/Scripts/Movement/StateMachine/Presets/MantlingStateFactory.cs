@@ -8,7 +8,7 @@ namespace LOGIYGames
     public class MantlingStateFactory : MovementStateFactory
     {
         public MantlingMovmentStateData stateData;
-        protected override CharacterMovementState CreateState(CharacterModule character)
+        protected override CharacterMovementState CreateState(Character character)
         {
             return new MantlingMovementState(character, stateData);
         }

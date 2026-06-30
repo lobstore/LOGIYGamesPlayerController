@@ -23,13 +23,13 @@ namespace LOGIYGames
             loadingProgressBar.fillAmount = newSceneLoadingOperation.progress;
             if (newSceneLoadingOperation.isDone)
             {
-                m_Animator.SetTrigger("OpenScene");
+                m_Animator.CrossFade("Crossfade_Opening", 0.1f);
                 newSceneLoadingOperation = null;
             }
         }
         public void SwitchToScene(int index)
         {
-            m_Animator.SetTrigger("CloseScene");
+            m_Animator.CrossFade("Crossfade_Closing", 0.1f);
             newSceneLoadingOperation = SceneManager.LoadSceneAsync(index);
             newSceneLoadingOperation.allowSceneActivation = false;
         }

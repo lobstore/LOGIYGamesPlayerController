@@ -7,7 +7,7 @@ namespace LOGIYGames
     public class HangUpMantling : MantlingStrategy
     {
         private float obstacleHeight;
-        public HangUpMantling(CharacterModule chr, MantlingData data) : base(chr, data){  }
+        public HangUpMantling(Character chr, MantlingData data) : base(chr, data){  }
         public override bool CanEnter()
         {
             if (!HasClearPathToRayOrigin())

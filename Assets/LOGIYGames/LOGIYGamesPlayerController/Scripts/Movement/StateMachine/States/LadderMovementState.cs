@@ -7,7 +7,7 @@ namespace LOGIYGames
     public class LadderMovementState : CharacterMovementState
     {
         LadderMovementController ladderMovementController;
-        public LadderMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
+        public LadderMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
             ladderMovementController = _character.GetComponent<LadderMovementController>();
         }
@@ -20,7 +20,6 @@ namespace LOGIYGames
             _character.RotationStrategy = new LadderClimbRotation(ladderMovementController);
             _character.MovementStrategy = new NoneMovement();
             _controller.UseGravity = false;
-            _character.IsOnLadder = true;
         }
         public override void LogicUpdate()
         {
@@ -35,7 +34,6 @@ namespace LOGIYGames
         {
             base.Exit();
             _controller.UseGravity = true;
-            _character.IsOnLadder = false;
             _character.RotationStrategy = _character.DefaultRotationStrategy;
             _character.MovementStrategy = _character.DefaultMovementStrategy;
         }

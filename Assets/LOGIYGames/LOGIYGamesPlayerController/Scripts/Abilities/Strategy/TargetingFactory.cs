@@ -7,6 +7,6 @@ namespace LOGIYGames
     public abstract class TargetingFactory : ScriptableObject
     {
         public AbilityVFXData vFXData;
-        public abstract TargetingStrategy Create();
+        public abstract AbilityTargetingStrategy Create();
     }
 }

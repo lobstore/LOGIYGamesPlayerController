@@ -3,7 +3,7 @@ namespace LOGIYGames.CharacterCore
 {
     public class CharacterVelocityDebug : MonoBehaviour
     {
-        [SerializeField] CharacterModule characterModule;
+        [SerializeField] Character characterModule;
         [SerializeField] MovementWrapperBase controller;
         [SerializeField] Animator animator;
         [Header("Target Velocity")]

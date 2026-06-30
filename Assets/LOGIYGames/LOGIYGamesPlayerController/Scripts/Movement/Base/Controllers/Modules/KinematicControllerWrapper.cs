@@ -14,7 +14,7 @@ namespace LOGIYGames
         private CapsuleCollider m_capsuleCollider;
         private SensorsModule m_SensorsModule;
         private CharacterGravityModule m_characterGravityModule;
-        private CharacterModule character;
+        private Character character;
         
         #region Public Properties
         public override float MaxStepHeight

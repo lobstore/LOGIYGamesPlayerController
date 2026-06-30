@@ -38,7 +38,7 @@ namespace LOGIYGames
         #region Constructor
 
         public MantlingMovementState(
-            CharacterModule ctx,
+            Character ctx,
             MantlingMovmentStateData stateData)
             : base(ctx, stateData)
         {

@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class InputPlanarRotation : IRotationStrategy
     {
-        CharacterModule Character;
+        Character Character;
 
-        public InputPlanarRotation(CharacterModule character)
+        public InputPlanarRotation(Character character)
         {
             Character = character;
         }

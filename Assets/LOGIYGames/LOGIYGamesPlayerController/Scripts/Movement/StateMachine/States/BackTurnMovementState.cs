@@ -7,7 +7,7 @@ namespace LOGIYGames
 {
     public class BackTurnMovementState : TimedMovementState
     {
-        public BackTurnMovementState(CharacterModule ctx, TurnMovementStateData stateData) : base(ctx, stateData)
+        public BackTurnMovementState(Character ctx, TurnMovementStateData stateData) : base(ctx, stateData)
         {
         }
         Quaternion turnEnd;

@@ -1,17 +1,23 @@
 ﻿<Solution>
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="CrashKonijn.Goap.Runtime.csproj" />
   <Project Path="UniGLTF.Editor.csproj" />
   <Project Path="VRM10.Editor.csproj" />
+  <Project Path="CrashKonijn.Goap.Core.csproj" />
   <Project Path="UniGLTF.csproj" />
   <Project Path="uLipSync.Runtime.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="CrashKonijn.Goap.Editor.csproj" />
   <Project Path="VRM10.csproj" />
+  <Project Path="CrashKonijn.Agent.Runtime.csproj" />
   <Project Path="SpringBoneJobs.csproj" />
   <Project Path="VrmLibTests.csproj" />
+  <Project Path="CrashKonijn.Goap.Resolver.csproj" />
   <Project Path="uLipSync.Samples.Common.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
   <Project Path="UniHumanoid.csproj" />
   <Project Path="UniHumanoid.Editor.csproj" />
+  <Project Path="CrashKonijn.Agent.Core.csproj" />
   <Project Path="VrmLib.csproj" />
   <Project Path="UnityChan.csproj" />
   <Project Path="uLipSync.Editor.csproj" />

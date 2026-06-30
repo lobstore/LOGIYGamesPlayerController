@@ -15,7 +15,7 @@ namespace LOGIYGames
         [SerializeField]
         private CharacterController m_characterController;
         private CharacterGravityModule m_characterGravityModule;
-        private CharacterModule m_character;
+        private Character m_character;
         private SensorsModule m_sensors;
 
         private Vector3 totalVelocity;
@@ -110,7 +110,7 @@ namespace LOGIYGames
         private void Awake()
         {
             m_sensors = GetComponent<SensorsModule>();
-            m_character = GetComponent<CharacterModule>();
+            m_character = GetComponent<Character>();
             if (m_characterController == null)
             m_characterController = GetComponent<CharacterController>();
             m_characterGravityModule = GetComponent<CharacterGravityModule>();

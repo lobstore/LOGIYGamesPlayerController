@@ -8,7 +8,7 @@ namespace LOGIYGames
     public class RollStateFactory : MovementStateFactory
     {
         public JumpStateData stateData;
-        protected override CharacterMovementState CreateState(CharacterModule character)
+        protected override CharacterMovementState CreateState(Character character)
         {
             return new RollMovementState(character, stateData);
         }

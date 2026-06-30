@@ -10,11 +10,11 @@ namespace LOGIYGames
 {
     public class PlayerManager : PersistentSingleton<PlayerManager>
     {
-        [SerializeField] CharacterModule InitCharacter;
+        [SerializeField] Character InitCharacter;
         [SerializeField] InputActionAsset InputActions;
 
-        public UnityEvent<CharacterModule> OnCharacterChanged = new();
-        public CharacterModule CurrentCharacter { get; private set; }
+        public UnityEvent<Character> OnCharacterChanged = new();
+        public Character CurrentCharacter { get; private set; }
 
         public readonly UnityEvent<bool> OnTargetLocked = new();
         public CinemachineTargetGroup TargetGroup { get; private set; }
@@ -25,7 +25,7 @@ namespace LOGIYGames
         [field: SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
 
         [SerializeField] private PlayerProfileView profileView;
-        [SerializeField] private GameObject abilityPrefab;
+        [SerializeField] private GameObject abilityIconPrefab;
         private PlayerProfilePresenter profilePresenter;
         [SerializeField] private RectTransform skillsContainer;
         private List<PlayerSkillPresenter> skillPresenters = new List<PlayerSkillPresenter>();
@@ -63,7 +63,7 @@ namespace LOGIYGames
                 {
                     foreach (var item in newChar.AbilityController.Abilities)
                     {
-                        var obj = Instantiate(abilityPrefab);
+                        var obj = Instantiate(abilityIconPrefab);
                         obj.transform.SetParent(skillsContainer,true);
                         obj.transform.localScale = Vector3.one;
                         var view = obj.GetComponent<PlayerAbilityView>();
@@ -146,7 +146,7 @@ namespace LOGIYGames
                     break;
             }
         }
-        public void SetPlayerControlOnCharacter(CharacterModule character)
+        public void SetPlayerControlOnCharacter(Character character)
         {
             CurrentCharacter = character;
             UpdateStrategies();

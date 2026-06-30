@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class Input360LookMovement : IMovementStrategy
     {
-        CharacterModule Character;
+        Character Character;
 
-        public Input360LookMovement(CharacterModule character)
+        public Input360LookMovement(Character character)
         {
             Character = character;
         }

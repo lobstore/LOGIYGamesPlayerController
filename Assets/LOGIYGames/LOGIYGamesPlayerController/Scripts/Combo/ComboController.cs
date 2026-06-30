@@ -11,18 +11,16 @@ namespace LOGIYGames.CharacterCore
         public bool IsNextQueued { get; private set; }
         public ComboPhase Phase { get; private set; }
 
-        private CharacterModule character;
+        private Character character;
         private Animator animator;
-        private InputCommandBuffer commandBuffer;
+        public InputCommandBuffer CommandBuffer { get; private set;  }
 
         public ComboMovesetSO comboMovesetSO {  get; private set; }
         private void Awake()
         {
-            character = GetComponent<CharacterModule>();
+            character = GetComponent<Character>();
             animator = GetComponent<Animator>();
-            commandBuffer = new InputCommandBuffer();
-            GetComponent<ComboBufferDebugView>().Buffer = commandBuffer;
-
+            CommandBuffer = new InputCommandBuffer();
         }
 
         private void Start()
@@ -31,7 +29,7 @@ namespace LOGIYGames.CharacterCore
         }
         public void AddCommand(IInputCommand input)
         {
-            commandBuffer.AddCommand(input);
+            CommandBuffer.AddCommand(input);
         }
         private void SubscribeEvents()
         {
@@ -68,7 +66,7 @@ namespace LOGIYGames.CharacterCore
 
         private void StartAttack(AttackNodeSO attack)
         {
-            commandBuffer.Clear();
+            CommandBuffer.Clear();
 
             if (attack == null)
             {
@@ -203,7 +201,7 @@ namespace LOGIYGames.CharacterCore
                 }
 
                 int matchLength =
-                    commandBuffer.GetMatchLength(
+                    CommandBuffer.GetMatchLength(
                         transition.Sequence.Inputs);
 
                 if (matchLength <= 0)
@@ -261,12 +259,12 @@ namespace LOGIYGames.CharacterCore
         {
             if (character.Input.AttackPressed)
             {
-                commandBuffer.AddCommand(new AttackInputCommand(AttackInputType.Light));
+                CommandBuffer.AddCommand(new AttackInputCommand(AttackInputType.Light));
             }
 
             if (character.Input.EvadePressed)
             {
-                commandBuffer.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
+                CommandBuffer.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
             }
         }
         public void ResetCombo()
@@ -276,7 +274,7 @@ namespace LOGIYGames.CharacterCore
 
             CanCancel = false;
             IsNextQueued = false;
-            commandBuffer.Clear();
+            CommandBuffer.Clear();
             Phase = ComboPhase.None;
         }
     }

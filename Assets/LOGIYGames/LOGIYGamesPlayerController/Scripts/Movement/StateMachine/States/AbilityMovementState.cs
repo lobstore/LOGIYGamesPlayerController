@@ -8,7 +8,7 @@ namespace LOGIYGames
     public class AbilityMovementState : CharacterMovementState
     {
         private readonly AbilityController abilityController;
-        public AbilityMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
+        public AbilityMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
             abilityController =
           ctx.AbilityController;

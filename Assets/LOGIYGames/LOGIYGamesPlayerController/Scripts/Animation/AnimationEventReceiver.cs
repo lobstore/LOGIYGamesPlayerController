@@ -13,11 +13,11 @@ namespace LOGIYGames.CharacterCore
         [SerializeField] UnityEvent OnRHandAttack = new();
         [SerializeField] UnityEvent OnLHandAttack = new();
         [SerializeField] private Animator animator;
-        private CharacterModule character;
+        private Character character;
 
         private void Awake()
         {
-            character = GetComponent<CharacterModule>();
+            character = GetComponent<Character>();
         }
 
         public void RFootStep(UnityEngine.AnimationEvent @event)
@@ -51,34 +51,6 @@ namespace LOGIYGames.CharacterCore
             }
 
             return highestWeightClip != null && currentClip == highestWeightClip;
-        }
-        // ========================================================
-        // ABILITY
-        // ========================================================
-
-        public void AbilityStarted()
-        {
-            SendAbilityAnimationEvent(
-                AbilityEventType
-                    .Started);
-        }
-        public void AbilityActionStarted()
-        {
-            SendAbilityAnimationEvent(
-                AbilityEventType
-                    .AnimationStart);
-        }
-        public void AbilityActionEnded()
-        {
-            SendAbilityAnimationEvent(
-                AbilityEventType
-                    .AnimationEnd);
-        }
-        public void AbilityFinished()
-        {
-            SendAbilityAnimationEvent(
-                AbilityEventType
-                    .Finished);
         }
 
         // ========================================================
@@ -149,18 +121,6 @@ namespace LOGIYGames.CharacterCore
                     .CloseCancelWindow);
         }
 
-        // ========================================================
-        // SEND
-        // ========================================================
-
-        private void SendAbilityAnimationEvent(AbilityEventType type)
-        {
-            character.EventBus.Publish(new Shared.Character.Events.AnimationEvent()
-            {
-                // AbilityEventType = type
-
-            });
-        }
         private void SendComboAnimationEvent(ComboEventType type)
         {
             character.EventBus.Publish(new ComboAnimationEvent()

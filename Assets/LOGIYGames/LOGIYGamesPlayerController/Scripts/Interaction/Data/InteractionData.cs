@@ -7,6 +7,7 @@ namespace LOGIYGames
     public struct InteractionData
     {
         public string Name;
+        public string Description;
         public Sprite Icon;
         public float HoldDuration;
     }

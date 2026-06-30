@@ -8,7 +8,7 @@ namespace LOGIYGames
 {
     public class AbilityController : MonoBehaviour
     {
-        private CharacterModule characterModule;
+        private Character characterModule;
         public Ability CurrentAbility { get; private set; } = null;
         [field: SerializeField] public List<AbilityFactory> AbilityFactories { get; private set; } = new();
         public List<Ability> Abilities { get; private set; } = new();
@@ -18,7 +18,7 @@ namespace LOGIYGames
         public CountdownTimer ExecutionTimer { get; private set; }
 
         public Animator Animator { get; private set; }
-        public TargetingManager TargetingManager;
+        public AbilityTargetingController TargetingManager;
         private void Awake()
         {
             Animator = GetComponent<Animator>();

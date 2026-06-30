@@ -9,7 +9,7 @@ namespace LOGIYGames.AI
     public abstract class AIBaseState : IState
     {
         protected AIBrain Brain { get; private set; }
-        protected CharacterModule Character { get; private set; }
+        protected Character Character { get; private set; }
         protected Transform CharacterTransform { get; private set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace LOGIYGames.AI
         {
             Brain = brain;
             CharacterTransform = brain.transform;
-            Character = brain.GetComponent<CharacterModule>();
+            Character = brain.GetComponent<Character>();
         }
 
         public virtual void Enter()

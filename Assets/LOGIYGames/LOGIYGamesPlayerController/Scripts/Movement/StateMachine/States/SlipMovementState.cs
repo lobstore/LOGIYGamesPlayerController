@@ -8,7 +8,7 @@ namespace LOGIYGames
     public class SlipMovementState : TimedMovementState
     {
         private JumpStateData _stateData;
-        public SlipMovementState(CharacterModule ctx, JumpStateData stateData) : base(ctx, stateData)
+        public SlipMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
         }

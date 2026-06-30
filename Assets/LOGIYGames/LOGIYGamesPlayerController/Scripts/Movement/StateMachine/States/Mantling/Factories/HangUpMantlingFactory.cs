@@ -6,7 +6,7 @@ namespace LOGIYGames
     [CreateAssetMenu(fileName = "HangUpMantlingFactory", menuName = "Mantling/Factories/HangUp")]
     public class HangUpMantlingFactory : MantlingFactory
     {
-        public override MantlingStrategy Create(CharacterModule chr)
+        public override MantlingStrategy Create(Character chr)
         {
             return new HangUpMantling(chr, mantlingData);
         }

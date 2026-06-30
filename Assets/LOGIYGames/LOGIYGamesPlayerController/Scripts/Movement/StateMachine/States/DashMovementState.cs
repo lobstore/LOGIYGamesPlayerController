@@ -8,7 +8,7 @@ namespace LOGIYGames
     public class DashMovementState : TimedMovementState
     {
         private JumpStateData _jumpStateData;
-        public DashMovementState(CharacterModule ctx, JumpStateData stateData) : base(ctx, stateData)
+        public DashMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _jumpStateData = stateData;
         }

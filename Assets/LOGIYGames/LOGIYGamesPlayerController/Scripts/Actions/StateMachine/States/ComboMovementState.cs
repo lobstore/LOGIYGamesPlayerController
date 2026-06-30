@@ -7,7 +7,7 @@ namespace LOGIYGames
     public class ComboMovementState : CharacterMovementState
     {
         ComboController combo;
-        public ComboMovementState(CharacterModule character, MovementStateData data) : base(character, data)
+        public ComboMovementState(Character character, MovementStateData data) : base(character, data)
         {
             combo = character.ComboController;
         }

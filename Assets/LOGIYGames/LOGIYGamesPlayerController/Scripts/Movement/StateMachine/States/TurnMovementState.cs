@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TurnMovementState : TimedMovementState
 {
-    public TurnMovementState(CharacterModule ctx, TurnMovementStateData stateData) : base(ctx, stateData)
+    public TurnMovementState(Character ctx, TurnMovementStateData stateData) : base(ctx, stateData)
     {
     }
     Quaternion turnEnd;

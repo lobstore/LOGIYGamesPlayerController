@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class FirstPersonPlanarRotation : IRotationStrategy
     {
-        CharacterModule character;
+        Character character;
 
-        public FirstPersonPlanarRotation(CharacterModule character)
+        public FirstPersonPlanarRotation(Character character)
         {
             this.character = character;
         }

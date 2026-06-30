@@ -8,7 +8,7 @@ namespace LOGIYGames.Movement
     public class HangJumpMovementState : TimedMovementState
     {
         private JumpStateData _stateData;
-        public HangJumpMovementState(CharacterModule ctx, JumpStateData stateData) : base(ctx, stateData)
+        public HangJumpMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
 

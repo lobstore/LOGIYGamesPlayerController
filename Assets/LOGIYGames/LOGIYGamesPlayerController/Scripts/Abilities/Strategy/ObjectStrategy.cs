@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class ObjectStrategy : TargetingStrategy
+    public class ObjectStrategy : AbilityTargetingStrategy
     {
         protected AbilityVFXData vFXData;
         protected GameObject prefab;

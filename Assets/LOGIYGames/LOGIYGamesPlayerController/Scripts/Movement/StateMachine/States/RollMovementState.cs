@@ -9,7 +9,7 @@ namespace LOGIYGames.Movement
     {
         private JumpStateData _stateData;
 
-        public RollMovementState(CharacterModule ctx, JumpStateData stateData) : base(ctx, stateData)
+        public RollMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
 

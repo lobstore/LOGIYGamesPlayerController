@@ -5,7 +5,7 @@ namespace LOGIYGames
 {
     public class ThrowItemActionState : CharacterActionState
     {
-        public ThrowItemActionState(CharacterModule character) : base(character)
+        public ThrowItemActionState(Character character) : base(character)
         {
         }
 

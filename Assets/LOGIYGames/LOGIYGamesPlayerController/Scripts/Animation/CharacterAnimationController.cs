@@ -9,7 +9,7 @@ namespace LOGIYGames.Animation
 {
     public class CharacterAnimationController : MonoModuleBase
     {
-        [SerializeField] CharacterModule character;
+        [SerializeField] Character character;
         [SerializeField] MovementWrapperBase controller;
         [SerializeField] Animator animator;
 

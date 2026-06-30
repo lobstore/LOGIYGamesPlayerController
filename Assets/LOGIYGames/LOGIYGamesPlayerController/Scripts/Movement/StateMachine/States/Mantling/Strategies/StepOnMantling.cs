@@ -9,7 +9,7 @@ namespace LOGIYGames
 
         private float obstacleHeight;
 
-        public StepOnMantling(CharacterModule chr, MantlingData data) : base(chr, data)
+        public StepOnMantling(Character chr, MantlingData data) : base(chr, data)
         {
         }
 

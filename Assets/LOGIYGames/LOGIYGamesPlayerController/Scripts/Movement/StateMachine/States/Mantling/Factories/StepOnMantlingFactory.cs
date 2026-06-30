@@ -6,7 +6,7 @@ namespace LOGIYGames
     [CreateAssetMenu(fileName ="StepOnMantlingFactory", menuName = "Mantling/Factories/StepOn")]
     public class StepOnMantlingFactory : MantlingFactory
     {
-        public override MantlingStrategy Create(CharacterModule chr)
+        public override MantlingStrategy Create(Character chr)
         {
             return new StepOnMantling(chr, mantlingData);
         }

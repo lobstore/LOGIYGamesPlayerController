@@ -7,7 +7,7 @@ namespace LOGIYGames
     public class WallClimbMovementState : CharacterMovementState
     {
         SensorsModule sensorModule;
-        public WallClimbMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData)
+        public WallClimbMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
             sensorModule = ctx.GetComponent<SensorsModule>();
         }
@@ -17,12 +17,11 @@ namespace LOGIYGames
             _character.MovementStrategy = new WallClimbMovement(sensorModule, _character);
             _character.RotationStrategy = new WallClimbRotaion(sensorModule);
             _controller.UseGravity = false;
-            _character.IsWallClimbing = true;
         }
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-            _character.ForceMove(-sensorModule.LegsFrontHit.normal*0.1f);
+            _controller.ForceMove(-sensorModule.LegsFrontHit.normal*0.1f);
         }
         public override void Exit()
         {
@@ -30,7 +29,6 @@ namespace LOGIYGames
             _character.MovementStrategy = _character.DefaultMovementStrategy;
             _character.RotationStrategy = _character.DefaultRotationStrategy;
             _controller.UseGravity = true;
-            _character.IsWallClimbing = false;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace LOGIYGames
         [SerializeField] private CharacterController m_characterController;
         [SerializeField] private CharacterGravityModule m_characterGravityModule;
         [SerializeField] private SensorsModule m_sensors;
-        [SerializeField] private CharacterModule character;
+        [SerializeField] private Character character;
 
         public override float MaxStepHeight
         {

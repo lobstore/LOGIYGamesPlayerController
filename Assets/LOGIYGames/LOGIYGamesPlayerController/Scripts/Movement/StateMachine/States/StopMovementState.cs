@@ -7,7 +7,7 @@ namespace LOGIYGames.Movement
 {
     public class StopMovementState : TimedMovementState
     {
-        public StopMovementState(CharacterModule ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
+        public StopMovementState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
         public override void Enter()
         {
             Direction dir = _character.GetRelativeMovementDirection();

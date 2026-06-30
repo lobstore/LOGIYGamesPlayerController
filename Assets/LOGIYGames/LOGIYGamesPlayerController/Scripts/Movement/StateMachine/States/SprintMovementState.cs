@@ -4,7 +4,7 @@ namespace LOGIYGames.Movement
 {
     public class SprintMovementState : CharacterMovementState
     {
-        public SprintMovementState(CharacterModule ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public SprintMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
         protected override void Move()
         {
             if (Data.IsAnimationDrivenMovement) return;

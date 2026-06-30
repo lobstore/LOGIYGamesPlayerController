@@ -5,7 +5,7 @@ namespace LOGIYGames
 {
     public class LeashWeaponActionState : CharacterActionState
     {
-        public LeashWeaponActionState(CharacterModule character) : base(character)
+        public LeashWeaponActionState(Character character) : base(character)
         {
         }
 

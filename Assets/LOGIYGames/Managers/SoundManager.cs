@@ -10,7 +10,7 @@ namespace LOGIYGames.Audio
         readonly List<SoundEmitter> activeSoundEmitters = new();
         public readonly LinkedList<SoundEmitter> FrequentSoundEmitters = new();
 
-        [SerializeField] SoundEmitter soundEmitterPrefab;
+        [SerializeField] GameObject soundEmitterPrefab;
         [SerializeField] bool collectionCheck = true;
         [SerializeField] int defaultCapacity = 10;
         [SerializeField] int maxPoolSize = 100;
@@ -81,7 +81,7 @@ namespace LOGIYGames.Audio
         {
             var soundEmitter = Instantiate(soundEmitterPrefab);
             soundEmitter.gameObject.SetActive(false);
-            return soundEmitter;
+            return soundEmitter.GetComponent<SoundEmitter>();
         }
 
         void OnTakeFromPool(SoundEmitter soundEmitter)

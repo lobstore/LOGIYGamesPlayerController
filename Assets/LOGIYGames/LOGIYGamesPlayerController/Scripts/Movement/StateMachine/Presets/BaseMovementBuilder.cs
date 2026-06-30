@@ -46,7 +46,7 @@ namespace LOGIYGames
         // INIT
         // =========================================================
 
-        public override void Build(CharacterModule character)
+        public override void Build(Character character)
         {
             RegisterStates(character);
 
@@ -59,7 +59,7 @@ namespace LOGIYGames
         // STATE REGISTRATION
         // =========================================================
 
-        private void RegisterStates(CharacterModule character)
+        private void RegisterStates(Character character)
         {
             character.AddMovementState(new FallingMovementState(character, fallingMovementStateData));
 
@@ -94,7 +94,7 @@ namespace LOGIYGames
             });
         }
 
-        private void ConfigureTransitions(CharacterModule character)
+        private void ConfigureTransitions(Character character)
         {
             // =========================================================
             // ANY TRANSITIONS
@@ -778,12 +778,12 @@ namespace LOGIYGames
         // HELPERS
         // =========================================================
 
-        private static bool HasMovementInput(CharacterModule character)
+        private static bool HasMovementInput(Character character)
         {
             return character.Input.MovementInput.magnitude > 0;
         }
 
-        private bool CanFall(CharacterModule character)
+        private bool CanFall(Character character)
         {
             var groundJump = character.GetMovementState<GroundJumpMovementState>();
             var roll = character.GetMovementState<RollMovementState>();
@@ -810,7 +810,7 @@ namespace LOGIYGames
             && (groundJump == null || !groundJump.CanEnter())
             && (skill == null || !skill.IsActiveState);
         }
-        private bool CanWallRun(CharacterModule character)
+        private bool CanWallRun(Character character)
         {
             return (character.Sensors.IsObstacleLegsLeft
                 || character.Sensors.IsObstacleLegsRight)

@@ -8,7 +8,7 @@ namespace LOGIYGames
     {
         public void StartGame()
         {
-            SceneManager.LoadScene(2);
+            LevelLoader.Instance.SwitchToScene(2);
         }
         public void QuitGame()
         {

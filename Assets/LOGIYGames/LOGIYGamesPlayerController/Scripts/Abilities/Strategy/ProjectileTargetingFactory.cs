@@ -6,7 +6,7 @@ namespace LOGIYGames
     public class ProjectileTargetingFactory : TargetingFactory
     {
         public float speed;
-        public override TargetingStrategy Create()
+        public override AbilityTargetingStrategy Create()
         {
             return new ProjectileTargeting(vFXData, speed);
         }

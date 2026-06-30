@@ -56,9 +56,14 @@ namespace LOGIYGames
             cinemachineCameraControllers.Add(instance_LockOnCameraController);
             currentCameraPerspectiveType = defaultCameraPerspectiveType;
         }
+       protected override void Awake()
+        {
+            base.Awake();
+            Initialize();
+        }
         private void Start()
         {
-            Initialize();
+
             CameraInput.Enable();
             UpdateCameraView();
             PlayerManager.Instance.OnTargetLocked.AddListener((evt) =>
@@ -137,10 +142,12 @@ namespace LOGIYGames
         }
         public void SetTargetTo(Transform Follow, Transform LookAt)
         {
+            
             foreach (var cam in cinemachineCameraControllers)
             {
                 cam.CameraFollowTarget = Follow;
                 cam.CameraLookAtTarget = LookAt;
+                Debug.Log(cam.CameraFollowTarget);
             }
         }
 
