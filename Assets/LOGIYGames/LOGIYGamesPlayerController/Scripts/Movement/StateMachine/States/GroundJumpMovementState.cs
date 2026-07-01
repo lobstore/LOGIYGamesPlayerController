@@ -35,7 +35,7 @@ namespace LOGIYGames.Movement
             return base.CanEnter() 
                 && (_character.Sensors.IsValidSlope() || _character.Sensors.GroundAngle<=0) 
                 && _character.Input.JumpPressed 
-                && _character.JumpCount < _stateData.MaxJumpCount;
+                && _character.JumpController.JumpCount < _stateData.MaxJumpCount;
         }
 
     }

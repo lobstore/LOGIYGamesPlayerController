@@ -16,15 +16,15 @@ namespace LOGIYGames
             turnEnd = _character.RotationStrategy.GetRotation();
             _character.EventBus.Publish(new BackTurnPerformedEvent
             {
-                movementSpeed = _character.Speed,
-                angle = _character.DeltaYaw
+                movementSpeed = _character.RuntimeMovement.Speed,
+                angle = _character.RuntimeMovement.DeltaYaw
             });
             base.Enter();
         }
         protected override void Rotate()
         {
             if (Data.IsAnimationDrivenRotation) return;
-            _character.Rotate(turnEnd, _character.TurnSmoothTime);
+            _character.Rotate(turnEnd, _character.RuntimeMovement.TurnSmoothTime);
         }
         public override void Exit()
         {

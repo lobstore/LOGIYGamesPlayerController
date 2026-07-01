@@ -1,17 +1,19 @@
 using System;
+using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
     [Serializable]
-    public class StateMachineDebugModule
+    public class MovementStateMachineViewer : MonoBehaviour
     {
+        [SerializeField] Character Character;
         StateMachine StateMachine;
         private string _currentStateName;
         private string _lastTransition;
-        public StateMachineDebugModule(StateMachine stateMachine)
+        private void Start()
         {
-            StateMachine = stateMachine;
+            StateMachine = Character.MovementStateMachine;
         }
-        public void Update()
+        private void Update()
         {
             _currentStateName = StateMachine.CurrentNode.State.ToString();
             _lastTransition = StateMachine.LastTransition;

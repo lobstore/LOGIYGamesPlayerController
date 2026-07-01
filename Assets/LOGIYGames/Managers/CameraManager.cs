@@ -66,27 +66,27 @@ namespace LOGIYGames
 
             CameraInput.Enable();
             UpdateCameraView();
-            PlayerManager.Instance.OnTargetLocked.AddListener((evt) =>
-            {
-                if (evt)
-                {
-                    if (PlayerManager.Instance.CurrentCharacter.Targeting.CurrentTarget != null)
-                    {
-                        CurrentCameraPerspectiveType = CameraPerspectiveType.LockOn;
-                    }
-                    else
-                    {
-                        CurrentCameraPerspectiveType = defaultCameraPerspectiveType;
-                    }
-                }
-                else
-                {
-                    CurrentCameraPerspectiveType = defaultCameraPerspectiveType;
-                    CurrentCameraController.CameraFollowTarget = PlayerManager.Instance.CurrentCharacter.CameraFollow;
-                    CurrentCameraController.CameraLookAtTarget = PlayerManager.Instance.CurrentCharacter.CameraLookAt;
-                }
+            //PlayerManager.Instance.OnTargetLocked.AddListener((evt) =>
+            //{
+            //    if (evt)
+            //    {
+            //        if (PlayerManager.Instance.CurrentCharacter.Targeting.CurrentTarget != null)
+            //        {
+            //            CurrentCameraPerspectiveType = CameraPerspectiveType.LockOn;
+            //        }
+            //        else
+            //        {
+            //            CurrentCameraPerspectiveType = defaultCameraPerspectiveType;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        CurrentCameraPerspectiveType = defaultCameraPerspectiveType;
+            //        CurrentCameraController.CameraFollowTarget = PlayerManager.Instance.CurrentCharacter.CameraTarget.CameraFollow;
+            //        CurrentCameraController.CameraLookAtTarget = PlayerManager.Instance.CurrentCharacter.CameraTarget.CameraLookAt;
+            //    }
 
-            });
+            //});
         }
 
         private void UpdateCameraView()
@@ -147,7 +147,6 @@ namespace LOGIYGames
             {
                 cam.CameraFollowTarget = Follow;
                 cam.CameraLookAtTarget = LookAt;
-                Debug.Log(cam.CameraFollowTarget);
             }
         }
 
@@ -192,8 +191,8 @@ namespace LOGIYGames
         {
             CurrentCameraController = instance_LockOnCameraController;
             SetPriorVirtualCamera(CurrentCameraController);
-            CurrentCameraController.CameraFollowTarget = PlayerManager.Instance.CurrentCharacter.CameraFollow;
-            CurrentCameraController.CameraLookAtTarget = PlayerManager.Instance.TargetGroup.transform;
+            CurrentCameraController.CameraFollowTarget = PlayerManager.Instance.CurrentCharacter.CameraTarget.CameraFollow;
+            //CurrentCameraController.CameraLookAtTarget = PlayerManager.Instance.TargetGroup.transform;
         }
 
     }

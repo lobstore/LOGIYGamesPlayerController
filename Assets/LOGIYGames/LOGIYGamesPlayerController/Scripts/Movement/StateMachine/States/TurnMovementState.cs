@@ -15,13 +15,13 @@ public class TurnMovementState : TimedMovementState
         turnEnd = _character.RotationStrategy.GetRotation();
         _character.EventBus.Publish(new TurnPerformedEvent
         {
-            movementSpeed = _character.Speed,
-            angle = _character.DeltaYaw
+            movementSpeed = _character.RuntimeMovement.Speed,
+            angle = _character.RuntimeMovement.DeltaYaw
         });
         base.Enter();
     }
     protected override void Rotate()
     {
-        _character.Rotate(turnEnd, _character.TurnSmoothTime);
+        _character.Rotate(turnEnd, _character.RuntimeMovement.TurnSmoothTime);
     }
 }

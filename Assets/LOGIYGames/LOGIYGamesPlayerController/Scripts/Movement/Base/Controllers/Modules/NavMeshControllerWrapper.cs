@@ -34,7 +34,7 @@ namespace LOGIYGames
 
         private void Update()
         {
-            if (sensorModule.IsGrounded&& character.VelocityData.Gravity.y<0)
+            if (sensorModule.IsGrounded&& characterGravityModule.CurrentGravity.y<0)
             {
                 agent.enabled = true;
             }
@@ -44,7 +44,7 @@ namespace LOGIYGames
             agent.enabled = false;
             if (characterGravityModule != null)
             {
-                character.VelocityData.Gravity = force ;
+                characterGravityModule.CurrentGravity = force ;
             }
         }
 
@@ -57,10 +57,10 @@ namespace LOGIYGames
             }
             else
             {
-                Vector3 totalVelocity = a_move + character.VelocityData.Gravity;
+                Vector3 totalVelocity = a_move + characterGravityModule.CurrentGravity;
                 if (sensorModule.IsValidSlope())
                 {
-                    if (sensorModule.IsGrounded && character.VelocityData.Gravity.y < 0 && character.Input.MovementInput.magnitude > 0)
+                    if (sensorModule.IsGrounded && characterGravityModule.CurrentGravity.y < 0 && character.Input.MovementInput.magnitude > 0)
                     {
                         ProjectVelocity(totalVelocity);
 

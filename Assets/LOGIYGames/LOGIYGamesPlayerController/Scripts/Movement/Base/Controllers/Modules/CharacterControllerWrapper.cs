@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public struct GroundedReport
-    {
-        public Vector3 GroundedVelocity;
-    }
 
     [RequireComponent(typeof(CharacterController))]
     public class CharacterControllerWrapper : MovementWrapperBase
@@ -137,7 +133,7 @@ namespace LOGIYGames
 
         private void Update()
         {
-            verticalVelocity = m_character.VelocityData.Gravity;
+            verticalVelocity = m_characterGravityModule.CurrentGravity;
 
             UpdateGroundMotion();
             ApplyGroundMotion();
@@ -208,7 +204,10 @@ namespace LOGIYGames
             transform.position = a_position;
         }
 
-        public override void AddForce(Vector3 force) { }
+        public override void AddForce(Vector3 force) { 
+            m_characterGravityModule.CurrentGravity = Vector3.up * force.y;
+            m_character.RuntimeMovement.TargetVelocity = new Vector3(force.x,0,force.z);
+        }
 
         public override void ResetVelocity()
         {

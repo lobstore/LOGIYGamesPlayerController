@@ -479,16 +479,10 @@ GameObject:
   - component: {fileID: 1176126297597612246}
   - component: {fileID: 3336788084049153636}
   - component: {fileID: 5964245791863302330}
-  - component: {fileID: 2829093751541247377}
-  - component: {fileID: 6060120445340774513}
   - component: {fileID: 3170350395309969284}
-  - component: {fileID: 7537625313940413956}
   - component: {fileID: 5010907610595090611}
   - component: {fileID: 1030516243872166310}
-  - component: {fileID: 6550930880353304642}
   - component: {fileID: 8332372990304411095}
-  - component: {fileID: 3587852132894530033}
-  - component: {fileID: 649944240874449276}
   m_Layer: 3
   m_Name: Character
   m_TagString: Character
@@ -539,12 +533,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
   <ModulePriority>k__BackingField: 0
-  m_motor: {fileID: 1176126297597612246}
+  <Motor>k__BackingField: {fileID: 1176126297597612246}
   <Sensors>k__BackingField: {fileID: 2268543539570239712}
-  JumpCount: 0
+  <CameraTarget>k__BackingField:
+    CameraLookAt: {fileID: 2640723071682425344}
+    CameraFollow: {fileID: 4734613552037350644}
   movementPreset: {fileID: 11400000, guid: a950937825b83ab4086272ca9dbfed13, type: 2}
-  BaseSpeed: 3
-  <Height>k__BackingField: 1.8
+  <Height>k__BackingField: 1.67
 --- !u!114 &2268543539570239712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -639,7 +634,8 @@ MonoBehaviour:
   groundMagnit: 4
   gravityDirection: {x: 0, y: -1, z: 0}
   MaxGravityForce: 15
-  CurrentGravityForce: 0
+  CurrentGravityMultiplier: 0
+  CurrentGravity: {x: 0, y: 0, z: 0}
   m_sensors: {fileID: 2268543539570239712}
   m_character: {fileID: 8334357512040222824}
   GravityAcceleration: 10
@@ -652,7 +648,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 427882813280634629}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
+  m_Avatar: {fileID: -7015762578403652589, guid: 84eae5ce6c2238f41b556e702b08d5bc, type: 3}
   m_Controller: {fileID: 9100000, guid: 8eccf9a92ff353147a77f36f4eaef42b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -831,35 +827,6 @@ MonoBehaviour:
   OnRightFootLifted:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2829093751541247377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896648472b5055c438867fff91398bda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.StaminaModule
-  <ModulePriority>k__BackingField: 0
-  maxStamina: 100
-  regenPerSecond: 10
-  regenDelay: 1.5
---- !u!114 &6060120445340774513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaefc6231bffa1f46a9284d26ef94267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.HealthModule
-  maxHealth: 100
 --- !u!114 &3170350395309969284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -873,21 +840,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.MantleIKController
   ikWeightSpeed: 5
---- !u!114 &7537625313940413956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72f6c8a26c213f14dbeaaebc54da5442, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.CameraTargetModule
-  <ModulePriority>k__BackingField: 0
-  cameraLookAt: {fileID: 2640723071682425344}
-  cameraFollow: {fileID: 4734613552037350644}
 --- !u!114 &5010907610595090611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -921,19 +873,6 @@ MonoBehaviour:
   <AbilityFactories>k__BackingField:
   - {fileID: 11400000, guid: 1b8312ba0a79f414699c7a25d085248a, type: 2}
   - {fileID: 11400000, guid: a30ce83e531581b4287ea369a7c269ef, type: 2}
-  TargetingManager: {fileID: 649944240874449276}
---- !u!114 &6550930880353304642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d65ccbf0fae16b04d998bb97fe684d1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.ComboController
 --- !u!114 &8332372990304411095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -952,33 +891,6 @@ MonoBehaviour:
   movementTargetDirectionArrowColor: {r: 1, g: 0, b: 0, a: 1}
   animatorVelocityArrowColor: {r: 1, g: 1, b: 1, a: 1}
   totalVelocityArrowColor: {r: 0, g: 1, b: 0.028357267, a: 1}
---- !u!114 &3587852132894530033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c84ca77cb1628bf4794a674906b5e043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterEquipmentController
-  rightHandSlot: {fileID: 3754089005485572689}
-  leftHandSlot: {fileID: 5706043407428586019}
-  defaultWeapon: {fileID: 11400000, guid: 0b5a4e80a2ab00543809f6e722225588, type: 2}
---- !u!114 &649944240874449276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51a34d44c60a15048955ed69814c585c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.TargetingManager
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0
@@ -3808,7 +3720,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6021583798893025641
 Transform:
   m_ObjectHideFlags: 0
@@ -11409,7 +11321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1082271958561512970, guid: ebe7ffd9d56b0fd4db859ab99a8f25f9, type: 3}
       propertyPath: m_Layer

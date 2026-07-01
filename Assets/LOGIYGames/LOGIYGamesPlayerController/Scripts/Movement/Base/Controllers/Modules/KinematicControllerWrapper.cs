@@ -108,7 +108,7 @@ namespace LOGIYGames
             if (m_characterGravityModule != null)
             {
                 m_kinematicMotor.ForceUnground(0.1f);
-                character.VelocityData.Gravity =  force;
+                m_characterGravityModule.CurrentGravity=  force;
             }
         }
         
@@ -142,7 +142,7 @@ namespace LOGIYGames
             currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, 1f - Mathf.Exp(-StableMovementSharpness * deltaTime));
             if (m_characterGravityModule != null && !m_kinematicMotor.GroundingStatus.IsStableOnGround)
             {
-                currentVelocity += character.VelocityData.Gravity;
+                currentVelocity += m_characterGravityModule.CurrentGravity;
             }
         }
         

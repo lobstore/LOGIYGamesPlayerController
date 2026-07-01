@@ -4,5 +4,8 @@
     {
         RightHand,
         LeftHand,
+        RightBeltHolder,
+        LeftBeltHolder,
+        BackHolder,
     }
 }

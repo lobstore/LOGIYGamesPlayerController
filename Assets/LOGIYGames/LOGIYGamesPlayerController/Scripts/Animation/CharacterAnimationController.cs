@@ -350,6 +350,12 @@ namespace LOGIYGames.Animation
                 }
 
             });
+            character.EventBus.Subscribe<ComboAttackEvent>((evt) =>
+            {
+                PlayAnimation(evt.AnimationData.AnimationName);
+                animator.applyRootMotion = evt.AnimationData.UseRootMotion;
+                animator.SetFloat("MotionSpeed", evt.AnimationData.MotionSpeed);
+            });
         }
         public void PlayAnimation(string animname, int layer = 0)
         {
@@ -363,7 +369,7 @@ namespace LOGIYGames.Animation
         {
             base.OnLateUpdate(deltaTime);
 
-            animator.SetFloat("Speed", character.Speed, crossFadeSpeed, Time.deltaTime);
+            animator.SetFloat("Speed", character.RuntimeMovement.Speed, crossFadeSpeed, Time.deltaTime);
             if (character.RotationStrategy is InputPlanarRotation or InputRelativeRotation)
             {
 
@@ -383,33 +389,27 @@ namespace LOGIYGames.Animation
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
             animator.SetBool("IsGrounded", character.IsGrounded);
-            animator.SetBool("IsFalling", character.IsFalling);
-            animator.SetBool("IsSliding", character.IsSliding);
+            animator.SetBool("IsFalling", character.GetMovementState<FallingMovementState>().IsActiveState);
             animator.SetBool("IsFocusing", character.Input.FocusPressed);
-            animator.SetBool("IsOnLadder", character.IsOnLadder);
-            animator.SetBool("IsWallClimbing", character.IsWallClimbing);
-            animator.SetBool("IsSwimming", character.IsSwimming);
-            animator.SetBool("IsFlying", character.IsFlying);
-            animator.SetBool("IsWallRunning", character.IsWallRunning);
 
-            animator.SetFloat("TurnAngle", character.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
+            animator.SetFloat("TurnAngle", character.RuntimeMovement.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
         private void Update()
         {
             if (character.Input.MovementInput.magnitude > 0)
             {
-                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, character.TargetDirection.normalized, character.AccelerationData.Acceleration * Time.deltaTime);
+                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, character.RuntimeMovement.TargetDirection.normalized, character.RuntimeMovement.AccelerationData.Acceleration * Time.deltaTime);
             }
             else
             {
-                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, character.AccelerationData.Deceleration * Time.deltaTime);
+                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, character.RuntimeMovement.AccelerationData.Deceleration * Time.deltaTime);
             }
         }
         private void OnAnimatorMove()
         {
             if (animator.applyRootMotion)
             {
-                character.VelocityData.Locomotion = new Vector3(animator.velocity.x, animator.velocity.y, animator.velocity.z);
+                character.RuntimeMovement.TargetVelocity = new Vector3(animator.velocity.x, animator.velocity.y, animator.velocity.z);
                 character.Move();
                 character.Rotate(animator.rootRotation);
             }

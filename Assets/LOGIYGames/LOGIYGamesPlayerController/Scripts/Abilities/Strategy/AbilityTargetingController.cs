@@ -1,12 +1,10 @@
-using UnityEngine;
-
 namespace LOGIYGames
 {
-    public class AbilityTargetingController : MonoBehaviour
+    public class AbilityTargetingController
     {
         AbilityTargetingStrategy currentStrategy;
 
-        private void Update()
+        public void Tick()
         {
             if (currentStrategy != null && currentStrategy.IsTargeting)
             {

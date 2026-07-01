@@ -1,141 +1,73 @@
 using LOGIYGames.Movement;
-using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 namespace LOGIYGames.CharacterCore
 {
-    [RequireComponent(typeof(CameraTargetModule))]
-    public class Character : MonoModuleBase, IControllable
+    public partial class Character : MonoModuleBase, IControllable
     {
         public CharacterInput Input { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
         public IRotationStrategy DefaultRotationStrategy { get; set; }
         public IMovementStrategy DefaultMovementStrategy { get; set; }
-        public IEventDispatcher EventBus { get; private set; }
 
-
-        public CharacterStats Stats = new CharacterStats();
-        public EffectSystem EffectSystem {  get; private set; }
-
+        public IEventDispatcher EventBus { get; private set; } = new EventDispatcher();
 
         [Header("References")]
 
-
-        [field: SerializeField] private MovementWrapperBase m_motor;
+        [field: SerializeField] public MovementWrapperBase Motor {  get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
-
-        public int JumpCount;
+        public MovementRuntime RuntimeMovement { get; private set; }
+        public Health Health { get; private set; }
+        public Stamina Stamina { get; private set; }
 
         #region Modules
         public TargetingController Targeting { get; private set; }
         public ComboController ComboController { get; private set; }
         public AbilityController AbilityController { get; private set; }
+        public DamageReceiver DamageReceiver { get; private set; }
+        public StaminaRecharger StaminaRecharger { get; private set; }
+        public JumpController JumpController { get; private set; }
+        public AbilityTargetingController AbilityTargetingController { get; private set; }
+        public StateMachine MovementStateMachine { get; private set; }
+        [field: SerializeField] public CameraTarget CameraTarget { get; set; }
         #endregion
-        #region State Machine Configuration
+
         [Header("State Machine Configuration")]
-        public StateMachineDebugModule MovementStateMachineDebugModule { get; private set; }
         public MovementBuilder movementPreset;
         private Dictionary<Type, CharacterMovementState> m_movementStates = new();
-        public StateMachine MovementStateMachine { get; private set; }
-        #endregion
-        #region Runtime States
         public bool IsGrounded { get => Sensors.IsGrounded; }
-        public bool IsAimig { get; set; }
-        public bool IsFalling => GetMovementState<FallingMovementState>().IsActiveState;
-        public bool IsFlying => GetMovementState<FlyMovementState>().IsActiveState;
-        public bool IsCrouching => GetMovementState<CrouchMovementState>().IsActiveState;
-        public bool IsSliding => GetMovementState<SlideMovementState>().IsActiveState;
-        public bool IsOnLadder => GetMovementState<LadderMovementState>().IsActiveState;
-        public bool IsWallClimbing => GetMovementState<WallClimbMovementState>().IsActiveState;
-        public bool IsWallRunning => GetMovementState<WallRunMovementState>().IsActiveState;
-        public bool IsSwimming => GetMovementState<SwimMovementState>().IsActiveState;
-        public bool IsMantling => GetMovementState<MantlingMovementState>().IsActiveState;
-        #endregion
-        #region Velocity Variables
-        [Header("Movement Configuration")]
-        public CharacterVelocityData VelocityData { get; private set; }
-        public float BaseSpeed;
-        public AccelerationData AccelerationData { get; set; }
-        public float Speed { get; set; }
-        public float CurrentSpeed => Speed * BaseSpeed;
-        public float TurnSmoothTime { get; set; } = 5f;
-        public Quaternion TargetRotation { get; set; }
-        public Vector3 TargetDirection { get; set; }
 
-        #endregion
-        #region Collider Properties
-        public float Radius { get => m_motor.Radius; set => m_motor.Radius = value; }
-        public float MaxStepHeight { get => m_motor.MaxStepHeight; set => m_motor.MaxStepHeight = value; }
+        public float Radius { get => Motor.Radius; set => Motor.Radius = value; }
+        public float MaxStepHeight { get => Motor.MaxStepHeight; set => Motor.MaxStepHeight = value; }
         [field: SerializeField] public float Height { get; set; }
         public float HeightChangingSmoothTime { get; private set; } = 4f;
 
-        #endregion
-
-        #region Camera References
-        public CameraTargetModule CameraTarget { get; set; }
-        public Transform CameraLookAt => CameraTarget.CameraLookAt;
-        public Transform CameraFollow => CameraTarget.CameraFollow;
-
-        #endregion
-        public float DeltaYaw { get; set; }
-
-        public UnityEvent OnControlReleased { get; } = new();
 
 
         private void Awake()
         {
-            EventBus = new EventDispatcher();
-            CameraTarget = GetComponent<CameraTargetModule>();
-            ComboController = GetComponent<ComboController>();
+            RuntimeMovement = new();
+            Health = new Health(100);
+            Stamina = new Stamina(100);
+            DamageReceiver = new DamageReceiver(Health);
+            StaminaRecharger = new StaminaRecharger(Stamina, 1);
+            AbilityTargetingController = new();
+            ComboController = new ComboController(this);
             AbilityController = GetComponent<AbilityController>();
-            EffectSystem = new EffectSystem(this);
             InitializeStateMachine();
             Targeting = new();
-            VelocityData = new();
-            AccelerationData = new();
-            EventsSubscription();
+            JumpController = new(this);
+
         }
         private void Start()
         {
-            m_motor.Height = Height;
-            m_motor.Center = new Vector3(0, Height / 2.0f, 0);
+            Motor.Height = Height;
+            Motor.Center = new Vector3(0, Height / 2.0f, 0);
+        }
 
-            MovementStateMachineDebugModule = new StateMachineDebugModule(MovementStateMachine);
-        }
-        private void EventsSubscription()
-        {
-            EventBus.Subscribe<JumpPerformedEvent>((evt) =>
-            {
-                switch (evt.jumpType)
-                {
-                    case JumpType.GroundJump:
-                        Jump(TargetDirection * evt.planarForce, transform.up * evt.verticalForce);
-                        JumpCount++;
-                        GetComponent<StaminaModule>().TryUse(20);
-                        break;
-                    case JumpType.HangJump:
-                        Jump(Sensors.LegsFrontHit.normal * evt.planarForce, evt.verticalForce * transform.up);
-                        break;
-                    case JumpType.WallRunJump:
-                        break;
-                    case JumpType.Roll:
-                        Jump(transform.forward * evt.planarForce, transform.up * evt.verticalForce);
-                        break;
-                    case JumpType.Dash:
-                        Jump(TargetDirection * evt.planarForce, transform.up * evt.verticalForce);
-                        break;
-                    case JumpType.Slip:
-                        Jump(TargetDirection * evt.planarForce, Vector3.zero);
-                        break;
-                    default:
-                        break;
-                }
-            });
-        }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
@@ -150,38 +82,38 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+            RuntimeMovement.TargetRotation = RotationStrategy.GetRotation();
+            RuntimeMovement.TargetDirection = MovementStrategy.GetMovementDirection();
             UpdateVelocity();
-            TargetRotation = RotationStrategy.GetRotation();
             CalculateDeltaYaw();
-            TargetDirection = MovementStrategy.GetMovementDirection();
             MovementStateMachine.Update();
-            MovementStateMachineDebugModule.Update();
-            EffectSystem.Update();
+            StaminaRecharger.Tick();
+            AbilityTargetingController.Tick();
         }
         private void SmoothHeightChanging()
         {
-            if (Height == m_motor.Height && m_motor.Center.y == Height) return;
-            if (!Mathf.Approximately(m_motor.Height, Height) || !Mathf.Approximately(m_motor.Center.y, Height / 2.0f))
+            if (Height == Motor.Height && Motor.Center.y == Height) return;
+            if (!Mathf.Approximately(Motor.Height, Height) || !Mathf.Approximately(Motor.Center.y, Height / 2.0f))
             {
-                m_motor.Height = Mathf.Lerp(m_motor.Height, Height, HeightChangingSmoothTime * Time.deltaTime);
-                m_motor.Center = Vector3.Lerp(m_motor.Center, new Vector3(0, Height / 2.0f, 0), HeightChangingSmoothTime * Time.deltaTime);
+                Motor.Height = Mathf.Lerp(Motor.Height, Height, HeightChangingSmoothTime * Time.deltaTime);
+                Motor.Center = Vector3.Lerp(Motor.Center, new Vector3(0, Height / 2.0f, 0), HeightChangingSmoothTime * Time.deltaTime);
             }
             else
             {
-                m_motor.Height = Height;
-                m_motor.Center = new Vector3(0, Height / 2.0f, 0);
+                Motor.Height = Height;
+                Motor.Center = new Vector3(0, Height / 2.0f, 0);
             }
         }
 
         #region Rotation Methods
         public void RotateToDirection(Vector3 desiredDirection, float turnSmoothTime = 0)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, m_motor.transform.up);
+            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection, Motor.transform.up);
             Rotate(targetRotation, turnSmoothTime);
         }
         public void RotateToPosition(Vector3 position, float turnSmoothTime = 0)
         {
-            Vector3 desiredDirection = position - m_motor.transform.position;
+            Vector3 desiredDirection = position - Motor.transform.position;
             RotateToDirection(desiredDirection.normalized, turnSmoothTime);
         }
 
@@ -189,21 +121,21 @@ namespace LOGIYGames.CharacterCore
         {
             if (turnSpeed > 0f)
             {
-                Quaternion smoothedRotation = Quaternion.Slerp(m_motor.Rotation, targetRotation, turnSpeed * Time.deltaTime);
-                m_motor.SetRotation(smoothedRotation);
+                Quaternion smoothedRotation = Quaternion.Slerp(Motor.Rotation, targetRotation, turnSpeed * Time.deltaTime);
+                Motor.SetRotation(smoothedRotation);
             }
             else
             {
-                m_motor.SetRotation(targetRotation);
+                Motor.SetRotation(targetRotation);
             }
         }
 
         private void CalculateDeltaYaw()
         {
-            DeltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, TargetRotation.eulerAngles.y);
-            if (Mathf.Abs(DeltaYaw) < 0.01f)
+            RuntimeMovement.DeltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, RuntimeMovement.TargetRotation.eulerAngles.y);
+            if (Mathf.Abs(RuntimeMovement. DeltaYaw) < 0.01f)
             {
-                DeltaYaw = 0;
+                RuntimeMovement.DeltaYaw = 0;
             }
         }
 
@@ -212,7 +144,7 @@ namespace LOGIYGames.CharacterCore
 
         public void Move()
         {
-            m_motor.Move(VelocityData.Locomotion);
+            Motor.Move(RuntimeMovement.TargetVelocity);
         }
 
         private void UpdateVelocity()
@@ -220,44 +152,34 @@ namespace LOGIYGames.CharacterCore
             if (Input.MovementInput.magnitude > 0)
             {
 
-                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, TargetDirection.normalized * CurrentSpeed, AccelerationData.Acceleration * Time.deltaTime);
+                RuntimeMovement.TargetVelocity = Vector3.Lerp(RuntimeMovement.TargetVelocity, RuntimeMovement.TargetDirection.normalized * RuntimeMovement.CurrentSpeed, RuntimeMovement.AccelerationData.Acceleration * Time.deltaTime);
             }
             else
             {
-                VelocityData.Locomotion = Vector3.Lerp(VelocityData.Locomotion, Vector3.zero, AccelerationData.Deceleration * Time.deltaTime);
+                RuntimeMovement.TargetVelocity = Vector3.Lerp(RuntimeMovement.TargetVelocity, Vector3.zero, RuntimeMovement.AccelerationData.Deceleration * Time.deltaTime);
             }
         }
 
         public void ForceMove(Vector3 moveDirection)
         {
-            m_motor.ForceMove(moveDirection);
+            Motor.ForceMove(moveDirection);
         }
         public void SetPosition(Vector3 position)
         {
-            m_motor.SetPosition(position);
+            Motor.SetPosition(position);
         }
-        public void Jump(Vector3 hForce, Vector3 vForce)
+        public void Jump(Vector3 jumpForce)
         {
-            VelocityData.Locomotion = hForce;
-            VelocityData.Gravity = vForce;
-            m_motor.AddForce(new Vector3(VelocityData.Locomotion.x, VelocityData.Gravity.y, VelocityData.Locomotion.z));
-        }
-        private Vector3 ProjectVelocity()
-        {
-            return Vector3.ProjectOnPlane(VelocityData.Locomotion, Sensors.BelowHit.normal) + Vector3.ProjectOnPlane(-m_motor.transform.up * Speed, Sensors.BelowHit.normal);
-        }
-        public void Slide()
-        {
-            m_motor.Move(ProjectVelocity());
+            Motor.AddForce(jumpForce);
         }
 
         public void ResetVelocity()
         {
-            VelocityData.Reset();
-            TargetDirection = Vector3.zero;
-            m_motor.ResetVelocity();
+            RuntimeMovement.TargetVelocity = Vector3.zero;
+            RuntimeMovement.TargetDirection = Vector3.zero;
+            Motor.ResetVelocity();
         }
-        public void ResetSpeed() => AccelerationData = new();
+        public void ResetSpeed() => RuntimeMovement.AccelerationData = new();
         #endregion
         #region Movement State Machine
         private void InitializeStateMachine()
@@ -272,7 +194,7 @@ namespace LOGIYGames.CharacterCore
             {
                 Debug.LogError("No MovementPreset provided");
             }
-        } 
+        }
 
         public void AddMovementState(CharacterMovementState state)
         {
@@ -299,7 +221,6 @@ namespace LOGIYGames.CharacterCore
             return m_movementStates.ContainsKey(typeof(T));
         }
         #endregion
-
         #region IControllable
         public void UpdateInput(CharacterInput inputReader)
         {
@@ -319,13 +240,13 @@ namespace LOGIYGames.CharacterCore
         public Direction GetRelativeMovementDirection()
         {
             Vector3 localDir;
-            if (VelocityData.Locomotion.magnitude > 0)
+            if (RuntimeMovement.TargetVelocity.magnitude > 0)
             {
-                localDir = m_motor.transform.InverseTransformDirection(VelocityData.Locomotion);
+                localDir = Motor.transform.InverseTransformDirection(RuntimeMovement.TargetVelocity);
             }
             else
             {
-                localDir = m_motor.transform.InverseTransformDirection(m_motor.Velocity);
+                localDir = Motor.transform.InverseTransformDirection(Motor.Velocity);
             }
             float forwardDot = Vector3.Dot(localDir, Vector3.forward);
             float rightDot = Vector3.Dot(localDir, Vector3.right);
@@ -354,5 +275,4 @@ namespace LOGIYGames.CharacterCore
         }
 
     }
-
 }

@@ -4,8 +4,7 @@ namespace LOGIYGames.CharacterCore
 {
     public interface IControllable
     {
-        Transform CameraLookAt { get; }
-        Transform CameraFollow { get; }
+        CameraTarget CameraTarget { get; }
         void UpdateInput(CharacterInput input);
     }
 }

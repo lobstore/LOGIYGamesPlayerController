@@ -2,8 +2,6 @@ using LOGIYGames.CharacterCore;
 
 namespace LOGIYGames
 {
-
-
     public sealed class DamageContext
     {
         public Character Source;

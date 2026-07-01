@@ -36,13 +36,13 @@ namespace LOGIYGames.Movement
                 _character.ResetVelocity();
             }
             _animator.applyRootMotion = Data.IsAnimationDrivenMovement;
-            _character.AccelerationData = Data.AccelerationData;
-            _character.TurnSmoothTime = Data.TurnSmoothTime;
+            _character.RuntimeMovement.AccelerationData = Data.AccelerationData;
+            _character.RuntimeMovement.TurnSmoothTime = Data.TurnSmoothTime;
             _controller.UseProjectionOnPlane = Data.UseProjectionOnPlane;
             actionFrameTimer.Start();
             if (_character.IsGrounded)
             {
-                _character.JumpCount = 0;
+                _character.JumpController.JumpCount = 0;
             }
         }
 
@@ -68,6 +68,7 @@ namespace LOGIYGames.Movement
         {
             UpdateSpeed();
             Rotate();
+            Move();
         }
 
         public virtual void LateUpdate()
@@ -76,7 +77,7 @@ namespace LOGIYGames.Movement
         }
         public virtual void PhysicsUpdate()
         {
-            Move();
+            
         }
         protected virtual void Move()
         {
@@ -92,7 +93,7 @@ namespace LOGIYGames.Movement
             {
                 return;
             }
-            _character.Rotate(_character.TargetRotation, _character.TurnSmoothTime);
+            _character.Rotate(_character.RuntimeMovement.TargetRotation, _character.RuntimeMovement.TurnSmoothTime);
         }
         /// <summary>
         /// Smooth change speed for animations purpose
@@ -101,12 +102,12 @@ namespace LOGIYGames.Movement
         {
             if (_character.Input.MovementInput.magnitude > 0)
             {
-                _character.Speed = Mathf.Lerp(_character.Speed, Data.Speed, Time.deltaTime * _character.AccelerationData.Acceleration);
+                _character.RuntimeMovement.Speed = Mathf.Lerp(_character.RuntimeMovement.Speed, Data.Speed, Time.deltaTime * _character.RuntimeMovement.AccelerationData.Acceleration);
 
             }
             else
             {
-                _character.Speed = Mathf.Lerp(_character.Speed, 0, Time.deltaTime * _character.AccelerationData.Deceleration);
+                _character.RuntimeMovement.Speed = Mathf.Lerp(_character.RuntimeMovement.Speed, 0, Time.deltaTime * _character.RuntimeMovement.AccelerationData.Deceleration);
             }
         }
     }

@@ -14,22 +14,22 @@ namespace LOGIYGames
 
         PlayerProfileView ProfileView;
         DisposableBag DisposableBag;
-        public PlayerProfilePresenter(HealthModule health, StaminaModule stamina, ReactiveProperty<string> name, PlayerProfileView profileView)
+        public PlayerProfilePresenter(Health health, Stamina stamina, ReactiveProperty<string> name, PlayerProfileView profileView)
         {
             ProfileView = profileView;
-            DisposableBag.Add(health.CurrentHealth.Subscribe(value =>
+            DisposableBag.Add(health.Current.Subscribe(value =>
             {
                 Health.Value = value;
             }));
-            DisposableBag.Add(health.MaxHealth.Subscribe(value =>
+            DisposableBag.Add(health.Max.Subscribe(value =>
             {
                 MaxHealth.Value = value;
             }));
-            DisposableBag.Add(stamina.CurrentStamina.Subscribe(value =>
+            DisposableBag.Add(stamina.Current.Subscribe(value =>
             {
                 Stamina.Value = value;
             }));
-            DisposableBag.Add(stamina.MaxStamina.Subscribe(value =>
+            DisposableBag.Add(stamina.Max.Subscribe(value =>
             {
                 MaxStamina.Value = value;
             }));

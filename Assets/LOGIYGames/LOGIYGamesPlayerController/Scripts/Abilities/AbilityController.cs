@@ -18,9 +18,10 @@ namespace LOGIYGames
         public CountdownTimer ExecutionTimer { get; private set; }
 
         public Animator Animator { get; private set; }
-        public AbilityTargetingController TargetingManager;
+        public AbilityTargetingController TargetingController {  get; private set; }
         private void Awake()
         {
+            characterModule = GetComponent<Character>();
             Animator = GetComponent<Animator>();
             foreach (var factory in AbilityFactories)
             {
@@ -53,6 +54,10 @@ namespace LOGIYGames
 
                 CurrentAbility = null;
             };
+        }
+        private void Start()
+        {
+            TargetingController = characterModule.AbilityTargetingController;
         }
         public void SetAbility(Ability ability)
         {

@@ -1,9 +1,8 @@
-using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
-using UnityEngine;
+using AnimationEvent = LOGIYGames.Shared.Character.Events.AnimationEvent;
 namespace LOGIYGames.CharacterCore
 {
-    public class ComboController : MonoBehaviour
+    public class ComboController
     {
         public AttackNodeSO CurrentAttack { get; private set; }
         private AttackNodeSO queuedAttack;
@@ -12,19 +11,14 @@ namespace LOGIYGames.CharacterCore
         public ComboPhase Phase { get; private set; }
 
         private Character character;
-        private Animator animator;
-        public InputCommandBuffer CommandBuffer { get; private set;  }
+        public InputCommandBuffer CommandBuffer { get; private set; }
 
-        public ComboMovesetSO comboMovesetSO {  get; private set; }
-        private void Awake()
+        public ComboMovesetSO comboMovesetSO { get; private set; }
+
+        public ComboController(Character character)
         {
-            character = GetComponent<Character>();
-            animator = GetComponent<Animator>();
+            this.character = character;
             CommandBuffer = new InputCommandBuffer();
-        }
-
-        private void Start()
-        {
             SubscribeEvents();
         }
         public void AddCommand(IInputCommand input)
@@ -33,10 +27,6 @@ namespace LOGIYGames.CharacterCore
         }
         private void SubscribeEvents()
         {
-            character.EventBus.Subscribe<ComboAnimationEvent>(e =>
-            {
-                OnAnimationEvent(e.ComboEventType);
-            });
             character.EventBus.Subscribe<WeaponEquipEvent>((evt) =>
             {
                 switch (evt.WeaponEquipState)
@@ -81,29 +71,19 @@ namespace LOGIYGames.CharacterCore
                 return;
             }
 
-            int stateHash = Animator.StringToHash(attack.Animation.AnimationName);
-
-            // Проверяем наличие состояния в Base Layer
-            if (!animator.HasState(0, stateHash))
-            {
-                Debug.LogError(
-                    $"ComboController: Animator state '{attack.Animation.AnimationName}' not found.");
-
-                FinishCombo();
-                return;
-            }
 
             CurrentAttack = attack;
 
-            animator.applyRootMotion = attack.Animation.UseRootMotion;
 
-            animator.CrossFade(
-                attack.Animation.AnimationName,
-                attack.Animation.CrossFade);
+            character.EventBus.Publish(new ComboAttackEvent
+            {
+                AnimationData = attack.Animation
+            });
+
 
             if (attack.ForwardImpulse > 0f)
             {
-                character.VelocityData.Locomotion +=
+                character.RuntimeMovement.TargetVelocity +=
                     character.transform.forward * attack.ForwardImpulse;
             }
         }
@@ -277,5 +257,9 @@ namespace LOGIYGames.CharacterCore
             CommandBuffer.Clear();
             Phase = ComboPhase.None;
         }
+    }
+    public class ComboAttackEvent : AnimationEvent
+    {
+
     }
 }

@@ -15,7 +15,7 @@ namespace LOGIYGames.CharacterCore
 
         private void Update()
         {
-            var velo = characterModule.TargetDirection * characterModule.BaseSpeed;
+            var velo = characterModule.RuntimeMovement.TargetDirection * characterModule.RuntimeMovement.BaseSpeed;
             if (velo.magnitude > 0)
             {
                 DebugDraw.DrawArrow(transform.position, velo, movementTargetDirectionArrowColor);

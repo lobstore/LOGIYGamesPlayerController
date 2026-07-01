@@ -13,7 +13,7 @@ namespace LOGIYGames.Movement
             Direction dir = _character.GetRelativeMovementDirection();
             _character.EventBus.Publish(new MovementStoppedEvent
             {
-                movementSpeed = _character.Speed,
+                movementSpeed = _character.RuntimeMovement.Speed,
                 direction = dir,
             });
             base.Enter();

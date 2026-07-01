@@ -139,7 +139,7 @@ namespace LOGIYGames
 
                     return
                         turn.CanEnter() &&
-                        Mathf.Abs(character.DeltaYaw) > turnMovementStateData.MinAngle;
+                        Mathf.Abs(character.RuntimeMovement.DeltaYaw) > turnMovementStateData.MinAngle;
                 }));
 
             character.MovementStateMachine.AddTransition
@@ -175,7 +175,7 @@ namespace LOGIYGames
 
                     return
                         backTurn.CanEnter() &&
-                        Mathf.Abs(character.DeltaYaw) > backTurnMovementStateData.MinAngle;
+                        Mathf.Abs(character.RuntimeMovement.DeltaYaw) > backTurnMovementStateData.MinAngle;
                 }));
             #endregion
             // =========================================================
@@ -230,7 +230,7 @@ namespace LOGIYGames
 
                     return
                         backTurn.CanEnter() &&
-                        Mathf.Abs(character.DeltaYaw) > backTurnMovementStateData.MinAngle;
+                        Mathf.Abs(character.RuntimeMovement.DeltaYaw) > backTurnMovementStateData.MinAngle;
                 }));
 
             character.MovementStateMachine.AddTransition
@@ -253,9 +253,8 @@ namespace LOGIYGames
 
                     return
                         character.GetMovementState<TurnMovementState>().CanEnter() &&
-                        Mathf.Abs(character.DeltaYaw) > turnMovementStateData.MinAngle &&
-                        Mathf.Abs(character.DeltaYaw) < turnMovementStateData.MaxAngle &&
-                        !character.IsAimig;
+                        Mathf.Abs(character.RuntimeMovement.DeltaYaw) > turnMovementStateData.MinAngle &&
+                        Mathf.Abs(character.RuntimeMovement.DeltaYaw) < turnMovementStateData.MaxAngle;
                 }));
             character.MovementStateMachine.AddTransition<RunMovementState, RollMovementState>(
                 new FuncPredicate(() =>
@@ -313,7 +312,7 @@ namespace LOGIYGames
 
                     return
                         backTurn.CanEnter() &&
-                        Mathf.Abs(character.DeltaYaw) > backTurnMovementStateData.MinAngle;
+                        Mathf.Abs(character.RuntimeMovement.DeltaYaw) > backTurnMovementStateData.MinAngle;
                 }));
 
             character.MovementStateMachine.AddTransition
@@ -324,7 +323,7 @@ namespace LOGIYGames
 
                     return
                         turn.CanEnter() &&
-                        Mathf.Abs(character.DeltaYaw) > turnMovementStateData.MinAngle;
+                        Mathf.Abs(character.RuntimeMovement.DeltaYaw) > turnMovementStateData.MinAngle;
                 }));
             #endregion
             // =========================================================
@@ -346,7 +345,7 @@ namespace LOGIYGames
                     return
                         stop.CanEnter() &&
                         (character.Input.MovementInput.magnitude == 0 ||
-                         Mathf.Abs(character.DeltaYaw) > 120);
+                         Mathf.Abs(character.RuntimeMovement.DeltaYaw) > 120);
                 }));
 
             character.MovementStateMachine.AddTransition

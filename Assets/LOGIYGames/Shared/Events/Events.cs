@@ -29,26 +29,12 @@ namespace LOGIYGames.Shared.Character.Events
         public bool unleashWeapon;
     }
     [Serializable]
-    public class ItemThrowedEvent : EventBase
-    {
-
-    }
-    [Serializable]
     public class LandedEvent : EventBase
     {
         public Direction horizontalDirection;
         public float fallingSpeed;
     }
-    [Serializable]
-    public class LadderEnteredEvent : EventBase
-    {
-        public Direction from;
-    }
-    [Serializable]
-    public class LadderExitedEvent : EventBase
-    {
-        public Direction from;
-    }
+
     [Serializable]
     public class MovementStoppedEvent : EventBase
     {
@@ -71,14 +57,9 @@ namespace LOGIYGames.Shared.Character.Events
         public DamageData DamageData { get; set; }
     }
     [Serializable]
-    public class SkillUsedEvent : EventBase
+    public class AbilityEvent : EventBase
     {
         public AbilityFactory AbilityData { get; set; }
-    }
-    [Serializable]
-    public class ComboAnimationEvent : EventBase
-    {
-        public ComboEventType ComboEventType { get; set; }
     }
     [Serializable]
     public class AnimationEvent : EventBase

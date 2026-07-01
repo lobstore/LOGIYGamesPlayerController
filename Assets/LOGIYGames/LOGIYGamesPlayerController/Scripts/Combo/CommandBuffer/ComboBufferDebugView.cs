@@ -7,22 +7,27 @@ namespace LOGIYGames.CharacterCore
         private Vector2 position =
             new Vector2(20, 20);
 
-        [SerializeField] private ComboController ComboController;
+        private ComboController ComboController;
+        [SerializeField] private Character Character;
 
         private GUIStyle style;
 
         private void Awake()
         {
+
             style = new GUIStyle();
 
             style.fontSize = 24;
 
             style.normal.textColor = Color.white;
         }
-
+        private void Start()
+        {
+            ComboController = Character.ComboController;
+        }
         private void OnGUI()
         {
-            if (ComboController.CommandBuffer== null)
+            if (ComboController.CommandBuffer == null)
                 return;
 
             GUI.Label(

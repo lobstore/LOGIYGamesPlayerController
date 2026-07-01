@@ -9,6 +9,9 @@ namespace LOGIYGames
     {
         [SerializeField] WeaponSlot rightHandSlot;
         [SerializeField] WeaponSlot leftHandSlot;
+        [SerializeField] WeaponSlot leftBeltHolder;
+        [SerializeField] WeaponSlot rightBeltHolder;
+        [SerializeField] WeaponSlot backHolder;
 
         [SerializeField] WeaponDataSO defaultWeapon;
 

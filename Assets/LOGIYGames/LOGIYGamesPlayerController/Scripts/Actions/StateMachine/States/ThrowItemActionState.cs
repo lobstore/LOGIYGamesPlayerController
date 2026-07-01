@@ -12,7 +12,6 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            _character.EventBus.Publish(new ItemThrowedEvent());
         }
     }
 }

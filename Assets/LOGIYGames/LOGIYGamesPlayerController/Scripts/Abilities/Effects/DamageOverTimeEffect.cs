@@ -51,9 +51,9 @@ namespace LOGIYGames
                 return;
             }
 
-            HealthModule health =
+            Health health =
                 context.Target
-                    .GetComponent<HealthModule>();
+                    .GetComponent<Health>();
 
             if (health == null)
                 return;

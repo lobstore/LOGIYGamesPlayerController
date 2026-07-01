@@ -53,10 +53,6 @@ namespace LOGIYGames.CharacterCore
             return highestWeightClip != null && currentClip == highestWeightClip;
         }
 
-        // ========================================================
-        // ATTACK
-        // ========================================================
-
         public void RHandAttack()
         {
             OnRHandAttack?.Invoke();
@@ -65,69 +61,7 @@ namespace LOGIYGames.CharacterCore
         {
             OnLHandAttack?.Invoke();
         }
-        public void OpenHitWindow()
-        {
 
-            SendComboAnimationEvent(
-                ComboEventType
-                    .EnableHitbox);
-        }
-
-        public void CloseHitWindow()
-        {
-            SendComboAnimationEvent(
-                ComboEventType
-                    .DisableHitbox);
-        }
-
-        // ========================================================
-        // COMBO
-        // ========================================================
-
-        public void OpenComboWindow()
-        {
-            SendComboAnimationEvent(
-                ComboEventType
-                    .OpenComboWindow);
-        }
-
-        public void CloseComboWindow()
-        {
-            SendComboAnimationEvent(
-                ComboEventType
-                    .CloseComboWindow);
-        }
-        public void FinishAttack()
-        {
-            SendComboAnimationEvent(
-                ComboEventType
-                    .AttackFinished);
-        }
-        // ========================================================
-        // CANCEL
-        // ========================================================
-
-        public void EnableCancelationWindow()
-        {
-            SendComboAnimationEvent(
-                ComboEventType
-                    .OpenCancelWindow);
-        }
-
-        public void DisableCancelationWindow()
-        {
-            SendComboAnimationEvent(
-                ComboEventType
-                    .CloseCancelWindow);
-        }
-
-        private void SendComboAnimationEvent(ComboEventType type)
-        {
-            character.EventBus.Publish(new ComboAnimationEvent()
-            {
-                ComboEventType = type
-            });
-        }
     }
 
 }
