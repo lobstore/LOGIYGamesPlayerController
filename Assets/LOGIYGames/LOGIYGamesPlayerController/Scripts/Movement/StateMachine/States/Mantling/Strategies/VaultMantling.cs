@@ -27,7 +27,7 @@ namespace LOGIYGames
             throw new System.NotImplementedException();
         }
 
-        public override void Update()
+        public override void Tick()
         {
             throw new System.NotImplementedException();
         }

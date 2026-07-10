@@ -24,6 +24,10 @@ namespace LOGIYGames.Movement
                 fallingSpeed = controller.LastGroundedReport.GroundedVelocity.y
             });
         }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && _character.IsGrounded;
+        }
     }
 
 }

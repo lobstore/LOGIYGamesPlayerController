@@ -477,12 +477,12 @@ GameObject:
   - component: {fileID: 3842424064180597113}
   - component: {fileID: 4172097682158500128}
   - component: {fileID: 1176126297597612246}
-  - component: {fileID: 3336788084049153636}
   - component: {fileID: 5964245791863302330}
   - component: {fileID: 3170350395309969284}
   - component: {fileID: 5010907610595090611}
-  - component: {fileID: 1030516243872166310}
   - component: {fileID: 8332372990304411095}
+  - component: {fileID: 1260613408038869289}
+  - component: {fileID: 5416445008551645531}
   m_Layer: 3
   m_Name: Character
   m_TagString: Character
@@ -533,11 +533,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.Character
   <ModulePriority>k__BackingField: 0
-  <Motor>k__BackingField: {fileID: 1176126297597612246}
-  <Sensors>k__BackingField: {fileID: 2268543539570239712}
   <CameraTarget>k__BackingField:
     CameraLookAt: {fileID: 2640723071682425344}
     CameraFollow: {fileID: 4734613552037350644}
+  <Motor>k__BackingField: {fileID: 1176126297597612246}
+  <Sensors>k__BackingField: {fileID: 2268543539570239712}
   movementPreset: {fileID: 11400000, guid: a950937825b83ab4086272ca9dbfed13, type: 2}
   <Height>k__BackingField: 1.67
 --- !u!114 &2268543539570239712
@@ -680,7 +680,7 @@ MonoBehaviour:
   rotationAnimationsBlendTime: 0.2
   crossFadeSpeed: 0.1
   _data: {fileID: 11400000, guid: 8d5fcd2a8fa1f0745a6d8d8359a06121, type: 2}
-  unarmedOverride: {fileID: 22100000, guid: 3673290a59a56d0439ae291614a50a7d, type: 2}
+  defaultOverride: {fileID: 22100000, guid: 3673290a59a56d0439ae291614a50a7d, type: 2}
 --- !u!114 &4172097682158500128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -771,19 +771,6 @@ MonoBehaviour:
   slopeSlideMaxSpeed: 10
   slopeSlideAcceleration: 2
   useGroundMotion: 1
---- !u!114 &3336788084049153636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5d88b99652e9e54dacc431b9baccb41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.LadderMovementController
-  character: {fileID: 8334357512040222824}
 --- !u!114 &5964245791863302330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,21 +845,6 @@ MonoBehaviour:
   walkRadius: 4
   runRadius: 8
   sprintRadius: 18
---- !u!114 &1030516243872166310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85eeb62e1dd99d24889bfb32edd726f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.AbilityController
-  <AbilityFactories>k__BackingField:
-  - {fileID: 11400000, guid: 1b8312ba0a79f414699c7a25d085248a, type: 2}
-  - {fileID: 11400000, guid: a30ce83e531581b4287ea369a7c269ef, type: 2}
 --- !u!114 &8332372990304411095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,6 +863,34 @@ MonoBehaviour:
   movementTargetDirectionArrowColor: {r: 1, g: 0, b: 0, a: 1}
   animatorVelocityArrowColor: {r: 1, g: 1, b: 1, a: 1}
   totalVelocityArrowColor: {r: 0, g: 1, b: 0.028357267, a: 1}
+--- !u!114 &1260613408038869289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7a44987964670a44b26a048f717f108, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.LadderClimbController
+  character: {fileID: 8334357512040222824}
+--- !u!114 &5416445008551645531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52f6de9f6a54c64abb8d0231ecafa05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.MantlingController
+  MantlingFactories:
+  - {fileID: 11400000, guid: 76f4c1f4b2037584c94911f0045ab0ca, type: 2}
+  - {fileID: 11400000, guid: fbc26c4e33c75d1468550e830d3aa646, type: 2}
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0

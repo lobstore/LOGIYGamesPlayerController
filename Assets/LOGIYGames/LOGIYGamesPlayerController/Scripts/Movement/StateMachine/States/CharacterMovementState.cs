@@ -27,6 +27,7 @@ namespace LOGIYGames.Movement
             _controller = ctx.GetComponent<MovementWrapperBase>();
             actionFrameTimer = new CountdownTimer(Data.ActionFrameDuration);
         }
+        public virtual bool CanEnter() { return true; }
         public virtual void Enter()
         {
             IsActiveState = true;
@@ -38,6 +39,7 @@ namespace LOGIYGames.Movement
             _animator.applyRootMotion = Data.IsAnimationDrivenMovement;
             _character.RuntimeMovement.AccelerationData = Data.AccelerationData;
             _character.RuntimeMovement.TurnSmoothTime = Data.TurnSmoothTime;
+            _character.RuntimeMovement.Speed = Data.Speed;
             _controller.UseProjectionOnPlane = Data.UseProjectionOnPlane;
             actionFrameTimer.Start();
             if (_character.IsGrounded)
@@ -66,7 +68,7 @@ namespace LOGIYGames.Movement
 
         public virtual void LogicUpdate()
         {
-            UpdateSpeed();
+            //UpdateSpeed();
             Rotate();
             Move();
         }

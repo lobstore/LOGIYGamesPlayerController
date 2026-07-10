@@ -12,12 +12,6 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            _character.EventBus.Publish(
-                new LeashWeaponEvent
-                {
-                    unleashWeapon = true
-                }
-            );
         }
         public override void LogicUpdate()
         {

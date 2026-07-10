@@ -58,7 +58,7 @@ namespace LOGIYGames
         {
             _characterModule.transform.position = MantleTargetPosition;
         }
-        public override void Update()
+        public override void Tick()
         {
             if (MantleTargetTransform != null)
             {

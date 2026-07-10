@@ -1,10 +1,7 @@
 using UnityEngine;
-
-
-
 namespace LOGIYGames.CharacterCore
 {
-    public class LadderMovementController : MonoBehaviour
+    public class LadderClimbController : MonoBehaviour
     {
         [SerializeField] Character character;
         public Ladder Ladder { get; private set; }
@@ -25,7 +22,7 @@ namespace LOGIYGames.CharacterCore
                     Exit();
             }
         }
-        public void Climb()
+        public void Tick()
         {
             Vector3 pos = Ladder.GetPosition(t);
             // выход сверху/снизу

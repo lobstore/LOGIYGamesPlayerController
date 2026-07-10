@@ -10,8 +10,7 @@ namespace LOGIYGames
         private readonly AbilityController abilityController;
         public AbilityMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
-            abilityController =
-          ctx.AbilityController;
+           // abilityController = ctx.AbilityController;
         }
 
         public override void Enter()

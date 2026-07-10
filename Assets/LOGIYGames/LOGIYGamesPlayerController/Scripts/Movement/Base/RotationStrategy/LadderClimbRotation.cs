@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class LadderClimbRotation : IRotationStrategy
     {
-        LadderMovementController Ladder;
+        LadderClimbController Ladder;
 
-        public LadderClimbRotation(LadderMovementController ladder)
+        public LadderClimbRotation(LadderClimbController ladder)
         {
             Ladder = ladder;
         }

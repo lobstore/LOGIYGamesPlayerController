@@ -16,7 +16,7 @@ namespace LOGIYGames.Movement
             base.Enter();
             Direction direction = _character.GetRelativeMovementDirection();
             float planarForce = _stateData.PlanarJumpForce;
-            if (_character.Input.MovementInput.magnitude ==0)
+            if (_character.Input.MovementInput.magnitude == 0)
             {
                 direction = Direction.Up;
                 planarForce = 0;
@@ -27,15 +27,14 @@ namespace LOGIYGames.Movement
                 planarForce = planarForce,
                 direction = direction,
                 jumpType = JumpType.GroundJump
-
             });
         }
         public override bool CanEnter()
         {
-            return base.CanEnter() 
-                && (_character.Sensors.IsValidSlope() || _character.Sensors.GroundAngle<=0) 
-                && _character.Input.JumpPressed 
-                && _character.JumpController.JumpCount < _stateData.MaxJumpCount;
+            return base.CanEnter()
+                && (_character.Sensors.IsValidSlope() || _character.Sensors.GroundAngle <= 0)
+                && _character.Input.JumpPressed
+                && _character.JumpController.CanExecute(_stateData);
         }
 
     }

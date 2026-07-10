@@ -1,18 +1,26 @@
+using System;
+
 namespace LOGIYGames
 {
+    [Serializable]
     public enum StatType
     {
-        MaxHealth,
-        MaxMana,
+        BaseHealth,
+        BaseStamina,
+        BaseMana,
 
-        Attack,
-        Defense,
+        Vitality,
+        Agility,
+        Intelegence,
 
-        MoveSpeed,
-        AttackSpeed,
+        AttackBase,
+        DefenseBase,
 
-        CritChance,
-        CritMultiplier,
+        MoveSpeedBase,
+        AttackSpeedBase,
+
+        CritRate,
+        CritDamage,
 
         CooldownReduction
     }

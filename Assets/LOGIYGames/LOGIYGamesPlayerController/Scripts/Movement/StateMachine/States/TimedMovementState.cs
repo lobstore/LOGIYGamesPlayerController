@@ -62,15 +62,15 @@ namespace LOGIYGames.Movement
         /// <summary>
         /// Check if state can be entered (cooldown check)
         /// </summary>
-        public virtual bool CanEnter()
+        public override bool CanEnter()
         {
             if (_cooldownTimer != null)
             {
-                return !_cooldownTimer.IsRunning;
+                return base.CanEnter()&&!_cooldownTimer.IsRunning;
             }
             else
             {
-                return true;
+                return base.CanEnter();
 
             }
         }

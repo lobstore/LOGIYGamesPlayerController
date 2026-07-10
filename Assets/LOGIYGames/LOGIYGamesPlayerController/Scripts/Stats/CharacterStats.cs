@@ -6,7 +6,7 @@ namespace LOGIYGames
     [Serializable]
     public class CharacterStats
     {
-        private readonly Dictionary<StatType, Stat> _stats = new();
+        private Dictionary<StatType, Stat> _stats = new();
 
         public CharacterStats()
         {
@@ -16,9 +16,9 @@ namespace LOGIYGames
             }
         }
 
-        public float Get(StatType stat)
+        public Stat GetStat(StatType stat)
         {
-            return _stats[stat].Value;
+            return _stats[stat];
         }
 
         public void SetBase(

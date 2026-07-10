@@ -57,7 +57,7 @@ namespace LOGIYGames
         }
         private void Start()
         {
-            TargetingController = characterModule.AbilityTargetingController;
+            //TargetingController = characterModule.AbilityTargetingController;
         }
         public void SetAbility(Ability ability)
         {

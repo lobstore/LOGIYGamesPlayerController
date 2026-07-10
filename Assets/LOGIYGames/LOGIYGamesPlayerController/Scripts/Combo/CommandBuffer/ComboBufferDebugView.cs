@@ -23,7 +23,7 @@ namespace LOGIYGames.CharacterCore
         }
         private void Start()
         {
-            ComboController = Character.ComboController;
+           // ComboController = Character.ComboController;
         }
         private void OnGUI()
         {

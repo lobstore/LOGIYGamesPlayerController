@@ -40,44 +40,44 @@ namespace LOGIYGames
 
                 profilePresenter?.Dispose();
                 Name.Value = newChar.name;
-                profilePresenter = new PlayerProfilePresenter(newChar.Health, newChar.Stamina, Name, profileView);
+                profilePresenter = new PlayerProfilePresenter(newChar.Health, newChar.StaminaController.Stamina, Name, profileView);
 
-                UpdateAbilityViews(newChar);
+             //   UpdateAbilityViews(newChar);
             });
         }
 
-        private void UpdateAbilityViews(Character newChar)
-        {
-            for (int i = 0; i < skillsContainer.childCount; i++)
-            {
-                Destroy(skillsContainer.GetChild(i));
-            }
-            if (skillPresenters.Count > 0)
-            {
-                skillPresenters.Clear();
-            }
-            if (skillViews.Count > 0)
-            {
-                foreach (var item in skillViews)
-                {
-                    Destroy(item);
-                }
-                skillViews.Clear();
-            }
+        //private void UpdateAbilityViews(Character newChar)
+        //{
+        //    for (int i = 0; i < skillsContainer.childCount; i++)
+        //    {
+        //        Destroy(skillsContainer.GetChild(i));
+        //    }
+        //    if (skillPresenters.Count > 0)
+        //    {
+        //        skillPresenters.Clear();
+        //    }
+        //    if (skillViews.Count > 0)
+        //    {
+        //        foreach (var item in skillViews)
+        //        {
+        //            Destroy(item);
+        //        }
+        //        skillViews.Clear();
+        //    }
 
-            if (newChar.AbilityController.Abilities.Count > 0)
-            {
-                foreach (var item in newChar.AbilityController.Abilities)
-                {
-                    var obj = Instantiate(abilityIconPrefab);
-                    obj.transform.SetParent(skillsContainer, true);
-                    obj.transform.localScale = Vector3.one;
-                    var view = obj.GetComponent<PlayerAbilityView>();
-                    skillViews.Add(view);
-                    skillPresenters.Add(new PlayerSkillPresenter(item, view));
-                }
-            }
-        }
+        //    if (newChar.AbilityController.Abilities.Count > 0)
+        //    {
+        //        foreach (var item in newChar.AbilityController.Abilities)
+        //        {
+        //            var obj = Instantiate(abilityIconPrefab);
+        //            obj.transform.SetParent(skillsContainer, true);
+        //            obj.transform.localScale = Vector3.one;
+        //            var view = obj.GetComponent<PlayerAbilityView>();
+        //            skillViews.Add(view);
+        //            skillPresenters.Add(new PlayerSkillPresenter(item, view));
+        //        }
+        //    }
+        //}
 
         private void Start()
         {
@@ -140,7 +140,7 @@ namespace LOGIYGames
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
                     CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new InputPlanarRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new LookRelativeRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
                     CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
@@ -148,7 +148,7 @@ namespace LOGIYGames
                     break;
                 case CameraPerspectiveType.Top_Down:
                     CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new InputPlanarRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new LookRelativeRotation(CurrentCharacter);
                     break;
                 default:
                     break;

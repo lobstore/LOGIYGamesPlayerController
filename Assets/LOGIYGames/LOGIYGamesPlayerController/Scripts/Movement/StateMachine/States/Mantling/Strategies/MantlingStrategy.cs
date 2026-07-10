@@ -31,6 +31,6 @@ namespace LOGIYGames
         abstract public bool CanExit();
         abstract public void Enter();
         abstract public void Exit();
-        abstract public void Update();
+        abstract public void Tick();
     }
 }

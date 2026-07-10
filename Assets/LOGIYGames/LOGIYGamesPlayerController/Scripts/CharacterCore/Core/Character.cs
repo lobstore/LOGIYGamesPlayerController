@@ -17,22 +17,20 @@ namespace LOGIYGames.CharacterCore
 
         [Header("References")]
 
-        [field: SerializeField] public MovementWrapperBase Motor {  get; private set; }
+        [field: SerializeField] public CameraTarget CameraTarget { get; private set; }
+        [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
         public MovementRuntime RuntimeMovement { get; private set; }
         public Health Health { get; private set; }
-        public Stamina Stamina { get; private set; }
+        public CharacterStats Stats { get; private set; }
 
         #region Modules
-        public TargetingController Targeting { get; private set; }
-        public ComboController ComboController { get; private set; }
-        public AbilityController AbilityController { get; private set; }
-        public DamageReceiver DamageReceiver { get; private set; }
-        public StaminaRecharger StaminaRecharger { get; private set; }
+        public TargetingController TargetingController { get; private set; }
+        public DamageController DamageController { get; private set; }
+        public StaminaController StaminaController { get; private set; }
         public JumpController JumpController { get; private set; }
-        public AbilityTargetingController AbilityTargetingController { get; private set; }
+        public MantlingController MantlingController { get; private set; }
         public StateMachine MovementStateMachine { get; private set; }
-        [field: SerializeField] public CameraTarget CameraTarget { get; set; }
         #endregion
 
         [Header("State Machine Configuration")]
@@ -44,21 +42,26 @@ namespace LOGIYGames.CharacterCore
         public float MaxStepHeight { get => Motor.MaxStepHeight; set => Motor.MaxStepHeight = value; }
         [field: SerializeField] public float Height { get; set; }
         public float HeightChangingSmoothTime { get; private set; } = 4f;
-
-
-
         private void Awake()
         {
             RuntimeMovement = new();
-            Health = new Health(100);
-            Stamina = new Stamina(100);
-            DamageReceiver = new DamageReceiver(Health);
-            StaminaRecharger = new StaminaRecharger(Stamina, 1);
-            AbilityTargetingController = new();
-            ComboController = new ComboController(this);
-            AbilityController = GetComponent<AbilityController>();
+            Stats = new();
+            Stats.SetBase(StatType.BaseHealth, 100);
+            Stats.SetBase(StatType.BaseStamina, 50);
+            Stats.SetBase(StatType.BaseMana, 10);
+            Stats.SetBase(StatType.Vitality, 100);
+            Stats.SetBase(StatType.Intelegence, 1);
+            Stats.SetBase(StatType.AttackBase, 1);
+            Stats.SetBase(StatType.DefenseBase, 1);
+            Stats.SetBase(StatType.CritRate, 15);
+            Stats.SetBase(StatType.CritDamage, 50);
+            Health = new Health(Stats);
+
+            DamageController = new DamageController(Health,Stats);
+            StaminaController = new StaminaController(Stats, 1);
+            MantlingController = GetComponent<MantlingController>();
             InitializeStateMachine();
-            Targeting = new();
+            TargetingController = new();
             JumpController = new(this);
 
         }
@@ -87,8 +90,7 @@ namespace LOGIYGames.CharacterCore
             UpdateVelocity();
             CalculateDeltaYaw();
             MovementStateMachine.Update();
-            StaminaRecharger.Tick();
-            AbilityTargetingController.Tick();
+            StaminaController.Tick();
         }
         private void SmoothHeightChanging()
         {
@@ -133,7 +135,7 @@ namespace LOGIYGames.CharacterCore
         private void CalculateDeltaYaw()
         {
             RuntimeMovement.DeltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, RuntimeMovement.TargetRotation.eulerAngles.y);
-            if (Mathf.Abs(RuntimeMovement. DeltaYaw) < 0.01f)
+            if (Mathf.Abs(RuntimeMovement.DeltaYaw) < 0.01f)
             {
                 RuntimeMovement.DeltaYaw = 0;
             }

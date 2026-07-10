@@ -27,7 +27,7 @@ namespace LOGIYGames
             }));
             subscriprions.Add(presenter.MaxHealth.Subscribe(_val =>
             {
-                UpdateHealthBar(presenter.MaxHealth.CurrentValue, _val);
+                UpdateHealthBar(presenter.Health.CurrentValue, _val);
             }));
 
 
@@ -39,12 +39,12 @@ namespace LOGIYGames
 
             subscriprions.Add(presenter.MaxStamina.Subscribe(_val =>
             {
-                UpdateStaminaBar(presenter.MaxStamina.CurrentValue, _val);
+                UpdateStaminaBar(presenter.Stamina.CurrentValue, _val);
             })); 
             
-            subscriprions.Add(presenter.MaxStamina.Subscribe(_val =>
+            subscriprions.Add(presenter.Name.Subscribe(_val =>
             {
-                UpdateCharacterName(presenter.Name.CurrentValue);
+                UpdateCharacterName(_val);
             }));
             subscriprions.AddTo(this);
         }

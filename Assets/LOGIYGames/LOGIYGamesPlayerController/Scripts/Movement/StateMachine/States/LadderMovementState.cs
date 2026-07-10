@@ -6,10 +6,10 @@ namespace LOGIYGames
 {
     public class LadderMovementState : CharacterMovementState
     {
-        LadderMovementController ladderMovementController;
+        LadderClimbController ladderMovementController;
         public LadderMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
-            ladderMovementController = _character.GetComponent<LadderMovementController>();
+            ladderMovementController = _character.GetComponent<LadderClimbController>();
         }
         float t;
         float distanceTravelled;
@@ -28,7 +28,7 @@ namespace LOGIYGames
             t = distanceTravelled / ladderMovementController.Ladder.Lenght;
             //t += _character.Input.MovementInput.y * _character.SpeedMultiplier * Time.deltaTime;
             ladderMovementController.t = Mathf.Clamp01(t);
-            ladderMovementController.Climb();
+            ladderMovementController.Tick();
         }
         public override void Exit()
         {

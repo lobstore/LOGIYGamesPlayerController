@@ -35,5 +35,14 @@ namespace LOGIYGames.Movement
             base.Exit();
             _controller.UseGravity = true;
         }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && (_character.Sensors.IsObstacleLegsLeft
+                || _character.Sensors.IsObstacleLegsRight)
+                && !_character.Sensors.IsGrounded
+                && _character.Input.MovementInput.y > 0
+                && !_character.Sensors.IsObstacleLegsFront
+                && Vector3.Angle(_character.transform.forward, Camera.main.transform.forward) < 60;
+        }
     }
 }

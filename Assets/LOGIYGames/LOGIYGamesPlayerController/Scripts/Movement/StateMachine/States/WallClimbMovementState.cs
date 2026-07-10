@@ -1,6 +1,5 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
-using UnityEngine;
 
 namespace LOGIYGames
 {
@@ -21,7 +20,7 @@ namespace LOGIYGames
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-            _controller.ForceMove(-sensorModule.LegsFrontHit.normal*0.1f);
+            _controller.ForceMove(-sensorModule.LegsFrontHit.normal * 0.1f);
         }
         public override void Exit()
         {
@@ -29,6 +28,12 @@ namespace LOGIYGames
             _character.MovementStrategy = _character.DefaultMovementStrategy;
             _character.RotationStrategy = _character.DefaultRotationStrategy;
             _controller.UseGravity = true;
+        }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && _character.Sensors.IsObstacleLegsFront &&
+                    _character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") &&
+                    _character.Input.MovementInput.y > 0;
         }
     }
 }

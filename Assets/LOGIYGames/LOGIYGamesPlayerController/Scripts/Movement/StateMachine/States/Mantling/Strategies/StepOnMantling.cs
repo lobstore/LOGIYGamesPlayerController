@@ -62,7 +62,7 @@ namespace LOGIYGames
         {
             _characterModule.transform.position = MantleTargetPosition;
         }
-        public override void Update()
+        public override void Tick()
         {
             if (MantleTargetTransform != null)
             {
@@ -88,27 +88,6 @@ namespace LOGIYGames
                    _characterModule.transform.forward * (_characterModule.Radius + forwardDistance) +
                    _characterModule.transform.up * (_characterModule.Height * 0.5f);
         }
-        //private bool HasClearPathToRayOrigin()
-        //{
-        //    Vector3 rayOrigin = GetTopDownRayOrigin(checkDistance);
-
-        //    Vector3 start =
-        //        _characterModule.transform.position +
-        //        _characterModule.transform.up * (_characterModule.Height);
-
-        //    Vector3 direction = rayOrigin - start;
-        //    float distance = direction.magnitude;
-
-        //    Debug.DrawLine(start, rayOrigin, Color.yellow);
-
-        //    return !Physics.Raycast(
-        //        start,
-        //        direction.normalized,
-        //        out _,
-        //        distance,
-        //        mantlingLayers,
-        //        QueryTriggerInteraction.Ignore);
-        //}
         private bool HasClearPathToRayOrigin()
         {
             Vector3 rayOrigin = GetTopDownRayOrigin(checkDistance);

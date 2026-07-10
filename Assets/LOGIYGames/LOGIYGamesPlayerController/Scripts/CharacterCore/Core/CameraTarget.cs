@@ -3,7 +3,7 @@ using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
     [Serializable]
-    public class CameraTarget
+    public struct CameraTarget
     {
        public Transform CameraLookAt;
        public Transform CameraFollow;

@@ -24,11 +24,6 @@ namespace LOGIYGames.Shared.Character.Events
     {
     }
     [Serializable]
-    public class LeashWeaponEvent : EventBase
-    {
-        public bool unleashWeapon;
-    }
-    [Serializable]
     public class LandedEvent : EventBase
     {
         public Direction horizontalDirection;

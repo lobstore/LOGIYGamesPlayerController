@@ -10,6 +10,11 @@ namespace LOGIYGames.Movement
             if (Data.IsAnimationDrivenMovement) return;
             base.Move();
         }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && _character.Sensors.IsGrounded &&
+                        _character.Input.SprintPressing;
+        }
     }
 
 }

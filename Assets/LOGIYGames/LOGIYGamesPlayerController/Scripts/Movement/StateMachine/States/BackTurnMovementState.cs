@@ -7,8 +7,10 @@ namespace LOGIYGames
 {
     public class BackTurnMovementState : TimedMovementState
     {
+        TurnMovementStateData TurnData;
         public BackTurnMovementState(Character ctx, TurnMovementStateData stateData) : base(ctx, stateData)
         {
+            TurnData = stateData;
         }
         Quaternion turnEnd;
         public override void Enter()
@@ -31,6 +33,10 @@ namespace LOGIYGames
             base.Exit();
             if (Data.IsAnimationDrivenRotation) return;
             _character.Rotate(turnEnd);
+        }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle;
         }
     }
 

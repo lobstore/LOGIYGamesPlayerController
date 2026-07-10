@@ -1,6 +1,6 @@
 ﻿<Solution>
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="CrashKonijn.Goap.Runtime.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="UniGLTF.Editor.csproj" />
   <Project Path="VRM10.Editor.csproj" />
   <Project Path="CrashKonijn.Goap.Core.csproj" />

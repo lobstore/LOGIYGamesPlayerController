@@ -6,6 +6,6 @@ namespace LOGIYGames
     [Serializable]
     public class MantlingMovmentStateData : MovementStateData
     {
-        public List<MantlingFactory> MantlingFactories;
+
     }
 }

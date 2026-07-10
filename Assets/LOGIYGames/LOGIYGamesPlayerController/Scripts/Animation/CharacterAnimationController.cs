@@ -21,10 +21,11 @@ namespace LOGIYGames.Animation
 
         public Vector3 ScaledTargetDirection { get; set; }
 
-        [SerializeField] AnimatorOverrideController unarmedOverride;
+        [SerializeField] AnimatorOverrideController defaultOverride;
 
         private void Start()
         {
+            animator.runtimeAnimatorController = defaultOverride;
             character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
             {
                 switch (evt.jumpType)
@@ -81,36 +82,36 @@ namespace LOGIYGames.Animation
             {
                 switch (evt.horizontalDirection)
                 {
-                    case Direction.Left:
-                        if (evt.fallingSpeed > -7)
-                        {
-                            PlayAnimation(_data.Landing_Light_Left);
+                    //case Direction.Left:
+                    //    if (evt.fallingSpeed > -7)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Light_Left);
 
-                        }
-                        else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
-                        {
-                            PlayAnimation(_data.Landing_Hard_Forward);
-                        }
-                        else if (evt.fallingSpeed < -10)
-                        {
-                            PlayAnimation(_data.Landing_Break);
-                        }
-                        break;
-                    case Direction.Right:
-                        if (evt.fallingSpeed > -7)
-                        {
-                            PlayAnimation(_data.Landing_Light_Right);
+                    //    }
+                    //    else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Hard_Forward);
+                    //    }
+                    //    else if (evt.fallingSpeed < -10)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Break);
+                    //    }
+                    //    break;
+                    //case Direction.Right:
+                    //    if (evt.fallingSpeed > -7)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Light_Right);
 
-                        }
-                        else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
-                        {
-                            PlayAnimation(_data.Landing_Hard_Forward);
-                        }
-                        else if (evt.fallingSpeed < -10)
-                        {
-                            PlayAnimation(_data.Landing_Break);
-                        }
-                        break;
+                    //    }
+                    //    else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Hard_Forward);
+                    //    }
+                    //    else if (evt.fallingSpeed < -10)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Break);
+                    //    }
+                    //    break;
                     case Direction.Forward:
                         if (evt.fallingSpeed > -7)
                         {
@@ -126,21 +127,21 @@ namespace LOGIYGames.Animation
                             PlayAnimation(_data.Landing_Break);
                         }
                         break;
-                    case Direction.Backward:
-                        if (evt.fallingSpeed > -7)
-                        {
-                            PlayAnimation(_data.Landing_Light_Backward);
+                    //case Direction.Backward:
+                    //    if (evt.fallingSpeed > -7)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Light_Backward);
 
-                        }
-                        else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
-                        {
-                            PlayAnimation(_data.Landing_Hard_Forward);
-                        }
-                        else if (evt.fallingSpeed < -10)
-                        {
-                            PlayAnimation(_data.Landing_Break);
-                        }
-                        break;
+                    //    }
+                    //    else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Hard_Forward);
+                    //    }
+                    //    else if (evt.fallingSpeed < -10)
+                    //    {
+                    //        PlayAnimation(_data.Landing_Break);
+                    //    }
+                    //    break;
                     case Direction.NoMovement:
                         if (evt.fallingSpeed > -7)
                         {
@@ -219,20 +220,6 @@ namespace LOGIYGames.Animation
                     }
                 }
             });
-            character.EventBus.Subscribe<LeashWeaponEvent>((evt) =>
-            {
-                if (evt.unleashWeapon)
-                {
-                    PlayAnimation("Unleash");
-                    animator.SetBool("IsInCombat", true);
-                }
-                else
-                {
-                    PlayAnimation("Leash");
-                    animator.SetBool("IsInCombat", false);
-                }
-            }
-            );
             character.EventBus.Subscribe<MovementStoppedEvent>((evt) =>
             {
                 switch (evt.direction)
@@ -252,11 +239,11 @@ namespace LOGIYGames.Animation
                         }
                         break;
                     case Direction.Backward:
-                        if (evt.movementSpeed < GetStateSpeed<WalkMovementState>())
+                        if (evt.movementSpeed <= GetStateSpeed<WalkMovementState>())
                         {
                             PlayAnimation(_data.Walk_Stop_Backward);
                         }
-                        else if (evt.movementSpeed < GetStateSpeed<RunMovementState>())
+                        else if (evt.movementSpeed <= GetStateSpeed<RunMovementState>())
                         {
                             PlayAnimation(_data.Run_Stop_Backward);
                         }
@@ -324,7 +311,7 @@ namespace LOGIYGames.Animation
                         }
                         break;
                     case WeaponEquipState.Unequiped:
-                        animator.runtimeAnimatorController = unarmedOverride;
+                        animator.runtimeAnimatorController = defaultOverride;
                         if (evt.WeaponData.TwoHandsRequired)
                         {
                             PlayAnimation("Unequip", 3);
@@ -370,27 +357,25 @@ namespace LOGIYGames.Animation
             base.OnLateUpdate(deltaTime);
 
             animator.SetFloat("Speed", character.RuntimeMovement.Speed, crossFadeSpeed, Time.deltaTime);
-            if (character.RotationStrategy is InputPlanarRotation or InputRelativeRotation)
+            if (character.RotationStrategy is LookRelativeRotation or InputRelativeRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
                 animator.SetFloat("VerticalSpeed", character.Input.MovementInput.magnitude, crossFadeSpeed, Time.deltaTime);
             }
-            else if (character.RotationStrategy is WallClimbRotaion)
-            {
-                animator.SetFloat("HorizontalSpeed", character.Input.MovementInput.x, crossFadeSpeed, Time.deltaTime);
-                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.y, crossFadeSpeed, Time.deltaTime);
-            }
             else
             {
-                animator.SetFloat("VerticalSpeed", transform.InverseTransformDirection(ScaledTargetDirection).z, crossFadeSpeed, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", transform.InverseTransformDirection(ScaledTargetDirection).x, crossFadeSpeed, Time.deltaTime);
+                var local = character.Input.MovementInput;
+                animator.SetFloat("VerticalSpeed", local.y, crossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", local.x, crossFadeSpeed, Time.deltaTime);
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
             animator.SetBool("IsGrounded", character.IsGrounded);
             animator.SetBool("IsFalling", character.GetMovementState<FallingMovementState>().IsActiveState);
             animator.SetBool("IsFocusing", character.Input.FocusPressed);
+            animator.SetFloat("InputX", character.Input.MovementInput.x, crossFadeSpeed, Time.deltaTime);
+            animator.SetFloat("InputY", character.Input.MovementInput.y, crossFadeSpeed, Time.deltaTime);
 
             animator.SetFloat("TurnAngle", character.RuntimeMovement.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
