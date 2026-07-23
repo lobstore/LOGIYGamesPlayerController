@@ -1,3 +1,5 @@
+using Alchemy.Hierarchy;
+using LOGIYGames.Shared.Extensions;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -54,9 +56,15 @@ namespace LOGIYGames
             cinemachineCameraControllers.Add(instance_ThirdPersonCameraController);
             cinemachineCameraControllers.Add(instance_TopDownCameraController);
             cinemachineCameraControllers.Add(instance_LockOnCameraController);
+            var obj = new GameObject("VirtualCameras_Runtime");
+            obj.GetOrAddComponent<HierarchyHeader>();
+            foreach (var item in cinemachineCameraControllers)
+            {
+                item.gameObject.transform.SetParent(obj.transform);
+            }
             currentCameraPerspectiveType = defaultCameraPerspectiveType;
         }
-       protected override void Awake()
+        protected override void Awake()
         {
             base.Awake();
             Initialize();
@@ -142,7 +150,7 @@ namespace LOGIYGames
         }
         public void SetTargetTo(Transform Follow, Transform LookAt)
         {
-            
+
             foreach (var cam in cinemachineCameraControllers)
             {
                 cam.CameraFollowTarget = Follow;

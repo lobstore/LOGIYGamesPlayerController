@@ -1,3 +1,4 @@
+using LOGIYGames.Shared.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace LOGIYGames.Audio
 
         void Awake()
         {
-            audioSource = gameObject.GetOrAdd<AudioSource>();
+            audioSource = gameObject.GetOrAddComponent<AudioSource>();
         }
 
         public void Initialize(SoundData data)

@@ -1,12 +1,14 @@
 using UnityEngine;
 
-namespace LOGIYGames.Audio {
+namespace LOGIYGames.Shared.Extensions {
     public static class GameObjectExtensions {
-        public static T GetOrAdd<T>(this GameObject gameObject) where T : Component {
-            T component = gameObject.GetComponent<T>();
-            if (!component) component = gameObject.AddComponent<T>();
-
-            return component;
+        public static T GetOrAddComponent<T>(this GameObject go) where T : Component
+        {
+            if (go.TryGetComponent<T>(out var t))
+            {
+                return t;
+            }
+            return go.AddComponent<T>();
         }
     }
 }

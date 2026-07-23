@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Alchemy.Inspector;
 namespace LOGIYGames.CharacterCore
 {
     [Serializable]
@@ -7,8 +8,8 @@ namespace LOGIYGames.CharacterCore
     {
         [SerializeField] Character Character;
         StateMachine StateMachine;
-        private string _currentStateName;
-        private string _lastTransition;
+        [ReadOnly] public string _currentStateName;
+        [ReadOnly] public string _lastTransition;
         private void Start()
         {
             StateMachine = Character.MovementStateMachine;

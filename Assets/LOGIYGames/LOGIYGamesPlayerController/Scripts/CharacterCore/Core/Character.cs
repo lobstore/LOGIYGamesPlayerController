@@ -12,7 +12,7 @@ namespace LOGIYGames.CharacterCore
         public IRotationStrategy RotationStrategy { get; set; }
         public IRotationStrategy DefaultRotationStrategy { get; set; }
         public IMovementStrategy DefaultMovementStrategy { get; set; }
-
+        
         public IEventDispatcher EventBus { get; private set; } = new EventDispatcher();
 
         [Header("References")]
@@ -21,19 +21,19 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
         public MovementRuntime RuntimeMovement { get; private set; }
-        public Health Health { get; private set; }
+        
         public CharacterStats Stats { get; private set; }
 
         #region Modules
         public TargetingController TargetingController { get; private set; }
-        public DamageController DamageController { get; private set; }
+        public HealthController HealthController { get; private set; }
         public StaminaController StaminaController { get; private set; }
         public JumpController JumpController { get; private set; }
         public MantlingController MantlingController { get; private set; }
-        public StateMachine MovementStateMachine { get; private set; }
         #endregion
 
         [Header("State Machine Configuration")]
+        public StateMachine MovementStateMachine { get; private set; }
         public MovementBuilder movementPreset;
         private Dictionary<Type, CharacterMovementState> m_movementStates = new();
         public bool IsGrounded { get => Sensors.IsGrounded; }
@@ -55,9 +55,8 @@ namespace LOGIYGames.CharacterCore
             Stats.SetBase(StatType.DefenseBase, 1);
             Stats.SetBase(StatType.CritRate, 15);
             Stats.SetBase(StatType.CritDamage, 50);
-            Health = new Health(Stats);
 
-            DamageController = new DamageController(Health,Stats);
+            HealthController = new HealthController(Stats);
             StaminaController = new StaminaController(Stats, 1);
             MantlingController = GetComponent<MantlingController>();
             InitializeStateMachine();

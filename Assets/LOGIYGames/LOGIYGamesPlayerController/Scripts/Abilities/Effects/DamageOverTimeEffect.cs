@@ -10,7 +10,7 @@ namespace LOGIYGames
 
         private readonly float tickInterval;
 
-        private readonly float damagePerTick;
+        private readonly DamageContext damagePerTick;
 
         private IntervalTimer timer;
 
@@ -19,7 +19,7 @@ namespace LOGIYGames
         public DamageOverTimeEffect(
             float duration,
             float tickInterval,
-            float damagePerTick)
+            DamageContext damagePerTick)
         {
             this.duration = duration;
             this.tickInterval = tickInterval;
@@ -51,14 +51,14 @@ namespace LOGIYGames
                 return;
             }
 
-            Health health =
+            HealthController health =
                 context.Target
-                    .GetComponent<Health>();
+                    .GetComponent<HealthController>();
 
             if (health == null)
                 return;
 
-            health.ApplyDamage(
+            health.TakeDamage(
                 damagePerTick);
 
             Debug.Log(

@@ -12,7 +12,7 @@ namespace LOGIYGames
 
         public float tickInterval;
 
-        public float damagePerTick;
+        public DamageContext damagePerTick;
 
         public override IEffect CreateEffect()
         {

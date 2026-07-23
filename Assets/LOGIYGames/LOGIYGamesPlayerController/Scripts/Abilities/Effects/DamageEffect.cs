@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class DamageEffect : IEffect
     {
-        private readonly float damage;
+        private readonly DamageContext damage;
 
-        public DamageEffect(float damage)
+        public DamageEffect(DamageContext damage)
         {
             this.damage = damage;
         }
@@ -17,14 +17,12 @@ namespace LOGIYGames
             if (context.Target == null)
                 return;
 
-            Health health =
-                context.Target
-                    .GetComponent<Health>();
+            HealthController health = context.Target.GetComponent<HealthController>();
 
             if (health == null)
                 return;
 
-            health.ApplyDamage(damage);
+            health.TakeDamage(damage);
 
             Debug.Log(
                 $"{context.Source.name} dealt " +
@@ -34,6 +32,7 @@ namespace LOGIYGames
 
         public void Cancel()
         {
+     
         }
     }
 }

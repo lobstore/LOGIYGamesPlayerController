@@ -5,6 +5,6 @@ namespace LOGIYGames
     {
         void Apply(AbilityContext context);
 
-        void Cancel();
+        void Cancel() { }
     }
 }

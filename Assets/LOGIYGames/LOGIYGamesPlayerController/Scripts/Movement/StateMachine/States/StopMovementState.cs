@@ -17,11 +17,6 @@ public class StopMovementState : TimedMovementState
         });
         base.Enter();
     }
-    public override void Exit()
-    {
-        base.Exit();
-        _character.MovementStrategy = _character.DefaultMovementStrategy;
-    }
     public override bool CanEnter()
     {
         return base.CanEnter() && _character.Input.MovementInput.magnitude == 0 && _character.RotationStrategy is LookRelativeRotation or InputRelativeRotation;

@@ -51,6 +51,7 @@ namespace LOGIYGames.Movement
         public virtual void Exit()
         {
             IsActiveState = false;
+            _character.ResetStrategies();
             if (Data.ResetVelocityOnExit)
             {
                 _character.ResetVelocity();
@@ -59,7 +60,6 @@ namespace LOGIYGames.Movement
             {
                 _character.ResetSpeed();
             }
-            _character.ResetStrategies();
             if (actionFrameTimer.IsRunning)
             {
                 actionFrameTimer.Stop();

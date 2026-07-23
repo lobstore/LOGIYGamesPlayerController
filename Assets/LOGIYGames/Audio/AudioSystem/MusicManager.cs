@@ -1,3 +1,4 @@
+using LOGIYGames.Shared.Extensions;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -55,7 +56,7 @@ namespace LOGIYGames.Audio
 
             previous = current;
 
-            current = gameObject.GetOrAdd<AudioSource>();
+            current = gameObject.GetOrAddComponent<AudioSource>();
             current.clip = clip;
             current.outputAudioMixerGroup = musicMixerGroup; // Set mixer group
             current.loop = false; // For playlist functionality, we want tracks to play once

@@ -40,7 +40,7 @@ namespace LOGIYGames
 
                 profilePresenter?.Dispose();
                 Name.Value = newChar.name;
-                profilePresenter = new PlayerProfilePresenter(newChar.Health, newChar.StaminaController.Stamina, Name, profileView);
+                profilePresenter = new PlayerProfilePresenter(newChar.HealthController.Health, newChar.StaminaController.Stamina, Name, profileView);
 
              //   UpdateAbilityViews(newChar);
             });
