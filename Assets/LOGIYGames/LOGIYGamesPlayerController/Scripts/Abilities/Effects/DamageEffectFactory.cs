@@ -1,3 +1,4 @@
+using LOGIYGames.Shared.Data;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -5,7 +6,7 @@ namespace LOGIYGames
     [CreateAssetMenu(fileName = "Damage Effect", menuName = "Ability/Effects/Damage")]
     public class DamageEffectFactory : EffectFactory
     {
-        public DamageContext damage;
+        public DamageData damage;
 
         public override IEffect CreateEffect()
         {

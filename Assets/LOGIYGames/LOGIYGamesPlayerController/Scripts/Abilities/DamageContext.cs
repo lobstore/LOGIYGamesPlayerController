@@ -1,15 +1,17 @@
 using LOGIYGames.CharacterCore;
+using LOGIYGames.Shared.Data;
+using System;
+using UnityEngine;
 
 namespace LOGIYGames
 {
+    [Serializable]
     public sealed class DamageContext
     {
-        public Character Source;
-        public Character Target;
+        public GameObject Source;
+        public GameObject Target;
 
-        public float Damage;
-
-        public DamageType DamageType;
+        public DamageData Damage;
 
         public bool IsCritical;
 

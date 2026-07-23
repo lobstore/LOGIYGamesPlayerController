@@ -56,11 +56,11 @@ namespace LOGIYGames
             cinemachineCameraControllers.Add(instance_ThirdPersonCameraController);
             cinemachineCameraControllers.Add(instance_TopDownCameraController);
             cinemachineCameraControllers.Add(instance_LockOnCameraController);
-            var obj = new GameObject("VirtualCameras_Runtime");
-            obj.GetOrAddComponent<HierarchyHeader>();
+            var holder = new GameObject("VirtualCameras_Runtime");
+            holder.GetOrAddComponent<HierarchyHeader>();
             foreach (var item in cinemachineCameraControllers)
             {
-                item.gameObject.transform.SetParent(obj.transform);
+                item.gameObject.transform.SetParent(holder.transform);
             }
             currentCameraPerspectiveType = defaultCameraPerspectiveType;
         }

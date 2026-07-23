@@ -36,7 +36,7 @@ namespace LOGIYGames.CharacterCore
         {
             if (!damage.Cancelled)
             {
-                float resaultDamage = Math.Clamp(damage.Damage - VITStat.Value, 0, float.MaxValue);
+                float resaultDamage = Math.Clamp(damage.Damage.Amount - VITStat.Value, 0, float.MaxValue);
                 ApplyDamage(resaultDamage);
             }
         }
