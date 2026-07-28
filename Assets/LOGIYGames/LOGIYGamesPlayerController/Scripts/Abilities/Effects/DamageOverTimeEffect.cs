@@ -1,83 +1,43 @@
-using LOGIYGames.CharacterCore;
+using Alchemy.Inspector;
 using LOGIYGames.Timers;
+using System;
 using UnityEngine;
 
-namespace LOGIYGames
+[Serializable]
+public class DamageOverTimeEffect : DamageEffect
 {
-    public class DamageOverTimeEffect : IEffect
+    [ReadOnly][field: SerializeField] public IntervalTimer Timer { get; private set; }
+    public override bool IsFinished => Timer.IsFinished;
+    public DamageOverTimeEffect(DamageEffectData effectData, float duration, float tickInterval) : base(effectData)
     {
-        private readonly float duration;
+        Timer = new IntervalTimer(duration, tickInterval, false);
+        Timer.OnInterval += OnInterval;
+    }
 
-        private readonly float tickInterval;
+    public override void OnApply()
+    {
+        Timer.Start();
+    }
 
-        private readonly DamageContext damagePerTick;
+    public override void OnRemove()
+    {
+        Timer.Stop();
+    }
 
-        private IntervalTimer timer;
+    public override void OnUpdate(float delta)
+    {
+        DisplayValue.Value = Mathf.RoundToInt(Timer.CurrentTime.CurrentValue).ToString();
+        Timer.Tick();
+    }
 
-        private AbilityContext context;
-
-        public DamageOverTimeEffect(
-            float duration,
-            float tickInterval,
-            DamageContext damagePerTick)
+    private void OnInterval()
+    {
+        if (Data.VFX != null)
         {
-            this.duration = duration;
-            this.tickInterval = tickInterval;
-            this.damagePerTick = damagePerTick;
+            var obj = UnityEngine.Object.Instantiate(Data.VFX, Owner.transform.position + Vector3.up * 2f, Quaternion.identity);
+            UnityEngine.Object.Destroy(obj, 1);
         }
-
-        public void Apply(
-            AbilityContext context)
-        {
-            this.context = context;
-
-            timer =
-                new IntervalTimer(
-                    duration,
-                    tickInterval);
-
-            timer.OnInterval = OnTick;
-
-            timer.OnTimerStop = Cleanup;
-
-            timer.Start();
-        }
-
-        private void OnTick()
-        {
-            if (context.Target == null)
-            {
-                Cancel();
-                return;
-            }
-
-            HealthController health =
-                context.Target
-                    .GetComponent<HealthController>();
-
-            if (health == null)
-                return;
-
-            health.TakeDamage(
-                damagePerTick);
-
-            Debug.Log(
-                $"DOT dealt " +
-                $"{damagePerTick} to " +
-                $"{context.Target.name}");
-        }
-
-        public void Cancel()
-        {
-            timer?.Stop();
-
-            Cleanup();
-        }
-
-        private void Cleanup()
-        {
-            timer = null;
-        }
+        Owner.TakeDamage(DamageData.Damage);
     }
 
 }

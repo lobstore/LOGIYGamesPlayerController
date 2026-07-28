@@ -5,9 +5,9 @@ namespace LOGIYGames.Timers
     [Serializable]
     public class CountdownTimer : Timer
     {
-        public CountdownTimer(float value = 0) : base(value) { }
+        public CountdownTimer(float value = 0, bool isGlobalTimer = true) : base(value, isGlobalTimer) { }
 
-        public override float Progress => 1- base.Progress;
+        public override float Progress => 1 - base.Progress;
         public override float ElapsedTime => initialTime - CurrentTime.CurrentValue;
         public override void Tick()
         {

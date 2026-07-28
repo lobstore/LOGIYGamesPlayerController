@@ -6,7 +6,11 @@ namespace LOGIYGames.Timers
         static readonly List<Timer> timers = new();
 
         public static void RegisterTimer(Timer timer) => timers.Add(timer);
-        public static void DeregisterTimer(Timer timer) => timers.Remove(timer);
+        public static void DeregisterTimer(Timer timer)
+        {
+            if (timers.Contains(timer))
+            timers.Remove(timer);
+        }
 
         void Update()
         {

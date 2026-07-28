@@ -10,6 +10,7 @@ namespace LOGIYGames
 
         [SerializeField] private Slider healthFill;
         [SerializeField] private Slider staminaFill;
+        [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private TextMeshProUGUI characterName;
         DisposableBag subscriprions;
 
@@ -56,6 +57,7 @@ namespace LOGIYGames
         {
             healthFill.maxValue = maxValue;
             healthFill.value = value;
+            healthText.text = value.ToString()+" \\ " + maxValue.ToString();
         }
         private void UpdateStaminaBar(float value, float maxValue)
         {

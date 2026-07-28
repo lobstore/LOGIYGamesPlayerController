@@ -1,45 +1,28 @@
-using LOGIYGames.CharacterCore;
-using LOGIYGames.Shared.Data;
+using Alchemy.Inspector;
+using LOGIYGames;
+using System;
 using UnityEngine;
 
-namespace LOGIYGames
+[Serializable]
+public class DamageEffect : RuntimeEffect
 {
-    public class DamageEffect : IEffect
+    [ReadOnly][field:SerializeField] public DamageEffectData DamageData { get; protected set; }
+    public DamageEffect(DamageEffectData effectData) : base(effectData)
     {
-        private readonly DamageData damage;
-
-        public DamageEffect(DamageData damage)
-        {
-            this.damage = damage;
-
-        }
-
-        public void Apply(AbilityContext context)
-        {
-            if (context.Target == null)
-                return;
-
-            HealthController health = context.Target.GetComponent<HealthController>();
-
-            if (health == null)
-                return;
-
-            health.TakeDamage(new DamageContext()
-            {
-                Damage = damage,
-                Source = context.Source,
-                Target = context.Target
-            });
-
-            Debug.Log(
-                $"{context.Source.name} dealt " +
-                $"{damage} to " +
-                $"{context.Target.name}");
-        }
-
-        public void Cancel()
-        {
-
-        }
+        DamageData = effectData;
     }
+    public override void OnApply()
+    {
+        Owner.TakeDamage(DamageData.Damage);
+        IsFinished = true;
+    }
+
+    public override void OnRemove()
+    {
+    }
+
+    public override void OnUpdate(float delta)
+    {
+    }
+
 }

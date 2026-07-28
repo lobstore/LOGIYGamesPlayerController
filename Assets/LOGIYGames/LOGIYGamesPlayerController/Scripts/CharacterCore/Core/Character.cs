@@ -1,18 +1,19 @@
 using LOGIYGames.Movement;
+using LOGIYGames.Shared.Data;
 using LOGIYGames.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    public partial class Character : MonoModuleBase, IControllable
+    public partial class Character : MonoModuleBase, IControllable, IDamageable
     {
         public CharacterInput Input { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
         public IRotationStrategy DefaultRotationStrategy { get; set; }
         public IMovementStrategy DefaultMovementStrategy { get; set; }
-        
+
         public IEventDispatcher EventBus { get; private set; } = new EventDispatcher();
 
         [Header("References")]
@@ -21,8 +22,10 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
         public MovementRuntime RuntimeMovement { get; private set; }
-        
+
         public CharacterStats Stats { get; private set; }
+
+        [field:SerializeField] public EffectsController EffectSystem {  get; private set; }
 
         #region Modules
         public TargetingController TargetingController { get; private set; }
@@ -49,7 +52,7 @@ namespace LOGIYGames.CharacterCore
             Stats.SetBase(StatType.BaseHealth, 100);
             Stats.SetBase(StatType.BaseStamina, 50);
             Stats.SetBase(StatType.BaseMana, 10);
-            Stats.SetBase(StatType.Vitality, 100);
+            Stats.SetBase(StatType.Vitality, 10);
             Stats.SetBase(StatType.Intelegence, 1);
             Stats.SetBase(StatType.AttackBase, 1);
             Stats.SetBase(StatType.DefenseBase, 1);
@@ -62,7 +65,7 @@ namespace LOGIYGames.CharacterCore
             InitializeStateMachine();
             TargetingController = new();
             JumpController = new(this);
-
+            EffectSystem = new(this);
         }
         private void Start()
         {
@@ -90,6 +93,7 @@ namespace LOGIYGames.CharacterCore
             CalculateDeltaYaw();
             MovementStateMachine.Update();
             StaminaController.Tick();
+            EffectSystem.Update();
         }
         private void SmoothHeightChanging()
         {
@@ -273,6 +277,11 @@ namespace LOGIYGames.CharacterCore
             }
 
             return direction;
+        }
+
+        public void TakeDamage(DamageData damage)
+        {
+            HealthController.TakeDamage(damage);
         }
 
     }

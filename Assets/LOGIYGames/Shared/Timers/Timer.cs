@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿using Alchemy.Inspector;
 using R3;
 using System;
 using UnityEngine;
@@ -7,19 +7,21 @@ namespace LOGIYGames.Timers
     [Serializable]
     public abstract class Timer : IDisposable
     {
-        protected bool IsStopped;
-        protected float initialTime;
-        public ReactiveProperty<float> CurrentTime { get; set; } = new();
+        [field:SerializeField]  public bool IsGlobalTimer { get; private set; }
+        [SerializeField] protected bool IsStopped;
+        [SerializeField] protected float initialTime;
+        [field:SerializeField] public SerializableReactiveProperty<float> CurrentTime { get; set; } = new();
         public virtual float ElapsedTime => CurrentTime.CurrentValue;
-        public bool IsRunning { get; protected set; }
+        [field: SerializeField] public bool IsRunning { get; protected set; }
 
         public virtual float Progress => Mathf.Clamp(CurrentTime.CurrentValue / initialTime, 0, 1);
 
         public Action OnTimerStart = delegate { };
         public Action OnTimerStop = delegate { };
 
-        protected Timer(float value)
+        protected Timer(float value, bool isGlobalTimer = true)
         {
+            IsGlobalTimer = isGlobalTimer;
             initialTime = value;
             IsRunning = false;
         }
@@ -31,7 +33,10 @@ namespace LOGIYGames.Timers
             {
                 IsRunning = true;
                 IsStopped = false;
-                TimersManager.RegisterTimer(this);
+                if (IsGlobalTimer)
+                {
+                    TimersManager.RegisterTimer(this);
+                }
                 OnTimerStart.Invoke();
             }
         }
@@ -42,7 +47,10 @@ namespace LOGIYGames.Timers
             {
                 IsRunning = false;
                 IsStopped = true;
-                TimersManager.DeregisterTimer(this);
+                if (IsGlobalTimer)
+                {
+                    TimersManager.DeregisterTimer(this);
+                }
                 OnTimerStop.Invoke();
             }
         }

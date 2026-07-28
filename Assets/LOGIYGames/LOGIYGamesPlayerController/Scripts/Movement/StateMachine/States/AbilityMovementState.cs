@@ -7,7 +7,7 @@ namespace LOGIYGames
 {
     public class AbilityMovementState : CharacterMovementState
     {
-        private readonly AbilityController abilityController;
+        //private readonly AbilityController abilityController;
         public AbilityMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
         {
            // abilityController = ctx.AbilityController;
@@ -18,7 +18,7 @@ namespace LOGIYGames
             base.Enter();
             _character.MovementStrategy = new NoneMovement();
             _character.RotationStrategy = new NoneRotation(_character);
-            abilityController.BeginAbility();
+           // abilityController.BeginAbility();
         }
         public override void Exit()
         {
@@ -26,7 +26,8 @@ namespace LOGIYGames
         }
         public bool CanExit()
         {
-            return abilityController.CurrentAbility == null;
+            return false;
+                //abilityController.CurrentAbility == null;
         }
     }
 }

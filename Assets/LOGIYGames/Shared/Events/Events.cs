@@ -52,11 +52,6 @@ namespace LOGIYGames.Shared.Character.Events
         public DamageData DamageData { get; set; }
     }
     [Serializable]
-    public class AbilityEvent : EventBase
-    {
-        public AbilityFactory AbilityData { get; set; }
-    }
-    [Serializable]
     public class AnimationEvent : EventBase
     {
         public AnimationData AnimationData;

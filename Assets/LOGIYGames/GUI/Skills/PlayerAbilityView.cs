@@ -12,7 +12,7 @@ namespace LOGIYGames
         [SerializeField] TextMeshProUGUI cooldownTimeText;
         DisposableBag subscriprions;
 
-        public void Bind(PlayerSkillPresenter presenter)
+        public void Bind(PlayerAbilityPresenter presenter)
         {
             subscriprions.Add(presenter.CooldownProgress.Subscribe(
                 (currentTime) =>
