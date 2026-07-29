@@ -19,5 +19,6 @@ public class ProjectileTargeting : AbilityTargetingStrategy {
             context.Source = targetingManager.Character.gameObject;
             projectile.GetComponent<ProjectileController>().Initialize(context, projectileSpeed);
         }
+        ability.CooldownTimer.Start();
     }
 }

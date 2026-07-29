@@ -2,7 +2,6 @@ using Alchemy.Inspector;
 using LOGIYGames.CharacterCore;
 using R3;
 using System;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -11,12 +10,13 @@ namespace LOGIYGames
     public abstract class RuntimeEffect
     {
         protected Character Owner;
-        [ReadOnly][field:SerializeField] public EffectData Data {  get; protected set; }
+        [ReadOnly][field: SerializeField] public EffectData Data { get; protected set; }
         protected RuntimeEffect(EffectData effectData)
         {
             Data = effectData;
         }
-
+        protected bool isStackable;
+        public bool IsStackable => isStackable;
 
         [ReadOnly][field: SerializeField] public virtual bool IsFinished { get; protected set; }
 
@@ -41,5 +41,19 @@ namespace LOGIYGames
         public virtual void OnRemove()
         {
         }
+    }
+    public abstract class InstantEffect : RuntimeEffect
+    {
+        public InstantEffect(EffectData effectData) : base(effectData)
+        {
+        }
+
+    }
+    public abstract class ContinuousEffect : RuntimeEffect
+    {
+        public ContinuousEffect(EffectData effectData) : base(effectData)
+        {
+        }
+
     }
 }

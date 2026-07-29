@@ -1,5 +1,4 @@
-﻿using LOGIYGames.Shared.Data;
-using LOGIYGames.Shared.Enums;
+﻿using LOGIYGames.Shared.Enums;
 using System;
 
 namespace LOGIYGames.Shared.Character.Events

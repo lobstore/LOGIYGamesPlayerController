@@ -1,19 +1,18 @@
-using Alchemy.Inspector;
 using LOGIYGames;
 using System;
 using UnityEngine;
 
 [Serializable]
-public class DamageEffect : RuntimeEffect
+public class DamageEffect : InstantEffect
 {
-    [ReadOnly][field:SerializeField] public DamageEffectData DamageData { get; protected set; }
+    [SerializeField] protected DamageData Damage;
     public DamageEffect(DamageEffectData effectData) : base(effectData)
     {
-        DamageData = effectData;
+        Damage = effectData.BaseDamage;
     }
     public override void OnApply()
     {
-        Owner.TakeDamage(DamageData.Damage);
+        Owner.TakeDamage(Damage);
         IsFinished = true;
     }
 

@@ -483,6 +483,8 @@ GameObject:
   - component: {fileID: 8332372990304411095}
   - component: {fileID: 1260613408038869289}
   - component: {fileID: 5416445008551645531}
+  - component: {fileID: 933800356505827515}
+  - component: {fileID: 4771965165850887711}
   m_Layer: 3
   m_Name: Character
   m_TagString: Character
@@ -538,8 +540,13 @@ MonoBehaviour:
     CameraFollow: {fileID: 4734613552037350644}
   <Motor>k__BackingField: {fileID: 1176126297597612246}
   <Sensors>k__BackingField: {fileID: 2268543539570239712}
+  <EffectSystem>k__BackingField:
+    _effects: []
   movementPreset: {fileID: 11400000, guid: a950937825b83ab4086272ca9dbfed13, type: 2}
   <Height>k__BackingField: 1.67
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &2268543539570239712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,6 +898,36 @@ MonoBehaviour:
   MantlingFactories:
   - {fileID: 11400000, guid: 76f4c1f4b2037584c94911f0045ab0ca, type: 2}
   - {fileID: 11400000, guid: fbc26c4e33c75d1468550e830d3aa646, type: 2}
+--- !u!114 &933800356505827515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09d06b5957af1b04eb8407c1f43b0ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetingManager
+  Character: {fileID: 8334357512040222824}
+--- !u!114 &4771965165850887711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf0a503a37fcec24293b9bf7bfd93461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAbilityCaster
+  abilities:
+  - {fileID: 11400000, guid: d16332d1d90c7fe4ebc5193f03723e4c, type: 2}
+  - {fileID: 11400000, guid: fda8720ea69a573418081950b1c1351d, type: 2}
+  - {fileID: 11400000, guid: 5de00d4c52167f8468ca2533b63a6e29, type: 2}
+  targetingManager: {fileID: 933800356505827515}
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0

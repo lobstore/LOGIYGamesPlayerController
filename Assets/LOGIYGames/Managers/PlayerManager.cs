@@ -52,7 +52,7 @@ namespace LOGIYGames
                 UpdateProfileView(newChar);
                 UpdateAbilitiesViews(newChar);
                 subscription?.Dispose();
-                subscription = newChar.EffectSystem.OnCollectionChanged.Subscribe((effects) =>
+                subscription = newChar.EffectSystem.OnContinuousEffectsChanged.Subscribe((effects) =>
                 {
                     UpdateEffectsViews(effects);
                 });

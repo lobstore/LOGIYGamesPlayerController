@@ -1,27 +1,44 @@
 using Alchemy.Inspector;
+using LOGIYGames;
+using LOGIYGames.Audio;
 using LOGIYGames.Timers;
 using System;
 using UnityEngine;
 
 [Serializable]
-public class DamageOverTimeEffect : DamageEffect
+public class DamageOverTimeEffect : ContinuousEffect
 {
+    [SerializeField] protected DamageData Damage;
     [ReadOnly][field: SerializeField] public IntervalTimer Timer { get; private set; }
     public override bool IsFinished => Timer.IsFinished;
-    public DamageOverTimeEffect(DamageEffectData effectData, float duration, float tickInterval) : base(effectData)
+    [ReadOnly][SerializeField] float duration;
+    [ReadOnly][SerializeField] float interval;
+    private GameObject effectGO;
+    public DamageOverTimeEffect(DamageOverTimeEffectData effectData) : base(effectData)
     {
-        Timer = new IntervalTimer(duration, tickInterval, false);
+        isStackable = true;
+        Damage = effectData.BaseDamage;
+        duration = effectData.Duration;
+        interval = effectData.Interval;
+        Timer = new IntervalTimer(effectData.Duration, effectData.Interval, false);
         Timer.OnInterval += OnInterval;
     }
 
     public override void OnApply()
     {
         Timer.Start();
+        if (Data.VFX != null)
+        {
+            effectGO = UnityEngine.Object.Instantiate(Data.VFX, Owner.transform.position, Quaternion.identity, Owner.transform);
+
+        }
     }
 
     public override void OnRemove()
     {
         Timer.Stop();
+        if (effectGO != null)
+        UnityEngine.Object.Destroy(effectGO);
     }
 
     public override void OnUpdate(float delta)
@@ -32,12 +49,9 @@ public class DamageOverTimeEffect : DamageEffect
 
     private void OnInterval()
     {
-        if (Data.VFX != null)
-        {
-            var obj = UnityEngine.Object.Instantiate(Data.VFX, Owner.transform.position + Vector3.up * 2f, Quaternion.identity);
-            UnityEngine.Object.Destroy(obj, 1);
-        }
-        Owner.TakeDamage(DamageData.Damage);
+
+        Owner.TakeDamage(Damage);
+        SoundManager.Instance.CreateSoundBuilder().WithPosition(Owner.transform.position).WithRandomPitch(-0.1f, 0.1f).Play(new SoundData() { clip = Data.SFX } );
     }
 
 }

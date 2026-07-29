@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Alchemy.Inspector;
 using R3;
+using System.Linq;
 namespace LOGIYGames
 {
     [Serializable]
@@ -12,7 +13,7 @@ namespace LOGIYGames
         private readonly Character _owner;
         [ReadOnly][SerializeReference] private List<RuntimeEffect> _effects = new();
         public IReadOnlyList<RuntimeEffect> Effects => _effects;
-        public Subject<IReadOnlyList<RuntimeEffect>> OnCollectionChanged = new();
+        public Subject<IReadOnlyList<RuntimeEffect>> OnContinuousEffectsChanged = new();
         public EffectsController(Character owner)
         {
             _owner = owner;
@@ -41,10 +42,17 @@ namespace LOGIYGames
 
         public void AddEffect(RuntimeEffect effect)
         {
+            var existingEffect = _effects.FirstOrDefault(x => x.GetType() == effect.GetType());
+
+            if (existingEffect != null && !effect.IsStackable)
+            {
+                RemoveEffect(existingEffect);
+            }
             effect.Initialize(_owner);
 
             _effects.Add(effect);
-            OnCollectionChanged.OnNext(_effects);
+            if (effect is ContinuousEffect)
+            OnContinuousEffectsChanged.OnNext(_effects);
             effect.OnApply();
 
 
@@ -62,7 +70,8 @@ namespace LOGIYGames
             {
                 effect.OnRemove();
             }
-            OnCollectionChanged.OnNext(_effects);
+            if (effect is ContinuousEffect)
+                OnContinuousEffectsChanged.OnNext(_effects);
         }
     }
 }

@@ -1,5 +1,4 @@
 using LOGIYGames.Movement;
-using LOGIYGames.Shared.Data;
 using LOGIYGames.Shared.Enums;
 using System;
 using System.Collections.Generic;
@@ -25,7 +24,7 @@ namespace LOGIYGames.CharacterCore
 
         public CharacterStats Stats { get; private set; }
 
-        [field:SerializeField] public EffectsController EffectSystem {  get; private set; }
+        [field: SerializeField] public EffectsController EffectSystem { get; private set; }
 
         #region Modules
         public TargetingController TargetingController { get; private set; }

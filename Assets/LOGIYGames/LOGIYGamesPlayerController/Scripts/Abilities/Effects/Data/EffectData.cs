@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    [Serializable]
-    public class EffectData
+    [CreateAssetMenu(fileName = "New EffectData", menuName = "Abilities/Effects/EffectData")]
+    public class EffectData : ScriptableObject
     {
         public GameObject VFX;
         public AudioClip SFX;

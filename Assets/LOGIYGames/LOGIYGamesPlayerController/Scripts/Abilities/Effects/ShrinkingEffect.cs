@@ -5,13 +5,13 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class ShrinkingEffect : RuntimeEffect
+public class ShrinkingEffect : ContinuousEffect
 {
     [ReadOnly][field: SerializeField] public CountdownTimer Timer { get; private set; }
     public override bool IsFinished => Timer.IsFinished;
-    public ShrinkingEffect(EffectData effectData, float duration) : base(effectData)
+    public ShrinkingEffect(ShrinkingEffectData effectData) : base(effectData)
     {
-        Timer = new CountdownTimer(duration, false);
+        Timer = new CountdownTimer(effectData.Duration, false);
     }
 
     public override void OnApply()

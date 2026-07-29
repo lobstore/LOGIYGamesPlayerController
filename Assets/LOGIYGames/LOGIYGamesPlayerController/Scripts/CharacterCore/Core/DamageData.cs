@@ -1,10 +1,11 @@
 using System;
-namespace LOGIYGames.Shared.Data
+namespace LOGIYGames
 {
     [Serializable]
     public struct DamageData
     {
-        public int Amount;
+        public float Amount;
+        public ModifierType ModifierType;
         public DamageType Type;
     }
 }

@@ -1,8 +1,8 @@
-using LOGIYGames.Shared.Data;
 using R3;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace LOGIYGames.CharacterCore
 {
@@ -33,11 +33,22 @@ namespace LOGIYGames.CharacterCore
             Health.Current.Value = Health.Max.CurrentValue;
         }
 
-        public void TakeDamage(in DamageData damage)
+        public void TakeDamage(DamageData damage)
         {
-            float resaultDamage = Math.Clamp(damage.Amount - VITStat.Value, 0, float.MaxValue);
-            Debug.Log(damage.Amount);
-            ReduceHealth(resaultDamage);
+
+            float resultDamage = 0;
+            switch (damage.ModifierType)
+            {
+                case ModifierType.Add:
+                    resultDamage = Math.Clamp(damage.Amount - VITStat.Value, 0, float.MaxValue);
+                    break;
+                case ModifierType.Multiply:
+                    resultDamage = Health.Max.CurrentValue * damage.Amount;
+                    break;
+                default:
+                    break;
+            }
+            ReduceHealth(resultDamage);
         }
         public void TakeHeal(float amount)
         {
@@ -45,6 +56,7 @@ namespace LOGIYGames.CharacterCore
         }
         private void ReduceHealth(float value)
         {
+            Debug.Log("DamageTook: " + value);
             if (Health.Current.Value <= 0)
                 return;
 

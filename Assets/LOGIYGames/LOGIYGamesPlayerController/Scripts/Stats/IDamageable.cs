@@ -1,4 +1,4 @@
-using LOGIYGames.Shared.Data;
+using LOGIYGames;
 
 public interface IDamageable
 {
