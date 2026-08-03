@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6987533314664215049}
   - component: {fileID: 3511965928248306254}
   - component: {fileID: 4839103491531204712}
-  - component: {fileID: 9043036403964964748}
   - component: {fileID: 1480133464791474050}
   m_Layer: 0
   m_Name: TopDownPersonVirtualCamera
@@ -127,18 +126,6 @@ MonoBehaviour:
   FocusTarget: {fileID: 0}
   FocusOffset: 0
   Profile: {fileID: 11400000, guid: d77980e7054c1c54b9001cd8f2f21ab4, type: 2}
---- !u!114 &9043036403964964748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7261505452651263688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c186f12ede6f8d4480d66fa81fda9aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1480133464791474050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,9 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3a67c76897d5e4abc768d717859af8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input: {fileID: 11400000, guid: 3f8609d3b5d4a404bb9950193fcceb31, type: 2}
   defaultDistance: 6
   minimumDistance: 4
   maximumDistance: 10
   smoothing: 4
   zoomSensitivity: 1
+  currentTargetDistance: 0

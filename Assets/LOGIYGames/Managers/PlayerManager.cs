@@ -87,9 +87,9 @@ namespace LOGIYGames
                 abilitiesViews.Clear();
             }
 
-            if (newChar.GetComponent<AbilityController>().Abilities.Count > 0)
+            if (newChar.GetComponent<AbilitiesController>().Abilities.Count > 0)
             {
-                foreach (var item in newChar.GetComponent<AbilityController>().Abilities)
+                foreach (var item in newChar.GetComponent<AbilitiesController>().Abilities)
                 {
                     var obj = Instantiate(abilityIconPrefab);
                     obj.transform.SetParent(abilitiesContainer, true);
@@ -216,7 +216,7 @@ namespace LOGIYGames
             CurrentCharacter = character;
             UpdateStrategies();
             CurrentCharacter.ResetStrategies();
-            CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraTarget.CameraFollow, CurrentCharacter.CameraTarget.CameraLookAt);
+            CameraManager.Instance.SetTargetTo(CurrentCharacter.TPVCameraTarget);
             OnCharacterChanged?.Invoke(CurrentCharacter);
         }
     }

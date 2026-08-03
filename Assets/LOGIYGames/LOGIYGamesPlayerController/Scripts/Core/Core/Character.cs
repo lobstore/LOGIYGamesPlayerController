@@ -2,6 +2,7 @@ using LOGIYGames.Movement;
 using LOGIYGames.Shared.Enums;
 using System;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
@@ -15,12 +16,11 @@ namespace LOGIYGames.CharacterCore
 
         public IEventDispatcher EventBus { get; private set; } = new EventDispatcher();
 
-        [Header("References")]
-
-        [field: SerializeField] public CameraTarget CameraTarget { get; private set; }
+        [field: SerializeField] public CameraTarget TPVCameraTarget { get; private set; }
+        [field: SerializeField] public CameraTarget FPVCameraTarget { get; private set; }
         [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
-        public MovementRuntime RuntimeMovement { get; private set; }
+        public MovementRuntimeData RuntimeMovement { get; private set; }
 
         public CharacterStats Stats { get; private set; }
 
@@ -32,6 +32,7 @@ namespace LOGIYGames.CharacterCore
         public StaminaController StaminaController { get; private set; }
         public JumpController JumpController { get; private set; }
         public MantlingController MantlingController { get; private set; }
+
         #endregion
 
         [Header("State Machine Configuration")]
@@ -241,6 +242,9 @@ namespace LOGIYGames.CharacterCore
         }
 
         #endregion
+
+
+
         public Direction GetRelativeMovementDirection()
         {
             Vector3 localDir;
@@ -277,11 +281,11 @@ namespace LOGIYGames.CharacterCore
 
             return direction;
         }
-
+        #region IDamageable
         public void TakeDamage(DamageData damage)
         {
             HealthController.TakeDamage(damage);
         }
-
+        #endregion
     }
 }

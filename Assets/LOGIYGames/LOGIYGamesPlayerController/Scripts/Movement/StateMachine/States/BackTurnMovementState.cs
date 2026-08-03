@@ -28,12 +28,6 @@ namespace LOGIYGames
             if (Data.IsAnimationDrivenRotation) return;
             _character.Rotate(turnEnd, _character.RuntimeMovement.TurnSmoothTime);
         }
-        public override void Exit()
-        {
-            base.Exit();
-            if (Data.IsAnimationDrivenRotation) return;
-            _character.Rotate(turnEnd);
-        }
         public override bool CanEnter()
         {
             return base.CanEnter() && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle;

@@ -47,7 +47,7 @@ public class AOETargeting : AbilityTargetingStrategy
         radiusGhost.transform.SetParent(previewInstance.transform, false);
 
         // Удаляем коллайдер
-        UnityEngine.Object.Destroy(radiusGhost.GetComponent<Collider>());
+        UnityEngine.Object.DestroyImmediate(radiusGhost.GetComponent<Collider>());
 
         // Располагаем чуть ниже префаба
         radiusGhost.transform.localPosition = Vector3.zero;

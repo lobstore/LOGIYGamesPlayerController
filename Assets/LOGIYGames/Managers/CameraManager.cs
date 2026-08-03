@@ -1,6 +1,9 @@
 using Alchemy.Hierarchy;
+using Alchemy.Inspector;
+using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Extensions;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,17 +19,17 @@ namespace LOGIYGames
     }
     public class CameraManager : PersistentSingleton<CameraManager>
     {
-        [SerializeField] List<CinemachineCameraController> cinemachineCameraControllers = new();
-        public CinemachineCameraController CurrentCameraController { get; private set; }
-        [SerializeField] CinemachineCameraController FirstPersonCameraController;
-        [SerializeField] CinemachineCameraController ThirdPersonCameraController;
-        [SerializeField] CinemachineCameraController TopDownCameraController;
-        [SerializeField] CinemachineCameraController LockOnCameraController;
+        [ReadOnly] [SerializeField] List<CinemachineCamera> cinemachineCameraControllers = new();
+        public CinemachineCamera CurrentCameraController { get; private set; }
+        [SerializeField] CinemachineCamera FirstPersonCameraController;
+        [SerializeField] CinemachineCamera ThirdPersonCameraController;
+        [SerializeField] CinemachineCamera TopDownCameraController;
+        [SerializeField] CinemachineCamera LockOnCameraController;
 
-        CinemachineCameraController instance_FirstPersonCameraController;
-        CinemachineCameraController instance_ThirdPersonCameraController;
-        CinemachineCameraController instance_TopDownCameraController;
-        CinemachineCameraController instance_LockOnCameraController;
+        CinemachineCamera instance_FirstPersonCameraController;
+        CinemachineCamera instance_ThirdPersonCameraController;
+        CinemachineCamera instance_TopDownCameraController;
+        CinemachineCamera instance_LockOnCameraController;
 
         [SerializeField] InputActionAsset inputActions;
         public PlayerCameraInputReader CameraInput { get; private set; }
@@ -73,7 +76,6 @@ namespace LOGIYGames
         {
 
             CameraInput.Enable();
-            UpdateCameraView();
             //PlayerManager.Instance.OnTargetLocked.AddListener((evt) =>
             //{
             //    if (evt)
@@ -102,9 +104,11 @@ namespace LOGIYGames
             switch (CurrentCameraPerspectiveType)
             {
                 case CameraPerspectiveType.FirstPerson:
+                    SetTargetTo(PlayerManager.Instance.CurrentCharacter.FPVCameraTarget);
                     Set1stView();
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
+                    SetTargetTo(PlayerManager.Instance.CurrentCharacter.TPVCameraTarget);
                     Set3rdFreeLookView();
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
@@ -148,17 +152,15 @@ namespace LOGIYGames
             UpdateCameraView();
 
         }
-        public void SetTargetTo(Transform Follow, Transform LookAt)
+        public void SetTargetTo(CameraTarget cameraTarget)
         {
-
             foreach (var cam in cinemachineCameraControllers)
             {
-                cam.CameraFollowTarget = Follow;
-                cam.CameraLookAtTarget = LookAt;
+                cam.Target = cameraTarget;
             }
         }
 
-        void SetPriorVirtualCamera(CinemachineCameraController cameraController)
+        void SetPriorVirtualCamera(CinemachineCamera cameraController)
         {
             foreach (var controller in cinemachineCameraControllers)
             {
@@ -199,7 +201,7 @@ namespace LOGIYGames
         {
             CurrentCameraController = instance_LockOnCameraController;
             SetPriorVirtualCamera(CurrentCameraController);
-            CurrentCameraController.CameraFollowTarget = PlayerManager.Instance.CurrentCharacter.CameraTarget.CameraFollow;
+            CurrentCameraController.Target.TrackingTarget = PlayerManager.Instance.CurrentCharacter.TPVCameraTarget.TrackingTarget;
             //CurrentCameraController.CameraLookAtTarget = PlayerManager.Instance.TargetGroup.transform;
         }
 

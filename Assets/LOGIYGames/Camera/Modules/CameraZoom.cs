@@ -14,14 +14,14 @@ namespace LOGIYGames
         [SerializeField][Range(0f, 10f)] private float zoomSensitivity = 1f;
         [SerializeField][Range(0f, 10f)] private float currentTargetDistance;
 
-        private CinemachineFreeLookModifier.IModifiableDistance framingTransposer;
+        private CinemachineFreeLookModifier.IModifiableDistance composer;
 
-        private float Distance { get { return framingTransposer.Distance; } set { framingTransposer.Distance = value; } }
+        private float Distance { get { return composer.Distance; } set { composer.Distance = value; } }
 
 
         private void Awake()
         {
-            framingTransposer = GetComponent<CinemachineFreeLookModifier.IModifiableDistance>();
+            composer = GetComponent<CinemachineFreeLookModifier.IModifiableDistance>();
 
             currentTargetDistance = defaultDistance;
             PlayerCameraInput = CameraManager.Instance.CameraInput;

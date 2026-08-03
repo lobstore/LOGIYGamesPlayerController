@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1112122697328132918}
   - component: {fileID: 4720824850533462554}
   - component: {fileID: 1547100494613142329}
-  - component: {fileID: 9043036403964964748}
   - component: {fileID: 4170622409733040555}
   - component: {fileID: 8149182025060742599}
   m_Layer: 0
@@ -62,7 +61,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60
+    FieldOfView: 80
     OrthographicSize: 5
     NearClipPlane: 0.17
     FarClipPlane: 1000
@@ -163,18 +162,6 @@ MonoBehaviour:
   FocusTarget: {fileID: 0}
   FocusOffset: 0
   Profile: {fileID: 11400000, guid: d77980e7054c1c54b9001cd8f2f21ab4, type: 2}
---- !u!114 &9043036403964964748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7261505452651263688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c186f12ede6f8d4480d66fa81fda9aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4170622409733040555
 MonoBehaviour:
   m_ObjectHideFlags: 0

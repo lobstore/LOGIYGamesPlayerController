@@ -3,7 +3,7 @@ using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
     [Serializable]
-    public class MovementRuntime
+    public class MovementRuntimeData
     {
         public float BaseSpeed = 3;
         public AccelerationData AccelerationData { get; set; }

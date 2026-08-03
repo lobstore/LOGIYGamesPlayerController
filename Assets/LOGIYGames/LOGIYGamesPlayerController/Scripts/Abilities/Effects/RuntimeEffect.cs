@@ -42,6 +42,7 @@ namespace LOGIYGames
         {
         }
     }
+    [Serializable]
     public abstract class InstantEffect : RuntimeEffect
     {
         public InstantEffect(EffectData effectData) : base(effectData)
@@ -49,6 +50,7 @@ namespace LOGIYGames
         }
 
     }
+    [Serializable]
     public abstract class ContinuousEffect : RuntimeEffect
     {
         public ContinuousEffect(EffectData effectData) : base(effectData)

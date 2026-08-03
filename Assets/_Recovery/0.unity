@@ -8400,37 +8400,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!1 &1681018497
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1681018498}
-  m_Layer: 3
-  m_Name: FPVCameraTarget
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1681018498
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681018497}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.054336958, y: -0.00000022020464, z: -0.000000011981884, w: 0.99852264}
-  m_LocalPosition: {x: 0, y: 0.07373181, z: 0.00034812474}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 354810366595266590}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1726672904
 GameObject:
   m_ObjectHideFlags: 0
@@ -11112,57 +11081,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5912570608368876119, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Name
-      value: TPVCameraTarget
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <FPVCameraTarget>k__BackingField.CameraFollow
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <FPVCameraTarget>k__BackingField.CameraLookAt
-      value: 
-      objectReference: {fileID: 1681018498}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <TPVCameraTarget>k__BackingField.CameraFollow
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <TPVCameraTarget>k__BackingField.CameraLookAt
-      value: 
-      objectReference: {fileID: 354810366595266592}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <FPVCameraTarget>k__BackingField.TrackingTarget
-      value: 
-      objectReference: {fileID: 1681018498}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <TPVCameraTarget>k__BackingField.TrackingTarget
-      value: 
-      objectReference: {fileID: 354810366595266592}
-    - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: <TPVCameraTarget>k__BackingField.CustomLookAtTarget
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 4765061938889970631, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8612203276129994608, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1681018498}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
---- !u!4 &354810366595266590 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8612203276129994608, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &354810366595266592 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2640723071682425344, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-  m_PrefabInstance: {fileID: 354810366595266589}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1539397806351433313
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11531,19 +11454,19 @@ PrefabInstance:
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: LockOnCameraController
       value: 
-      objectReference: {fileID: 6856858958671481707, guid: c96f4ca9dd9c56e49857621c8bd34942, type: 3}
+      objectReference: {fileID: 4357187487791016319, guid: c96f4ca9dd9c56e49857621c8bd34942, type: 3}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: TopDownCameraController
       value: 
-      objectReference: {fileID: 6987533314664215049, guid: b47d90cd6080a4a4b96f90d3ccba1631, type: 3}
+      objectReference: {fileID: 9043036403964964748, guid: b47d90cd6080a4a4b96f90d3ccba1631, type: 3}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: FirstPersonCameraController
       value: 
-      objectReference: {fileID: 644479021886345685, guid: c2094c0a08318514fb9b9625c14ff206, type: 3}
+      objectReference: {fileID: 9043036403964964748, guid: c2094c0a08318514fb9b9625c14ff206, type: 3}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: ThirdPersonCameraController
       value: 
-      objectReference: {fileID: 6856858958671481707, guid: ee51ef78b8a8ba5429a8eba45c8784ba, type: 3}
+      objectReference: {fileID: 4357187487791016319, guid: ee51ef78b8a8ba5429a8eba45c8784ba, type: 3}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: <CameraInput>k__BackingField
       value: 
