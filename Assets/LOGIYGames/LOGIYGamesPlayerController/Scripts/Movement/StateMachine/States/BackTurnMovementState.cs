@@ -30,7 +30,9 @@ namespace LOGIYGames
         }
         public override bool CanEnter()
         {
-            return base.CanEnter() && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle;
+            return base.CanEnter() 
+                && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle 
+                && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson;
         }
     }
 

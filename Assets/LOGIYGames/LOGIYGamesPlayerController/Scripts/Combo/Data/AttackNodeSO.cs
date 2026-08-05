@@ -17,20 +17,12 @@ namespace LOGIYGames.CharacterCore
         public AnimationData Animation;
 
         // =====================================================
-        // MOVEMENT
-        // =====================================================
-
-        [Header("Movement")]
-
-        public float ForwardImpulse;
-
-        // =====================================================
         // DAMAGE
         // =====================================================
 
         [Header("Damage")]
 
-        DamageData BaseDamageData;
+        public DamageData BaseDamageData;
 
         // =====================================================
         // SEQUENCE

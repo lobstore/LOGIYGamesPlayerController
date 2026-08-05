@@ -240,7 +240,7 @@ namespace LOGIYGames
             m_legsForwardObstacleName = m_legsFrontHit.transform?.name;
         }
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
 
             if (!m_showDebugInfo) return;

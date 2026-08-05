@@ -4,7 +4,7 @@ namespace LOGIYGames.CharacterCore
 {
     [Serializable]
     public class AttackInputCommand
-    : IInputCommand
+    : IComboInputCommand
     {
         public AttackInputType InputType
         {

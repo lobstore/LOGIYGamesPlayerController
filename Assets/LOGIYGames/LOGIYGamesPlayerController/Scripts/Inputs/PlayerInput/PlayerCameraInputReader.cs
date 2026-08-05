@@ -23,14 +23,9 @@ namespace LOGIYGames
         public PlayerCameraInputReader(InputActionAsset inputActions)
         {
             InputActions = inputActions;
-            CameraActionMap = InputActions.FindActionMap("Camera");
+            CameraActionMap = InputActions.FindActionMap("CameraInputs");
             ZoomAction = CameraActionMap.FindAction("Zoom");
             LookAction = CameraActionMap.FindAction("Look");
         }
-    }
-    public interface ICameraInputReader
-    {
-        public float ZoomDelta { get; }
-        public Vector2 LookInput {  get; }
     }
 }

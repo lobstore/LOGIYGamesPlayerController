@@ -19,7 +19,9 @@ public class StopMovementState : TimedMovementState
     }
     public override bool CanEnter()
     {
-        return base.CanEnter() && _character.Input.MovementInput.magnitude == 0 && _character.RotationStrategy is LookRelativeRotation or InputRelativeRotation;
+        return base.CanEnter() 
+            && _character.Input.MovementInput.magnitude == 0 
+            && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson;
     }
 }
 

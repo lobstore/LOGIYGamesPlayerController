@@ -6,7 +6,7 @@ namespace LOGIYGames.CharacterCore
 {
     public class InputCommandBuffer
     {
-        private readonly List<IInputCommand>
+        private readonly List<IComboInputCommand>
             bufferedCommands = new();
 
         // =====================================================
@@ -14,7 +14,7 @@ namespace LOGIYGames.CharacterCore
         // =====================================================
 
         public void AddCommand(
-            IInputCommand command)
+            IComboInputCommand command)
         {
             //CleanupExpiredCommands();
 

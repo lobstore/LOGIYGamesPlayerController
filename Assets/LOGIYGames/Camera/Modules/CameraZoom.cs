@@ -18,15 +18,13 @@ namespace LOGIYGames
 
         private float Distance { get { return composer.Distance; } set { composer.Distance = value; } }
 
-
-        private void Awake()
+        private void Start()
         {
             composer = GetComponent<CinemachineFreeLookModifier.IModifiableDistance>();
 
             currentTargetDistance = defaultDistance;
             PlayerCameraInput = CameraManager.Instance.CameraInput;
         }
-
         private float zoomDelta;
 
         private void Update()

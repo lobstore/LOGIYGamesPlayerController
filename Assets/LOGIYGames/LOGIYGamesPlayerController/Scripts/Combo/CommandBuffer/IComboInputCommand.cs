@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace LOGIYGames.CharacterCore
 {
 
-    public interface IInputCommand
+    public interface IComboInputCommand
     {
         AttackInputType InputType { get; }
 

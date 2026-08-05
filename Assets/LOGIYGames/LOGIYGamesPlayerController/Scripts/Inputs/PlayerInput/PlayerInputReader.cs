@@ -8,6 +8,7 @@ namespace LOGIYGames
     {
 
         InputActionMap CharacterActionMap;
+        InputActionMap CameraActionMap;
 
         InputAction m_MoveAction;
         InputAction m_JumpAction;
@@ -18,7 +19,7 @@ namespace LOGIYGames
         InputAction m_AttackAction;
         InputAction m_InteractAction;
         Camera Camera;
-
+        
 
         public PlayerInputReader(InputActionAsset InputActions)
         {

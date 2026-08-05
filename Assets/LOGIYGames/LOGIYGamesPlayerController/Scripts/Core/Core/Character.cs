@@ -32,7 +32,7 @@ namespace LOGIYGames.CharacterCore
         public StaminaController StaminaController { get; private set; }
         public JumpController JumpController { get; private set; }
         public MantlingController MantlingController { get; private set; }
-
+        public ComboController ComboController {  get; private set; }
         #endregion
 
         [Header("State Machine Configuration")]
@@ -81,14 +81,16 @@ namespace LOGIYGames.CharacterCore
         public override void OnLateUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
+
             MovementStateMachine.LateUpdate();
             SmoothHeightChanging();
         }
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            RuntimeMovement.TargetRotation = RotationStrategy.GetRotation();
+
             RuntimeMovement.TargetDirection = MovementStrategy.GetMovementDirection();
+            RuntimeMovement.TargetRotation = RotationStrategy.GetRotation();
             UpdateVelocity();
             CalculateDeltaYaw();
             MovementStateMachine.Update();

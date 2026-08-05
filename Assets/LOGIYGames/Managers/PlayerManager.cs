@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 namespace LOGIYGames
 {
@@ -22,7 +23,7 @@ namespace LOGIYGames
         //private bool isLockedOn;
 
         //public bool IsLockedOn { get { return isLockedOn; } private set { isLockedOn = value; OnTargetLocked.Invoke(isLockedOn); } }
-        [field: SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
+        public PlayerInputReader PlayerInputReader { get; private set; }
 
         [SerializeField] private PlayerProfileView profileView;
         private PlayerProfilePresenter profilePresenter;
@@ -143,57 +144,24 @@ namespace LOGIYGames
             PlayerInputReader?.Enable();
 
 
-            //c_Target.Object = CurrentCharacter.Targeting.CurrentTarget;
-            //if (TargetGroup == null)
-            //{
-            //    TargetGroup = new GameObject("CameraTargets_Runtime").AddComponent<CinemachineTargetGroup>();
-
-            //}
-            //TargetGroup.Targets.Clear();
-            //TargetGroup.Targets.Add(new CinemachineTargetGroup.Target { Object = CurrentCharacter.CameraTarget.CameraFollow, Radius = 0.2f, Weight = 10 });
-            //TargetGroup.Targets.Add(c_Target);
-            //c_Target.Radius = 4f;
-            //c_Target.Weight = 4f;
-
-
         }
+
         private void Update()
         {
             CharacterInput input = PlayerInputReader.GetInput();
             CurrentCharacter.UpdateInput(input);
-
-            //if (input.FocusPressed && !IsLockedOn)
-            //{
-            //    LockOnTarget();
-            //}
-            //else if (!input.FocusPressed && IsLockedOn)
-            //{
-            //    LockOffTarget();
-            //}
-
+        }
+        private void LateUpdate()
+        {
             UpdateStrategies();
         }
-        //private void LockOnTarget()
-        //{
-        //    if (!CurrentCharacter.Targeting.HasTarget) return;
-
-
-
-
-        //    IsLockedOn = true;
-        //}
-        //private void LockOffTarget()
-        //{
-        //    CameraManager.Instance.SetTargetTo(CurrentCharacter.CameraTarget.CameraFollow, CurrentCharacter.CameraTarget.CameraLookAt);
-        //    IsLockedOn = false;
-        //}
         private void UpdateStrategies()
         {
             switch (CameraManager.Instance.CurrentCameraPerspectiveType)
             {
                 case CameraPerspectiveType.FirstPerson:
                     CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new FirstPersonPlanarRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new LookForwardPlanarRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
                     CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
@@ -201,7 +169,7 @@ namespace LOGIYGames
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
                     CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new FirstPersonPlanarRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new LookForwardPlanarRotation(CurrentCharacter);
                     break;
                 case CameraPerspectiveType.Top_Down:
                     CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);

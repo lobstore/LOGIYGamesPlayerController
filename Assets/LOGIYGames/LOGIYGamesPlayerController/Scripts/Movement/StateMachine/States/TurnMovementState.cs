@@ -29,6 +29,7 @@ public class TurnMovementState : TimedMovementState
     {
         return base.CanEnter() 
             && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle 
-            && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) < TurnData.MaxAngle;
+            && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) < TurnData.MaxAngle 
+            && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson;
     }
 }

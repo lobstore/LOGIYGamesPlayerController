@@ -21,7 +21,7 @@ namespace LOGIYGames.CharacterCore
             CommandBuffer = new InputCommandBuffer();
             SubscribeEvents();
         }
-        public void AddCommand(IInputCommand input)
+        public void AddCommand(IComboInputCommand input)
         {
             CommandBuffer.AddCommand(input);
         }
@@ -80,12 +80,6 @@ namespace LOGIYGames.CharacterCore
                 AnimationData = attack.Animation
             });
 
-
-            if (attack.ForwardImpulse > 0f)
-            {
-                character.RuntimeMovement.TargetVelocity +=
-                    character.transform.forward * attack.ForwardImpulse;
-            }
         }
 
         public void OnAnimationEvent(ComboEventType type)

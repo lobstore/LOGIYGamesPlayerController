@@ -6723,7 +6723,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.717}
   m_AnchorMax: {x: 0.36054382, y: 1}
-  m_AnchoredPosition: {x: -0.87316895, y: -0.27392578}
+  m_AnchoredPosition: {x: -0.87319946, y: -0.27392578}
   m_SizeDelta: {x: -1.745697, y: 0.5477905}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1205543505
@@ -8424,8 +8424,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1681018497}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.08, z: 0.05}
+  m_LocalRotation: {x: -0.054336958, y: -0.00000022020464, z: -0.000000011981884, w: 0.99852264}
+  m_LocalPosition: {x: 0, y: 0.07373181, z: 0.00034812474}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11072,30 +11072,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Henry
       objectReference: {fileID: 0}
-    - target: {fileID: 1283272730193767307, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833083733447526842, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833083733447526842, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833083733447526842, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833083733447526842, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2654077868994141792, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3732176754581607695, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.94318
@@ -11139,14 +11115,6 @@ PrefabInstance:
     - target: {fileID: 5912570608368876119, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: m_Name
       value: TPVCameraTarget
-      objectReference: {fileID: 0}
-    - target: {fileID: 6186406791908379824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6519021881047199560, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8334357512040222824, guid: 22a805bf961aff04db7e4c5bb166fa74, type: 3}
       propertyPath: <FPVCameraTarget>k__BackingField.CameraFollow
@@ -11266,27 +11234,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2520828506510115346, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -281.5622
+      value: -278.1522
       objectReference: {fileID: 0}
     - target: {fileID: 2520828506510115346, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10.00269
+      value: -0.0026907644
       objectReference: {fileID: 0}
     - target: {fileID: 2520828506510115346, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.71325046
       objectReference: {fileID: 0}
     - target: {fileID: 2520828506510115346, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.70090926
       objectReference: {fileID: 0}
     - target: {fileID: 2520828506510115346, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2520828506510115346, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2520828506510115346, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11304,33 +11272,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Camera
       objectReference: {fileID: 0}
-    - target: {fileID: 2791204035372060595, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3322574222078835902, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: UpdateMethod
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3322574222078835902, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: IgnoreTimeScale
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3322574222078835902, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: BlendUpdateMethod
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3322574222078835902, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: m_EditorClassIdentifier
-      value: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
-      objectReference: {fileID: 0}
     - target: {fileID: 7153722467040546871, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: field of view
-      value: 60
+      value: 60.000004
       objectReference: {fileID: 0}
     - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: far clip plane
@@ -11338,15 +11286,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: near clip plane
-      value: 0.3
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
       propertyPath: orthographic size
       value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8251926599401972465, guid: b83642689ef8fbc449591d8b594438db, type: 3}
-      propertyPath: m_projectionMatrixMode
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11622,11 +11566,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: currentCameraPerspectiveType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 423988925049396937, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: defaultCameraPerspectiveType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2273399926896640566, guid: 08735337ea6242d4fb3c8484c21c0014, type: 3}
       propertyPath: m_LocalPosition.x

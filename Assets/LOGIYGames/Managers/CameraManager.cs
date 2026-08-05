@@ -51,20 +51,17 @@ namespace LOGIYGames
         private void Initialize()
         {
             CameraInput = new(inputActions);
-            instance_FirstPersonCameraController = Instantiate(FirstPersonCameraController, null);
-            instance_ThirdPersonCameraController = Instantiate(ThirdPersonCameraController, null);
-            instance_TopDownCameraController = Instantiate(TopDownCameraController, null);
-            instance_LockOnCameraController = Instantiate(LockOnCameraController, null);
+            var holder = new GameObject("VirtualCams_Runtime");
+            holder.GetOrAddComponent<HierarchyHeader>();
+            instance_FirstPersonCameraController = Instantiate(FirstPersonCameraController, holder.transform);
+            instance_ThirdPersonCameraController = Instantiate(ThirdPersonCameraController, holder.transform);
+            instance_TopDownCameraController = Instantiate(TopDownCameraController, holder.transform);
+            instance_LockOnCameraController = Instantiate(LockOnCameraController, holder.transform);
             cinemachineCameraControllers.Add(instance_FirstPersonCameraController);
             cinemachineCameraControllers.Add(instance_ThirdPersonCameraController);
             cinemachineCameraControllers.Add(instance_TopDownCameraController);
             cinemachineCameraControllers.Add(instance_LockOnCameraController);
-            var holder = new GameObject("VirtualCameras_Runtime");
-            holder.GetOrAddComponent<HierarchyHeader>();
-            foreach (var item in cinemachineCameraControllers)
-            {
-                item.gameObject.transform.SetParent(holder.transform);
-            }
+
             currentCameraPerspectiveType = defaultCameraPerspectiveType;
         }
         protected override void Awake()
@@ -74,29 +71,7 @@ namespace LOGIYGames
         }
         private void Start()
         {
-
             CameraInput.Enable();
-            //PlayerManager.Instance.OnTargetLocked.AddListener((evt) =>
-            //{
-            //    if (evt)
-            //    {
-            //        if (PlayerManager.Instance.CurrentCharacter.Targeting.CurrentTarget != null)
-            //        {
-            //            CurrentCameraPerspectiveType = CameraPerspectiveType.LockOn;
-            //        }
-            //        else
-            //        {
-            //            CurrentCameraPerspectiveType = defaultCameraPerspectiveType;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        CurrentCameraPerspectiveType = defaultCameraPerspectiveType;
-            //        CurrentCameraController.CameraFollowTarget = PlayerManager.Instance.CurrentCharacter.CameraTarget.CameraFollow;
-            //        CurrentCameraController.CameraLookAtTarget = PlayerManager.Instance.CurrentCharacter.CameraTarget.CameraLookAt;
-            //    }
-
-            //});
         }
 
         private void UpdateCameraView()
@@ -125,32 +100,9 @@ namespace LOGIYGames
             }
         }
 
-        int index = 0;
         private void Update()
         {
-            //if (Input.GetKeyDown(KeyCode.F))
-            //{
-            //    index++;
-            //    index = index % cinemachineCameraControllers.Count;
-            //    if (index == 0)
-            //    {
-            //        CameraPerspectiveType = CameraPerspectiveType.ThirdPersonFreeLook;
-            //    }
-            //    else if (index == 1)
-            //    {
-            //        CameraPerspectiveType = CameraPerspectiveType.FirstPerson;
-            //    }
-            //    else if (index == 2)
-            //    {
-            //        CameraPerspectiveType = CameraPerspectiveType.Top_Down;
-            //    }
-            //    else if (index == 3)
-            //    {
-            //        CameraPerspectiveType = CameraPerspectiveType.ThirdPersonLookForward;
-            //    }
-            //}
             UpdateCameraView();
-
         }
         public void SetTargetTo(CameraTarget cameraTarget)
         {
