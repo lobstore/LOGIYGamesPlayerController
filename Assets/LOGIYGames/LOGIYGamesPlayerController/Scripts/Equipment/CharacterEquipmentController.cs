@@ -15,12 +15,12 @@ namespace LOGIYGames
 
         [SerializeField] WeaponDataSO defaultWeapon;
 
-        Character characterModule;
+        Actor characterModule;
         bool isWeaponRightHandWasLoaded;
         bool isWeaponLeftHandWasLoaded;
         private void Awake()
         {
-            characterModule = GetComponent<Character>();
+            characterModule = GetComponent<Actor>();
         }
         private void Start()
         {

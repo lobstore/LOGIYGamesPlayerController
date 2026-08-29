@@ -16,7 +16,9 @@ namespace LOGIYGames.CharacterCore
         public bool SprintPressing;
         public bool CrouchPressed;
         public bool InteractPressed;
+        public bool InteractHeld;
         public bool AttackPressed;
+        public bool AbilityPressed;
         public bool HeavyAttackPressed;
     }
 }

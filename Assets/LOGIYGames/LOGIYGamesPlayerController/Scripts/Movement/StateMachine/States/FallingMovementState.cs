@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
-    public class FallingMovementState : CharacterMovementState
+    public class FallingMovementState : MovementStateBase
     {
-        public FallingMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public FallingMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData) { }
 
         public override void Enter()
         {

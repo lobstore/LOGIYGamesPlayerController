@@ -4,14 +4,15 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    [CreateAssetMenu(fileName = "GroundJumpState", menuName = "MovementStateMachine/States/GroundJumpState")]
+    [CreateAssetMenu(fileName = "GroundJumpStateFactory", menuName = "MovementStateMachine/Factories/GroundJumpStateFactory")]
     public class GroundJumpStateFactory : MovementStateFactory
     {
         public JumpStateData stateData;
 
-        protected override CharacterMovementState CreateState(Character character)
+        protected override MovementStateBase CreateState(Actor character)
         {
             return new GroundJumpMovementState(character, stateData);
         }
     }
+
 }

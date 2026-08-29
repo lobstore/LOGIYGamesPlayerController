@@ -11,7 +11,7 @@ namespace LOGIYGames
         [SerializeField]
         private CharacterController m_characterController;
         private CharacterGravityModule m_characterGravityModule;
-        private Character m_character;
+        private Actor m_character;
         private SensorsModule m_sensors;
 
         private Vector3 totalVelocity;
@@ -106,7 +106,7 @@ namespace LOGIYGames
         private void Awake()
         {
             m_sensors = GetComponent<SensorsModule>();
-            m_character = GetComponent<Character>();
+            m_character = GetComponent<Actor>();
             if (m_characterController == null)
             m_characterController = GetComponent<CharacterController>();
             m_characterGravityModule = GetComponent<CharacterGravityModule>();
@@ -206,7 +206,7 @@ namespace LOGIYGames
 
         public override void AddForce(Vector3 force) { 
             m_characterGravityModule.CurrentGravity = Vector3.up * force.y;
-            m_character.RuntimeMovement.TargetVelocity = new Vector3(force.x,0,force.z);
+            m_character.RuntimeMovement.TargetVelocity = new Vector3(planarVelocity.x+ force.x,0, planarVelocity.z + force.z);
         }
 
         public override void ResetVelocity()

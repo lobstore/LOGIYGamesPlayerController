@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class WallRunMovement : IMovementStrategy
     {
-        Character Character;
+        Actor Character;
 
-        public WallRunMovement(Character character)
+        public WallRunMovement(Actor character)
         {
             Character = character;
         }

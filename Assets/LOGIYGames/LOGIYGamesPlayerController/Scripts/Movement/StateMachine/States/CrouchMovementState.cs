@@ -2,12 +2,12 @@
 
 namespace LOGIYGames.Movement
 {
-    public class CrouchMovementState : CharacterMovementState
+    public class CrouchMovementState : MovementStateBase
     {
         protected float StandingHeight;
         protected float CrouchHeight;
 
-        public CrouchMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public CrouchMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
             StandingHeight = _character.Height;
             CrouchHeight = StandingHeight * 0.5f;

@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class LadderClimbMovement : IMovementStrategy
     {
-        Character Character;
+        Actor Character;
         LadderClimbController Ladder;
-        public LadderClimbMovement(Character character, LadderClimbController ladder)
+        public LadderClimbMovement(Actor character, LadderClimbController ladder)
         {
             Character = character;
             Ladder = ladder;

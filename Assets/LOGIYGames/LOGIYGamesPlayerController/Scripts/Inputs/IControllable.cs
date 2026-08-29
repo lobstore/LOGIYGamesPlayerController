@@ -5,7 +5,7 @@ namespace LOGIYGames.CharacterCore
 {
     public interface IControllable
     {
-        CameraTarget TPVCameraTarget { get; }
+        CameraTarget CameraTarget { get; }
         void UpdateInput(CharacterInput input);
     }
 }

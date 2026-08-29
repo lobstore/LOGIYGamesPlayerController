@@ -14,12 +14,12 @@ namespace LOGIYGames
 
         public RaycastHit TargetTopPoint { get; protected set; }
 
-        protected Character _characterModule;
+        protected Actor _characterModule;
         protected float checkDistance;
         protected LayerMask mantlingLayers;
         public CountdownTimer Duration { get; protected set; }
         public MantlingType MantlingType { get; protected set; }
-        protected MantlingStrategy(Character chr, MantlingData data)
+        protected MantlingStrategy(Actor chr, MantlingData data)
         {
             this.mantlingLayers = data.mantlingLayers;
             this.checkDistance = data.checkDistance;

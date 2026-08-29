@@ -30,7 +30,7 @@ namespace Perception {
             alert = new(1f, 0.2f, 0.15f);
 
         #endregion
-        Character player;
+        Actor player;
 
         void LateUpdate() {
             ScanSight();
@@ -138,7 +138,7 @@ namespace Perception {
 
         void Awake() {
             rend = GetComponent<Renderer>();
-            player = GameObject.FindAnyObjectByType<Character>();
+            player = GameObject.FindAnyObjectByType<Actor>();
             if (rend) mat = rend.material;
         }
         

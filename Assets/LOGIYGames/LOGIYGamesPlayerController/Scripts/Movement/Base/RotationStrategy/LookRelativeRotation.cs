@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class LookRelativeRotation : IRotationStrategy
     {
-        Character Character;
+        Actor Character;
 
-        public LookRelativeRotation(Character character)
+        public LookRelativeRotation(Actor character)
         {
             Character = character;
         }

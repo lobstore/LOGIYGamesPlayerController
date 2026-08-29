@@ -2,13 +2,14 @@
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace LOGIYGames.Movement
 {
     public class HangJumpMovementState : TimedMovementState
     {
         private JumpStateData _stateData;
-        public HangJumpMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
+        public HangJumpMovementState(Actor ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
 
@@ -27,6 +28,10 @@ namespace LOGIYGames.Movement
                 jumpType = JumpType.HangJump
 
             });
+        }
+        public override bool CanEnter()
+        {
+            return base.CanEnter() && _character.Input.JumpPressed;
         }
     }
 }

@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    [CreateAssetMenu(fileName = "MantlingState", menuName = "MovementStateMachine/States/MantlingState")]
+    [CreateAssetMenu(fileName = "MantlingStateFactory", menuName = "MovementStateMachine/Factories/MantlingStateFactory")]
     public class MantlingStateFactory : MovementStateFactory
     {
         public MantlingMovmentStateData stateData;
-        protected override CharacterMovementState CreateState(Character character)
+        protected override MovementStateBase CreateState(Actor character)
         {
             return new MantlingMovementState(character, stateData);
         }

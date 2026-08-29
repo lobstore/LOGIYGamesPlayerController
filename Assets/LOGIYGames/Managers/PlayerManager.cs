@@ -5,17 +5,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 namespace LOGIYGames
 {
     public class PlayerManager : PersistentSingleton<PlayerManager>
     {
-        [SerializeField] Character InitCharacter;
+        [SerializeField] Actor InitCharacter;
         [SerializeField] InputActionAsset InputActions;
 
-        public UnityEvent<Character> OnCharacterChanged = new();
-        public Character CurrentCharacter { get; private set; }
+        public UnityEvent<Actor> OnCharacterChanged = new();
+        public Actor CurrentCharacter { get; private set; }
 
         //public readonly UnityEvent<bool> OnTargetLocked = new();
         //public CinemachineTargetGroup TargetGroup { get; private set; }
@@ -23,7 +22,7 @@ namespace LOGIYGames
         //private bool isLockedOn;
 
         //public bool IsLockedOn { get { return isLockedOn; } private set { isLockedOn = value; OnTargetLocked.Invoke(isLockedOn); } }
-        public PlayerInputReader PlayerInputReader { get; private set; }
+        public PlayerInputReader PlayerInput { get; private set; }
 
         [SerializeField] private PlayerProfileView profileView;
         private PlayerProfilePresenter profilePresenter;
@@ -43,11 +42,20 @@ namespace LOGIYGames
         private ReactiveProperty<string> Name = new();
 
         IDisposable subscription;
-
+        [SerializeField] private CameraPerspectiveType currentControlType;
+        public CameraPerspectiveType CurrentCameraPerspectiveType
+        {
+            get { return currentControlType; }
+            set
+            {
+                currentControlType = value;
+                UpdateStrategies();
+            }
+        }
         protected override void Awake()
         {
-            base.Awake();
-            PlayerInputReader = new(InputActions);
+            base.Awake(); 
+            PlayerInput = new(InputActions, Camera.main.transform);
             OnCharacterChanged.AddListener((newChar) =>
             {
                 UpdateProfileView(newChar);
@@ -62,14 +70,13 @@ namespace LOGIYGames
             });
         }
 
-        private void UpdateProfileView(Character newChar)
+        private void UpdateProfileView(Actor newChar)
         {
             profilePresenter?.Dispose();
             Name.Value = newChar.name;
             profilePresenter = new PlayerProfilePresenter(newChar.HealthController.Health, newChar.StaminaController.Stamina, Name, profileView);
         }
-
-        private void UpdateAbilitiesViews(Character newChar)
+        private void UpdateAbilitiesViews(Actor newChar)
         {
             for (int i = 0; i < abilitiesContainer.childCount; i++)
             {
@@ -141,50 +148,47 @@ namespace LOGIYGames
         {
 
             SetPlayerControlOnCharacter(InitCharacter);
-            PlayerInputReader?.Enable();
-
-
+            PlayerInput?.Enable();
         }
 
         private void Update()
         {
-            CharacterInput input = PlayerInputReader.GetInput();
+            CharacterInput input = PlayerInput.GetInput();
             CurrentCharacter.UpdateInput(input);
-        }
-        private void LateUpdate()
-        {
-            UpdateStrategies();
         }
         private void UpdateStrategies()
         {
-            switch (CameraManager.Instance.CurrentCameraPerspectiveType)
+            switch (currentControlType)
             {
                 case CameraPerspectiveType.FirstPerson:
                     CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new LookForwardPlanarRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new MousePlanarRotation(CurrentCharacter);
+                    PlayerInput = new(InputActions, CurrentCharacter.transform);
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
                     CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
                     CurrentCharacter.DefaultRotationStrategy = new LookRelativeRotation(CurrentCharacter);
+                    PlayerInput = new(InputActions, Camera.main.transform);
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
                     CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
                     CurrentCharacter.DefaultRotationStrategy = new LookForwardPlanarRotation(CurrentCharacter);
+                    PlayerInput = new(InputActions, Camera.main.transform);
                     break;
                 case CameraPerspectiveType.Top_Down:
                     CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
                     CurrentCharacter.DefaultRotationStrategy = new LookRelativeRotation(CurrentCharacter);
+                    PlayerInput = new(InputActions, Camera.main.transform);
                     break;
                 default:
                     break;
             }
         }
-        public void SetPlayerControlOnCharacter(Character character)
+        public void SetPlayerControlOnCharacter(Actor character)
         {
             CurrentCharacter = character;
             UpdateStrategies();
             CurrentCharacter.ResetStrategies();
-            CameraManager.Instance.SetTargetTo(CurrentCharacter.TPVCameraTarget);
             OnCharacterChanged?.Invoke(CurrentCharacter);
         }
     }

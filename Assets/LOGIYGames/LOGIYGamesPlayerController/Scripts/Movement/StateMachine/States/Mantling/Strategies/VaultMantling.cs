@@ -3,7 +3,7 @@ namespace LOGIYGames
 {
     public class VaultMantling : MantlingStrategy
     {
-        public VaultMantling(Character chr, MantlingData data) : base(chr, data)
+        public VaultMantling(Actor chr, MantlingData data) : base(chr, data)
         {
         }
 

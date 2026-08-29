@@ -4,18 +4,15 @@ namespace LOGIYGames.CharacterCore
 {
     public class ComboController
     {
-        public AttackNodeSO CurrentAttack { get; private set; }
+        private AttackNodeSO currentAttack;
         private AttackNodeSO queuedAttack;
-        public bool CanCancel { get; private set; }
-        public bool IsNextQueued { get; private set; }
-        public ComboPhase Phase { get; private set; }
 
-        private Character character;
+        private Actor character;
         public InputCommandBuffer CommandBuffer { get; private set; }
 
         public ComboMovesetSO comboMovesetSO { get; private set; }
 
-        public ComboController(Character character)
+        public ComboController(Actor character)
         {
             this.character = character;
             CommandBuffer = new InputCommandBuffer();
@@ -47,125 +44,27 @@ namespace LOGIYGames.CharacterCore
 
         public void BeginCombo()
         {
-            ResetCombo();
-
-            Phase = ComboPhase.Started;
-
             StartAttack(comboMovesetSO.EntryAttack);
         }
 
         private void StartAttack(AttackNodeSO attack)
         {
             CommandBuffer.Clear();
-
-            if (attack == null)
+            if (attack == null || string.IsNullOrWhiteSpace(attack.Animation.AnimationName))
             {
-                FinishCombo();
+                ResetCombo();
                 return;
             }
-
-
-            if (string.IsNullOrWhiteSpace(attack.Animation.AnimationName))
-            {
-                FinishCombo();
-                return;
-            }
-
-
-            CurrentAttack = attack;
-
-
-            character.EventBus.Publish(new ComboAttackEvent
-            {
-                AnimationData = attack.Animation
-            });
-
+            currentAttack = attack;
         }
 
-        public void OnAnimationEvent(ComboEventType type)
-        {
-            switch (type)
-            {
-                case ComboEventType.AttackStarted:
-                    OnAttackStarted();
-                    break;
-
-                case ComboEventType.EnableHitbox:
-                    OnHitboxEnabled();
-                    break;
-
-                case ComboEventType.DisableHitbox:
-                    OnHitboxDisabled();
-                    break;
-
-                case ComboEventType.OpenComboWindow:
-                    OnComboWindowOpened();
-                    break;
-
-                case ComboEventType.CloseComboWindow:
-                    OnComboWindowClosed();
-                    break;
-
-                case ComboEventType.OpenCancelWindow:
-                    OnCancelWindowOpened();
-                    break;
-
-                case ComboEventType.CloseCancelWindow:
-                    OnCancelWindowClosed();
-                    break;
-
-                case ComboEventType.AttackFinished:
-                    OnAttackFinished();
-                    break;
-            }
-        }
-
-        #region Event Handlers
-
-        private void OnAttackStarted()
-        {
-        }
-
-        private void OnHitboxEnabled()
-        {
-        }
-
-        private void OnHitboxDisabled()
-        {
-        }
-
-        private void OnComboWindowOpened()
-        {
-        }
-
-        private void OnComboWindowClosed()
-        {
-            ResolveTransition();
-        }
-
-        private void OnCancelWindowOpened()
-        {
-            CanCancel = true;
-        }
-
-        private void OnCancelWindowClosed()
-        {
-            CanCancel = false;
-        }
-
-        private void OnAttackFinished()
-        {
-            TryContinueCombo();
-        }
-
-        #endregion
-
+        // Find next attack node and queuing it
         private void ResolveTransition()
         {
             AttackTransition bestTransition = null;
             int bestMatchLength = 0;
 
-            foreach (AttackTransition transition in CurrentAttack.Transitions)
+            foreach (AttackTransition transition in currentAttack.Transitions)
             {
                 if (transition.Sequence == null ||
                     transition.Sequence.Inputs == null ||
@@ -191,45 +90,28 @@ namespace LOGIYGames.CharacterCore
             if (bestTransition == null)
             {
                 queuedAttack = null;
-                IsNextQueued = false;
                 return;
             }
 
             queuedAttack = bestTransition.NextAttack;
-            IsNextQueued = true;
         }
-
+        // Check if we has next attack node queued and continue combo
         private void TryContinueCombo()
         {
             if (queuedAttack == null)
             {
-                FinishCombo();
+                ResetCombo();
                 return;
             }
 
             AttackNodeSO nextAttack = queuedAttack;
-
             queuedAttack = null;
-            IsNextQueued = false;
 
             StartAttack(nextAttack);
 
         }
 
-        private void FinishCombo()
-        {
-
-            ResetCombo();
-
-            Phase = ComboPhase.Finished;
-
-        }
-
-        public bool IsFinished()
-        {
-            return Phase == ComboPhase.Finished;
-        }
-        public void ReadInput()
+        public void Tick()
         {
             if (character.Input.AttackPressed)
             {
@@ -241,19 +123,23 @@ namespace LOGIYGames.CharacterCore
                 CommandBuffer.AddCommand(new AttackInputCommand(AttackInputType.Heavy));
             }
         }
-        public void ResetCombo()
+        private void ResetCombo()
         {
             queuedAttack = null;
-            CurrentAttack = null;
-
-            CanCancel = false;
-            IsNextQueued = false;
+            currentAttack = null;
             CommandBuffer.Clear();
-            Phase = ComboPhase.None;
         }
-    }
-    public class ComboAttackEvent : AnimationEvent
-    {
-
+        public bool CanEnter()
+        {
+            return CommandBuffer.HasInput() && comboMovesetSO != null;
+        }
+        public bool CanExit()
+        {
+            return queuedAttack == null && currentAttack == null && !CommandBuffer.HasInput();
+        }
+        public void Exit()
+        {
+            ResetCombo();
+        }
     }
 }

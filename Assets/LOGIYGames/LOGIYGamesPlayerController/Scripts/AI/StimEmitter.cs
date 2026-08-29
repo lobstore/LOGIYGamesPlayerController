@@ -10,11 +10,11 @@ namespace Perception {
         [SerializeField] float runRadius = 8f;
         [SerializeField] float sprintRadius = 18f;
         
-        Character player;
+        Actor player;
         Transform body;
 
         void Awake() {
-            player = GetComponent<Character>();
+            player = GetComponent<Actor>();
             body = transform;
         }
 

@@ -6,7 +6,7 @@ using LOGIYGames.Shared.Enums;
 
 public class StopMovementState : TimedMovementState
 {
-    public StopMovementState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
+    public StopMovementState(Actor ctx, TimedMovementStateData stateData) : base(ctx, stateData) { }
     public override void Enter()
     {
         Direction dir = _character.GetRelativeMovementDirection();

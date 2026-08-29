@@ -6,9 +6,9 @@ namespace LOGIYGames
     public class WallClimbMovement : IMovementStrategy
     {
         SensorsModule Sensors;
-        Character Character;
+        Actor Character;
 
-        public WallClimbMovement(SensorsModule sensors, Character character)
+        public WallClimbMovement(SensorsModule sensors, Actor character)
         {
             Sensors = sensors;
             Character = character;

@@ -2,13 +2,13 @@ using LOGIYGames.CharacterCore;
 using UnityEngine;
 
 public class AbilityTargetingController : MonoBehaviour {
-    public Character Character {  get; private set; }
+    public Actor Character {  get; private set; }
     AbilityTargetingStrategy currentStrategy;
     private void Awake()
     {
         if (Character == null)
         {
-            Character = GetComponent<Character>();
+            Character = GetComponent<Actor>();
         }
     }
     void Update() {

@@ -1,32 +1,24 @@
 using LOGIYGames.Shared.Enums;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
     public class InputCommandBuffer
     {
-        private readonly List<IComboInputCommand>
-            bufferedCommands = new();
+        private readonly List<IComboInputCommand> bufferedCommands = new();
 
-        // =====================================================
-        // ADD
-        // =====================================================
-
-        public void AddCommand(
-            IComboInputCommand command)
+        public bool HasInput()
+        {
+            return bufferedCommands.Count > 0;
+        }
+        public void AddCommand(IComboInputCommand command)
         {
             //CleanupExpiredCommands();
 
             bufferedCommands.Add(command);
         }
 
-        // =====================================================
-        // MATCH
-        // =====================================================
-
-        public int GetMatchLength(
-            IReadOnlyList<AttackInputType> sequence)
+        public int GetMatchLength(IReadOnlyList<AttackInputType> sequence)
         {
             //CleanupExpiredCommands();
 
@@ -65,18 +57,10 @@ namespace LOGIYGames.CharacterCore
             return matched;
         }
 
-        // =====================================================
-        // CLEAR
-        // =====================================================
-
         public void Clear()
         {
             bufferedCommands.Clear();
         }
-
-        // =====================================================
-        // DEBUG
-        // =====================================================
 
         public string GetDebugBuffer()
         {

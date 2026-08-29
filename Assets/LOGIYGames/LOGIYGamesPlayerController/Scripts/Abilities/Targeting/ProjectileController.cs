@@ -20,7 +20,7 @@ public class ProjectileController : MonoBehaviour
     {
         if (other.gameObject == ability.Source) return;
 
-        ability.Ability.Execute(other.GetComponent<Character>());
+        ability.Ability.ApplyEffects(other.GetComponent<Actor>());
         Destroy(gameObject);
     }
 }

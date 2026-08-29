@@ -219,14 +219,17 @@ namespace LOGIYGames
             {
                 if (!HasTransitionTarget(transition))
                     continue;
-
+                if (transition.To == CurrentNode.State.GetType())
+                {
+                    continue;
+                }
                 if (transition.Condition.Evaluate())
                     return transition;
             }
 
             // State transitions
-            if (CurrentNode == null)
-                return null;
+            //if (CurrentNode == null)
+            //    return null;
 
             foreach (var transition in CurrentNode.Transitions)
             {

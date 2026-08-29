@@ -10,11 +10,11 @@ namespace LOGIYGames
     [Serializable]
     public sealed class EffectsController
     {
-        private readonly Character _owner;
+        private readonly Actor _owner;
         [ReadOnly][SerializeReference] private List<RuntimeEffect> _effects = new();
         public IReadOnlyList<RuntimeEffect> Effects => _effects;
         public Subject<IReadOnlyList<RuntimeEffect>> OnContinuousEffectsChanged = new();
-        public EffectsController(Character owner)
+        public EffectsController(Actor owner)
         {
             _owner = owner;
         }

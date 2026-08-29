@@ -7,18 +7,15 @@ namespace LOGIYGames.Movement
     /// Base state with timer/cooldown support using CountdownTimer
     /// Supports both duration (minimum time in state) and cooldown (delay before re-entry)
     /// </summary>
-    public abstract class TimedMovementState : CharacterMovementState
+    public abstract class TimedMovementState : MovementStateBase
     {
         protected CountdownTimer _durationTimer;
         protected CountdownTimer _cooldownTimer;
 
-        protected TimedMovementState(Character ctx, TimedMovementStateData stateData) : base(ctx, stateData)
+        protected TimedMovementState(Actor ctx, TimedMovementStateData stateData) : base(ctx, stateData)
         {
-            // Create timers from data
-            if (stateData.Duration > 0)
-            {
                 _durationTimer = new CountdownTimer(stateData.Duration);
-            }
+
 
             if (stateData.Cooldown > 0)
             {
@@ -73,6 +70,10 @@ namespace LOGIYGames.Movement
                 return base.CanEnter();
 
             }
+        }
+        public override bool CanExit()
+        {
+            return IsDurationTimerElapsed;
         }
         public bool IsDurationTimerElapsed => _durationTimer?.IsFinished == true;
         public bool IsCooldownTimerElapsed => _cooldownTimer?.IsFinished == true;

@@ -1,10 +1,10 @@
 ﻿using LOGIYGames;
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
-public class ComboMovementState : CharacterMovementState
+public class ComboMovementState : MovementStateBase
 {
     ComboController combo;
-    public ComboMovementState(Character character, MovementStateData data) : base(character, data)
+    public ComboMovementState(Actor character, MovementStateData data) : base(character, data)
     {
         //combo = character.ComboController;
     }
@@ -21,19 +21,20 @@ public class ComboMovementState : CharacterMovementState
     public override void Exit()
     {
         base.Exit();
-
-        combo.ResetCombo();
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        combo.ReadInput();
+        combo.Tick();
     }
-    public bool CanExit()
+    public override bool CanExit()
     {
-        return true;
+        return combo.CanExit();
     }
 
-
+    public override bool CanEnter()
+    {
+        return combo.CanEnter();
+    }
 }

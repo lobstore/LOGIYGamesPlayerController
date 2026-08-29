@@ -9,7 +9,7 @@ namespace LOGIYGames
     [Serializable]
     public abstract class RuntimeEffect
     {
-        protected Character Owner;
+        protected Actor Owner;
         [ReadOnly][field: SerializeField] public EffectData Data { get; protected set; }
         protected RuntimeEffect(EffectData effectData)
         {
@@ -24,7 +24,7 @@ namespace LOGIYGames
 
 
 
-        public virtual void Initialize(Character owner)
+        public virtual void Initialize(Actor owner)
         {
             Owner = owner;
         }

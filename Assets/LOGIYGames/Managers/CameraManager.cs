@@ -1,10 +1,10 @@
 using Alchemy.Hierarchy;
 using Alchemy.Inspector;
-using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Extensions;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace LOGIYGames
@@ -19,50 +19,56 @@ namespace LOGIYGames
     }
     public class CameraManager : PersistentSingleton<CameraManager>
     {
-        [ReadOnly] [SerializeField] List<CinemachineCamera> cinemachineCameraControllers = new();
+        [ReadOnly][SerializeField] List<CinemachineCamera> cinemachineCameraControllers = new();
         public CinemachineCamera CurrentCameraController { get; private set; }
         [SerializeField] CinemachineCamera FirstPersonCameraController;
         [SerializeField] CinemachineCamera ThirdPersonCameraController;
         [SerializeField] CinemachineCamera TopDownCameraController;
-        [SerializeField] CinemachineCamera LockOnCameraController;
-
+        [SerializeField] bool isActionFP;
         CinemachineCamera instance_FirstPersonCameraController;
         CinemachineCamera instance_ThirdPersonCameraController;
         CinemachineCamera instance_TopDownCameraController;
-        CinemachineCamera instance_LockOnCameraController;
 
         [SerializeField] InputActionAsset inputActions;
         public PlayerCameraInputReader CameraInput { get; private set; }
-
-
-
-        [SerializeField] private CameraPerspectiveType defaultCameraPerspectiveType;
         [SerializeField] private CameraPerspectiveType currentCameraPerspectiveType;
-
+        public UnityEvent OnCameraPerspectiveChanged { get; private set; } = new();
         public CameraPerspectiveType CurrentCameraPerspectiveType
         {
             get { return currentCameraPerspectiveType; }
             set
             {
                 currentCameraPerspectiveType = value;
-                UpdateCameraView();
+                OnCameraPerspectiveChanged.Invoke();
+                ResetCameraView();
+            }
+        }
+        public void DisableAllCameras()
+        {
+            foreach (var item in cinemachineCameraControllers)
+            {
+                item.enabled = false;
+            }
+        }
+        public void EnableAllCameras()
+        {
+            foreach (var item in cinemachineCameraControllers)
+            {
+                item.enabled = true;
             }
         }
         private void Initialize()
         {
             CameraInput = new(inputActions);
-            var holder = new GameObject("VirtualCams_Runtime");
+            PlayerManager.Instance.OnCharacterChanged.AddListener((_) => ResetCameraView());
+            var holder = new GameObject("PlayerVirtualCams_Runtime");
             holder.GetOrAddComponent<HierarchyHeader>();
             instance_FirstPersonCameraController = Instantiate(FirstPersonCameraController, holder.transform);
             instance_ThirdPersonCameraController = Instantiate(ThirdPersonCameraController, holder.transform);
             instance_TopDownCameraController = Instantiate(TopDownCameraController, holder.transform);
-            instance_LockOnCameraController = Instantiate(LockOnCameraController, holder.transform);
             cinemachineCameraControllers.Add(instance_FirstPersonCameraController);
             cinemachineCameraControllers.Add(instance_ThirdPersonCameraController);
             cinemachineCameraControllers.Add(instance_TopDownCameraController);
-            cinemachineCameraControllers.Add(instance_LockOnCameraController);
-
-            currentCameraPerspectiveType = defaultCameraPerspectiveType;
         }
         protected override void Awake()
         {
@@ -72,18 +78,19 @@ namespace LOGIYGames
         private void Start()
         {
             CameraInput.Enable();
+            ResetCameraView();
         }
 
-        private void UpdateCameraView()
+        public void ResetCameraView()
         {
+            SetTargetTo(PlayerManager.Instance.CurrentCharacter.CameraTarget);
+
             switch (CurrentCameraPerspectiveType)
             {
                 case CameraPerspectiveType.FirstPerson:
-                    SetTargetTo(PlayerManager.Instance.CurrentCharacter.FPVCameraTarget);
                     Set1stView();
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
-                    SetTargetTo(PlayerManager.Instance.CurrentCharacter.TPVCameraTarget);
                     Set3rdFreeLookView();
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
@@ -92,17 +99,10 @@ namespace LOGIYGames
                 case CameraPerspectiveType.Top_Down:
                     SetTopDownView();
                     break;
-                case CameraPerspectiveType.LockOn:
-                    SetLockOnView();
-                    break;
                 default:
                     break;
             }
-        }
 
-        private void Update()
-        {
-            UpdateCameraView();
         }
         public void SetTargetTo(CameraTarget cameraTarget)
         {
@@ -111,7 +111,20 @@ namespace LOGIYGames
                 cam.Target = cameraTarget;
             }
         }
-
+        public void SetLookAtTo(Transform lookAt)
+        {
+            foreach (var cam in cinemachineCameraControllers)
+            {
+                cam.LookAt = lookAt;
+            }
+        }
+        public void SetFollowTo(Transform tracking)
+        {
+            foreach (var cam in cinemachineCameraControllers)
+            {
+                cam.Follow = tracking;
+            }
+        }
         void SetPriorVirtualCamera(CinemachineCamera cameraController)
         {
             foreach (var controller in cinemachineCameraControllers)
@@ -148,13 +161,6 @@ namespace LOGIYGames
         {
             CurrentCameraController = instance_ThirdPersonCameraController;
             SetPriorVirtualCamera(CurrentCameraController);
-        }
-        public void SetLockOnView()
-        {
-            CurrentCameraController = instance_LockOnCameraController;
-            SetPriorVirtualCamera(CurrentCameraController);
-            CurrentCameraController.Target.TrackingTarget = PlayerManager.Instance.CurrentCharacter.TPVCameraTarget.TrackingTarget;
-            //CurrentCameraController.CameraLookAtTarget = PlayerManager.Instance.TargetGroup.transform;
         }
 
     }

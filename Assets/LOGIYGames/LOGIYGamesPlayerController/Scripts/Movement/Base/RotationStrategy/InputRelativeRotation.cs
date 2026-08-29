@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class InputRelativeRotation : IRotationStrategy
     {
-        private Character Character;
+        private Actor Character;
 
-        public InputRelativeRotation(Character character)
+        public InputRelativeRotation(Actor character)
         {
             Character = character;
         }

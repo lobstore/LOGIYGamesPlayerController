@@ -20,7 +20,7 @@ namespace LOGIYGames
 
         [Header("References")]
         [SerializeField] private SensorsModule m_sensors;
-        [SerializeField] private Character m_character;
+        [SerializeField] private Actor m_character;
         [SerializeField] private float GravityAcceleration;
 
         public override void OnFixedUpdate(float fixedDeltaTime)

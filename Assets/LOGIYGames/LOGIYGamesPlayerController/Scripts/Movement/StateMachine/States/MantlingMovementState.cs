@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace LOGIYGames
 {
-    public class MantlingMovementState : CharacterMovementState
+    public class MantlingMovementState : MovementStateBase
     {
         #region Fields
         private MantlingController MantlingController;
@@ -13,7 +13,7 @@ namespace LOGIYGames
         public UnityEvent OnMantlingEnd = new UnityEvent();
         #endregion
 
-        public MantlingMovementState(Character ctx, MantlingMovmentStateData stateData) : base(ctx, stateData)
+        public MantlingMovementState(Actor ctx, MantlingMovmentStateData stateData) : base(ctx, stateData)
         {
             MantlingController = ctx.MantlingController;
         }

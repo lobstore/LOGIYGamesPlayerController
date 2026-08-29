@@ -6,10 +6,12 @@ namespace LOGIYGames.Movement
 {
     public class GroundJumpMovementState : TimedMovementState
     {
+        JumpController controller;
         private JumpStateData _stateData;
-        public GroundJumpMovementState(Character ctx, JumpStateData stateData) : base(ctx, stateData)
+        public GroundJumpMovementState(Actor ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _stateData = stateData;
+            controller = ctx.GetComponent<JumpController>();
         }
         public override void Enter()
         {
@@ -34,7 +36,7 @@ namespace LOGIYGames.Movement
             return base.CanEnter()
                 && (_character.Sensors.IsValidSlope() || _character.Sensors.GroundAngle <= 0)
                 && _character.Input.JumpPressed
-                && _character.JumpController.CanExecute(_stateData);
+                && controller.CanExecute(_stateData);
         }
 
     }

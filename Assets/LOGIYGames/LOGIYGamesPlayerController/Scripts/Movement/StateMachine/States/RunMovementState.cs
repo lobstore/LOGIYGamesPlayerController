@@ -2,9 +2,9 @@
 
 namespace LOGIYGames.Movement
 {
-    public class RunMovementState : CharacterMovementState
+    public class RunMovementState : MovementStateBase
     {
-        public RunMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public RunMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData) { }
         public override bool CanEnter()
         {
             return base.CanEnter() && _character.Input.MovementInput.magnitude > 0 && _character.IsGrounded;

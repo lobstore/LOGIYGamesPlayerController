@@ -6,6 +6,6 @@ namespace LOGIYGames
 
     public abstract class MovementBuilder : ScriptableObject
     {
-        public abstract void Build(Character movementStateDriver);
+        public abstract void Build(Actor movementStateDriver);
     }
 }

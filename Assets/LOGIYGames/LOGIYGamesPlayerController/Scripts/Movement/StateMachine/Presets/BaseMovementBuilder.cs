@@ -44,7 +44,7 @@ namespace LOGIYGames
         // INIT
         // =========================================================
 
-        public override void Build(Character character)
+        public override void Build(Actor character)
         {
             RegisterStates(character);
 
@@ -57,7 +57,7 @@ namespace LOGIYGames
         // STATE REGISTRATION
         // =========================================================
 
-        private void RegisterStates(Character character)
+        private void RegisterStates(Actor character)
         {
             character.AddMovementState(new FallingMovementState(character, fallingMovementStateData));
 
@@ -87,7 +87,7 @@ namespace LOGIYGames
             });
         }
 
-        private void ConfigureTransitions(Character character)
+        private void ConfigureTransitions(Actor character)
         {
             // =========================================================
             // ANY TRANSITIONS
@@ -96,17 +96,15 @@ namespace LOGIYGames
 
 
             character.MovementStateMachine.AddAnyTransition<WallClimbMovementState>(
-                new FuncPredicate(() =>
-                    character.Sensors.IsObstacleLegsFront &&
-                    character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") &&
-                    character.Input.MovementInput.y > 0));
+                new FuncPredicate(() => character.GetMovementState<WallClimbMovementState>().CanEnter()));
 
             character.MovementStateMachine.AddAnyTransition<FallingMovementState>(
                 new FuncPredicate(() => CanFall(character)));
 
             character.MovementStateMachine.AddAnyTransition<SwimMovementState>(
-                new FuncPredicate(() => character.Sensors.IsInWater));
-
+                new FuncPredicate(() => character.GetMovementState<SwimMovementState>().CanEnter()));
+            character.MovementStateMachine.AddAnyTransition<MountingMovementState>(
+                new FuncPredicate(() => character.GetMovementState<MountingMovementState>().CanEnter()));
             #region Movement
             // =========================================================
             // IDLE
@@ -127,13 +125,23 @@ namespace LOGIYGames
                     return character.GetMovementState<TurnMovementState>().CanEnter();
                 }));
 
-            character.MovementStateMachine.AddTransition
-                <IdleMovementState, WalkMovementState>(
-                new FuncPredicate(() => Input.GetKeyDown(KeyCode.Z)));
+            //character.MovementStateMachine.AddTransition
+            //    <IdleMovementState, WalkMovementState>(
+            //    new FuncPredicate(() => Input.GetKeyDown(KeyCode.Z)));
 
             character.MovementStateMachine.AddTransition
+                <MountingMovementState, IdleMovementState>(
+                new FuncPredicate(() => character.GetMovementState<MountingMovementState>().CanExit()
+                ));
+
+            character.MovementStateMachine.AddTransition
+                <IdleMovementState, BackTurnMovementState>(
+                new FuncPredicate(() => character.GetMovementState<BackTurnMovementState>().CanEnter()
+                ));
+            character.MovementStateMachine.AddTransition
                 <IdleMovementState, RunMovementState>(
-                new FuncPredicate(() => character.GetMovementState<RunMovementState>().CanEnter()));
+                new FuncPredicate(() => character.GetMovementState<RunMovementState>().CanEnter()
+                ));
 
             character.MovementStateMachine.AddTransition<IdleMovementState, RollMovementState>(
                 new FuncPredicate(() =>
@@ -202,15 +210,14 @@ namespace LOGIYGames
                 <RunMovementState, StopMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return
-                        character.GetMovementState<RunMovementState>().IsActionFrameElapsed &&
-                        character.GetMovementState<StopMovementState>().CanEnter();
+                    return character.GetMovementState<StopMovementState>().CanEnter();
                 }));
             character.MovementStateMachine.AddTransition
                 <RunMovementState, IdleMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return !character.GetMovementState<StopMovementState>().CanEnter() && character.GetMovementState<IdleMovementState>().CanEnter();
+                    return
+                     character.GetMovementState<IdleMovementState>().CanEnter();
                 }));
             character.MovementStateMachine.AddTransition
                 <RunMovementState, TurnMovementState>(
@@ -256,7 +263,7 @@ namespace LOGIYGames
                 <StopMovementState, IdleMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return character.GetMovementState<StopMovementState>().IsDurationTimerElapsed;
+                    return character.GetMovementState<StopMovementState>().CanExit();
                 }));
 
             character.MovementStateMachine.AddTransition
@@ -281,7 +288,8 @@ namespace LOGIYGames
             character.MovementStateMachine.AddTransition
                 <SprintMovementState, RunMovementState>(
                 new FuncPredicate(() =>
-                    !character.Input.SprintPressing));
+                    character.GetMovementState<SprintMovementState>().CanExit()
+                    && character.GetMovementState<RunMovementState>().CanEnter()));
 
             character.MovementStateMachine.AddTransition
                 <SprintMovementState, StopMovementState>(
@@ -296,6 +304,13 @@ namespace LOGIYGames
                 {
                     return character.GetMovementState<GroundJumpMovementState>().CanEnter();
                 }));
+            character.MovementStateMachine.AddTransition
+                <SprintMovementState, IdleMovementState>(
+                new FuncPredicate(() =>
+                {
+                    return character.GetMovementState<SprintMovementState>().CanExit()
+                    && character.GetMovementState<IdleMovementState>().CanEnter();
+                }));
             #endregion
             // =========================================================
             // JUMP
@@ -307,7 +322,7 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                        character.GetMovementState<GroundJumpMovementState>().IsDurationTimerElapsed &&
+                        character.GetMovementState<GroundJumpMovementState>().CanExit() &&
                         character.GetMovementState<RunMovementState>().CanEnter();
                 }));
 
@@ -316,7 +331,7 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                        character.GetMovementState<GroundJumpMovementState>().IsDurationTimerElapsed &&
+                        character.GetMovementState<GroundJumpMovementState>().CanExit() &&
                         character.GetMovementState<IdleMovementState>().CanEnter();
                 }));
 
@@ -370,7 +385,7 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                        character.GetMovementState<LandingMovementState>().IsDurationTimerElapsed &&
+                        character.GetMovementState<LandingMovementState>().CanExit() &&
                         character.GetMovementState<RunMovementState>().CanEnter();
                 }));
 
@@ -379,7 +394,7 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                        character.GetMovementState<LandingMovementState>().IsDurationTimerElapsed &&
+                        character.GetMovementState<LandingMovementState>().CanExit() &&
                         character.GetMovementState<IdleMovementState>().CanEnter();
                 }));
             #endregion
@@ -393,8 +408,8 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                        character.GetMovementState<SprintMovementState>().CanEnter() &&
-                        !character.GetMovementState<DashMovementState>().IsDurationTimerRunning;
+                        character.GetMovementState<DashMovementState>().CanExit() &&
+                        character.GetMovementState<SprintMovementState>().CanEnter();
                 }));
 
             character.MovementStateMachine.AddTransition
@@ -402,8 +417,8 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                        character.GetMovementState<StopMovementState>().CanEnter() &&
-                        !character.GetMovementState<DashMovementState>().IsDurationTimerRunning;
+                        character.GetMovementState<DashMovementState>().CanExit() &&
+                    character.GetMovementState<StopMovementState>().CanEnter();
                 }));
 
             character.MovementStateMachine.AddTransition
@@ -411,8 +426,16 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                       character.GetMovementState<RunMovementState>().CanEnter() &&
-                        !character.GetMovementState<DashMovementState>().IsDurationTimerRunning;
+                        character.GetMovementState<DashMovementState>().CanExit() &&
+                       character.GetMovementState<RunMovementState>().CanEnter();
+                }));
+            character.MovementStateMachine.AddTransition
+                <DashMovementState, IdleMovementState>(
+                new FuncPredicate(() =>
+                {
+                    return
+                        character.GetMovementState<DashMovementState>().CanExit() &&
+                       character.GetMovementState<IdleMovementState>().CanEnter();
                 }));
             #endregion
             // =========================================================
@@ -425,7 +448,7 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                        !character.GetMovementState<RollMovementState>().IsDurationTimerRunning &&
+                        character.GetMovementState<RollMovementState>().CanExit() &&
                         character.GetMovementState<RunMovementState>().CanEnter();
                 }));
 
@@ -434,7 +457,7 @@ namespace LOGIYGames
                 new FuncPredicate(() =>
                 {
                     return
-                           !character.GetMovementState<RollMovementState>().IsDurationTimerRunning &&
+                           character.GetMovementState<RollMovementState>().CanExit() &&
                            character.GetMovementState<IdleMovementState>().CanEnter();
                 }));
             #endregion
@@ -446,7 +469,7 @@ namespace LOGIYGames
                 <BackTurnMovementState, RunMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return !character.GetMovementState<BackTurnMovementState>().IsDurationTimerRunning &&
+                    return character.GetMovementState<BackTurnMovementState>().CanExit() &&
                            character.GetMovementState<RunMovementState>().CanEnter();
                 }));
 
@@ -454,7 +477,7 @@ namespace LOGIYGames
                 <BackTurnMovementState, IdleMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return !character.GetMovementState<BackTurnMovementState>().IsDurationTimerRunning &&
+                    return character.GetMovementState<BackTurnMovementState>().CanExit() &&
                            character.GetMovementState<IdleMovementState>().CanEnter();
                 }));
 
@@ -462,7 +485,7 @@ namespace LOGIYGames
                 <TurnMovementState, IdleMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return !character.GetMovementState<TurnMovementState>().IsDurationTimerRunning &&
+                    return character.GetMovementState<TurnMovementState>().CanExit() &&
                            character.GetMovementState<IdleMovementState>().CanEnter();
                 }));
 
@@ -470,7 +493,7 @@ namespace LOGIYGames
                 <TurnMovementState, RunMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return !character.GetMovementState<TurnMovementState>().IsDurationTimerRunning &&
+                    return character.GetMovementState<TurnMovementState>().CanExit() &&
                           character.GetMovementState<RunMovementState>().CanEnter();
                 }));
             character.MovementStateMachine.AddTransition
@@ -488,18 +511,14 @@ namespace LOGIYGames
             character.MovementStateMachine.AddTransition
                 <WallClimbMovementState, IdleMovementState>(
                 new FuncPredicate(() =>
-                    character.Input.InteractPressed ||
-                    !character.Sensors.IsObstacleLegsFront ||
-                    !character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") ||
-                    (character.IsGrounded && character.Input.MovementInput.y < 0)));
+                character.GetMovementState<WallClimbMovementState>().CanExit()));
 
             character.MovementStateMachine.AddTransition
                 <WallClimbMovementState, HangJumpMovementState>(
                 new FuncPredicate(() =>
                 {
                     return
-                        character.GetMovementState<HangJumpMovementState>().CanEnter() &&
-                        character.Input.JumpPressed;
+                        character.GetMovementState<HangJumpMovementState>().CanEnter();
                 }));
             #endregion
             // =========================================================
@@ -524,13 +543,13 @@ namespace LOGIYGames
 
             character.MovementStateMachine.AddTransition
                 <IdleMovementState, LadderMovementState>(
-                new FuncPredicate(() => character.GetComponent<LadderClimbController>().Ladder != null && character.Input.InteractPressed));
+                new FuncPredicate(() => character.GetMovementState<LadderMovementState>().CanEnter()));
 
             character.MovementStateMachine.AddTransition
                 <LadderMovementState, IdleMovementState>(
                 new FuncPredicate(() =>
                 {
-                    return character.GetComponent<LadderClimbController>().Ladder == null;
+                    return character.GetMovementState<LadderMovementState>().CanExit();
                 }));
             #endregion
             // =========================================================
@@ -538,21 +557,21 @@ namespace LOGIYGames
             // =========================================================
             #region MantlingState Transitions
 
-            character.MovementStateMachine.AddTransition
-                <MantlingMovementState, IdleMovementState>(
-                new FuncPredicate(() =>
-                {
-                    return character.GetMovementState<MantlingMovementState>().CanExit();
-                }));
+            character.MovementStateMachine.AddTransition<MantlingMovementState, IdleMovementState>(
+                new FuncPredicate(
+                    () => character.GetMovementState<MantlingMovementState>().CanExit())
+                );
             #endregion
             // =========================================================
             // SWIM
             // =========================================================
             #region SwimState Transitions
 
-            character.MovementStateMachine.AddTransition
-                <SwimMovementState, IdleMovementState>(
-                new FuncPredicate(() => character.IsGrounded));
+            character.MovementStateMachine.AddTransition<SwimMovementState, IdleMovementState>(
+                new FuncPredicate(
+                    () => character.GetMovementState<SwimMovementState>().CanExit() 
+                          && character.GetMovementState<IdleMovementState>().CanEnter())
+                );
             #endregion
             // =========================================================
             // FLY
@@ -579,7 +598,7 @@ namespace LOGIYGames
         // HELPERS
         // =========================================================
 
-        private bool CanFall(Character character)
+        private bool CanFall(Actor character)
         {
             var groundJump = character.GetMovementState<GroundJumpMovementState>();
             var roll = character.GetMovementState<RollMovementState>();
@@ -590,6 +609,7 @@ namespace LOGIYGames
             var fly = character.GetMovementState<FlyMovementState>();
             var wallRun = character.GetMovementState<WallRunMovementState>();
             var mantling = character.GetMovementState<MantlingMovementState>();
+            var mounting = character.GetMovementState<MountingMovementState>();
 
             return !character.IsGrounded
                 && (groundJump == null || !groundJump.IsDurationTimerRunning)
@@ -601,6 +621,7 @@ namespace LOGIYGames
             && (fly == null || !fly.IsActiveState)
             && (wallRun == null || !wallRun.IsActiveState)
             && (mantling == null || !mantling.IsActiveState)
+            && (mounting == null || !mounting.IsActiveState)
             && (mantling == null || !mantling.CanEnter())
             && (groundJump == null || !groundJump.CanEnter());
         }

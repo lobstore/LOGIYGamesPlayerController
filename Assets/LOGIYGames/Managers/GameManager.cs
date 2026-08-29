@@ -7,41 +7,54 @@ namespace LOGIYGames
     {
         [SerializeField] InputActionAsset InputActions;
 
-        InputActionMap GameActionMap;
-        InputActionMap CameraActionMap;
-        InputActionMap CharacterActionMap;
-
-        InputAction UIEngageAction;
-
+        public GameInputReader GameInput {  get; private set; }
         public bool UIEngaged { get; private set; }
         override protected void Awake()
         {
             base.Awake();
-            GameActionMap = InputActions.FindActionMap("GameControl");
-            CameraActionMap = InputActions.FindActionMap("Camera");
-            CharacterActionMap = InputActions.FindActionMap("CharacterInputs");
-            UIEngageAction = GameActionMap.FindAction("UIEngage");
-            UIEngageAction.performed += (x) =>
+            GameInput = new(InputActions);
+            GameInput.Enable();
+            GameInput.UIEngageAction.performed += (x) =>
             {
                 if (x.performed)
                 {
                     UIEngaged = !UIEngaged;
                     if (UIEngaged)
                     {
-                        CameraActionMap.Disable();
-                        CharacterActionMap.Disable();
                         Cursor.lockState = CursorLockMode.None;
                     }
                     else
                     {
-                        CameraActionMap.Enable();
-                        CharacterActionMap.Enable();
+                        CameraManager.Instance.CameraInput.Enable();
+                        PlayerManager.Instance.PlayerInput.Enable();
                         Cursor.lockState = CursorLockMode.Locked;
                     }
                 }
 
             };
+        }
+    }
+    public class GameInputReader
+    {
+        InputActionAsset InputActions;
+        InputActionMap GameActionMap;
+        public InputAction EscapeAction { get; private set; }
+        public InputAction UIEngageAction { get; private set; }
+        public bool EscapePressed => EscapeAction.WasPressedThisFrame();
+        public void Enable()
+        {
             GameActionMap.Enable();
+        }
+        public void Disable()
+        {
+            GameActionMap.Disable();
+        }
+        public GameInputReader(InputActionAsset inputActions)
+        {
+            InputActions = inputActions;
+            GameActionMap = InputActions.FindActionMap("GameControl");
+            UIEngageAction = GameActionMap.FindAction("UIEngage");
+            EscapeAction = GameActionMap.FindAction("Escape");
         }
     }
 }

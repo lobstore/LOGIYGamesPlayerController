@@ -9,7 +9,7 @@ namespace LOGIYGames.Animation
 {
     public class CharacterAnimationController : MonoModuleBase
     {
-        [SerializeField] Character character;
+        [SerializeField] Actor character;
         [SerializeField] MovementWrapperBase controller;
         [SerializeField] Animator animator;
 
@@ -337,12 +337,12 @@ namespace LOGIYGames.Animation
                 }
 
             });
-            character.EventBus.Subscribe<ComboAttackEvent>((evt) =>
-            {
-                PlayAnimation(evt.AnimationData.AnimationName);
-                animator.applyRootMotion = evt.AnimationData.UseRootMotion;
-                animator.SetFloat("MotionSpeed", evt.AnimationData.MotionSpeed);
-            });
+            //character.EventBus.Subscribe<ComboAttackEvent>((evt) =>
+            //{
+            //    PlayAnimation(evt.AnimationData.AnimationName);
+            //    animator.applyRootMotion = evt.AnimationData.UseRootMotion;
+            //    animator.SetFloat("MotionSpeed", evt.AnimationData.MotionSpeed);
+            //});
         }
         public void PlayAnimation(string animname, int layer = 0)
         {
@@ -400,7 +400,7 @@ namespace LOGIYGames.Animation
             }
         }
 
-        private float GetStateSpeed<T>() where T : CharacterMovementState
+        private float GetStateSpeed<T>() where T : MovementStateBase
         {
             return character.MovementStateMachine.GetState<T>().Data.Speed;
         }

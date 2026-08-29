@@ -3,10 +3,10 @@ using LOGIYGames.Shared.Character.Events;
 using UnityEngine;
 namespace LOGIYGames.Movement
 {
-    public class WallRunMovementState : CharacterMovementState
+    public class WallRunMovementState : MovementStateBase
     {
         Vector3 normal;
-        public WallRunMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public WallRunMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
         public override void Enter()

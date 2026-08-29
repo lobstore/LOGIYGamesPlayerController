@@ -1,22 +1,20 @@
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
+using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
-    public class JumpController
+    public class JumpController : MonoBehaviour
     {
         public int JumpCount;
         public int MaxJumpCount = 2;
-        Character Character;
-        StaminaController Stamina;
-        public JumpController(Character character)
+        [SerializeField] Actor Character;
+        private void Awake()
         {
-            Character = character;
-            Stamina = character.StaminaController;
             EventsSubscription();
         }
         public bool CanExecute(JumpStateData jumpStateData)
         {
-            return JumpCount < MaxJumpCount && Stamina.TryUse(jumpStateData.StaminaUsage);
+            return JumpCount < MaxJumpCount && Character.StaminaController.TryUse(jumpStateData.StaminaUsage);
         }
         private void EventsSubscription()
         {

@@ -2,9 +2,9 @@
 
 namespace LOGIYGames.Movement
 {
-    public class WalkMovementState : CharacterMovementState
+    public class WalkMovementState : MovementStateBase
     {
-        public WalkMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        public WalkMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData) { }
     }
 
 }

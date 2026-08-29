@@ -6,7 +6,7 @@ namespace LOGIYGames.CharacterCore
     [Serializable]
     public class MovementStateMachineViewer : MonoBehaviour
     {
-        [SerializeField] Character Character;
+        [SerializeField] Actor Character;
         StateMachine StateMachine;
         [ReadOnly] public string _currentStateName;
         [ReadOnly] public string _lastTransition;

@@ -8,7 +8,7 @@ namespace LOGIYGames
     public class BackTurnMovementState : TimedMovementState
     {
         TurnMovementStateData TurnData;
-        public BackTurnMovementState(Character ctx, TurnMovementStateData stateData) : base(ctx, stateData)
+        public BackTurnMovementState(Actor ctx, TurnMovementStateData stateData) : base(ctx, stateData)
         {
             TurnData = stateData;
         }

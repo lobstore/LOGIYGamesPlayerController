@@ -96,19 +96,19 @@ public class AOETargeting : AbilityTargetingStrategy
                 aoeRadius,
                 targetLayerMask);
 
-            HashSet<Character> targets = new();
+            HashSet<Actor> targets = new();
 
             foreach (Collider hit in hits)
             {
-                Character character = hit.GetComponentInParent<Character>();
+                Actor character = hit.GetComponentInParent<Actor>();
 
                 if (character != null)
                     targets.Add(character);
             }
 
-            foreach (Character target in targets)
+            foreach (Actor target in targets)
             {
-                ability.Execute(target);
+                ability.ApplyEffects(target);
             }
 
             Cancel();

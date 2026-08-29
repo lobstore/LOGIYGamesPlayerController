@@ -7,9 +7,9 @@ namespace LOGIYGames
     public class CharacterForwardMovement : IMovementStrategy
     {
 
-        Character Character;
+        Actor Character;
 
-        public CharacterForwardMovement(Character character)
+        public CharacterForwardMovement(Actor character)
         {
             Character = character;
         }

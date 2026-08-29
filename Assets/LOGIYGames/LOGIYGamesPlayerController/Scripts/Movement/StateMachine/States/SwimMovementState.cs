@@ -1,12 +1,16 @@
 ﻿using LOGIYGames.CharacterCore;
+using UnityEngine.TextCore.Text;
 namespace LOGIYGames.Movement
 {
-    public class SwimMovementState : CharacterMovementState
+    public class SwimMovementState : MovementStateBase
     {
-        public SwimMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public SwimMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
-
+        public override bool CanEnter()
+        {
+            return _character.Sensors.IsInWater;
+        }
         public override void Enter()
         {
             base.Enter();
@@ -18,6 +22,10 @@ namespace LOGIYGames.Movement
         {
             base.Exit();
             _character.GetComponent<MovementWrapperBase>().UseGravity = true;
+        }
+        public override bool CanExit()
+        {
+            return !_character.Sensors.IsInWater;
         }
     }
 

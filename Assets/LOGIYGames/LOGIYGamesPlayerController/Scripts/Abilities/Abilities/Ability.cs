@@ -13,11 +13,12 @@ public class Ability
     {
         if (Data.targetingStrategy != null)
         {
-            Data.targetingStrategy.Start(this, targetingManager);
+            var strategy = Data.targetingStrategy.Create();
+            strategy.Start(this, targetingManager);
         }
     }
 
-    public virtual void Execute(Character target)
+    public virtual void ApplyEffects(Actor target)
     {
         foreach (var effect in Data.effects)
         {

@@ -3,7 +3,7 @@ namespace LOGIYGames.CharacterCore
 {
     public class LadderClimbController : MonoBehaviour
     {
-        [SerializeField] Character character;
+        [SerializeField] Actor character;
         public Ladder Ladder { get; private set; }
         public float t {  get; set; }
         private void OnTriggerEnter(Collider other)

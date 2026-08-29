@@ -5,9 +5,9 @@ namespace LOGIYGames
 {
     public class LookForwardPlanarRotation : IRotationStrategy
     {
-        Character character;
+        Actor character;
 
-        public LookForwardPlanarRotation(Character character)
+        public LookForwardPlanarRotation(Actor character)
         {
             this.character = character;
         }

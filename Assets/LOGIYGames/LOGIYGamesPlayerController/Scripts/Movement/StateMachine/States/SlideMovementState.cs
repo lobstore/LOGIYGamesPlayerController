@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class SlideMovementState : CharacterMovementState
+    public class SlideMovementState : MovementStateBase
     {
-        public SlideMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public SlideMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
 

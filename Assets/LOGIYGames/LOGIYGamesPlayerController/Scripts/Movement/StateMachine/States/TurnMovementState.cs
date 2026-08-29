@@ -6,7 +6,7 @@ using UnityEngine;
 public class TurnMovementState : TimedMovementState
 {
     TurnMovementStateData TurnData;
-    public TurnMovementState(Character ctx, TurnMovementStateData stateData) : base(ctx, stateData)
+    public TurnMovementState(Actor ctx, TurnMovementStateData stateData) : base(ctx, stateData)
     {
         TurnData = stateData;
     }

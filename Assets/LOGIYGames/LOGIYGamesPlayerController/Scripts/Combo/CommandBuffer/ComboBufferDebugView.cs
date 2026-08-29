@@ -8,7 +8,7 @@ namespace LOGIYGames.CharacterCore
             new Vector2(20, 20);
 
         private ComboController ComboController;
-        [SerializeField] private Character Character;
+        [SerializeField] private Actor Character;
 
         private GUIStyle style;
 

@@ -1,9 +1,9 @@
 ﻿using LOGIYGames.CharacterCore;
 namespace LOGIYGames.Movement
 {
-    public class FlyMovementState : CharacterMovementState
+    public class FlyMovementState : MovementStateBase
     {
-        public FlyMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public FlyMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
         }
         public override void Enter()

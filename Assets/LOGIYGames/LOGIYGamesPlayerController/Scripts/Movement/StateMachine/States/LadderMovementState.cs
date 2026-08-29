@@ -1,13 +1,14 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace LOGIYGames
 {
-    public class LadderMovementState : CharacterMovementState
+    public class LadderMovementState : MovementStateBase
     {
         LadderClimbController ladderMovementController;
-        public LadderMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public LadderMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
             ladderMovementController = _character.GetComponent<LadderClimbController>();
         }
@@ -36,6 +37,14 @@ namespace LOGIYGames
             _controller.UseGravity = true;
             _character.RotationStrategy = _character.DefaultRotationStrategy;
             _character.MovementStrategy = _character.DefaultMovementStrategy;
+        }
+        public override bool CanExit()
+        {
+            return ladderMovementController.Ladder == null;
+        }
+        public override bool CanEnter()
+        {
+            return ladderMovementController.Ladder != null && _character.Input.InteractPressed;
         }
     }
 }

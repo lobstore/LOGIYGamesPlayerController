@@ -9,7 +9,7 @@ public class CinemachineRollEffect : CinemachineExtension
     [Header("Roll Settings")]
     public float rollSpeed = 8f;
 
-    Character player; // объект где находится IsRolling
+    Actor player; // объект где находится IsRolling
 
     RollMovementState roll;
     LandingMovementState land;

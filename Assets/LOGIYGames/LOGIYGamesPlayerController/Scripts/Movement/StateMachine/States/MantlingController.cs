@@ -27,11 +27,11 @@ namespace LOGIYGames
         private List<MantlingStrategy> Mantlings = new();
         public List<MantlingFactory> MantlingFactories = new();
         private MantlingStrategy CurrentMantling;
-        Character _character;
+        Actor _character;
         private void Awake()
         {
             mantleIKController = GetComponent<HandsIK>();
-            _character = GetComponent<Character>();
+            _character = GetComponent<Actor>();
             foreach (var item in MantlingFactories)
             {
                 Mantlings.Add(item.Create(_character));

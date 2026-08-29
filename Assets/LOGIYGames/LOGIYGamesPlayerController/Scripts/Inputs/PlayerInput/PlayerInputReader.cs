@@ -1,4 +1,5 @@
 using LOGIYGames.CharacterCore;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,8 +9,7 @@ namespace LOGIYGames
     {
 
         InputActionMap CharacterActionMap;
-        InputActionMap CameraActionMap;
-
+        List<InputAction> movementActions = new();
         InputAction m_MoveAction;
         InputAction m_JumpAction;
         InputAction m_EvadeAction;
@@ -18,11 +18,13 @@ namespace LOGIYGames
         InputAction m_FocusAction;
         InputAction m_AttackAction;
         InputAction m_InteractAction;
-        Camera Camera;
-        
+        InputAction m_AbilityAction;
+        Transform Pivot;
 
-        public PlayerInputReader(InputActionAsset InputActions)
+
+        public PlayerInputReader(InputActionAsset InputActions, Transform pivot)
         {
+
             CharacterActionMap = InputActions.FindActionMap("CharacterInputs");
             m_MoveAction = CharacterActionMap.FindAction("Move");
             m_JumpAction = CharacterActionMap.FindAction("Jump");
@@ -32,10 +34,30 @@ namespace LOGIYGames
             m_FocusAction = CharacterActionMap.FindAction("Focus");
             m_AttackAction = CharacterActionMap.FindAction("Attack");
             m_InteractAction = CharacterActionMap.FindAction("Interact");
-            Camera = Camera.main;
+            m_AbilityAction = CharacterActionMap.FindAction("Ability");
+            Pivot = pivot;
+            movementActions.Add(m_MoveAction);
+            movementActions.Add(m_JumpAction);
+            movementActions.Add(m_EvadeAction);
+            movementActions.Add(m_CrouchAction);
+            movementActions.Add(m_SprintAction);
+            movementActions.Add(m_AttackAction);
 
         }
-
+        public void DisableMovement()
+        {
+            foreach (var movement in movementActions)
+            {
+                movement.Disable();
+            }
+        }
+        public void EnableMovement()
+        {
+            foreach (var movement in movementActions)
+            {
+                movement.Enable();
+            }
+        }
         public void Enable()
         {
             CharacterActionMap.Enable();
@@ -54,10 +76,12 @@ namespace LOGIYGames
             input.EvadePressed = m_EvadeAction.WasPressedThisFrame();
             input.SprintPressing = m_SprintAction.IsPressed();
             input.AttackPressed = m_AttackAction.WasPressedThisFrame();
-            input.InteractPressed = m_InteractAction.WasPressedThisFrame();
+            input.InteractPressed = m_InteractAction.WasReleasedThisFrame();
             input.CrouchPressed = m_CrouchAction.WasPressedThisFrame();
-            input.LookForward = Camera.transform.forward;
-            input.LookRight = Camera.transform.right;
+            input.AbilityPressed = m_AbilityAction.WasPressedThisFrame();
+            input.InteractHeld = m_InteractAction.WasPerformedThisFrame();
+            input.LookForward = Pivot.forward;
+            input.LookRight = Pivot.right;
             return input;
         }
 

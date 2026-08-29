@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class AbilityMovementState : CharacterMovementState
+    public class AbilityMovementState : MovementStateBase
     {
         //private readonly AbilityController abilityController;
-        public AbilityMovementState(Character ctx, MovementStateData stateData) : base(ctx, stateData)
+        public AbilityMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
            // abilityController = ctx.AbilityController;
         }
