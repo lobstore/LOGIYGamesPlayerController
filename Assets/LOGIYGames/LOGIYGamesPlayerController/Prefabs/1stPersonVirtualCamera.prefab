@@ -17,7 +17,8 @@ GameObject:
   - component: {fileID: 4170622409733040555}
   - component: {fileID: 4646418619930704880}
   - component: {fileID: -7679893750581215393}
-  - component: {fileID: 5274164363819128872}
+  - component: {fileID: 976841014759332431}
+  - component: {fileID: 5160590578903006961}
   m_Layer: 0
   m_Name: 1stPersonVirtualCamera
   m_TagString: Untagged
@@ -256,7 +257,7 @@ MonoBehaviour:
   normalFov: 75
   sprintFov: 90
   smooth: 8
---- !u!114 &5274164363819128872
+--- !u!114 &976841014759332431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -265,7 +266,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 7261505452651263688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a086b85bb21f04a41b41cdabd913b5a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 27c4f3927a48e444f87a2f4d41c378c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CameraRollModule
+  m_EditorClassIdentifier: Assembly-CSharp::CameraRollEffect
   rollSpeed: 360
+--- !u!114 &5160590578903006961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261505452651263688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseListener
+  ApplyAfter: 3
+  ChannelMask: 0
+  Gain: 1
+  Use2DDistance: 0
+  UseCameraSpace: 1
+  SignalCombinationMode: 0
+  ReactionSettings:
+    m_SecondaryNoise: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}

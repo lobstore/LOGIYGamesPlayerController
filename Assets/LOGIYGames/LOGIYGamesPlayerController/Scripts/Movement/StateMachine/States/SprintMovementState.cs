@@ -5,14 +5,10 @@ namespace LOGIYGames.Movement
     public class SprintMovementState : MovementStateBase
     {
         public SprintMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData) { }
-        protected override void Move()
-        {
-            if (Data.IsAnimationDrivenMovement) return;
-            base.Move();
-        }
+
         public override bool CanExit()
         {
-            return !_character.Input.SprintPressing;
+            return !_character.Input.SprintPressing || _character.Input.MovementInput.magnitude == 0;
         }
         public override bool CanEnter()
         {

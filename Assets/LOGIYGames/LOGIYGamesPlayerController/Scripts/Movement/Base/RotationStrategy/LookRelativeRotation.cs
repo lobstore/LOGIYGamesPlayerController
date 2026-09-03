@@ -20,7 +20,7 @@ namespace LOGIYGames
             // если есть ввод — поворачиваем по направлению камеры
             if (input.magnitude > 0)
             {
-
+                Debug.Log("a");
                 // берем направления камеры по плоскости XZ
                 Vector3 cameraForward = Character.Input.LookForward;
                 Vector3 cameraRight = Character.Input.LookRight;

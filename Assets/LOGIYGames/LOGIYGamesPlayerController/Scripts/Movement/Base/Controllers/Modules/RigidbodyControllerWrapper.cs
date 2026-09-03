@@ -15,10 +15,12 @@ namespace LOGIYGames
         [Tooltip("Force mode for movement (ignored if useAddForce is false)")]
         [SerializeField] private ForceMode m_movementForceMode = ForceMode.Acceleration;
         [Tooltip("Movement force multiplier")]
-        [SerializeField] private float m_movementForceMultiplier = 10f;
-
+        [SerializeField] float forceMult;
         private Rigidbody m_rigidbody;
         private CapsuleCollider m_capsuleCollider;
+
+        public override Collider Collider => m_capsuleCollider;
+
         private SensorsModule m_sensors;
 
         private float m_Height;
@@ -92,15 +94,15 @@ namespace LOGIYGames
 
         private void Update()
         {
-            if (m_sensors.IsGrounded)
-            {
-                m_rigidbody.linearDamping = groundDrag;
-            }
-            else
-            {
-                m_rigidbody.linearDamping = airDrag;
-            }
-            m_rigidbody.useGravity = !m_sensors.IsOnSlope;
+            //if (m_sensors.IsGrounded)
+            //{
+            //    m_rigidbody.linearDamping = groundDrag;
+            //}
+            //else
+            //{
+            //    m_rigidbody.linearDamping = airDrag;
+            //}
+            //m_rigidbody.useGravity = !m_sensors.IsOnSlope;
 
         }
         #endregion
@@ -113,24 +115,18 @@ namespace LOGIYGames
             Vector3 force = Vector3.zero;
             horizontalVelocity = m_rigidbody.linearVelocity;
             horizontalVelocity.y = 0;
-            if (m_sensors.IsGrounded)
-            {
-                force = a_move;
-                if (m_sensors.IsOnSlope)
+            force = a_move;
+                //if (m_sensors.IsOnSlope)
+                //{
+                //    if (UseProjectionOnPlane)
+                //    {
+                //        force = Vector3.ProjectOnPlane(force, m_sensors.BelowHit.normal);
+                //    }
+                //}
+                if (horizontalVelocity.sqrMagnitude <= a_move.sqrMagnitude)
                 {
-                    if (UseProjectionOnPlane)
-                    {
-                        force = Vector3.ProjectOnPlane(force, m_sensors.BelowHit.normal);
-                    }
+                    m_rigidbody.AddForce(force * forceMult, m_movementForceMode);
                 }
-                m_rigidbody.AddForce(force - horizontalVelocity, m_movementForceMode);
-            }
-            else
-            {
-                force = a_move;
-                m_rigidbody.AddForce(force - horizontalVelocity, ForceMode.Force);
-            }
-
 
         }
         public override void ResetVelocity()

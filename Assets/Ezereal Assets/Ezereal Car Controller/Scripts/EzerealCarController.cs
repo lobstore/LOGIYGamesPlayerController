@@ -54,7 +54,7 @@ namespace Ezereal
         public float maxSteerAngle = 30f; // 30f default
         public float steeringSpeed = 5f; // 0.5f default
         public float stopThreshold = 1f; // 1f default. At what speed car will make a full stop
-        public float decelerationSpeed = 0.5f; // 0.5f default
+        public float decelerationSpeed = 100f;
         public float maxSteeringWheelRotation = 360f; // 360 for real steering wheel. 120 would be more suitable for racing.
 
         [Header("Drive Type")]
@@ -121,87 +121,52 @@ namespace Ezereal
 
         void OnAccelerate(InputValue accelerationValue)
         {
-            currentAccelerationValue = accelerationValue.Get<float>();
-            //Debug.Log("Acceleration: " + currentAccelerationValue.ToString());
+           
+            switch (currentGear)
+            {
+                case AutomaticGears.Reverse:
+                    currentAccelerationValue = -accelerationValue.Get<float>();
+                    break;
+                case AutomaticGears.Neutral:
+
+                    break;
+                case AutomaticGears.Drive:
+                    currentAccelerationValue = accelerationValue.Get<float>();
+                    break;
+                default:
+                    break;
+            }
         }
 
         void Acceleration()
         {
+
             if (isStarted)
             {
-                if (currentGear == AutomaticGears.Drive)
+
+                switch (driveType)
                 {
-                    // Calculate how close the car is to top speed
-                    // as a number from zero to one
-                    speedFactor = Mathf.InverseLerp(0, maxForwardSpeed, currentSpeed);
+                    case DriveTypes.RWD:
+                        rearLeftWheelCollider.motorTorque = horsePower * currentAccelerationValue;
+                        rearRightWheelCollider.motorTorque = horsePower * currentAccelerationValue;
 
-                    // Use that to calculate how much torque is available 
-                    // (zero torque at top speed)
-                    float currentMotorTorque = Mathf.Lerp(horsePower, 0, speedFactor);
+                        break;
+                    case DriveTypes.FWD:
+                        frontLeftWheelCollider.motorTorque = horsePower * currentAccelerationValue;
+                        frontRightWheelCollider.motorTorque = horsePower * currentAccelerationValue;
 
-                    if (currentAccelerationValue > 0f && currentSpeed < maxForwardSpeed)
-                    {
-                        if (driveType == DriveTypes.RWD)
-                        {
-                            rearLeftWheelCollider.motorTorque = currentMotorTorque * currentAccelerationValue;
-                            rearRightWheelCollider.motorTorque = currentMotorTorque * currentAccelerationValue;
-                        }
-                        else if (driveType == DriveTypes.FWD)
-                        {
-                            frontLeftWheelCollider.motorTorque = currentMotorTorque * currentAccelerationValue;
-                            frontRightWheelCollider.motorTorque = currentMotorTorque * currentAccelerationValue;
-                        }
-                        else if (driveType == DriveTypes.AWD)
-                        {
-                            frontLeftWheelCollider.motorTorque = currentMotorTorque * currentAccelerationValue;
-                            frontRightWheelCollider.motorTorque = currentMotorTorque * currentAccelerationValue;
-                            rearLeftWheelCollider.motorTorque = currentMotorTorque * currentAccelerationValue;
-                            rearRightWheelCollider.motorTorque = currentMotorTorque * currentAccelerationValue;
-                        }
-                    }
-                    else
-                    {
-                        frontLeftWheelCollider.motorTorque = 0;
-                        frontRightWheelCollider.motorTorque = 0;
-                        rearLeftWheelCollider.motorTorque = 0;
-                        rearRightWheelCollider.motorTorque = 0;
-                    }
+                        break;
+                    case DriveTypes.AWD:
+                        frontLeftWheelCollider.motorTorque = horsePower * currentAccelerationValue;
+                        frontRightWheelCollider.motorTorque = horsePower * currentAccelerationValue;
+                        rearLeftWheelCollider.motorTorque = horsePower * currentAccelerationValue;
+                        rearRightWheelCollider.motorTorque = horsePower * currentAccelerationValue;
+
+
+                        break;
+                    default:
+                        break;
                 }
-
-                if (currentGear == AutomaticGears.Reverse)
-                {
-                    if (currentAccelerationValue > 0f && currentSpeed > -maxReverseSpeed)
-                    {
-                        currentAccelerationValue = 1; //Invert Acceleration value
-
-                        if (driveType == DriveTypes.RWD)
-                        {
-                            rearLeftWheelCollider.motorTorque = -currentAccelerationValue * horsePower;
-                            rearRightWheelCollider.motorTorque = -currentAccelerationValue * horsePower;
-                        }
-                        else if (driveType == DriveTypes.FWD)
-                        {
-                            frontLeftWheelCollider.motorTorque = -currentAccelerationValue * horsePower;
-                            frontRightWheelCollider.motorTorque = -currentAccelerationValue * horsePower;
-                        }
-                        else if (driveType == DriveTypes.AWD)
-                        {
-                            frontLeftWheelCollider.motorTorque = -currentAccelerationValue * horsePower;
-                            frontRightWheelCollider.motorTorque = -currentAccelerationValue * horsePower;
-                            rearLeftWheelCollider.motorTorque = -currentAccelerationValue * horsePower;
-                            rearRightWheelCollider.motorTorque = -currentAccelerationValue * horsePower;
-                        }
-
-                    }
-                    else
-                    {
-                        frontLeftWheelCollider.motorTorque = 0;
-                        frontRightWheelCollider.motorTorque = 0;
-                        rearLeftWheelCollider.motorTorque = 0;
-                        rearRightWheelCollider.motorTorque = 0;
-                    }
-                }
-
                 UpdateAccelerationSlider();
             }
         }
@@ -225,11 +190,20 @@ namespace Ezereal
             {
                 frontLeftWheelCollider.brakeTorque = currentBrakeValue * brakePower;
                 frontRightWheelCollider.brakeTorque = currentBrakeValue * brakePower;
+                frontLeftWheelCollider.motorTorque = 0;
+                frontRightWheelCollider.motorTorque = 0;
+                rearLeftWheelCollider.brakeTorque = currentBrakeValue * brakePower;
+                rearRightWheelCollider.brakeTorque = currentBrakeValue * brakePower;
+                rearLeftWheelCollider.motorTorque = 0;
+                rearRightWheelCollider.motorTorque = 0;
+
             }
             else
             {
                 frontLeftWheelCollider.brakeTorque = 0;
                 frontRightWheelCollider.brakeTorque = 0;
+                rearLeftWheelCollider.brakeTorque = 0;
+                rearRightWheelCollider.brakeTorque = 0;
             }
         }
 
@@ -285,9 +259,9 @@ namespace Ezereal
 
         void Steering()
         {
-            float adjustedspeedFactor = Mathf.InverseLerp(20, maxForwardSpeed, currentSpeed); //minimum speed affecting steerAngle is 20
-            float adjustedTurnAngle = targetSteerAngle * (1 - adjustedspeedFactor); //based on current speed.
-            currentSteerAngle = Mathf.Lerp(currentSteerAngle, adjustedTurnAngle, Time.deltaTime * steeringSpeed);
+            //float adjustedspeedFactor = Mathf.InverseLerp(20, maxForwardSpeed, currentSpeed); //minimum speed affecting steerAngle is 20
+            //float adjustedTurnAngle = targetSteerAngle * (1 - adjustedspeedFactor); //based on current speed.
+            currentSteerAngle = Mathf.Lerp(currentSteerAngle, targetSteerAngle, Time.deltaTime * steeringSpeed);
 
             frontLeftWheelCollider.steerAngle = currentSteerAngle;
             frontRightWheelCollider.steerAngle = currentSteerAngle;
@@ -296,21 +270,6 @@ namespace Ezereal
             UpdateWheel(frontRightWheelCollider, frontRightWheelMesh);
             UpdateWheel(rearLeftWheelCollider, rearLeftWheelMesh);
             UpdateWheel(rearRightWheelCollider, rearRightWheelMesh);
-        }
-
-        void Slowdown()
-        {
-            if (vehicleRB != null)
-            {
-                if (currentAccelerationValue == 0 && currentBrakeValue == 0 && currentHandbrakeValue == 0)
-                {
-#if UNITY_6000_0_OR_NEWER
-                    vehicleRB.linearVelocity = Vector3.Lerp(vehicleRB.linearVelocity, Vector3.zero, Time.deltaTime * decelerationSpeed);
-#else
-                    vehicleRB.velocity = Vector3.Lerp(vehicleRB.velocity, Vector3.zero, Time.deltaTime * decelerationSpeed);
-#endif
-                }
-            }
         }
 
         void OnDownShift()
@@ -354,18 +313,15 @@ namespace Ezereal
         }
 
 
-
         private void FixedUpdate()
         {
             Acceleration();
-
             Braking();
 
             Handbraking();
 
             Steering();
 
-            Slowdown();
 
             RotateSteeringWheel();
 
@@ -389,12 +345,11 @@ namespace Ezereal
 #if UNITY_6000_0_OR_NEWER
                 currentSpeed = Vector3.Dot(vehicleRB.gameObject.transform.forward, vehicleRB.linearVelocity);
                 currentSpeed *= 3.6f;
-                UpdateSpeedText(currentSpeed);
 #else
                 currentSpeed = Vector3.Dot(vehicleRB.gameObject.transform.forward, vehicleRB.velocity);
                 currentSpeed *= 3.6f; 
-                UpdateSpeedText(currentSpeed);
 #endif
+                UpdateSpeedText(currentSpeed);
 
             }
 

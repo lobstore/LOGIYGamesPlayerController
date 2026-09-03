@@ -20,7 +20,7 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] public CameraTarget ActionCameraTarget { get; private set; }
         [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
-        public MovementRuntimeData RuntimeMovement { get; private set; }
+        [field:SerializeField] public MovementRuntimeData RuntimeMovement { get; private set; }
 
         public CharacterStats Stats { get; private set; }
 
@@ -46,7 +46,6 @@ namespace LOGIYGames.CharacterCore
         public float HeightChangingSmoothTime { get; private set; } = 4f;
         private void Awake()
         {
-            RuntimeMovement = new();
             Stats = new();
             Stats.SetBase(StatType.BaseHealth, 100);
             Stats.SetBase(StatType.BaseStamina, 50);
@@ -235,7 +234,6 @@ namespace LOGIYGames.CharacterCore
         #region IControllable
         public void UpdateInput(CharacterInput inputReader)
         {
-            Debug.Log("Input");
             Input = inputReader;
         }
         public void ResetInput()

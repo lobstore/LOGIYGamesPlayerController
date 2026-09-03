@@ -116,6 +116,8 @@ namespace LOGIYGames
             m_upCheckDistance = controller.Height/2;
             m_groundCheckDistance = controller.Height/2;
             m_groundCheckDistance = controller.Height / 2;
+            if (controller == null)
+            controller = GetComponent<MovementWrapperBase>();
         }
 
         public override void OnUpdate(float deltaTime)
@@ -243,7 +245,7 @@ namespace LOGIYGames
         private void OnDrawGizmosSelected()
         {
 
-            if (!m_showDebugInfo) return;
+            if (!m_showDebugInfo || col == null) return;
 
             // Draw sphere casts
             DrawSphereCasts(DetectionOrigin);

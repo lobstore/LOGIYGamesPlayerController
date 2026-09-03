@@ -7,10 +7,15 @@ namespace Ezereal
         [Header("Ezereal References")]
         [SerializeField] EzerealCarController ezerealCarController;
 
-        WheelFrictionCurve fLWSidewaysFriction;
-        WheelFrictionCurve fRWSidewaysFriction;
-        WheelFrictionCurve rLWSidewaysFriction;
-        WheelFrictionCurve rRWSidewaysFriction;
+        WheelFrictionCurve driftfLWSidewaysFriction;
+        WheelFrictionCurve driftfRWSidewaysFriction;
+        WheelFrictionCurve driftrLWSidewaysFriction;
+        WheelFrictionCurve driftrRWSidewaysFriction;
+
+        WheelFrictionCurve defaultfLWSidewaysFriction;
+        WheelFrictionCurve defaultfRWSidewaysFriction;
+        WheelFrictionCurve defaultrLWSidewaysFriction;
+        WheelFrictionCurve defaultrRWSidewaysFriction;
 
         WheelFrictionCurve fLWForwardFriction;
         WheelFrictionCurve fRWForwardFriction;
@@ -72,7 +77,7 @@ namespace Ezereal
 
         void SetSidewaysFriction()
         {
-            fLWSidewaysFriction = new WheelFrictionCurve
+            defaultfLWSidewaysFriction = new WheelFrictionCurve
             {
                 extremumSlip = ezerealCarController.frontLeftWheelCollider.sidewaysFriction.extremumSlip,
                 extremumValue = ezerealCarController.frontLeftWheelCollider.sidewaysFriction.extremumValue,
@@ -81,7 +86,7 @@ namespace Ezereal
                 stiffness = ezerealCarController.frontLeftWheelCollider.sidewaysFriction.stiffness
             };
 
-            fRWSidewaysFriction = new WheelFrictionCurve
+            defaultfRWSidewaysFriction = new WheelFrictionCurve
             {
                 extremumSlip = ezerealCarController.frontRightWheelCollider.sidewaysFriction.extremumSlip,
                 extremumValue = ezerealCarController.frontRightWheelCollider.sidewaysFriction.extremumValue,
@@ -90,7 +95,7 @@ namespace Ezereal
                 stiffness = ezerealCarController.frontRightWheelCollider.sidewaysFriction.stiffness
             };
 
-            rLWSidewaysFriction = new WheelFrictionCurve
+            defaultrLWSidewaysFriction = new WheelFrictionCurve
             {
                 extremumSlip = ezerealCarController.rearLeftWheelCollider.sidewaysFriction.extremumSlip,
                 extremumValue = ezerealCarController.rearLeftWheelCollider.sidewaysFriction.extremumValue,
@@ -99,7 +104,7 @@ namespace Ezereal
                 stiffness = ezerealCarController.rearLeftWheelCollider.sidewaysFriction.stiffness
             };
 
-            rRWSidewaysFriction = new WheelFrictionCurve
+            defaultrRWSidewaysFriction = new WheelFrictionCurve
             {
                 extremumSlip = ezerealCarController.rearRightWheelCollider.sidewaysFriction.extremumSlip,
                 extremumValue = ezerealCarController.rearRightWheelCollider.sidewaysFriction.extremumValue,
@@ -107,6 +112,11 @@ namespace Ezereal
                 asymptoteValue = ezerealCarController.rearRightWheelCollider.sidewaysFriction.asymptoteValue,
                 stiffness = ezerealCarController.rearRightWheelCollider.sidewaysFriction.stiffness
             };
+            driftfLWSidewaysFriction = defaultfLWSidewaysFriction;
+            driftfRWSidewaysFriction = defaultfRWSidewaysFriction;
+            driftrLWSidewaysFriction = defaultrLWSidewaysFriction;
+            driftrRWSidewaysFriction = defaultrRWSidewaysFriction;
+
         }
 
         public void StartDrifting(float currentHandbrakeValue)
@@ -114,13 +124,16 @@ namespace Ezereal
             if (ezerealCarController != null)
             {
 
-                rLWSidewaysFriction.extremumSlip = 3f * currentHandbrakeValue;
-                rRWSidewaysFriction.extremumSlip = 3f * currentHandbrakeValue;
-                rLWSidewaysFriction.extremumValue = 0.7f * currentHandbrakeValue;
-                rRWSidewaysFriction.extremumValue = 0.7f * currentHandbrakeValue;
+                //driftrLWSidewaysFriction.extremumSlip = 3f * currentHandbrakeValue;
+                //driftrRWSidewaysFriction.extremumSlip = 3f * currentHandbrakeValue;
+                //driftrLWSidewaysFriction.extremumValue = 0.7f * currentHandbrakeValue;
+                //driftrRWSidewaysFriction.extremumValue = 0.7f * currentHandbrakeValue;
 
-                ezerealCarController.rearLeftWheelCollider.sidewaysFriction = rLWSidewaysFriction;
-                ezerealCarController.rearRightWheelCollider.sidewaysFriction = rRWSidewaysFriction;
+                driftrLWSidewaysFriction.stiffness = 1f;
+                driftrRWSidewaysFriction.stiffness = 1f;
+
+                ezerealCarController.rearLeftWheelCollider.sidewaysFriction = driftrLWSidewaysFriction;
+                ezerealCarController.rearRightWheelCollider.sidewaysFriction = driftrRWSidewaysFriction;
             }
         }
 
@@ -128,14 +141,13 @@ namespace Ezereal
         {
             if (ezerealCarController != null)
             {
-                rLWSidewaysFriction.extremumSlip = 0.2f;
-                rRWSidewaysFriction.extremumSlip = 0.2f;
-                rLWSidewaysFriction.extremumValue = 1f;
-                rRWSidewaysFriction.extremumValue = 1f;
 
-                ezerealCarController.rearLeftWheelCollider.sidewaysFriction = rLWSidewaysFriction;
-                ezerealCarController.rearRightWheelCollider.sidewaysFriction = rRWSidewaysFriction;
+                ezerealCarController.rearLeftWheelCollider.sidewaysFriction = defaultrLWSidewaysFriction;
+                ezerealCarController.rearRightWheelCollider.sidewaysFriction = defaultrRWSidewaysFriction;
+                ezerealCarController.frontLeftWheelCollider.sidewaysFriction = defaultfLWSidewaysFriction;
+                ezerealCarController.frontRightWheelCollider.sidewaysFriction = defaultfRWSidewaysFriction;
             }
         }
     }
+
 }

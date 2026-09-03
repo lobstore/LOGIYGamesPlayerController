@@ -397,6 +397,14 @@ namespace LOGIYGames
                         character.GetMovementState<LandingMovementState>().CanExit() &&
                         character.GetMovementState<IdleMovementState>().CanEnter();
                 }));
+            character.MovementStateMachine.AddTransition
+                <LandingMovementState, GroundJumpMovementState>(
+                new FuncPredicate(() =>
+                {
+                    return
+                        character.GetMovementState<LandingMovementState>().IsActionFrameInProgress &&
+                        character.GetMovementState<GroundJumpMovementState>().CanEnter();
+                }));
             #endregion
             // =========================================================
             // DASH

@@ -26,10 +26,7 @@ namespace LOGIYGames
             float targetLean = -horizontal * maxLean;
 
             currentLean = Mathf.Lerp(currentLean, targetLean, smooth * Time.deltaTime);
-
-            var lens = cinemachineCamera.Lens;
-            lens.Dutch = currentLean;
-            cinemachineCamera.Lens = lens;
+            cinemachineCamera.Lens.Dutch = currentLean;
         }
     }
 }

@@ -51,7 +51,7 @@ namespace LOGIYGames.Movement
             //TODO REFACTOR
             if (_character.IsGrounded)
             {
-                _character.GetComponent<JumpController>().JumpCount = 0;
+                _character.GetComponent<JumpController>().ResetJumps();
             }
         }
 

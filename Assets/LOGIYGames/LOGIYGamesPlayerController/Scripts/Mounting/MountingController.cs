@@ -37,6 +37,7 @@ public class MountingController : MonoBehaviour
         Target.GetComponent<PlayerInput>().enabled = true;
         CameraManager.Instance.CameraInput.Disable();
         CameraManager.Instance.DisableAllCameras();
+        PlayerManager.Instance.PlayerInput.DisableMovement();
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<MovementWrapperBase>().UseGravity= false;
         transform.SetParent(Current.transform);
@@ -49,6 +50,7 @@ public class MountingController : MonoBehaviour
         gameObject.GetComponent<MovementWrapperBase>().UseGravity = true;
         CameraManager.Instance.CameraInput.Enable();
         CameraManager.Instance.EnableAllCameras();
+        PlayerManager.Instance.PlayerInput.EnableMovement();
         transform.position = Current.transform.position + -Current.transform.right * 2;
         transform.SetParent(null);
         gameObject.GetComponent<Collider>().enabled = true;

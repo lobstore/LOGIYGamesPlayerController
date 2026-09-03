@@ -5,6 +5,7 @@
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="UniGLTF.csproj" />
   <Project Path="CrashKonijn.Goap.Core.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="uLipSync.Runtime.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="CrashKonijn.Goap.Editor.csproj" />
@@ -31,7 +32,6 @@
   <Project Path="uLipSync.Samples.WebGL.Runtime.csproj" />
   <Project Path="RealStep.Runtime.csproj" />
   <Project Path="VRM10.MToon10.Editor.csproj" />
-  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="UniGLTF.Utils.csproj" />
   <Project Path="uLipSync.Example.RuntimeProfile.Runtime.csproj" />
   <Project Path="uLipSync.Samples.VRM.Runtime.csproj" />

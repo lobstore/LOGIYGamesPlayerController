@@ -1,16 +1,22 @@
+using Alchemy.Inspector;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
+using System;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
     public class JumpController : MonoBehaviour
     {
-        public int JumpCount;
-        public int MaxJumpCount = 2;
+        [field: SerializeField][field: ReadOnly] public int JumpCount {  get; private set; }
+        [field:SerializeField] public int MaxJumpCount {  get; private set; }
         [SerializeField] Actor Character;
         private void Awake()
         {
             EventsSubscription();
+        }
+        public void ResetJumps()
+        {
+            JumpCount = 0;
         }
         public bool CanExecute(JumpStateData jumpStateData)
         {
