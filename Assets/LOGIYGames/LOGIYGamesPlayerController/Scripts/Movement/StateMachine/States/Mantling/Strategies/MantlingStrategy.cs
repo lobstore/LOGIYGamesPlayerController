@@ -15,6 +15,7 @@ namespace LOGIYGames
         public RaycastHit TargetTopPoint { get; protected set; }
 
         protected Actor _characterModule;
+        protected MovementWrapperBase _controller;
         protected float checkDistance;
         protected LayerMask mantlingLayers;
         public CountdownTimer Duration { get; protected set; }
@@ -24,6 +25,7 @@ namespace LOGIYGames
             this.mantlingLayers = data.mantlingLayers;
             this.checkDistance = data.checkDistance;
             _characterModule = chr;
+            _controller = chr.GetComponent<MovementWrapperBase>();
             Duration = new CountdownTimer(data.duration);
         }
 

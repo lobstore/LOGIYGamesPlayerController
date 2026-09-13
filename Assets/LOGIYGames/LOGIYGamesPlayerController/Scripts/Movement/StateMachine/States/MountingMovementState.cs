@@ -11,7 +11,6 @@ namespace LOGIYGames.Movement
         }
         public override bool CanEnter()
         {
-            Debug.Log(_character.Input.InteractPressed);
             return controller.CanMount() && _character.Input.InteractPressed;
         }
         public override bool CanExit()

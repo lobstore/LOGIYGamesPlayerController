@@ -12,7 +12,7 @@ public class StopMovementState : TimedMovementState
         Direction dir = _character.GetRelativeMovementDirection();
         _character.EventBus.Publish(new MovementStoppedEvent
         {
-            movementSpeed = _character.RuntimeMovement.Speed,
+            movementSpeed = _character.RuntimeMovement.CurrentSpeed,
             direction = dir,
         });
         base.Enter();
@@ -21,7 +21,8 @@ public class StopMovementState : TimedMovementState
     {
         return base.CanEnter() 
             && _character.Input.MovementInput.magnitude == 0 
-            && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson;
+            && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson
+            && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.ThirdPersonLookForward;
     }
 }
 

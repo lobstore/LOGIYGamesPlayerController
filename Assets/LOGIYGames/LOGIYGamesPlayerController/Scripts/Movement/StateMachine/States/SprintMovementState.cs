@@ -4,7 +4,27 @@ namespace LOGIYGames.Movement
 {
     public class SprintMovementState : MovementStateBase
     {
-        public SprintMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData) { }
+        LocomotionController controller;
+        public SprintMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
+        {
+            controller = ctx.GetComponent<LocomotionController>();
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+            if (!Data.IsAnimationDrivenMovement)
+            {
+                if (_character.Input.MovementInput.magnitude > 0)
+                    controller.Move();
+
+            }
+            if (!Data.IsAnimationDrivenRotation)
+            {
+                _character.Rotate();
+
+            }
+        }
 
         public override bool CanExit()
         {

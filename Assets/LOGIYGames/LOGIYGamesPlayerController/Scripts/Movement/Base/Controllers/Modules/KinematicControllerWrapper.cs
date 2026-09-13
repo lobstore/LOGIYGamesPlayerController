@@ -13,14 +13,13 @@ namespace LOGIYGames
         private KinematicCharacterMotor m_kinematicMotor;
         private CapsuleCollider m_capsuleCollider;
         private SensorsModule m_SensorsModule;
-        private CharacterGravityModule m_characterGravityModule;
+        private CharacterGravity m_characterGravityModule;
         private Actor character;
         
         #region Public Properties
         public override float MaxStepHeight
         {
             get => m_kinematicMotor.MaxStepHeight;
-            set => m_kinematicMotor.MaxStepHeight = value;
         }
         Quaternion targetRotation;
         Vector3 targetVelocity;
@@ -59,6 +58,8 @@ namespace LOGIYGames
 
         public override Vector3 Velocity => m_kinematicMotor.Velocity;
 
+        public override Collider Collider => m_capsuleCollider;
+
 
         #endregion
 
@@ -68,7 +69,7 @@ namespace LOGIYGames
         {
             m_kinematicMotor = GetComponent<KinematicCharacterMotor>();
             m_capsuleCollider = GetComponent<CapsuleCollider>();
-            m_characterGravityModule = GetComponent<CharacterGravityModule>();
+            m_characterGravityModule = GetComponent<CharacterGravity>();
             m_kinematicMotor.MaxStableSlopeAngle = StableSlope;
             Debug.Assert(m_kinematicMotor != null, "Error (KinematicControllerWrapper): Could not find KinematicCharacterMotor component");
             Debug.Assert(m_capsuleCollider != null, "Error (KinematicControllerWrapper): Could not find CapsuleCollider component");
@@ -80,7 +81,7 @@ namespace LOGIYGames
         
         #region Movement Methods
         
-        public override void Move(Vector3 a_move)
+        public override void ChangeVelocity(Vector3 a_move)
         {
             targetVelocity = a_move;
         }  
@@ -103,7 +104,7 @@ namespace LOGIYGames
         
         #region Jump Method
         
-        public override void AddForce(Vector3 force)
+        public override void AddImpulse(Vector3 force)
         {
             if (m_characterGravityModule != null)
             {
@@ -178,6 +179,21 @@ namespace LOGIYGames
         public override void ResetVelocity()
         {
             targetVelocity = Vector3.zero;
+        }
+
+        public override void ResetGravity()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void DisableMovement()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void EnableMovement()
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion

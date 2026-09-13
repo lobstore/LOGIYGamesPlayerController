@@ -28,8 +28,8 @@ namespace LOGIYGames
             if (!HasEnoughSpace())
                 return false;
 
-            return obstacleHeight > _characterModule.MaxStepHeight &&
-                   obstacleHeight <= _characterModule.Height * 0.5;
+            return obstacleHeight > _controller.MaxStepHeight &&
+                   obstacleHeight <= _controller.Height*0.5f;
         }
 
         public override bool CanExit()
@@ -60,7 +60,7 @@ namespace LOGIYGames
         }
         public override void Exit()
         {
-            _characterModule.transform.position = MantleTargetPosition;
+            _controller.SetPosition(MantleTargetPosition);
         }
         public override void Tick()
         {
@@ -69,12 +69,12 @@ namespace LOGIYGames
                 MantleTargetPosition =
                     MantleTargetTransform.TransformPoint(MantleTargetLocalPoint);
             }
+            var target = Vector3.Lerp(
+                 MantleStartPosition,
+                 MantleTargetPosition,
+                 Duration.Progress);
+            _controller.SetPosition(target);
 
-            _characterModule.transform.position =
-                Vector3.Lerp(
-                    MantleStartPosition,
-                    MantleTargetPosition,
-                    Duration.Progress);
         }
 
         private float CalculateObstacleHeight()
@@ -85,38 +85,38 @@ namespace LOGIYGames
         private Vector3 GetTopDownRayOrigin(float forwardDistance)
         {
             return _characterModule.transform.position +
-                   _characterModule.transform.forward * (_characterModule.Radius + forwardDistance) +
-                   _characterModule.transform.up * (_characterModule.Height * 0.5f);
+                   _characterModule.transform.forward * (_controller.Radius + forwardDistance) +
+                   _characterModule.transform.up * (_controller.Height*0.5f);
         }
         private bool HasClearPathToRayOrigin()
         {
             Vector3 rayOrigin = GetTopDownRayOrigin(checkDistance);
 
-            float radius = _characterModule.Radius;
-            float height = _characterModule.Height;
+            float radius = _controller.Radius;
+            float height = _controller.Height;
 
             float yOffset =
-                rayOrigin.y - _characterModule.transform.position.y;
+                rayOrigin.y - _controller.transform.position.y;
 
             Vector3 bottom =
-                _characterModule.transform.position +
-                _characterModule.transform.up * (radius + yOffset);
+                _controller.transform.position +
+                _controller.transform.up * (radius + yOffset);
 
             Vector3 top =
                 bottom +
-                _characterModule.transform.up * (height - radius * 2f);
+               _controller.transform.up * (height - radius * 2f);
 
             Debug.DrawLine(bottom, top, Color.yellow);
             Debug.DrawRay(
                 (bottom + top) * 0.5f,
-                _characterModule.transform.forward * checkDistance,
+               _controller.transform.forward * checkDistance,
                 Color.cyan);
 
             return !Physics.CapsuleCast(
                 bottom,
                 top,
                 radius,
-                _characterModule.transform.forward,
+                _controller.transform.forward,
                 out _,
                 checkDistance,
                 mantlingLayers,
@@ -124,16 +124,16 @@ namespace LOGIYGames
         }
         private bool HasEnoughSpace()
         {
-            float radius = _characterModule.Radius;
-            float height = _characterModule.Height;
+            float radius = _controller.Radius;
+            float height = _controller.Height;
 
             Vector3 bottom =
                 TargetTopPoint.point +
-                _characterModule.transform.forward * radius +
-                _characterModule.transform.up * (radius + 0.1f);
+                _controller.transform.forward * radius +
+                _controller.transform.up * (radius + 0.1f);
 
             Vector3 top =
-                bottom + _characterModule.transform.up * (height - radius * 2 - 0.1f);
+                bottom + _controller.transform.up * (height - radius * 2 - 0.1f);
 
             return !Physics.CheckCapsule(
                 bottom,
@@ -149,14 +149,14 @@ namespace LOGIYGames
 
             Debug.DrawRay(
                 origin,
-                -_characterModule.transform.up * (_characterModule.Height + 0.3f),
+                -_controller.transform.up * (_controller.Height * 0.49f),
                 Color.red);
 
             if (Physics.Raycast(
                 origin,
-                -_characterModule.transform.up,
+                -_controller.transform.up,
                 out RaycastHit hit,
-                _characterModule.Height + 0.3f,
+                _controller.Height *0.49f,
                 mantlingLayers))
             {
                 return hit;
@@ -167,7 +167,7 @@ namespace LOGIYGames
 
         private MantlingType ChooseMantlingType()
         {
-            if (obstacleHeight <= _characterModule.Height * 0.4f)
+            if (obstacleHeight <= _controller.Height * 0.4f)
                 return MantlingType.StepOnLow;
 
             return MantlingType.StepOnHigh;

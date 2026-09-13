@@ -1108,7 +1108,7 @@ ModelImporter:
       name: Strafe_Walk_LoopLeft
       takeName: AnimUprisingRig|Stafe_Walk_Plant
       internalID: 0
-      firstFrame: 1073
+      firstFrame: 1075
       lastFrame: 1104
       wrapMode: 0
       orientationOffsetY: 0

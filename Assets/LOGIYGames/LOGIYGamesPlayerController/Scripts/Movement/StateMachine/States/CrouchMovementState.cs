@@ -9,20 +9,20 @@ namespace LOGIYGames.Movement
 
         public CrouchMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
-            StandingHeight = _character.Height;
+            StandingHeight = _controller.Height;
             CrouchHeight = StandingHeight * 0.5f;
         }
 
         public override void Enter()
         {
             base.Enter();
-            _character.Height = CrouchHeight;
+            _controller.Height = CrouchHeight;
         }
 
         public override void Exit()
         {
             base.Exit();
-            _character.Height = StandingHeight;
+            _controller.Height = StandingHeight;
         }
     }
 

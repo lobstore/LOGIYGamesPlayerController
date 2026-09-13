@@ -32,10 +32,12 @@ namespace LOGIYGames.Movement
             Debug.Log("Entered State: " + GetType());
             if (Data.ResetVelocityOnEnter)
             {
-                _character.ResetVelocity();
+                _controller.ResetVelocity();
             }
             _animator.applyRootMotion = Data.IsAnimationDrivenMovement;
-            _character.RuntimeMovement.AccelerationData = Data.AccelerationData;
+            _character.RuntimeMovement.Acceleration = Data.Acceleration;
+            _character.RuntimeMovement.Deceleration = Data.Deceleration;
+            _character.RuntimeMovement.TargetSpeed = Data.TargetSpeed;
             if (CameraManager.Instance.CurrentCameraPerspectiveType == CameraPerspectiveType.FirstPerson)
             {
                 _character.RuntimeMovement.TurnSmoothTime = 0;
@@ -45,7 +47,6 @@ namespace LOGIYGames.Movement
                 _character.RuntimeMovement.TurnSmoothTime = Data.TurnSmoothTime;
 
             }
-            _character.RuntimeMovement.Speed = Data.Speed;
             _controller.UseProjectionOnPlane = Data.UseProjectionOnPlane;
             actionFrameTimer.Start();
             //TODO REFACTOR
@@ -61,11 +62,11 @@ namespace LOGIYGames.Movement
             _character.ResetStrategies();
             if (Data.ResetVelocityOnExit)
             {
-                _character.ResetVelocity();
+                _controller.ResetVelocity();
             }
             if (Data.ResetSpeedOnExit)
             {
-                _character.ResetSpeed();
+                _character.RuntimeMovement.CurrentSpeed=0;
             }
             if (actionFrameTimer.IsRunning)
             {
@@ -75,32 +76,15 @@ namespace LOGIYGames.Movement
 
         public virtual void LogicUpdate()
         {
-            Move();
         }
 
         public virtual void LateUpdate()
         {
-            Rotate();
         }
         public virtual void PhysicsUpdate()
         {
 
         }
-        protected virtual void Move()
-        {
-            if (Data.IsAnimationDrivenMovement)
-            {
-                return;
-            }
-            _character.Move();
-        }
-        protected virtual void Rotate()
-        {
-            if (Data.IsAnimationDrivenRotation)
-            {
-                return;
-            }
-            _character.Rotate(_character.RuntimeMovement.TargetRotation, _character.RuntimeMovement.TurnSmoothTime);
-        }
+
     }
 }

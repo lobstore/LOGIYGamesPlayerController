@@ -1,3 +1,6 @@
+using GenshinImpactMovementSystem;
+using LOGIYGames.CharacterCore;
+using System;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -7,36 +10,26 @@ namespace LOGIYGames
     public class RigidbodyControllerWrapper : MovementWrapperBase
     {
         [Header("Rigidbody Controller Settings")]
-        [SerializeField] private float groundDrag;
-        [SerializeField] private float airDrag;
 
+        [SerializeField] CharacterCapsuleCollider characterCapsuleCollider;
 
-        [Header("Movement Settings")]
-        [Tooltip("Force mode for movement (ignored if useAddForce is false)")]
-        [SerializeField] private ForceMode m_movementForceMode = ForceMode.Acceleration;
-        [Tooltip("Movement force multiplier")]
-        [SerializeField] float forceMult;
         private Rigidbody m_rigidbody;
-        private CapsuleCollider m_capsuleCollider;
-
-        public override Collider Collider => m_capsuleCollider;
+        [SerializeField] Actor actor;
+        [SerializeField] float maxStepHeight;
+        public override Collider Collider => characterCapsuleCollider.Collider;
 
         private SensorsModule m_sensors;
-
-        private float m_Height;
-        private float m_Radius;
-        private Vector3 m_Center;
+        [SerializeField] private float baseSpeed = 3.5f;
 
         #region Public Properties
 
-        public override float MaxStepHeight { get; set; }
+        public override float MaxStepHeight { get => maxStepHeight; }
         public override float Height
         {
-            get => m_Height;
+            get => characterCapsuleCollider.Collider.height;
             set
             {
-                m_Height = value;
-                UpdateCapsuleDimensions();
+                characterCapsuleCollider.Collider.height = value;
             }
         }
 
@@ -44,21 +37,19 @@ namespace LOGIYGames
 
         public override Vector3 Center
         {
-            get => m_Center;
+            get => characterCapsuleCollider.Collider.center;
             set
             {
-                m_Center = value;
-                UpdateCapsuleCenter();
+                characterCapsuleCollider.Collider.center = value;
             }
         }
 
         public override float Radius
         {
-            get => m_Radius;
+            get => characterCapsuleCollider.Collider.radius;
             set
             {
-                m_Radius = value;
-                UpdateCapsuleDimensions();
+                characterCapsuleCollider.Collider.radius = value;
             }
         }
 
@@ -75,59 +66,78 @@ namespace LOGIYGames
 
         private void Awake()
         {
+            characterCapsuleCollider = GetComponent<CharacterCapsuleCollider>();
             m_rigidbody = GetComponent<Rigidbody>();
-            m_capsuleCollider = GetComponent<CapsuleCollider>();
             m_sensors = GetComponent<SensorsModule>();
-            Debug.Assert(m_rigidbody != null, "Error (RigidbodyControllerWrapper): Could not find Rigidbody component");
-            Debug.Assert(m_capsuleCollider != null, "Error (RigidbodyControllerWrapper): Could not find CapsuleCollider component");
 
             // Configure Rigidbody for character controller
             m_rigidbody.freezeRotation = true;
-            m_rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            m_rigidbody.interpolation = RigidbodyInterpolation.None;
             m_rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-            // Cache initial capsule values
-            m_Radius = m_capsuleCollider.radius;
-            m_Height = m_capsuleCollider.height;
-            m_Center = m_capsuleCollider.center;
         }
 
         private void Update()
         {
-            //if (m_sensors.IsGrounded)
-            //{
-            //    m_rigidbody.linearDamping = groundDrag;
-            //}
-            //else
-            //{
-            //    m_rigidbody.linearDamping = airDrag;
-            //}
-            //m_rigidbody.useGravity = !m_sensors.IsOnSlope;
-
+            m_rigidbody.linearDamping = actor.RuntimeMovement.Deceleration;
+            
+        }
+        private void FixedUpdate()
+        {
+            //Float();
         }
         #endregion
 
-        #region Movement Methods
 
-        public override void Move(Vector3 a_move)
+        public override void ChangeVelocity(Vector3 a_move)
         {
-            Vector3 horizontalVelocity = Vector3.zero;
-            Vector3 force = Vector3.zero;
-            horizontalVelocity = m_rigidbody.linearVelocity;
-            horizontalVelocity.y = 0;
-            force = a_move;
-                //if (m_sensors.IsOnSlope)
-                //{
-                //    if (UseProjectionOnPlane)
-                //    {
-                //        force = Vector3.ProjectOnPlane(force, m_sensors.BelowHit.normal);
-                //    }
-                //}
-                if (horizontalVelocity.sqrMagnitude <= a_move.sqrMagnitude)
+            Vector3 targetVelocity;
+            targetVelocity = a_move;
+            if (m_sensors.IsOnSlope && UseProjectionOnPlane)
+            {
+                targetVelocity = Vector3.ProjectOnPlane(
+                    targetVelocity,
+                    m_sensors.BelowHit.normal
+                );
+            }
+            if (m_sensors.IsGrounded)
+            {
+                if (m_rigidbody.linearVelocity.magnitude <= actor.RuntimeMovement.CurrentSpeed * baseSpeed)
                 {
-                    m_rigidbody.AddForce(force * forceMult, m_movementForceMode);
+                    m_rigidbody.AddForce(targetVelocity * actor.RuntimeMovement.Acceleration, ForceMode.Acceleration);
+                }
+                else
+                {
+                   // m_rigidbody.linearVelocity = targetVelocity * actor.RuntimeMovement.CurrentSpeed * baseSpeed;
+                }
+            }
+            else
+            {
+                m_rigidbody.AddForce(targetVelocity * actor.RuntimeMovement.Acceleration, ForceMode.Acceleration);
+            }
+  
+        }
+        private void Float()
+        {
+            if (m_sensors.IsGrounded)
+            {
+
+                float distanceToFloatingPoint = characterCapsuleCollider.Collider.center.y * transform.localScale.y - m_sensors.GroundHit.distance;
+
+                if (distanceToFloatingPoint <= 0f)
+                {
+                    return;
                 }
 
+                float amountToLift = distanceToFloatingPoint * characterCapsuleCollider.StepData.StepReachForce - m_rigidbody.linearVelocity.y;
+
+                Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
+
+                m_rigidbody.AddForce(liftForce * 10, ForceMode.Acceleration);
+            }
+        }
+        public override void ForceMove(Vector3 a_move)
+        {
+            m_rigidbody.linearVelocity = a_move;
         }
         public override void ResetVelocity()
         {
@@ -139,49 +149,31 @@ namespace LOGIYGames
             m_rigidbody.PublishTransform();
         }
 
-
-        #endregion
-
-        #region Transform Methods
-
         public override void SetPosition(Vector3 a_position)
         {
             m_rigidbody.position = a_position;
         }
 
 
-        #endregion
 
-        #region Jump Method
+        public override void AddImpulse(Vector3 force)
+        {
+            m_rigidbody.AddForce(force * m_rigidbody.mass, ForceMode.Impulse);
+        }
 
-        public override void AddForce(Vector3 force)
+        public override void ResetGravity()
         {
             m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z);
-            m_rigidbody.AddForce(force, ForceMode.Impulse);
         }
 
-        #endregion
-
-        #region Capsule Management
-
-        private void UpdateCapsuleDimensions()
+        public override void DisableMovement()
         {
-            if (m_capsuleCollider == null) return;
-
-            m_capsuleCollider.radius = m_Radius;
-            m_capsuleCollider.height = m_Height;
+            throw new NotImplementedException();
         }
 
-        private void UpdateCapsuleCenter()
+        public override void EnableMovement()
         {
-            if (m_capsuleCollider == null) return;
-
-            m_capsuleCollider.center = m_Center;
+            throw new NotImplementedException();
         }
-
-
-        #endregion
-
-
     }
 }

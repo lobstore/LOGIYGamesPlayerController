@@ -42,7 +42,7 @@ namespace LOGIYGames
             CurrentMantling.Enter();
             MantlingType mantlingType = CurrentMantling.MantlingType;
 
-            EnableIK();
+            EnableHandsIK();
             DisableFootIK();
 
             _character.EventBus.Publish(new MantlingEvent
@@ -114,7 +114,7 @@ namespace LOGIYGames
             var ik = _character.GetComponent<HandsIK>();
             if (ik != null) ik.DisableIK();
         }
-        private void EnableIK()
+        private void EnableHandsIK()
         {
             if (mantleIKController != null &&
                 (CurrentMantling.MantlingType == MantlingType.BracedLow ||

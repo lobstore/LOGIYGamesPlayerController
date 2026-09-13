@@ -45,23 +45,23 @@ namespace LOGIYGames
             switch (currentControlType)
             {
                 case CameraPerspectiveType.FirstPerson:
-                    CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultMovementStrategy = new StrafeMovement(CurrentCharacter);
                     CurrentCharacter.DefaultRotationStrategy = new MousePlanarRotation(CurrentCharacter);
                     PlayerInput = new(InputActions, CurrentCharacter.transform);
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
                     CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new LookRelativeRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new CharacterRelativeRotation(CurrentCharacter);
                     PlayerInput = new(InputActions, Camera.main.transform);
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
-                    CurrentCharacter.DefaultMovementStrategy = new PlanarInputMovement(CurrentCharacter);
+                    CurrentCharacter.DefaultMovementStrategy = new StrafeMovement(CurrentCharacter);
                     CurrentCharacter.DefaultRotationStrategy = new LookForwardPlanarRotation(CurrentCharacter);
                     PlayerInput = new(InputActions, Camera.main.transform);
                     break;
                 case CameraPerspectiveType.Top_Down:
                     CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new LookRelativeRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new CharacterRelativeRotation(CurrentCharacter);
                     PlayerInput = new(InputActions, Camera.main.transform);
                     break;
                 default:

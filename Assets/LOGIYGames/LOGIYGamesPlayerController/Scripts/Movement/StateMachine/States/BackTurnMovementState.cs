@@ -7,31 +7,41 @@ namespace LOGIYGames
 {
     public class BackTurnMovementState : TimedMovementState
     {
+        LocomotionController controller;
         TurnMovementStateData TurnData;
         public BackTurnMovementState(Actor ctx, TurnMovementStateData stateData) : base(ctx, stateData)
         {
             TurnData = stateData;
+            controller = ctx.GetComponent<LocomotionController>();
         }
-        Quaternion turnEnd;
         public override void Enter()
         {
-            turnEnd = _character.RotationStrategy.GetRotation();
+            _character.MovementStrategy = new CharacterForwardMovement(_character);
             _character.EventBus.Publish(new BackTurnPerformedEvent
             {
-                movementSpeed = _character.RuntimeMovement.Speed,
+                movementSpeed = _character.RuntimeMovement.CurrentSpeed,
                 angle = _character.RuntimeMovement.DeltaYaw
             });
             base.Enter();
         }
-        protected override void Rotate()
+        public override void PhysicsUpdate()
         {
-            if (Data.IsAnimationDrivenRotation) return;
-            _character.Rotate(turnEnd, _character.RuntimeMovement.TurnSmoothTime);
+            base.PhysicsUpdate();
+            if (!Data.IsAnimationDrivenMovement)
+            {
+                controller.Move();
+
+            }
+            if (!Data.IsAnimationDrivenRotation)
+            {
+                _character.Rotate();
+
+            }
         }
         public override bool CanEnter()
         {
-            return base.CanEnter() 
-                && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle 
+            return base.CanEnter()
+                && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle
                 && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson;
         }
     }

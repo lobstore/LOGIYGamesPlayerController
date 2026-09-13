@@ -5,14 +5,13 @@ namespace LOGIYGames.CharacterCore
     [Serializable]
     public class MovementRuntimeData
     {
-        public float BaseSpeed;
-        public AccelerationData AccelerationData;
-        public float Speed;
-        public float CurrentSpeed => Speed * BaseSpeed;
+        public float Acceleration;
+        public float Deceleration;
+        public float TargetSpeed;
+        public float CurrentSpeed;
         public float TurnSmoothTime;
         public Quaternion TargetRotation;
         public Vector3 TargetDirection;
-        public Vector3 TargetVelocity;
         public float DeltaYaw;
     }
 

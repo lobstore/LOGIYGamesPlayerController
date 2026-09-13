@@ -9,7 +9,7 @@ namespace LOGIYGames.Movement
         }
         public override bool CanEnter()
         {
-            return _character.Sensors.IsInWater;
+            return false;
         }
         public override void Enter()
         {
@@ -25,7 +25,7 @@ namespace LOGIYGames.Movement
         }
         public override bool CanExit()
         {
-            return !_character.Sensors.IsInWater;
+            return true;
         }
     }
 

@@ -1,4 +1,3 @@
-using LOGIYGames.CharacterCore;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -7,25 +6,15 @@ namespace LOGIYGames
     [RequireComponent(typeof(CharacterController))]
     public class CharacterControllerWrapper : MovementWrapperBase
     {
-        #region Unity Controller
         [SerializeField]
         private CharacterController m_characterController;
-        private CharacterGravityModule m_characterGravityModule;
-        private Actor m_character;
         private SensorsModule m_sensors;
 
-        private Vector3 totalVelocity;
-        private Vector3 planarVelocity;
-        private Vector3 verticalVelocity;
-
-        [SerializeField] private float projectingPlanarVelocityMultiplier;
-        [SerializeField] private float slopeSlideMaxSpeed;
-        [SerializeField] private float slopeSlideAcceleration;
+        private Vector3 linearVelocity;
 
         GroundedReport lastGroundedReport;
         public override GroundedReport LastGroundedReport => lastGroundedReport;
 
-        #endregion
 
         #region Ground Motion System
 
@@ -47,7 +36,13 @@ namespace LOGIYGames
 
         private LayerMask excludeLayers;
         private LayerMask includeLayers;
+        [SerializeField] private float damping;
 
+        [SerializeField] private float aerialDamping;
+        [SerializeField] private float groundDamping;
+        [SerializeField] private bool useGravity;
+        [SerializeField] bool freeze;
+        public bool Freeze {  get; set; }
         public override Collider Collider => m_characterController;
 
         public override bool IsNoClip
@@ -64,7 +59,6 @@ namespace LOGIYGames
         public override float MaxStepHeight
         {
             get => m_characterController.stepOffset;
-            set => m_characterController.stepOffset = value;
         }
 
         public override float Height
@@ -93,11 +87,12 @@ namespace LOGIYGames
 
         public override bool UseGravity
         {
-            get => m_characterGravityModule.UseGravity;
-            set => m_characterGravityModule.UseGravity = value;
+            get => useGravity;
+            set => useGravity = value;
         }
 
-        public override Vector3 Velocity => m_characterController.velocity;
+        public override Vector3 Velocity => linearVelocity;
+
 
         #endregion
 
@@ -106,10 +101,8 @@ namespace LOGIYGames
         private void Awake()
         {
             m_sensors = GetComponent<SensorsModule>();
-            m_character = GetComponent<Actor>();
             if (m_characterController == null)
-            m_characterController = GetComponent<CharacterController>();
-            m_characterGravityModule = GetComponent<CharacterGravityModule>();
+                m_characterController = GetComponent<CharacterController>();
 
             if (m_characterController == null)
                 m_characterController = gameObject.AddComponent<CharacterController>();
@@ -133,65 +126,39 @@ namespace LOGIYGames
 
         private void Update()
         {
-            verticalVelocity = m_characterGravityModule.CurrentGravity;
+            if (freeze) return;
+            if (useGravity)
+            {
+                AddAcceleration(Physics.gravity);
+                if (m_sensors.IsGrounded && linearVelocity.y < 0)
+                {
+                    linearVelocity.y = -1f;
+                }
+            }
+
+            damping = m_sensors.IsGrounded ? groundDamping : aerialDamping;
+            linearVelocity = Vector3.MoveTowards(linearVelocity, Vector3.zero, damping * Time.deltaTime);
 
             UpdateGroundMotion();
             ApplyGroundMotion();
-
+            ProjectVelocity();
+            m_characterController.Move(linearVelocity * Time.deltaTime);
         }
-
         #endregion
 
         #region Movement
 
-        public override void Move(Vector3 a_move)
+        public override void ChangeVelocity(Vector3 Velocity)
         {
-            planarVelocity = a_move;
-
-            if (!m_sensors.IsValidSlope() &&
-                verticalVelocity.y < 0 &&
-                UseProjectionOnPlane)
-            {
-                totalVelocity =
-                    Vector3.Lerp(
-                        totalVelocity,
-                        Vector3.ProjectOnPlane(
-                            Vector3.ClampMagnitude(verticalVelocity, slopeSlideMaxSpeed),
-                            m_sensors.BelowHit.normal),
-                        Time.deltaTime * slopeSlideAcceleration);
-            }
-            else
-            {
-                totalVelocity = planarVelocity + verticalVelocity;
-            }
-
-            if (m_sensors.IsOnSlope && UseProjectionOnPlane)
-            {
-                ProjectVelocity();
-            }
-
-            if (m_characterController == null || !m_characterController.enabled)
-            {
-                transform.Translate(totalVelocity * Time.deltaTime);
-                return;
-            }
-
-            m_characterController.Move(totalVelocity * Time.deltaTime);
+            linearVelocity = Velocity;
         }
-
-        public override void ForceMove(Vector3 a_move)
+        public override void AddAcceleration(Vector3 accelerationForce)
         {
-            m_characterController.Move(a_move * Time.deltaTime);
+            linearVelocity += accelerationForce * Time.deltaTime;
         }
-
-        private void ProjectVelocity()
+        public override void ForceMove(Vector3 velocity)
         {
-            Vector3 projectedPlanarVelocity =
-                Vector3.ProjectOnPlane(planarVelocity, m_sensors.BelowHit.normal);
-
-            planarVelocity =
-                Vector3.Lerp(planarVelocity, projectedPlanarVelocity,
-                    Time.deltaTime * projectingPlanarVelocityMultiplier);
+            linearVelocity = velocity;
         }
 
         public override void SetRotation(Quaternion a_targetRotation)
@@ -204,18 +171,21 @@ namespace LOGIYGames
             transform.position = a_position;
         }
 
-        public override void AddForce(Vector3 force) { 
-            m_characterGravityModule.CurrentGravity = Vector3.up * force.y;
-            m_character.RuntimeMovement.TargetVelocity = new Vector3(planarVelocity.x+ force.x,0, planarVelocity.z + force.z);
+        public override void AddImpulse(Vector3 impulseForce)
+        {
+            // m_characterGravityModule.CurrentGravity.y += impulseForce.y;
+            linearVelocity += impulseForce;
         }
 
         public override void ResetVelocity()
         {
-            totalVelocity = Vector3.zero;
-            planarVelocity = Vector3.zero;
-            verticalVelocity = Vector3.zero;
+            linearVelocity = Vector3.zero;
         }
 
+        public override void ResetGravity()
+        {
+            linearVelocity.y = 0;
+        }
         #endregion
 
         #region Ground Motion
@@ -290,6 +260,31 @@ namespace LOGIYGames
             }
         }
 
+
+
         #endregion
+
+        private void ProjectVelocity()
+        {
+            if (m_sensors.IsOnSlope && linearVelocity.y<0)
+            {
+                Vector3 projectedVelocity =
+                    Vector3.ProjectOnPlane(linearVelocity, m_sensors.BelowHit.normal);
+
+                linearVelocity = projectedVelocity;
+            }
+        }
+
+        public override void DisableMovement()
+        {
+            freeze = true;
+            useGravity = false;
+        }
+
+        public override void EnableMovement()
+        {
+            freeze = false;
+            useGravity = true;
+        }
     }
 }

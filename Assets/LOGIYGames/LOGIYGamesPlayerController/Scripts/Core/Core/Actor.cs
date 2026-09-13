@@ -20,7 +20,7 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] public CameraTarget ActionCameraTarget { get; private set; }
         [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
-        [field:SerializeField] public MovementRuntimeData RuntimeMovement { get; private set; }
+        [field: SerializeField] public MovementRuntimeData RuntimeMovement { get; private set; }
 
         public CharacterStats Stats { get; private set; }
 
@@ -40,10 +40,6 @@ namespace LOGIYGames.CharacterCore
         private Dictionary<Type, MovementStateBase> m_movementStates = new();
         public bool IsGrounded { get => Sensors.IsGrounded; }
 
-        public float Radius { get => Motor.Radius; set => Motor.Radius = value; }
-        public float MaxStepHeight { get => Motor.MaxStepHeight; set => Motor.MaxStepHeight = value; }
-        [field: SerializeField] public float Height { get; set; }
-        public float HeightChangingSmoothTime { get; private set; } = 4f;
         private void Awake()
         {
             Stats = new();
@@ -64,11 +60,6 @@ namespace LOGIYGames.CharacterCore
             TargetingController = new();
             EffectSystem = new(this);
         }
-        private void Start()
-        {
-            Motor.Height = Height;
-            Motor.Center = new Vector3(0, Height / 2.0f, 0);
-        }
 
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
@@ -80,7 +71,6 @@ namespace LOGIYGames.CharacterCore
             base.OnLateUpdate(deltaTime);
 
             MovementStateMachine.LateUpdate();
-            SmoothHeightChanging();
         }
         public override void OnUpdate(float deltaTime)
         {
@@ -94,25 +84,11 @@ namespace LOGIYGames.CharacterCore
                 RuntimeMovement.TargetRotation = RotationStrategy.GetRotation();
 
             }
-            UpdateVelocity();
+            UpdateSpeed();
             CalculateDeltaYaw();
             MovementStateMachine.Update();
             StaminaController.Tick();
             EffectSystem.Update();
-        }
-        private void SmoothHeightChanging()
-        {
-            if (Height == Motor.Height && Motor.Center.y == Height) return;
-            if (!Mathf.Approximately(Motor.Height, Height) || !Mathf.Approximately(Motor.Center.y, Height / 2.0f))
-            {
-                Motor.Height = Mathf.Lerp(Motor.Height, Height, HeightChangingSmoothTime * Time.deltaTime);
-                Motor.Center = Vector3.Lerp(Motor.Center, new Vector3(0, Height / 2.0f, 0), HeightChangingSmoothTime * Time.deltaTime);
-            }
-            else
-            {
-                Motor.Height = Height;
-                Motor.Center = new Vector3(0, Height / 2.0f, 0);
-            }
         }
 
         #region Rotation Methods
@@ -126,7 +102,6 @@ namespace LOGIYGames.CharacterCore
             Vector3 desiredDirection = position - Motor.transform.position;
             RotateToDirection(desiredDirection.normalized, turnSmoothTime);
         }
-
         public void Rotate(Quaternion targetRotation, float turnSpeed = 0)
         {
             if (turnSpeed > 0f)
@@ -139,7 +114,10 @@ namespace LOGIYGames.CharacterCore
                 Motor.SetRotation(targetRotation);
             }
         }
-
+        public void Rotate()
+        {
+            Rotate(RuntimeMovement.TargetRotation, RuntimeMovement.TurnSmoothTime);
+        }
         private void CalculateDeltaYaw()
         {
             RuntimeMovement.DeltaYaw = Mathf.DeltaAngle(transform.eulerAngles.y, RuntimeMovement.TargetRotation.eulerAngles.y);
@@ -150,47 +128,26 @@ namespace LOGIYGames.CharacterCore
         }
 
         #endregion
-        #region Movement Methods
-
-        public void Move()
+        private void UpdateSpeed()
         {
-            Motor.Move(RuntimeMovement.TargetVelocity);
-        }
-
-        private void UpdateVelocity()
-        {
-            if (Input.MovementInput.magnitude > 0)
+            if (RuntimeMovement.TargetSpeed > 0)
             {
 
-                RuntimeMovement.TargetVelocity = Vector3.Lerp(RuntimeMovement.TargetVelocity, RuntimeMovement.TargetDirection.normalized * RuntimeMovement.CurrentSpeed, RuntimeMovement.AccelerationData.Acceleration * Time.deltaTime);
+                RuntimeMovement.CurrentSpeed = Mathf.MoveTowards(RuntimeMovement.CurrentSpeed, RuntimeMovement.TargetSpeed, RuntimeMovement.Acceleration * Time.deltaTime);
             }
             else
             {
-                RuntimeMovement.TargetVelocity = Vector3.Lerp(RuntimeMovement.TargetVelocity, Vector3.zero, RuntimeMovement.AccelerationData.Deceleration * Time.deltaTime);
+                if (RuntimeMovement.CurrentSpeed < 0.001f)
+                {
+                    RuntimeMovement.CurrentSpeed = 0;
+                }
+                else
+                {
+
+                    RuntimeMovement.CurrentSpeed = Mathf.MoveTowards(RuntimeMovement.CurrentSpeed, 0, RuntimeMovement.Deceleration * Time.deltaTime);
+                }
             }
         }
-
-        public void ForceMove(Vector3 moveDirection)
-        {
-            Motor.ForceMove(moveDirection);
-        }
-        public void SetPosition(Vector3 position)
-        {
-            Motor.SetPosition(position);
-        }
-        public void Jump(Vector3 jumpForce)
-        {
-            Motor.AddForce(jumpForce);
-        }
-
-        public void ResetVelocity()
-        {
-            RuntimeMovement.TargetVelocity = Vector3.zero;
-            RuntimeMovement.TargetDirection = Vector3.zero;
-            Motor.ResetVelocity();
-        }
-        public void ResetSpeed() => RuntimeMovement.AccelerationData = new();
-        #endregion
         #region Movement State Machine
         private void InitializeStateMachine()
         {
@@ -253,9 +210,9 @@ namespace LOGIYGames.CharacterCore
         public Direction GetRelativeMovementDirection()
         {
             Vector3 localDir;
-            if (RuntimeMovement.TargetVelocity.magnitude > 0)
+            if (RuntimeMovement.TargetDirection.magnitude > 0)
             {
-                localDir = Motor.transform.InverseTransformDirection(RuntimeMovement.TargetVelocity);
+                localDir = Motor.transform.InverseTransformDirection(RuntimeMovement.TargetDirection);
             }
             else
             {

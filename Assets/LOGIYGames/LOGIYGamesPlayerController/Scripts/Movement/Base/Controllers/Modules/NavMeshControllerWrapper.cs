@@ -9,26 +9,28 @@ namespace LOGIYGames
     {
         SensorsModule sensorModule;
         NavMeshAgent agent;
-        CharacterGravityModule characterGravityModule;
+        CharacterGravity characterGravityModule;
         CharacterController characterController;
         Actor character;
         private Vector3 targetVelocity;
 
-        public override float MaxStepHeight { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public override float MaxStepHeight { get => throw new System.NotImplementedException(); }
         public override float Height { get => agent.height; set => agent.height = value; }
         public override float SlopeLimit { get => sensorModule.MaxStableSlopeAngle; set => sensorModule.MaxStableSlopeAngle = value; }
         public override Vector3 Center { get => characterController.center; set => characterController.center = value; }
         public override float Radius { get => agent.radius; set => agent.radius = value; }
         public override bool UseGravity { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
-        public override Vector3 Velocity => throw new System.NotImplementedException();
+        public override Vector3 Velocity { get; }
+
+        public override Collider Collider => characterController;
 
         void Awake()
         {
             character = GetComponent<Actor>();
             sensorModule = GetComponent<SensorsModule>();
             agent = GetComponent<NavMeshAgent>();
-            characterGravityModule = GetComponent<CharacterGravityModule>();
+            characterGravityModule = GetComponent<CharacterGravity>();
             characterController = GetComponent<CharacterController>();
         }
 
@@ -39,7 +41,7 @@ namespace LOGIYGames
                 agent.enabled = true;
             }
         }
-        public override void AddForce(Vector3 force)
+        public override void AddImpulse(Vector3 force)
         {
             agent.enabled = false;
             if (characterGravityModule != null)
@@ -48,7 +50,7 @@ namespace LOGIYGames
             }
         }
 
-        public override void Move(Vector3 a_move)
+        public override void ChangeVelocity(Vector3 a_move)
         {
             if (agent!=null && agent.isOnNavMesh)
             {
@@ -94,6 +96,21 @@ namespace LOGIYGames
         public override void ResetVelocity()
         {
             agent.ResetPath();
+        }
+
+        public override void ResetGravity()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void DisableMovement()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void EnableMovement()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class LookRelativeRotation : IRotationStrategy
+    public class CharacterRelativeRotation : IRotationStrategy
     {
         Actor Character;
 
-        public LookRelativeRotation(Actor character)
+        public CharacterRelativeRotation(Actor character)
         {
             Character = character;
         }
@@ -20,7 +20,6 @@ namespace LOGIYGames
             // если есть ввод — поворачиваем по направлению камеры
             if (input.magnitude > 0)
             {
-                Debug.Log("a");
                 // берем направления камеры по плоскости XZ
                 Vector3 cameraForward = Character.Input.LookForward;
                 Vector3 cameraRight = Character.Input.LookRight;
@@ -36,10 +35,7 @@ namespace LOGIYGames
                     cameraForward * input.y +
                     cameraRight * input.x;
 
-                if (moveDir.magnitude > 0)
-                {
-                    return Quaternion.LookRotation(moveDir);
-                }
+                return Quaternion.LookRotation(moveDir);
             }
 
             // если нет ввода — оставляем текущий поворот по Y

@@ -21,6 +21,7 @@ namespace LOGIYGames
             {
                 jumpType = JumpType.Dash,
                 planarForce = _jumpStateData.PlanarJumpForce,
+                verticalForce = _jumpStateData.VerticalJumpForce,
                 direction = direction
             });
         }

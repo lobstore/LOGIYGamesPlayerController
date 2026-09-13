@@ -9,9 +9,12 @@ namespace LOGIYGames.CharacterCore
     {
         [field: SerializeField][field: ReadOnly] public int JumpCount {  get; private set; }
         [field:SerializeField] public int MaxJumpCount {  get; private set; }
-        [SerializeField] Actor Character;
+        MovementWrapperBase Motor;
+        Actor Character;
         private void Awake()
         {
+            Motor = GetComponent<MovementWrapperBase>();
+            Character = GetComponent<Actor>();
             EventsSubscription();
         }
         public void ResetJumps()
@@ -26,24 +29,26 @@ namespace LOGIYGames.CharacterCore
         {
             Character.EventBus.Subscribe<JumpPerformedEvent>((evt) =>
             {
+
+                Motor.ResetGravity();
                 switch (evt.jumpType)
                 {
                     case JumpType.GroundJump:
-                        Character.Jump(Character.RuntimeMovement.TargetDirection * evt.planarForce + Character.transform.up * evt.verticalForce);
+                        Motor.AddImpulse(Character.RuntimeMovement.TargetDirection * evt.planarForce + Character.transform.up * evt.verticalForce);
                         break;
                     case JumpType.HangJump:
-                        Character.Jump(Character.Sensors.LegsFrontHit.normal * evt.planarForce + evt.verticalForce * Character.transform.up);
+                        Motor.AddImpulse(Character.Sensors.LegsFrontHit.normal * evt.planarForce + evt.verticalForce * Character.transform.up);
                         break;
                     case JumpType.WallRunJump:
                         break;
                     case JumpType.Roll:
-                        Character.Jump(Character.transform.forward * evt.planarForce + Character.transform.up * evt.verticalForce);
+                        Motor.AddImpulse(Character.transform.forward * evt.planarForce + Character.transform.up * evt.verticalForce);
                         break;
                     case JumpType.Dash:
-                        Character.Jump(Character.RuntimeMovement.TargetDirection * evt.planarForce + Character.transform.up * evt.verticalForce);
+                        Motor.AddImpulse(Character.RuntimeMovement.TargetDirection * evt.planarForce + Character.transform.up * evt.verticalForce);
                         break;
                     case JumpType.Slip:
-                        Character.Jump(Character.RuntimeMovement.TargetDirection * evt.planarForce);
+                        Motor.AddImpulse(Character.RuntimeMovement.TargetDirection * evt.planarForce);
                         break;
                     default:
                         break;

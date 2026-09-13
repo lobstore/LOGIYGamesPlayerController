@@ -4,6 +4,7 @@ using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using System;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 namespace LOGIYGames.Animation
 {
@@ -352,22 +353,30 @@ namespace LOGIYGames.Animation
         {
             animator.CrossFade(animhash, crossFadeSpeed, layer);
         }
+        Vector2 input;
         public override void OnFixedUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
 
-            animator.SetFloat("Speed", character.RuntimeMovement.Speed, crossFadeSpeed, Time.deltaTime);
-            if (character.RotationStrategy is LookRelativeRotation or InputRelativeRotation)
+            animator.SetFloat("Speed", character.RuntimeMovement.CurrentSpeed, crossFadeSpeed, Time.deltaTime);
+            if (character.RotationStrategy is CharacterRelativeRotation or InputRelativeRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
-                animator.SetFloat("VerticalSpeed", character.Input.MovementInput.magnitude, crossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", character.RuntimeMovement.CurrentSpeed, crossFadeSpeed, Time.deltaTime);
             }
             else
             {
-                var local = character.Input.MovementInput;
-                animator.SetFloat("VerticalSpeed", local.y, crossFadeSpeed, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", local.x, crossFadeSpeed, Time.deltaTime);
+                if (character.Input.MovementInput.magnitude > 0)
+                {
+                    input = character.Input.MovementInput;
+                }
+                var snapped = SnapDirection(input);
+                var horizontal = snapped.x;
+                var vertical = snapped.y;
+                animator.SetFloat("VerticalSpeed", vertical, crossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", horizontal, crossFadeSpeed, Time.deltaTime);
+
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
@@ -379,30 +388,44 @@ namespace LOGIYGames.Animation
 
             animator.SetFloat("TurnAngle", character.RuntimeMovement.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
+        private Vector2 SnapDirection(Vector2 input)
+        {
+
+            var angle = Mathf.Atan2(input.x, input.y);
+            var sector = Mathf.Round(angle / (Mathf.PI / 4f));
+
+            var snappedAngle = sector * (Mathf.PI / 4f);
+
+            return new Vector2(
+                Mathf.Sin(snappedAngle),
+                Mathf.Cos(snappedAngle)
+            );
+        }
         private void Update()
         {
             if (character.Input.MovementInput.magnitude > 0)
             {
-                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, character.RuntimeMovement.TargetDirection.normalized, character.RuntimeMovement.AccelerationData.Acceleration * Time.deltaTime);
+                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, character.RuntimeMovement.TargetDirection.normalized, character.RuntimeMovement.Acceleration * Time.deltaTime);
             }
             else
             {
-                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, character.RuntimeMovement.AccelerationData.Deceleration * Time.deltaTime);
+                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, character.RuntimeMovement.Deceleration * Time.deltaTime);
             }
         }
         private void OnAnimatorMove()
         {
-            if (animator.applyRootMotion)
-            {
-                character.RuntimeMovement.TargetVelocity = new Vector3(animator.velocity.x, animator.velocity.y, animator.velocity.z);
-                character.Move();
-                character.Rotate(animator.rootRotation);
-            }
+            if (!animator.applyRootMotion)
+                return;
+
+            Vector3 delta = animator.velocity;
+
+            controller.ForceMove(delta);
+            transform.rotation *= animator.deltaRotation;
         }
 
         private float GetStateSpeed<T>() where T : MovementStateBase
         {
-            return character.MovementStateMachine.GetState<T>().Data.Speed;
+            return character.MovementStateMachine.GetState<T>().Data.TargetSpeed;
         }
     }
 }

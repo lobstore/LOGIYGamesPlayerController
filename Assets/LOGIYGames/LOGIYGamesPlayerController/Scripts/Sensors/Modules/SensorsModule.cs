@@ -1,3 +1,4 @@
+using Alchemy.Inspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,15 +28,15 @@ namespace LOGIYGames
         private string m_legsRightObstacleName;
         private string m_legsLeftObstacleName;
         private string m_legsForwardObstacleName;
-        [SerializeField] Color rayColor;
-        [SerializeField] Color groundPlaneColor;
-        [SerializeField] Color groundedSphereColor;
-        [SerializeField] Color ungroundedSphereColor;
-        [SerializeField] Color aboveObstacleCollidedSphereColor;
-        [SerializeField] Color aboveObstacleNotCollidedSphereColor;
-        [SerializeField] Color belowObstacleCollidedSphereColor;
-        [SerializeField] Color belowObstacleNotCollidedSphereColor;
-        [SerializeField] Color belowHitSphereColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color rayColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color groundPlaneColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color groundedSphereColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color ungroundedSphereColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color aboveObstacleCollidedSphereColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color aboveObstacleNotCollidedSphereColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color belowObstacleCollidedSphereColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color belowObstacleNotCollidedSphereColor;
+        [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color belowHitSphereColor;
 
         [SerializeField] MovementWrapperBase controller;
         Collider col => controller.Collider;
@@ -47,7 +48,7 @@ namespace LOGIYGames
             {
                 return new Vector3(
                     col.bounds.center.x,
-                    col.bounds.center.y + m_detectionOriginYOffset,
+                    col.bounds.min.y + m_detectionOriginYOffset,
                     col.bounds.center.z
                 );
             }
@@ -98,7 +99,6 @@ namespace LOGIYGames
         public bool IsObstacleLegsFront { get; private set; }
         public bool IsObstacleLegsRight { get; private set; }
         public bool IsObstacleLegsLeft { get; private set; }
-        public bool IsInWater { get; private set; }
         /// <summary>
         /// <value>value</value> > 0: Up,
         /// value < 0: Down, 
@@ -111,13 +111,8 @@ namespace LOGIYGames
 
         private void Awake()
         {
-            m_castDownSphereRadius = controller.Radius;
-            m_castUpSphereRadius = controller.Radius;
-            m_upCheckDistance = controller.Height/2;
-            m_groundCheckDistance = controller.Height/2;
-            m_groundCheckDistance = controller.Height / 2;
             if (controller == null)
-            controller = GetComponent<MovementWrapperBase>();
+                controller = GetComponent<MovementWrapperBase>();
         }
 
         public override void OnUpdate(float deltaTime)
@@ -132,22 +127,6 @@ namespace LOGIYGames
             if (m_showDebugInfo)
             {
                 UpdateDebugInfo();
-            }
-        }
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Water"))
-            {
-                IsInWater = true;
-
-            }
-        }
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Water"))
-            {
-                IsInWater = false;
-
             }
         }
         public bool IsValidSlope()

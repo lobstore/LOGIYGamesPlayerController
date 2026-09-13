@@ -1,5 +1,7 @@
 using LOGIYGames;
+using LOGIYGames.Animation;
 using LOGIYGames.CharacterCore;
+using RealStep;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -34,29 +36,31 @@ public class MountingController : MonoBehaviour
     public void Mount()
     {
         Current = Target;
-        Target.GetComponent<PlayerInput>().enabled = true;
+        Current.GetComponent<PlayerInput>().enabled = true;
         CameraManager.Instance.CameraInput.Disable();
         CameraManager.Instance.DisableAllCameras();
         PlayerManager.Instance.PlayerInput.DisableMovement();
-        gameObject.GetComponent<Collider>().enabled = false;
-        gameObject.GetComponent<MovementWrapperBase>().UseGravity= false;
-        transform.SetParent(Current.transform);
-        transform.localPosition = Vector3.zero;
+        GetComponent<FootIK>().enabled = false;
+        GetComponent<MovementWrapperBase>().IsNoClip = true;
+        GetComponent<CharacterAnimationController>().PlayAnimation("Driving");
+        GetComponent<MovementWrapperBase>().DisableMovement();
+        Current.GetComponent<Mountable>().Mount(transform);
     }
 
     public void Dismount()
     {
+        Current.GetComponent<Mountable>().Dismount();
         Current.GetComponent<PlayerInput>().enabled = false;
-        gameObject.GetComponent<MovementWrapperBase>().UseGravity = true;
-        CameraManager.Instance.CameraInput.Enable();
-        CameraManager.Instance.EnableAllCameras();
-        PlayerManager.Instance.PlayerInput.EnableMovement();
-        transform.position = Current.transform.position + -Current.transform.right * 2;
-        transform.SetParent(null);
-        gameObject.GetComponent<Collider>().enabled = true;
+        GetComponent<FootIK>().enabled = true;
+        GetComponent<MovementWrapperBase>().IsNoClip = false;
+        GetComponent<CharacterAnimationController>().PlayAnimation("Exiting Car");
+        GetComponent<MovementWrapperBase>().EnableMovement();
         Current = null;
         Target = null;
         ExitRequested = false;
+        PlayerManager.Instance.PlayerInput.EnableMovement();
+        CameraManager.Instance.CameraInput.Enable();
+        CameraManager.Instance.EnableAllCameras();
     }
 
     private void OnTriggerStay(Collider other)

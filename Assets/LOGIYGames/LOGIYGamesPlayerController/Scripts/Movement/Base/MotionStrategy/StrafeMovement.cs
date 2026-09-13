@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class PlanarInputMovement : IMovementStrategy
+    public class StrafeMovement : IMovementStrategy
     {
 
         Actor Character;
 
-        public PlanarInputMovement(Actor character)
+        public StrafeMovement(Actor character)
         {
             Character = character;
         }
