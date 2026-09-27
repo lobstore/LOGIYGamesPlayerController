@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    [CreateAssetMenu(fileName = "DashStateFactory", menuName = "MovementStateMachine/Factories/DashStateFactory")]
+    [CreateAssetMenu(fileName = "DashMovementStateFactory", menuName = "MovementStateMachine/Factories/DashMovementStateFactory")]
     public class DashStateFactory : MovementStateFactory
     {
         public JumpStateData stateData;

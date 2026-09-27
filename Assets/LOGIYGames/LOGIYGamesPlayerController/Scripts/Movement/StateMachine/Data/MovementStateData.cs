@@ -18,6 +18,7 @@ namespace LOGIYGames
         public bool UseProjectionOnPlane;
         public bool ResetVelocityOnEnter;
         public bool ResetVelocityOnExit;
+        public bool ResetSpeedOnEnter;
         public bool ResetSpeedOnExit;
     }
 }

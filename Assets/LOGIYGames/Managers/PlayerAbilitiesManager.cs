@@ -15,7 +15,7 @@ namespace LOGIYGames
         {
             PlayerManager.Instance.OnCharacterChanged.AddListener(UpdateAbilitiesViews);
         }
-        private void UpdateAbilitiesViews(Actor newChar)
+        public void UpdateAbilitiesViews(Actor newChar)
         {
             for (int i = 0; i < abilitiesContainer.childCount; i++)
             {

@@ -28,10 +28,12 @@ namespace LOGIYGames
         public List<MantlingFactory> MantlingFactories = new();
         private MantlingStrategy CurrentMantling;
         Actor _character;
+        MovementWrapperBase controller;
         private void Awake()
         {
             mantleIKController = GetComponent<HandsIK>();
             _character = GetComponent<Actor>();
+            controller = GetComponent<MovementWrapperBase>();
             foreach (var item in MantlingFactories)
             {
                 Mantlings.Add(item.Create(_character));
@@ -141,7 +143,9 @@ namespace LOGIYGames
                 if (item.CanEnter())
                 {
                     CurrentMantling = item;
-                    return true;
+                    return _character.Input.MovementInput.magnitude>0 
+                        && (transform.InverseTransformDirection(controller.Velocity).z>0 
+                        || transform.InverseTransformDirection(controller.Velocity).y>0);
                 }
             }
 

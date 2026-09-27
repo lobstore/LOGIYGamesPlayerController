@@ -1,7 +1,7 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using UnityEngine.Events;
-
+using LOGIYGames.Shared.Extensions;
 namespace LOGIYGames
 {
     public class MantlingMovementState : MovementStateBase
@@ -15,7 +15,7 @@ namespace LOGIYGames
 
         public MantlingMovementState(Actor ctx, MantlingMovmentStateData stateData) : base(ctx, stateData)
         {
-            MantlingController = ctx.MantlingController;
+            MantlingController = ctx.gameObject.GetOrAddComponent<MantlingController>();
         }
 
 
@@ -47,7 +47,7 @@ namespace LOGIYGames
         {
             return base.CanEnter() && MantlingController.CanEnter();
         }
-        public bool CanExit()
+        public override bool CanExit()
         {
             return MantlingController.CanExit();
         }

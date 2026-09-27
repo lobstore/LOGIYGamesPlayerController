@@ -30,8 +30,6 @@ namespace LOGIYGames.CharacterCore
         public TargetingController TargetingController { get; private set; }
         public HealthController HealthController { get; private set; }
         public StaminaController StaminaController { get; private set; }
-        public MantlingController MantlingController { get; private set; }
-        public ComboController ComboController { get; private set; }
         #endregion
 
         [Header("State Machine Configuration")]
@@ -55,7 +53,6 @@ namespace LOGIYGames.CharacterCore
 
             HealthController = new HealthController(Stats);
             StaminaController = new StaminaController(Stats, 1);
-            MantlingController = GetComponent<MantlingController>();
             InitializeStateMachine();
             TargetingController = new();
             EffectSystem = new(this);
@@ -114,6 +111,10 @@ namespace LOGIYGames.CharacterCore
                 Motor.SetRotation(targetRotation);
             }
         }
+        public void Rotate(Quaternion targetRotation)
+        {
+            Rotate(targetRotation, RuntimeMovement.TurnSmoothTime);
+        }
         public void Rotate()
         {
             Rotate(RuntimeMovement.TargetRotation, RuntimeMovement.TurnSmoothTime);
@@ -130,7 +131,7 @@ namespace LOGIYGames.CharacterCore
         #endregion
         private void UpdateSpeed()
         {
-            if (RuntimeMovement.TargetSpeed > 0)
+            if (RuntimeMovement.CurrentSpeed < RuntimeMovement.TargetSpeed && Input.MovementInput.magnitude > 0)
             {
 
                 RuntimeMovement.CurrentSpeed = Mathf.MoveTowards(RuntimeMovement.CurrentSpeed, RuntimeMovement.TargetSpeed, RuntimeMovement.Acceleration * Time.deltaTime);

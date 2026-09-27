@@ -1,108 +1,104 @@
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace LOGIYGames
 {
-    [RequireComponent(typeof(Animator))]
     public class HandsIK : MonoBehaviour
     {
-        private Animator _animator;
+        [SerializeField] private TwoBoneIKConstraint leftConstraint;
+        [SerializeField] private TwoBoneIKConstraint rightConstraint;
+
+        [SerializeField] private Transform leftTarget;
+        [SerializeField] private Transform rightTarget;
+
+        [SerializeField] private float weightSpeed = 10f;
+
+        [SerializeField] private Vector3 leftRotationOffset;
+        [SerializeField] private Vector3 rightRotationOffset;
+
         public Vector3 LeftHandPoint { get; set; }
         public Vector3 LeftHandNormal { get; set; }
+
         public Vector3 RightHandPoint { get; set; }
         public Vector3 RightHandNormal { get; set; }
 
-        [SerializeField]
-        private float ikWeightSpeed = 10f;
-        float lHandTarget;
-        float rHandTarget;
-        private float lHandWeight;
-        private float rHandWeight;
+        private float _leftWeight;
+        private float _rightWeight;
 
+        private float _leftTargetWeight;
+        private float _rightTargetWeight;
 
-        private void Awake()
+        private void Update()
         {
-            _animator = GetComponent<Animator>();
+            var delta = Time.deltaTime * weightSpeed;
+            _leftWeight = Mathf.MoveTowards(
+                _leftWeight,
+                _leftTargetWeight,
+                delta * (_leftTargetWeight > 0f ? 1f : 2f));
+            _rightWeight = Mathf.MoveTowards(
+                _rightWeight,
+                _rightTargetWeight,
+                delta * (_rightTargetWeight > 0f ? 1f : 2f));
+
+
+
+            leftConstraint.weight = _leftWeight;
+            rightConstraint.weight = _rightWeight;
+
+            SetTarget(
+                leftTarget,
+                LeftHandPoint,
+                LeftHandNormal,
+                leftRotationOffset);
+
+            SetTarget(
+                rightTarget,
+                RightHandPoint,
+                RightHandNormal,
+                rightRotationOffset);
         }
 
         public void EnableIK()
         {
-            EnableRHandIK();
-            EnableLHandIK();
+            _leftTargetWeight = 1f;
+            _rightTargetWeight = 1f;
         }
 
         public void DisableIK()
         {
-            DisableRHandIK();
-            DisableLHandIK();
+            _leftTargetWeight = 0f;
+            _rightTargetWeight = 0f;
         }
 
-        public void EnableRHandIK()
-        {
-            rHandTarget = 1;
-        }
-        public void EnableLHandIK()
-        {
-            lHandTarget = 1;
-        }
-        public void DisableRHandIK()
-        {
-            rHandTarget = 0;
-        }
-        public void DisableLHandIK()
-        {
-            lHandTarget = 0;
-        }
-        private void Update()
-        {
+        public void EnableLHandIK() => _leftTargetWeight = 1f;
+        public void DisableLHandIK() => _leftTargetWeight = 0f;
 
-            lHandWeight = Mathf.MoveTowards(
-                lHandWeight,
-                lHandTarget,
-                Time.deltaTime * ikWeightSpeed);
-            rHandWeight = Mathf.MoveTowards(
-                rHandWeight,
-                rHandTarget,
-                Time.deltaTime * ikWeightSpeed);
-        }
+        public void EnableRHandIK() => _rightTargetWeight = 1f;
+        public void DisableRHandIK() => _rightTargetWeight = 0f;
 
-        private void OnAnimatorIK(int layerIndex)
+        private void SetTarget(
+            Transform target,
+            Vector3 point,
+            Vector3 normal,
+            Vector3 rotationOffset)
         {
-            if (_animator == null)
+            if (target == null || normal.sqrMagnitude < 0.0001f)
                 return;
 
-            ApplyHandIK(AvatarIKGoal.LeftHand, LeftHandPoint, LeftHandNormal, lHandWeight);
+            normal.Normalize();
 
-            ApplyHandIK(AvatarIKGoal.RightHand, RightHandPoint, RightHandNormal, rHandWeight);
-        }
+            Vector3 forward =
+                Vector3.Cross(normal, -transform.forward);
 
-        private void ApplyHandIK(
-            AvatarIKGoal goal,
-            Vector3 targetPoint,
-            Vector3 normal, float weight)
-        {
-            _animator.SetIKPositionWeight(goal, weight);
-            _animator.SetIKRotationWeight(goal, weight);
+            if (forward.sqrMagnitude < 0.0001f)
+                return;
 
-            _animator.SetIKPosition(goal, targetPoint);
+            forward.Normalize();
 
-            // Направление вдоль поверхности
-            Vector3 alongSurface =
-                Vector3.Cross(normal, -transform.forward).normalized;
-            //Uncomment if hands not symmetry
-            //if (goal == AvatarIKGoal.LeftHand)
-            //    alongSurface = -alongSurface;
-
-            // Вверх кисти = нормаль поверхности
-            Quaternion surfaceRotation =
-                Quaternion.LookRotation(alongSurface, normal);
-
-            // Подстройка под риг
-            Quaternion correction =
-                Quaternion.Euler(0f, 90f, 0f);
-
-            _animator.SetIKRotation(
-                goal,
-                surfaceRotation * correction);
+            target.SetPositionAndRotation(
+                point,
+                Quaternion.LookRotation(forward, normal) *
+                Quaternion.Euler(rotationOffset));
         }
     }
 }

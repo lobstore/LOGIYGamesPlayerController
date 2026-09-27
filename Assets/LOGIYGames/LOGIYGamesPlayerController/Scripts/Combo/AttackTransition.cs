@@ -10,6 +10,7 @@ namespace LOGIYGames.CharacterCore
 
         public AttackNodeSO NextAttack;
     }
+
     [Serializable]
     public class InputSequence
     {

@@ -5,6 +5,7 @@ using LOGIYGames.Shared.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace LOGIYGames.Animation
 {
@@ -19,9 +20,6 @@ namespace LOGIYGames.Animation
 
         [SerializeField] CharacterAnimationsData _data;
         public bool UseRootMotion { get => animator.applyRootMotion; set => animator.applyRootMotion = value; }
-
-        public Vector3 ScaledTargetDirection { get; set; }
-
         [SerializeField] AnimatorOverrideController defaultOverride;
 
         private void Start()
@@ -165,7 +163,7 @@ namespace LOGIYGames.Animation
             });
             character.EventBus.Subscribe<TurnPerformedEvent>((evt) =>
             {
-                if (evt.movementSpeed > GetStateSpeed<WalkMovementState>())
+                if (evt.movementSpeed > 0.5f)
                 {
                     if (evt.angle > 0)
                     {
@@ -226,7 +224,7 @@ namespace LOGIYGames.Animation
                 switch (evt.direction)
                 {
                     case Direction.Forward:
-                        if (evt.movementSpeed <= GetStateSpeed<WalkMovementState>())
+                        if (evt.movementSpeed <= GetStateSpeed<WalkMovementState>() )
                         {
                             PlayAnimation(_data.Walk_Stop_Forward);
                         }
@@ -338,12 +336,12 @@ namespace LOGIYGames.Animation
                 }
 
             });
-            //character.EventBus.Subscribe<ComboAttackEvent>((evt) =>
-            //{
-            //    PlayAnimation(evt.AnimationData.AnimationName);
-            //    animator.applyRootMotion = evt.AnimationData.UseRootMotion;
-            //    animator.SetFloat("MotionSpeed", evt.AnimationData.MotionSpeed);
-            //});
+            character.EventBus.Subscribe<ComboAttackEvent>((evt) =>
+            {
+                PlayAnimation(evt.AnimationData.AnimationName);
+                animator.applyRootMotion = evt.AnimationData.UseRootMotion;
+                animator.SetFloat("MotionSpeed", evt.AnimationData.MotionSpeed);
+            });
         }
         public void PlayAnimation(string animname, int layer = 0)
         {
@@ -353,7 +351,12 @@ namespace LOGIYGames.Animation
         {
             animator.CrossFade(animhash, crossFadeSpeed, layer);
         }
-        Vector2 input;
+        Vector2 XYinput;
+        public override void OnUpdate(float deltaTime)
+        {
+            base.OnUpdate(deltaTime);
+            animator.SetBool("IsGrounded", character.IsGrounded);
+        }
         public override void OnFixedUpdate(float deltaTime)
         {
             base.OnLateUpdate(deltaTime);
@@ -363,54 +366,65 @@ namespace LOGIYGames.Animation
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
-                animator.SetFloat("VerticalSpeed", character.RuntimeMovement.CurrentSpeed, crossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", 1, crossFadeSpeed, Time.deltaTime);
             }
             else
             {
                 if (character.Input.MovementInput.magnitude > 0)
                 {
-                    input = character.Input.MovementInput;
+                    XYinput = character.Input.MovementInput;
                 }
-                var snapped = SnapDirection(input);
+                //var dir = transform.InverseTransformDirection(controller.Velocity);
+               // XYinput = new Vector2(dir.x,dir.z).normalized;
+                var snapped = SnapDirection(XYinput);
+   
                 var horizontal = snapped.x;
                 var vertical = snapped.y;
-                animator.SetFloat("VerticalSpeed", vertical, crossFadeSpeed, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", horizontal, crossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", vertical, 0.05f, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", horizontal, 0.05f, Time.deltaTime);
 
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
-            animator.SetBool("IsGrounded", character.IsGrounded);
+
             animator.SetBool("IsFalling", character.GetMovementState<FallingMovementState>().IsActiveState);
             animator.SetBool("IsFocusing", character.Input.FocusPressed);
-            animator.SetFloat("InputX", character.Input.MovementInput.x, crossFadeSpeed, Time.deltaTime);
-            animator.SetFloat("InputY", character.Input.MovementInput.y, crossFadeSpeed, Time.deltaTime);
+            animator.SetFloat("InputX", character.Input.MovementInput.x, 0.05f, Time.deltaTime);
+            animator.SetFloat("InputY", character.Input.MovementInput.y, 0.05f, Time.deltaTime);
 
             animator.SetFloat("TurnAngle", character.RuntimeMovement.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }
+        private static readonly Vector2[] EightDirections =
+        {
+            new Vector2( 1,  0), // Right
+            new Vector2( 1,  1).normalized, // Top-Right
+            new Vector2( 0,  1), // Up
+            new Vector2(-1,  1).normalized, // Top-Left
+            new Vector2(-1,  0), // Left
+            new Vector2(-1, -1).normalized, // Bottom-Left
+            new Vector2( 0, -1), // Down
+            new Vector2( 1, -1).normalized  // Bottom-Right
+        };
+
         private Vector2 SnapDirection(Vector2 input)
         {
+            if (input.sqrMagnitude < 0.0001f) return Vector2.zero;
 
-            var angle = Mathf.Atan2(input.x, input.y);
-            var sector = Mathf.Round(angle / (Mathf.PI / 4f));
+            Vector2 bestDirection = Vector2.zero;
+            float maxDot = -1f;
 
-            var snappedAngle = sector * (Mathf.PI / 4f);
-
-            return new Vector2(
-                Mathf.Sin(snappedAngle),
-                Mathf.Cos(snappedAngle)
-            );
-        }
-        private void Update()
-        {
-            if (character.Input.MovementInput.magnitude > 0)
+            // Находим направление с максимальным скалярным произведением
+            foreach (var dir in EightDirections)
             {
-                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, character.RuntimeMovement.TargetDirection.normalized, character.RuntimeMovement.Acceleration * Time.deltaTime);
+                float dot = Vector2.Dot(input, dir);
+                if (dot > maxDot)
+                {
+                    maxDot = dot;
+                    bestDirection = dir;
+                }
             }
-            else
-            {
-                ScaledTargetDirection = Vector3.Lerp(ScaledTargetDirection, Vector3.zero, character.RuntimeMovement.Deceleration * Time.deltaTime);
-            }
+
+            return bestDirection;
         }
         private void OnAnimatorMove()
         {

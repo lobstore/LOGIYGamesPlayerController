@@ -6,7 +6,7 @@ public class ComboMovementState : MovementStateBase
     ComboController combo;
     public ComboMovementState(Actor character, MovementStateData data) : base(character, data)
     {
-        //combo = character.ComboController;
+        combo = character.GetComponent<ComboController>();
     }
 
     public override void Enter()
@@ -15,12 +15,13 @@ public class ComboMovementState : MovementStateBase
         _character.MovementStrategy = new NoneMovement();
         _character.RotationStrategy = new NoneRotation(_character);
 
-        // _character.ComboController.BeginCombo();
+        combo.BeginCombo();
         _character.ResetInput();
     }
     public override void Exit()
     {
         base.Exit();
+        combo.Exit();
     }
 
     public override void LogicUpdate()

@@ -40,6 +40,10 @@ namespace LOGIYGames
             CharacterInput input = PlayerInput.GetInput();
             CurrentCharacter.UpdateInput(input);
         }
+        private void LateUpdate()
+        {
+            UpdateStrategies();
+        }
         private void UpdateStrategies()
         {
             switch (currentControlType)
@@ -56,7 +60,7 @@ namespace LOGIYGames
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
                     CurrentCharacter.DefaultMovementStrategy = new StrafeMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new LookForwardPlanarRotation(CurrentCharacter);
+                    CurrentCharacter.DefaultRotationStrategy = new CharacterForwardRotation(CurrentCharacter);
                     PlayerInput = new(InputActions, Camera.main.transform);
                     break;
                 case CameraPerspectiveType.Top_Down:

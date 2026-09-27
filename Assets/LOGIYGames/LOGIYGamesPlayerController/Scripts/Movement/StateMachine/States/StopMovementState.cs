@@ -21,8 +21,8 @@ public class StopMovementState : TimedMovementState
     {
         return base.CanEnter() 
             && _character.Input.MovementInput.magnitude == 0 
-            && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson
-            && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.ThirdPersonLookForward;
+            && _character.RuntimeMovement.CurrentSpeed > 0.1
+            && _character.DefaultMovementStrategy is not StrafeMovement;
     }
 }
 

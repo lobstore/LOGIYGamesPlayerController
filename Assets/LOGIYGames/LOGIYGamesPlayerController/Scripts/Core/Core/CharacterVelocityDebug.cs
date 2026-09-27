@@ -3,6 +3,7 @@ namespace LOGIYGames.CharacterCore
 {
     public class CharacterVelocityDebug : MonoBehaviour
     {
+        [SerializeField] Actor actor;
         [SerializeField] MovementWrapperBase controller;
         [SerializeField] Animator animator;
         [Header("Target Velocity")]
@@ -11,10 +12,9 @@ namespace LOGIYGames.CharacterCore
         [SerializeField] Color animatorVelocityArrowColor;
         [Header("Actual Velocity")]
         [SerializeField] Color totalVelocityArrowColor;
-
         private void Update()
         {
-            var velo = controller.Velocity;
+            var velo = actor.RuntimeMovement.TargetDirection * actor.RuntimeMovement.CurrentSpeed * 3.5f;
             if (velo.magnitude > 0)
             {
                 DebugDraw.DrawArrow(transform.position, velo, movementTargetVelocityArrowColor);

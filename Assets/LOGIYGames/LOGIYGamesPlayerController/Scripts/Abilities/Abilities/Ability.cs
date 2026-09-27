@@ -11,7 +11,7 @@ public class Ability
     }
     public virtual void Target(AbilityTargetingController targetingManager)
     {
-        if (Data.targetingStrategy != null)
+        if (Data.targetingStrategy != null && !targetingManager.IsTargeting)
         {
             var strategy = Data.targetingStrategy.Create();
             strategy.Start(this, targetingManager);

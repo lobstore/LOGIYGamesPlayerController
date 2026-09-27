@@ -40,7 +40,7 @@ namespace LOGIYGames
             {
                 currentCameraPerspectiveType = value;
                 OnCameraPerspectiveChanged.Invoke();
-                ResetCameraView();
+                ChooseCamera();
             }
         }
         public void DisableAllCameras()
@@ -83,8 +83,25 @@ namespace LOGIYGames
 
         public void ResetCameraView()
         {
-            SetTargetTo(PlayerManager.Instance.CurrentCharacter.CameraTarget);
+            if (isActionFP)
+            {
+                SetTargetTo(PlayerManager.Instance.CurrentCharacter.ActionCameraTarget);
+            }
+            else
+            {
 
+                SetTargetTo(PlayerManager.Instance.CurrentCharacter.CameraTarget);
+            }
+
+            ChooseCamera();
+
+        }
+        private void LateUpdate()
+        {
+            ChooseCamera();
+        }
+        private void ChooseCamera()
+        {
             switch (CurrentCameraPerspectiveType)
             {
                 case CameraPerspectiveType.FirstPerson:
@@ -102,8 +119,8 @@ namespace LOGIYGames
                 default:
                     break;
             }
-
         }
+
         public void SetTargetTo(CameraTarget cameraTarget)
         {
             foreach (var cam in cinemachineCameraControllers)

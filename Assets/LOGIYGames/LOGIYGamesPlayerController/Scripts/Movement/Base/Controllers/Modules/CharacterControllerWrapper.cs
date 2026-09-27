@@ -139,9 +139,9 @@ namespace LOGIYGames
             damping = m_sensors.IsGrounded ? groundDamping : aerialDamping;
             linearVelocity = Vector3.MoveTowards(linearVelocity, Vector3.zero, damping * Time.deltaTime);
 
-            UpdateGroundMotion();
-            ApplyGroundMotion();
-            ProjectVelocity();
+            //UpdateGroundMotion();
+            //ApplyGroundMotion();
+            //ProjectVelocity();
             m_characterController.Move(linearVelocity * Time.deltaTime);
         }
         #endregion
@@ -173,7 +173,6 @@ namespace LOGIYGames
 
         public override void AddImpulse(Vector3 impulseForce)
         {
-            // m_characterGravityModule.CurrentGravity.y += impulseForce.y;
             linearVelocity += impulseForce;
         }
 

@@ -31,6 +31,11 @@ namespace LOGIYGames.Movement
                 jumpType = JumpType.GroundJump
             });
         }
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+            _character.Rotate();
+        }
         public override bool CanEnter()
         {
             return base.CanEnter()

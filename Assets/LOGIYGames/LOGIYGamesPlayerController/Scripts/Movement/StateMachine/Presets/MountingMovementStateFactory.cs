@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    [CreateAssetMenu(fileName = "MountingStateFactory", menuName = "MovementStateMachine/Factories/MountingStateFactory")]
-    public class MountingStateFactory : MovementStateFactory
+    [CreateAssetMenu(fileName = "MountingMovementStateFactory", menuName = "MovementStateMachine/Factories/MountingMovementStateFactory")]
+    public class MountingMovementStateFactory : MovementStateFactory
     {
         public MovementStateData stateData;
         protected override MovementStateBase CreateState(Actor character)

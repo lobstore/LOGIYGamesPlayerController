@@ -3,11 +3,11 @@ using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 public class TurnMovementState : TimedMovementState
 {
     LocomotionController controller;
     TurnMovementStateData TurnData;
+    Quaternion targetRotation;
     public TurnMovementState(Actor ctx, TurnMovementStateData stateData) : base(ctx, stateData)
     {
         controller = ctx.GetComponent<LocomotionController>();
@@ -21,6 +21,7 @@ public class TurnMovementState : TimedMovementState
             movementSpeed = _character.RuntimeMovement.CurrentSpeed,
             angle = _character.RuntimeMovement.DeltaYaw
         });
+        targetRotation = _character.RuntimeMovement.TargetRotation;
         base.Enter();
     }
     public override void PhysicsUpdate()
@@ -33,7 +34,7 @@ public class TurnMovementState : TimedMovementState
         }
         if (!Data.IsAnimationDrivenRotation)
         {
-            _character.Rotate();
+            _character.Rotate(targetRotation);
 
         }
     }
@@ -43,6 +44,6 @@ public class TurnMovementState : TimedMovementState
         return base.CanEnter()
             && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle
             && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) < TurnData.MaxAngle
-            && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson;
+            && _character.DefaultMovementStrategy is not StrafeMovement;
     }
 }

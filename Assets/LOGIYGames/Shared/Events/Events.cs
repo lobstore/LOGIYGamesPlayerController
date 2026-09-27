@@ -55,4 +55,8 @@ namespace LOGIYGames.Shared.Character.Events
     {
         public AnimationData AnimationData;
     }
+    [Serializable]
+    public class ComboAttackEvent : AnimationEvent
+    {
+    }
 }

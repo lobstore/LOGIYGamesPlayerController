@@ -76,9 +76,10 @@ namespace LOGIYGames
             input.EvadePressed = m_EvadeAction.WasPressedThisFrame();
             input.SprintPressing = m_SprintAction.IsPressed();
             input.AttackPressed = m_AttackAction.WasPressedThisFrame();
-            input.InteractPressed = m_InteractAction.WasReleasedThisFrame();
             input.CrouchPressed = m_CrouchAction.WasPressedThisFrame();
+            input.CrouchPressing = m_CrouchAction.IsPressed();
             input.AbilityPressed = m_AbilityAction.WasPressedThisFrame();
+            input.InteractPressed = m_InteractAction.WasReleasedThisFrame();
             input.InteractHeld = m_InteractAction.WasPerformedThisFrame();
             input.LookForward = Pivot.forward;
             input.LookRight = Pivot.right;

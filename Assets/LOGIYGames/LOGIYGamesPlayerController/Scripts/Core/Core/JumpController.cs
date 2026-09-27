@@ -48,7 +48,7 @@ namespace LOGIYGames.CharacterCore
                         Motor.AddImpulse(Character.RuntimeMovement.TargetDirection * evt.planarForce + Character.transform.up * evt.verticalForce);
                         break;
                     case JumpType.Slip:
-                        Motor.AddImpulse(Character.RuntimeMovement.TargetDirection * evt.planarForce);
+                        Motor.AddImpulse(Character.transform.forward * evt.planarForce);
                         break;
                     default:
                         break;

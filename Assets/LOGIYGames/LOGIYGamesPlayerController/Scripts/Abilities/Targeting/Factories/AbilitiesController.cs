@@ -24,9 +24,17 @@ public class AbilitiesController : MonoBehaviour
 
     void Update()
     {
-        if (Character.Input.AbilityPressed)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Cast(Abilities[0]);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Cast(Abilities[1]);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Cast(Abilities[2]);
         }
     }
 

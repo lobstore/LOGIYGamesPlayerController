@@ -58,7 +58,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.asset-manager-for-unity": {
-      "version": "1.11.0",
+      "version": "1.12.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {

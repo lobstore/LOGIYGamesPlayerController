@@ -19,8 +19,8 @@ public class AOETargeting : AbilityTargetingStrategy
     {
         this.ability = ability;
         this.targetingManager = targetingManager;
-
         Cancel();
+
 
         isTargeting = true;
         targetingManager.SetCurrentStrategy(this);
@@ -89,7 +89,7 @@ public class AOETargeting : AbilityTargetingStrategy
         previewInstance.transform.position = mousePos + Vector3.up * 0.1f;
 
         // ЛКМ - применить способность
-        if (Input.GetMouseButtonDown(0))
+        if (targetingManager.Character.Input.AttackPressed)
         {
             Collider[] hits = Physics.OverlapSphere(
                 mousePos,
@@ -116,7 +116,7 @@ public class AOETargeting : AbilityTargetingStrategy
         }
 
         // ПКМ - отмена
-        if (Input.GetMouseButtonDown(1))
+        if (targetingManager.Character.Input.FocusPressed)
         {
             Cancel();
         }

@@ -42,7 +42,7 @@ namespace LOGIYGames
         {
             return base.CanEnter()
                 && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle
-                && CameraManager.Instance.CurrentCameraPerspectiveType != CameraPerspectiveType.FirstPerson;
+                && _character.DefaultMovementStrategy is not StrafeMovement;
         }
     }
 

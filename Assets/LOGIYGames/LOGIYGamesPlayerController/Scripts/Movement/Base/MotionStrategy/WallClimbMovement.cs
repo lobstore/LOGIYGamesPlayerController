@@ -27,7 +27,7 @@ namespace LOGIYGames
             horizontalDir = wallAlongRight * Character.Input.MovementInput.x;
 
             verticalDir = wallAlongUp * Character.Input.MovementInput.y;
-            return horizontalDir + verticalDir;
+            return (horizontalDir + verticalDir).normalized;
         }
     }
 }

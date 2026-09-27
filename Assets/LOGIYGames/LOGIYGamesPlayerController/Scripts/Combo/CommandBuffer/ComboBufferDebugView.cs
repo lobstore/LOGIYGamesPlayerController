@@ -8,22 +8,17 @@ namespace LOGIYGames.CharacterCore
             new Vector2(20, 20);
 
         private ComboController ComboController;
-        [SerializeField] private Actor Character;
 
         private GUIStyle style;
 
         private void Awake()
         {
-
+            ComboController = transform.GetComponent<ComboController>();
             style = new GUIStyle();
 
             style.fontSize = 24;
 
             style.normal.textColor = Color.white;
-        }
-        private void Start()
-        {
-           // ComboController = Character.ComboController;
         }
         private void OnGUI()
         {

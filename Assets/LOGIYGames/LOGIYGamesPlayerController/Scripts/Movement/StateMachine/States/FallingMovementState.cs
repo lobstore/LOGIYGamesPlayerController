@@ -1,5 +1,4 @@
 ﻿using LOGIYGames.CharacterCore;
-using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -18,12 +17,14 @@ namespace LOGIYGames.Movement
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-            if (_character.Input.MovementInput.magnitude > 0)
+
+            if (_controller.Velocity.magnitude < _character.RuntimeMovement.CurrentSpeed * 3.5f)
             {
 
-                _controller.ChangeVelocity(_controller.Velocity+_character.RuntimeMovement.TargetDirection * _character.RuntimeMovement.CurrentSpeed * 3.5f * Time.deltaTime);
-
+                _controller.AddAcceleration(_character.RuntimeMovement.TargetDirection * _character.RuntimeMovement.CurrentSpeed * 3.5f);
             }
+
+            _character.Rotate();
         }
         public override void Exit()
         {

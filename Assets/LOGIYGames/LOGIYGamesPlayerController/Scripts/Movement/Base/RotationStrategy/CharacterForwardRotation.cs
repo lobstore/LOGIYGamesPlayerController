@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class LookForwardPlanarRotation : IRotationStrategy
+    public class CharacterForwardRotation : IRotationStrategy
     {
         Actor character;
 
-        public LookForwardPlanarRotation(Actor character)
+        public CharacterForwardRotation(Actor character)
         {
             this.character = character;
         }

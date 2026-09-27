@@ -34,11 +34,15 @@ namespace LOGIYGames.Movement
             {
                 _controller.ResetVelocity();
             }
+            if (Data.ResetSpeedOnEnter)
+            {
+                _character.RuntimeMovement.CurrentSpeed = 0;
+            }
             _animator.applyRootMotion = Data.IsAnimationDrivenMovement;
             _character.RuntimeMovement.Acceleration = Data.Acceleration;
             _character.RuntimeMovement.Deceleration = Data.Deceleration;
             _character.RuntimeMovement.TargetSpeed = Data.TargetSpeed;
-            if (CameraManager.Instance.CurrentCameraPerspectiveType == CameraPerspectiveType.FirstPerson)
+            if (_character.DefaultRotationStrategy is MousePlanarRotation)
             {
                 _character.RuntimeMovement.TurnSmoothTime = 0;
             }
