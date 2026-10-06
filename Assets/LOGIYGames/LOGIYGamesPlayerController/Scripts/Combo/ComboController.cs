@@ -21,10 +21,11 @@ namespace LOGIYGames.CharacterCore
 
         public ComboMovesetSO ComboMovesetSO { get; private set; }
         [SerializeField] private ComboMovesetSO comboMovesetSO;
+        [SerializeField] private ComboMovesetSO unequiped;
 
         private void Awake()
         {
-            ComboMovesetSO = comboMovesetSO;
+            ComboMovesetSO = unequiped;
             character = GetComponent<Actor>();
 
             CommandBuffer = new InputCommandBuffer();
@@ -50,7 +51,7 @@ namespace LOGIYGames.CharacterCore
 
                 case WeaponEquipState.Unequiped:
 
-                    ComboMovesetSO = null;
+                    ComboMovesetSO = unequiped;
 
                     ResetCombo();
 
@@ -283,7 +284,7 @@ namespace LOGIYGames.CharacterCore
         {
             return currentAttack == null &&
                    queuedAttack == null &&
-                   !CommandBuffer.HasInput();
+                   !CommandBuffer.HasInput() ;
         }
 
         public void Exit()
@@ -327,7 +328,7 @@ namespace LOGIYGames.CharacterCore
                 .Contains(attackTime);
         }
 
-        public bool IsDodgeCancelWindowActive()
+        public bool IsDodgeWindowActive()
         {
             if (currentAttack == null)
                 return false;

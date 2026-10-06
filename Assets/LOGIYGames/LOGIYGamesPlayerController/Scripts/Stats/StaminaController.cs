@@ -5,36 +5,25 @@ namespace LOGIYGames.CharacterCore
 {
     public class StaminaController
     {
-        public Stamina Stamina {  get; private set; }
-        float m_regenAmount;
+        public Stamina Stamina { get; private set; }
         CountdownTimer _regenDelayTimer;
         Stat VITStat;
         public Stat MPStat { get; private set; }
-        public Stat IntStat { get; private set; }
         public Subject<float> StaminaUsed = new();
         public Subject<float> StaminaRestored = new();
         public Subject<Unit> Exhausted = new();
-        public StaminaController(CharacterStats stats, float delayBeforeRegen = 0)
+        public StaminaController(StatsController stats, float delayBeforeRegen = 0)
         {
             Stamina = new Stamina();
             MPStat = stats.GetStat(StatType.BaseStamina);
-            IntStat = stats.GetStat(StatType.Vitality);
             VITStat = stats.GetStat(StatType.Vitality);
-            VITStat.OnModifiersChanged.Subscribe((_) =>
-            {
-                m_regenAmount = VITStat.Value/10f + 1;
-            });
-            m_regenAmount = VITStat.Value / 10f +1;
+  
             _regenDelayTimer = new(delayBeforeRegen);
             StaminaUsed.Subscribe((_) =>
             {
                 _regenDelayTimer.Start();
             });
             MPStat.OnModifiersChanged.Subscribe((_) =>
-            {
-                UpdateMaxValue();
-            });
-            IntStat.OnModifiersChanged.Subscribe((_) =>
             {
                 UpdateMaxValue();
             });
@@ -48,10 +37,11 @@ namespace LOGIYGames.CharacterCore
 
         private void UpdateMaxValue()
         {
-            Stamina.Max.Value = MPStat.Value + (IntStat.Value * MPStat.Value * 0.01f);
+            Stamina.Max.Value = MPStat.Value + (VITStat.Value * MPStat.Value * 0.01f);
         }
         public void Tick()
         {
+            var m_regenAmount = VITStat.Value / 10f + 1;
             if (CanRegenerate())
             {
                 Restore(m_regenAmount * Time.deltaTime);
@@ -61,7 +51,7 @@ namespace LOGIYGames.CharacterCore
         private bool CanRegenerate()
         {
             return !_regenDelayTimer.IsRunning
-                   && Stamina.Current.CurrentValue< Stamina.Max.CurrentValue;
+                   && Stamina.Current.CurrentValue < Stamina.Max.CurrentValue;
         }
         public bool CanUse(float amount)
         {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace LOGIYGames.Shared.Extensions {
     public static class GameObjectExtensions {
@@ -9,6 +10,10 @@ namespace LOGIYGames.Shared.Extensions {
                 return t;
             }
             return go.AddComponent<T>();
+        }
+        public static bool IsLayerInMask(this GameObject go, LayerMask mask)
+        {
+            return (mask.value & (1 << go.layer)) != 0;
         }
     }
 }

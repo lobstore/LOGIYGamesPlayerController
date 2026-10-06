@@ -3,15 +3,21 @@ namespace LOGIYGames.CharacterCore
 {
     public class CharacterVelocityDebug : MonoBehaviour
     {
-        [SerializeField] Actor actor;
-        [SerializeField] MovementWrapperBase controller;
-        [SerializeField] Animator animator;
+        Actor actor;
+        MovementWrapperBase controller;
+        Animator animator;
         [Header("Target Velocity")]
         [SerializeField] Color movementTargetVelocityArrowColor;
         [Header("Animator Velocity")]
         [SerializeField] Color animatorVelocityArrowColor;
         [Header("Actual Velocity")]
         [SerializeField] Color totalVelocityArrowColor;
+        private void Awake()
+        {
+            controller = GetComponent<MovementWrapperBase>();
+            actor = GetComponent<Actor>();
+            animator = GetComponent<Animator>();
+        }
         private void Update()
         {
             var velo = actor.RuntimeMovement.TargetDirection * actor.RuntimeMovement.CurrentSpeed * 3.5f;

@@ -14,8 +14,9 @@ namespace LOGIYGames
         InputAction m_JumpAction;
         InputAction m_EvadeAction;
         InputAction m_CrouchAction;
+        InputAction m_LockAction;
         InputAction m_SprintAction;
-        InputAction m_FocusAction;
+        InputAction m_SubAttackAction;
         InputAction m_AttackAction;
         InputAction m_InteractAction;
         InputAction m_AbilityAction;
@@ -30,8 +31,9 @@ namespace LOGIYGames
             m_JumpAction = CharacterActionMap.FindAction("Jump");
             m_EvadeAction = CharacterActionMap.FindAction("Evade");
             m_CrouchAction = CharacterActionMap.FindAction("Crouch");
+            m_LockAction = CharacterActionMap.FindAction("Lock");
             m_SprintAction = CharacterActionMap.FindAction("Sprint");
-            m_FocusAction = CharacterActionMap.FindAction("Focus");
+            m_SubAttackAction = CharacterActionMap.FindAction("SubAttack");
             m_AttackAction = CharacterActionMap.FindAction("Attack");
             m_InteractAction = CharacterActionMap.FindAction("Interact");
             m_AbilityAction = CharacterActionMap.FindAction("Ability");
@@ -71,8 +73,9 @@ namespace LOGIYGames
         {
             CharacterInput input = new();
             input.MovementInput = m_MoveAction.ReadValue<Vector2>();
-            input.FocusPressed = m_FocusAction.IsPressed();
+            input.SubAttackPressed = m_SubAttackAction.IsPressed();
             input.JumpPressed = m_JumpAction.WasPressedThisFrame();
+            input.LockPressed = m_LockAction.WasPressedThisFrame();
             input.EvadePressed = m_EvadeAction.WasPressedThisFrame();
             input.SprintPressing = m_SprintAction.IsPressed();
             input.AttackPressed = m_AttackAction.WasPressedThisFrame();

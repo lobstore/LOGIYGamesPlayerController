@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +16,7 @@ namespace LOGIYGames
         {
             targetCamera = Camera.main;
         }
-        public void Show(IReadOnlyList <InteractionAction> actions, InteractionContext context)
+        public void Show(IReadOnlyList<InteractionAction> actions, InteractionContext context)
         {
             this.actions = actions;
             this.context = context;
@@ -38,14 +37,14 @@ namespace LOGIYGames
 
         private void Populate()
         {
-            root.position = actions.First().ViewData.Anchor.position;
             foreach (var action in actions)
             {
                 var obj = Instantiate(prefab);
                 obj.transform.SetParent(root);
                 obj.transform.localScale = Vector3.one;
                 obj.transform.localPosition = Vector3.zero;
-                obj.GetComponent<Button>().onClick.AddListener(() => {
+                obj.GetComponent<Button>().onClick.AddListener(() =>
+                {
                     action.Execute(context);
                     Hide();
                     PlayerManager.Instance.PlayerInput.Enable();

@@ -5,23 +5,28 @@ using LOGIYGames.Shared.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace LOGIYGames.Animation
 {
     public class CharacterAnimationController : MonoModuleBase
     {
-        [SerializeField] Actor character;
-        [SerializeField] MovementWrapperBase controller;
-        [SerializeField] Animator animator;
+        Actor character;
+        MovementWrapperBase controller;
+        Animator animator;
 
         [SerializeField][Range(0, 0.5f)] private float rotationAnimationsBlendTime;
-        [SerializeField][Range(0, 0.5f)] private float crossFadeSpeed;
+        [SerializeField][Range(0, 0.5f)] private float animationsCrossFadeSpeed;
+        [SerializeField][Range(0, 0.5f)] private float locomotionCrossFadeSpeed;
 
         [SerializeField] CharacterAnimationsData _data;
         public bool UseRootMotion { get => animator.applyRootMotion; set => animator.applyRootMotion = value; }
         [SerializeField] AnimatorOverrideController defaultOverride;
-
+        private void Awake()
+        {
+            character = GetComponent<Actor>();
+            controller = GetComponent<MovementWrapperBase>();
+            animator = GetComponent<Animator>();
+        }
         private void Start()
         {
             animator.runtimeAnimatorController = defaultOverride;
@@ -224,7 +229,7 @@ namespace LOGIYGames.Animation
                 switch (evt.direction)
                 {
                     case Direction.Forward:
-                        if (evt.movementSpeed <= GetStateSpeed<WalkMovementState>() )
+                        if (evt.movementSpeed <= GetStateSpeed<WalkMovementState>())
                         {
                             PlayAnimation(_data.Walk_Stop_Forward);
                         }
@@ -345,11 +350,11 @@ namespace LOGIYGames.Animation
         }
         public void PlayAnimation(string animname, int layer = 0)
         {
-            animator.CrossFade(animname, crossFadeSpeed, layer);
+            animator.CrossFade(animname, animationsCrossFadeSpeed, layer);
         }
         public void PlayAnimation(int animhash, int layer = 0)
         {
-            animator.CrossFade(animhash, crossFadeSpeed, layer);
+            animator.CrossFade(animhash, animationsCrossFadeSpeed, layer);
         }
         Vector2 XYinput;
         public override void OnUpdate(float deltaTime)
@@ -361,12 +366,12 @@ namespace LOGIYGames.Animation
         {
             base.OnLateUpdate(deltaTime);
 
-            animator.SetFloat("Speed", character.RuntimeMovement.CurrentSpeed, crossFadeSpeed, Time.deltaTime);
+            animator.SetFloat("Speed", character.RuntimeMovement.CurrentSpeed, animationsCrossFadeSpeed, Time.deltaTime);
             if (character.RotationStrategy is CharacterRelativeRotation or InputRelativeRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
-                animator.SetFloat("VerticalSpeed", 1, crossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", 1, animationsCrossFadeSpeed, Time.deltaTime);
             }
             else
             {
@@ -375,22 +380,22 @@ namespace LOGIYGames.Animation
                     XYinput = character.Input.MovementInput;
                 }
                 //var dir = transform.InverseTransformDirection(controller.Velocity);
-               // XYinput = new Vector2(dir.x,dir.z).normalized;
+                // XYinput = new Vector2(dir.x,dir.z).normalized;
                 var snapped = SnapDirection(XYinput);
-   
+
                 var horizontal = snapped.x;
                 var vertical = snapped.y;
-                animator.SetFloat("VerticalSpeed", vertical, 0.05f, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", horizontal, 0.05f, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", vertical, locomotionCrossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("HorizontalSpeed", horizontal, locomotionCrossFadeSpeed, Time.deltaTime);
 
             }
 
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
 
             animator.SetBool("IsFalling", character.GetMovementState<FallingMovementState>().IsActiveState);
-            animator.SetBool("IsFocusing", character.Input.FocusPressed);
-            animator.SetFloat("InputX", character.Input.MovementInput.x, 0.05f, Time.deltaTime);
-            animator.SetFloat("InputY", character.Input.MovementInput.y, 0.05f, Time.deltaTime);
+            animator.SetBool("IsFocusing", character.Input.SubAttackPressed);
+            animator.SetFloat("InputX", character.Input.MovementInput.x, locomotionCrossFadeSpeed, Time.deltaTime);
+            animator.SetFloat("InputY", character.Input.MovementInput.y, locomotionCrossFadeSpeed, Time.deltaTime);
 
             animator.SetFloat("TurnAngle", character.RuntimeMovement.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
         }

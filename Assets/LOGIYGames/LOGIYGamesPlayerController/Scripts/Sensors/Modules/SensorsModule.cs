@@ -109,12 +109,6 @@ namespace LOGIYGames
         [Range(0, 90)]
         public float MaxStableSlopeAngle;
 
-        private void Awake()
-        {
-            if (controller == null)
-                controller = GetComponent<MovementWrapperBase>();
-        }
-
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);

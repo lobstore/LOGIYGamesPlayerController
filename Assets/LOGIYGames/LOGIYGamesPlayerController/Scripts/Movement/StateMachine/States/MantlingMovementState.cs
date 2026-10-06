@@ -9,8 +9,6 @@ namespace LOGIYGames
         #region Fields
         private MantlingController MantlingController;
 
-        public UnityEvent OnMantlingStart = new UnityEvent();
-        public UnityEvent OnMantlingEnd = new UnityEvent();
         #endregion
 
         public MantlingMovementState(Actor ctx, MantlingMovmentStateData stateData) : base(ctx, stateData)
@@ -27,7 +25,6 @@ namespace LOGIYGames
             _controller.UseGravity = false;
             _controller.IsNoClip = true;
             MantlingController.BeginMantling();
-            OnMantlingStart.Invoke();
         }
         public override void LogicUpdate()
         {
@@ -41,7 +38,6 @@ namespace LOGIYGames
 
             _controller.UseGravity = true;
             _controller.IsNoClip = false;
-            OnMantlingEnd.Invoke();
         }
         public override bool CanEnter()
         {

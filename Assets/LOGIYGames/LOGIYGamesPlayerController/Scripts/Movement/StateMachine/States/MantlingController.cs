@@ -4,6 +4,7 @@ using LOGIYGames.Shared.Enums;
 using RealStep;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LOGIYGames
 {
@@ -21,7 +22,8 @@ namespace LOGIYGames
         private Vector3 _ledgeNormal;
 
         #endregion
-
+        public UnityEvent OnMantlingStart = new();
+        public UnityEvent OnMantlingEnd = new();
         private HandsIK mantleIKController;
 
         private List<MantlingStrategy> Mantlings = new();
@@ -57,6 +59,7 @@ namespace LOGIYGames
 
             CalculateHandTargets(_ledgePoint, _ledgeNormal);
             UpdateHandTargets();
+            OnMantlingStart.Invoke();
         }
         public void Tick()
         {
@@ -161,6 +164,7 @@ namespace LOGIYGames
             CurrentMantling = null;
             DisableHandIK();
             EnableFootIK();
+            OnMantlingEnd.Invoke();
         }
     }
 }

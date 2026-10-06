@@ -6,8 +6,6 @@
         Right,
         Forward,
         Backward,
-        Up,
-        Down,
         NoMovement
     }
 }

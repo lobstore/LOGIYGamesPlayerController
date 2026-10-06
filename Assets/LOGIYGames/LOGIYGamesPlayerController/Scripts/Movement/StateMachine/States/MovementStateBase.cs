@@ -42,22 +42,9 @@ namespace LOGIYGames.Movement
             _character.RuntimeMovement.Acceleration = Data.Acceleration;
             _character.RuntimeMovement.Deceleration = Data.Deceleration;
             _character.RuntimeMovement.TargetSpeed = Data.TargetSpeed;
-            if (_character.DefaultRotationStrategy is MousePlanarRotation)
-            {
-                _character.RuntimeMovement.TurnSmoothTime = 0;
-            }
-            else
-            {
-                _character.RuntimeMovement.TurnSmoothTime = Data.TurnSmoothTime;
-
-            }
+            _character.RuntimeMovement.TurnSmoothTime = Data.TurnSmoothTime;
             _controller.UseProjectionOnPlane = Data.UseProjectionOnPlane;
             actionFrameTimer.Start();
-            //TODO REFACTOR
-            if (_character.IsGrounded)
-            {
-                _character.GetComponent<JumpController>().ResetJumps();
-            }
         }
 
         public virtual void Exit()
@@ -70,7 +57,7 @@ namespace LOGIYGames.Movement
             }
             if (Data.ResetSpeedOnExit)
             {
-                _character.RuntimeMovement.CurrentSpeed=0;
+                _character.RuntimeMovement.CurrentSpeed = 0;
             }
             if (actionFrameTimer.IsRunning)
             {

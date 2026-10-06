@@ -10,6 +10,7 @@ namespace LOGIYGames
         override protected void Start()
         {
             base.Start();
+
             if (openOnStart)
             {
                 Open();

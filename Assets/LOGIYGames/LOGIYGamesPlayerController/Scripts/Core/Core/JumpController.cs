@@ -11,11 +11,14 @@ namespace LOGIYGames.CharacterCore
         [field:SerializeField] public int MaxJumpCount {  get; private set; }
         MovementWrapperBase Motor;
         Actor Character;
+        SensorsModule Sens;
         private void Awake()
         {
+            Sens = GetComponent<SensorsModule>();
             Motor = GetComponent<MovementWrapperBase>();
             Character = GetComponent<Actor>();
             EventsSubscription();
+
         }
         public void ResetJumps()
         {
@@ -55,6 +58,7 @@ namespace LOGIYGames.CharacterCore
                 }
                 JumpCount++;
             });
+            Sens.GroundedEvent.AddListener(_ => ResetJumps());
         }
     }
 }

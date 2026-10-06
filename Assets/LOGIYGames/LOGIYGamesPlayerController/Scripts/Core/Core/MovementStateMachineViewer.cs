@@ -6,10 +6,14 @@ namespace LOGIYGames.CharacterCore
     [Serializable]
     public class MovementStateMachineViewer : MonoBehaviour
     {
-        [SerializeField] Actor Character;
+        Actor Character;
         StateMachine StateMachine;
         [ReadOnly] public string _currentStateName;
         [ReadOnly] public string _lastTransition;
+        private void Awake()
+        {
+            Character = GetComponent<Actor>();
+        }
         private void Start()
         {
             StateMachine = Character.MovementStateMachine;

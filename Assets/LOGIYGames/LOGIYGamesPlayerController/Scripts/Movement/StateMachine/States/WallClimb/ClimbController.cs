@@ -1,5 +1,7 @@
 using LOGIYGames.CharacterCore;
+using LOGIYGames.Shared.Extensions;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace LOGIYGames
 {
@@ -11,6 +13,7 @@ namespace LOGIYGames
         Actor actor;
         SensorsModule sensorModule;
         Vector3 dir;
+        [SerializeField] LayerMask include;
         private void Awake()
         {
             sensorModule = GetComponent<SensorsModule>();
@@ -34,6 +37,21 @@ namespace LOGIYGames
             }
 
             controller.ChangeVelocity(dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed);
+        }
+        public bool CanEnter()
+        {
+           return actor.Sensors.IsObstacleLegsFront &&
+                    actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include) &&
+                    actor.Input.MovementInput.magnitude > 0
+                        && (actor.transform.InverseTransformDirection(controller.Velocity).z > 0
+                        || actor.transform.InverseTransformDirection(controller.Velocity).y > 0);
+        }
+        public bool CanExit()
+        {
+           return actor.Input.InteractPressed ||
+                    !actor.Sensors.IsObstacleLegsFront ||
+                    !actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include) ||
+                    (actor.IsGrounded && actor.Input.MovementInput.y < 0);
         }
     }
 }

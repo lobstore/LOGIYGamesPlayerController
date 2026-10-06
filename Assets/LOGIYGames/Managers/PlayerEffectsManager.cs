@@ -1,8 +1,7 @@
+using R3;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using R3;
-using UnityEditor.Rendering;
 namespace LOGIYGames
 {
     public class PlayerEffectsManager : PersistentSingleton<PlayerEffectsManager>
@@ -14,18 +13,19 @@ namespace LOGIYGames
         [SerializeField] private RectTransform effectsContainer;
 
         IDisposable subscription;
-        private void Start()
+        override protected void Awake()
         {
-           PlayerManager.Instance.OnCharacterChanged.AddListener((newChar) =>
-            {
-                subscription?.Dispose();
-                subscription = newChar.EffectSystem.OnContinuousEffectsChanged.Subscribe((effects) =>
-                {
-                    UpdateEffectsViews(effects);
-                });
-                UpdateEffectsViews(newChar.EffectSystem.Effects);
+            base.Awake();
+            PlayerManager.Instance.OnCharacterChanged.AddListener((newChar) =>
+             {
+                 subscription?.Dispose();
+                 subscription = newChar.Effects.OnContinuousEffectsChanged.Subscribe((effects) =>
+                 {
+                     UpdateEffectsViews(effects);
+                 });
+                 UpdateEffectsViews(newChar.Effects.Effects);
 
-            });
+             });
         }
         private void UpdateEffectsViews(IReadOnlyList<RuntimeEffect> effects)
         {

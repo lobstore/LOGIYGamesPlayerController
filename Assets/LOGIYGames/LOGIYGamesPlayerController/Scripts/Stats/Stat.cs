@@ -1,6 +1,7 @@
 using R3;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace LOGIYGames
 {
@@ -9,8 +10,8 @@ namespace LOGIYGames
     {
         public float BaseValue;
 
-        private readonly List<StatModifier> _modifiers = new List<StatModifier>();
-        public Subject<Unit> OnModifiersChanged = new();
+        [SerializeField] private List<StatModifier> _modifiers;
+        [NonSerialized] public Subject<Unit> OnModifiersChanged = new();
 
         public float Value
         {
@@ -40,13 +41,6 @@ namespace LOGIYGames
         public void AddModifier(StatModifier modifier)
         {
             _modifiers.Add(modifier);
-            OnModifiersChanged.OnNext(Unit.Default);
-        }
-
-        public void RemoveSource(object source)
-        {
-            _modifiers.RemoveAll(
-                x => x.Source == source);
             OnModifiersChanged.OnNext(Unit.Default);
         }
     }

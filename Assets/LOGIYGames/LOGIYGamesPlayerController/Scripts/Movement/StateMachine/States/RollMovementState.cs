@@ -17,12 +17,26 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-            _character.EventBus.Publish(new JumpPerformedEvent
+            if (!Data.IsAnimationDrivenMovement)
             {
-                jumpType = JumpType.Roll,
-                planarForce = _stateData.PlanarJumpForce,
-                verticalForce = _stateData.VerticalJumpForce,
-            });
+                _character.EventBus.Publish(new JumpPerformedEvent
+                {
+                    jumpType = JumpType.Roll,
+                    planarForce = _stateData.PlanarJumpForce,
+                    verticalForce = _stateData.VerticalJumpForce,
+                });
+            }
+            else
+            {
+                _character.EventBus.Publish(new JumpPerformedEvent
+                {
+
+                    jumpType = JumpType.Roll,
+                    planarForce = 0,
+                    verticalForce = 0,
+                });
+            }
+
         }
         public override bool CanEnter()
         {

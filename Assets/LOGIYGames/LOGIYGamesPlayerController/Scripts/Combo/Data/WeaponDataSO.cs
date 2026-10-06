@@ -12,7 +12,7 @@ namespace LOGIYGames.CharacterCore
 
         public ComboMovesetSO ComboSet;
 
-        public WeaponType WeaponType;
+        public WeaponSlotType SlotType;
 
         public bool TwoHandsRequired;
     }

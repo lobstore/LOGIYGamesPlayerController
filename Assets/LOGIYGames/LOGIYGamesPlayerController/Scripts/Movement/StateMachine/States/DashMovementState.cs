@@ -2,6 +2,7 @@ using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
+using UnityEngine;
 
 namespace LOGIYGames
 {
@@ -15,15 +16,30 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            Direction direction = _character.GetRelativeMovementDirection();
 
-            _character.EventBus.Publish(new JumpPerformedEvent
+            if (!Data.IsAnimationDrivenMovement)
             {
-                jumpType = JumpType.Dash,
-                planarForce = _jumpStateData.PlanarJumpForce,
-                verticalForce = _jumpStateData.VerticalJumpForce,
-                direction = direction
-            });
+                _character.EventBus.Publish(new JumpPerformedEvent
+                {
+
+                    jumpType = JumpType.Dash,
+                    planarForce = _jumpStateData.PlanarJumpForce,
+                    verticalForce = _jumpStateData.VerticalJumpForce,
+                    direction = _character.GetInputRelativeDirection()
+                });
+            }
+            else
+            {
+                _character.EventBus.Publish(new JumpPerformedEvent
+                {
+
+                    jumpType = JumpType.Dash,
+                    planarForce = 0,
+                    verticalForce = 0,
+                    direction = _character.GetInputRelativeDirection()
+                });
+            }
+
         }
         public override bool CanEnter()
         {

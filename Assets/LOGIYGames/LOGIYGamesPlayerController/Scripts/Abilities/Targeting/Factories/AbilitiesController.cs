@@ -1,21 +1,19 @@
 using LOGIYGames.CharacterCore;
-using LOGIYGames.Shared.Extensions;
 using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent(typeof(AbilityTargetingController))]
 public class AbilitiesController : MonoBehaviour
 {
     [SerializeField] private List<AbilitySO> abilities;
     public List<Ability> Abilities { get; private set; } = new List<Ability>();
 
-    private AbilityTargetingController targetingManager;
+    private AbilityTargeting targetingManager;
 
     private Actor Character;
 
     private void Awake()
     {
         Character = GetComponent<Actor>();
-        targetingManager = gameObject.GetOrAddComponent<AbilityTargetingController>();
+        targetingManager = new AbilityTargeting(Character);
         foreach (var ability in abilities)
         {
             Abilities.Add(new Ability(ability));
@@ -24,6 +22,8 @@ public class AbilitiesController : MonoBehaviour
 
     void Update()
     {
+        targetingManager.Update();
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Cast(Abilities[0]);

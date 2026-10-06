@@ -1,6 +1,5 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
-using UnityEngine;
 
 namespace LOGIYGames
 {
@@ -39,23 +38,16 @@ namespace LOGIYGames
         public override void Exit()
         {
             base.Exit();
-            _animator.SetBool("IsWallClimbing",false);
+            _animator.SetBool("IsWallClimbing", false);
             _controller.UseGravity = true;
         }
         public override bool CanExit()
         {
-            return _character.Input.InteractPressed ||
-                    !_character.Sensors.IsObstacleLegsFront ||
-                    !_character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") ||
-                    (_character.IsGrounded && _character.Input.MovementInput.y < 0);
+            return base.CanExit() && controller.CanExit();
         }
         public override bool CanEnter()
         {
-            return base.CanEnter() && _character.Sensors.IsObstacleLegsFront &&
-                    _character.Sensors.LegsFrontHit.collider.CompareTag("Climbable") &&
-                    _character.Input.MovementInput.magnitude > 0
-                        && (_character.transform.InverseTransformDirection(_controller.Velocity).z > 0
-                        || _character.transform.InverseTransformDirection(_controller.Velocity).y > 0);
+            return base.CanEnter() && controller.CanEnter();
         }
     }
 }

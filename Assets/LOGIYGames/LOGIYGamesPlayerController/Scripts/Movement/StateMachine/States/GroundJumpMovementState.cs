@@ -1,6 +1,7 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
+using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -16,20 +17,29 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-            Direction direction = _character.GetRelativeMovementDirection();
+
             float planarForce = _stateData.PlanarJumpForce;
-            if (_character.Input.MovementInput.magnitude == 0)
+            if (!Data.IsAnimationDrivenMovement)
             {
-                direction = Direction.Up;
-                planarForce = 0;
+                _character.EventBus.Publish(new JumpPerformedEvent
+                {
+                    jumpType = JumpType.GroundJump,
+                    planarForce = _stateData.PlanarJumpForce,
+                    verticalForce = _stateData.VerticalJumpForce,
+                    direction = _character.GetInputRelativeDirection()
+                });
             }
-            _character.EventBus.Publish(new JumpPerformedEvent
+            else
             {
-                verticalForce = _stateData.VerticalJumpForce,
-                planarForce = planarForce,
-                direction = direction,
-                jumpType = JumpType.GroundJump
-            });
+                _character.EventBus.Publish(new JumpPerformedEvent
+                {
+                    jumpType = JumpType.GroundJump,
+                    planarForce = 0,
+                    verticalForce = 0,
+                    direction = _character.GetInputRelativeDirection()
+                });
+            }
+
         }
         public override void PhysicsUpdate()
         {

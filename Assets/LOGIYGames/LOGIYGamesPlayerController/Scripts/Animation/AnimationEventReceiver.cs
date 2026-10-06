@@ -12,12 +12,13 @@ namespace LOGIYGames.CharacterCore
         [SerializeField] UnityEvent OnRFoot = new();
         [SerializeField] UnityEvent OnRHandAttack = new();
         [SerializeField] UnityEvent OnLHandAttack = new();
-        [SerializeField] private Animator animator;
+        private Animator animator;
         private Actor character;
 
         private void Awake()
         {
             character = GetComponent<Actor>();
+            animator = GetComponent<Animator>();
         }
 
         public void RFootStep(UnityEngine.AnimationEvent @event)

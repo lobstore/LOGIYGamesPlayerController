@@ -11,8 +11,9 @@ namespace LOGIYGames
 
         private List<PlayerAbilityPresenter> abilityPresenters = new();
         private List<PlayerAbilityView> abilitiesViews = new();
-        private void Start()
+        override protected void Awake()
         {
+            base.Awake();
             PlayerManager.Instance.OnCharacterChanged.AddListener(UpdateAbilitiesViews);
         }
         public void UpdateAbilitiesViews(Actor newChar)

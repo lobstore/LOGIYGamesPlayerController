@@ -31,11 +31,11 @@ namespace LOGIYGames.Movement
         }
         public override bool CanExit()
         {
-            return base.CanExit() && !_character.Input.FocusPressed;
+            return base.CanExit() && !_character.Input.SubAttackPressed;
         }
         public override bool CanEnter()
         {
-            return base.CanEnter() && _character.Input.FocusPressed;
+            return base.CanEnter() && _character.Input.SubAttackPressed;
         }
         public override void Exit()
         {

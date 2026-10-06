@@ -6,8 +6,7 @@ namespace LOGIYGames
     [RequireComponent(typeof(CharacterController))]
     public class CharacterControllerWrapper : MovementWrapperBase
     {
-        [SerializeField]
-        private CharacterController m_characterController;
+       [SerializeField] private CharacterController m_characterController;
         private SensorsModule m_sensors;
 
         private Vector3 linearVelocity;
@@ -19,6 +18,8 @@ namespace LOGIYGames
         #region Ground Motion System
 
         [Header("Ground Motion")]
+
+        [SerializeField] float magnit;
 
         [SerializeField] private bool useGroundMotion = true;
 
@@ -42,7 +43,7 @@ namespace LOGIYGames
         [SerializeField] private float groundDamping;
         [SerializeField] private bool useGravity;
         [SerializeField] bool freeze;
-        public bool Freeze {  get; set; }
+        public bool Freeze { get => freeze; set => freeze =value; }
         public override Collider Collider => m_characterController;
 
         public override bool IsNoClip
@@ -101,11 +102,7 @@ namespace LOGIYGames
         private void Awake()
         {
             m_sensors = GetComponent<SensorsModule>();
-            if (m_characterController == null)
-                m_characterController = GetComponent<CharacterController>();
-
-            if (m_characterController == null)
-                m_characterController = gameObject.AddComponent<CharacterController>();
+            m_characterController = GetComponent<CharacterController>();
 
             m_characterController.enableOverlapRecovery = true;
 
@@ -132,15 +129,15 @@ namespace LOGIYGames
                 AddAcceleration(Physics.gravity);
                 if (m_sensors.IsGrounded && linearVelocity.y < 0)
                 {
-                    linearVelocity.y = -1f;
+                    linearVelocity.y = magnit;
                 }
             }
 
             damping = m_sensors.IsGrounded ? groundDamping : aerialDamping;
             linearVelocity = Vector3.MoveTowards(linearVelocity, Vector3.zero, damping * Time.deltaTime);
 
-            //UpdateGroundMotion();
-            //ApplyGroundMotion();
+            UpdateGroundMotion();
+            ApplyGroundMotion();
             //ProjectVelocity();
             m_characterController.Move(linearVelocity * Time.deltaTime);
         }
@@ -265,7 +262,7 @@ namespace LOGIYGames
 
         private void ProjectVelocity()
         {
-            if (m_sensors.IsOnSlope && linearVelocity.y<0)
+            if (m_sensors.IsOnSlope && linearVelocity.y < 0)
             {
                 Vector3 projectedVelocity =
                     Vector3.ProjectOnPlane(linearVelocity, m_sensors.BelowHit.normal);

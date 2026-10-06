@@ -12,7 +12,7 @@ namespace LOGIYGames.CharacterCore
         Stat VITStat;
         Stat HPStat;
         public readonly UnityEvent Died = new();
-        public HealthController(CharacterStats stats)
+        public HealthController(StatsController stats)
         {
             Health = new();
             VITStat = stats.GetStat(StatType.Vitality);

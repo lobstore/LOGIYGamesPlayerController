@@ -10,8 +10,9 @@ namespace LOGIYGames
         [SerializeField] private PlayerProfileView profileView;
         private PlayerProfilePresenter profilePresenter;
         private ReactiveProperty<string> Name = new();
-        private void Start()
+        override protected void Awake()
         {
+            base.Awake();
             PlayerManager.Instance.OnCharacterChanged.AddListener(UpdateProfileView);
         }
         private void UpdateProfileView(Actor newChar)

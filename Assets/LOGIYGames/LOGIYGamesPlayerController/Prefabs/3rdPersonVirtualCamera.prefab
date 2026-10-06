@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4392871345642403633}
   - component: {fileID: 6856858958671481707}
-  - component: {fileID: -8464756760881869375}
+  - component: {fileID: -4775125578482026725}
   - component: {fileID: 5403077147660180635}
   - component: {fileID: 3354564584338512877}
-  - component: {fileID: 6902940010051483142}
-  - component: {fileID: 8448001709863631451}
   - component: {fileID: 2450535617189801227}
+  - component: {fileID: 8448001709863631451}
   - component: {fileID: 1843990008812083582}
+  - component: {fileID: 1490431780840027318}
   m_Layer: 0
   m_Name: 3rdPersonVirtualCamera
   m_TagString: Untagged
@@ -82,7 +82,7 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
---- !u!114 &-8464756760881869375
+--- !u!114 &-4775125578482026725
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,7 +102,7 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   OrbitStyle: 0
-  Radius: 5
+  Radius: 10
   Orbits:
     Top:
       Radius: 2
@@ -121,7 +121,7 @@ MonoBehaviour:
     Range: {x: -180, y: 180}
     Wrap: 1
     Recentering:
-      Enabled: 1
+      Enabled: 0
       Wait: 1
       Time: 2
     Restrictions: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
     Range: {x: -10, y: 45}
     Wrap: 0
     Recentering:
-      Enabled: 1
+      Enabled: 0
       Wait: 1
       Time: 2
     Restrictions: 0
@@ -191,41 +191,6 @@ MonoBehaviour:
   FocusTarget: {fileID: 0}
   FocusOffset: 0
   Profile: {fileID: 11400000, guid: d77980e7054c1c54b9001cd8f2f21ab4, type: 2}
---- !u!114 &6902940010051483142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5902921758408453199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac3a67c76897d5e4abc768d717859af8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultDistance: 4
-  minimumDistance: 1.05
-  maximumDistance: 6
-  smoothing: 4
-  zoomSensitivity: 1
-  currentTargetDistance: 0
---- !u!114 &8448001709863631451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5902921758408453199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 0.3
-  FrequencyGain: 0.5
-  m_NoiseOffsets: {x: 254.52826, y: 208.1958, z: 640.4591}
 --- !u!114 &2450535617189801227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,37 +209,11 @@ MonoBehaviour:
   m_ControllerManager:
     Controllers:
     - Name: Look Orbit X
-      Owner: {fileID: -8464756760881869375}
+      Owner: {fileID: -4775125578482026725}
       Enabled: 1
       Input:
         InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: 1
-        LegacyInput: 
-        LegacyGain: 1
-        CancelDeltaTime: 1
-      InputValue: 0
-      Driver:
-        AccelTime: 0.2
-        DecelTime: 0.2
-    - Name: Look Orbit Y
-      Owner: {fileID: -8464756760881869375}
-      Enabled: 1
-      Input:
-        InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: 1
-        LegacyInput: 
-        LegacyGain: 1
-        CancelDeltaTime: 1
-      InputValue: 0
-      Driver:
-        AccelTime: 0.2
-        DecelTime: 0.2
-    - Name: Orbit Scale
-      Owner: {fileID: -8464756760881869375}
-      Enabled: 1
-      Input:
-        InputAction: {fileID: 6986982598937743682, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: -1
+        Gain: 10
         LegacyInput: 
         LegacyGain: 1
         CancelDeltaTime: 0
@@ -282,8 +221,51 @@ MonoBehaviour:
       Driver:
         AccelTime: 0
         DecelTime: 0
+    - Name: Look Orbit Y
+      Owner: {fileID: -4775125578482026725}
+      Enabled: 1
+      Input:
+        InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
+        Gain: 10
+        LegacyInput: 
+        LegacyGain: 1
+        CancelDeltaTime: 0
+      InputValue: 0
+      Driver:
+        AccelTime: 0
+        DecelTime: 0
+    - Name: Orbit Scale
+      Owner: {fileID: -4775125578482026725}
+      Enabled: 0
+      Input:
+        InputAction: {fileID: 0}
+        Gain: 1
+        LegacyInput: 
+        LegacyGain: 6.62
+        CancelDeltaTime: 0
+      InputValue: 0
+      Driver:
+        AccelTime: 0
+        DecelTime: 0
   PlayerIndex: -1
-  AutoEnableInputs: 1
+  AutoEnableInputs: 0
+--- !u!114 &8448001709863631451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5902921758408453199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 0.3
+  FrequencyGain: 0.5
+  m_NoiseOffsets: {x: 254.52826, y: 208.1958, z: 640.4591}
 --- !u!114 &1843990008812083582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,3 +305,21 @@ MonoBehaviour:
     NearLimit: 5
     FarLimit: 30
     MaxQualityBoost: 0.2
+--- !u!114 &1490431780840027318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5902921758408453199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3a67c76897d5e4abc768d717859af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CameraZoom
+  defaultDistance: 4
+  minimumDistance: 1
+  maximumDistance: 6
+  smoothing: 4
+  zoomSensitivity: 1
+  currentTargetDistance: 0

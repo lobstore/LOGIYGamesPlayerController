@@ -1,3 +1,4 @@
+using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Enums;
 using UnityEngine;
 
@@ -6,26 +7,25 @@ namespace LOGIYGames
     public class WeaponSlot : MonoBehaviour
     {
         public WeaponSlotType weaponSlot;
-        GameObject currentWeaponPrefab;
+        public GameObject CurrentWeaponPrefab {  get; private set; }
+        public WeaponDataSO CurrentWeapon {  get; private set; }
 
         public void UnloadModel()
         {
-            if (currentWeaponPrefab!=null)
+            if (CurrentWeaponPrefab!=null)
             {
-                Destroy(currentWeaponPrefab);
+                Destroy(CurrentWeaponPrefab);
+                CurrentWeapon = null;
             }
         }
 
-        public void LoadModel(GameObject prefab)
+        public void LoadModel(WeaponDataSO data)
         {
-            currentWeaponPrefab = prefab;
-
-            currentWeaponPrefab.transform.parent = transform;
-            currentWeaponPrefab.transform.localPosition = Vector3.zero;
-            currentWeaponPrefab.transform.localRotation = Quaternion.identity;
-            //currentWeaponPrefab.transform.localScale = Vector3.one;
-
-
+            CurrentWeapon = data;
+            CurrentWeaponPrefab = Instantiate(data.Prefab);
+            CurrentWeaponPrefab.transform.parent = transform;
+            CurrentWeaponPrefab.transform.localPosition = Vector3.zero;
+            CurrentWeaponPrefab.transform.localRotation = Quaternion.identity;
         }
     }
 }

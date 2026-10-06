@@ -1,9 +1,11 @@
+using Alchemy.Inspector;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 namespace LOGIYGames.CharacterCore
 {
     public partial class Actor : MonoModuleBase, IControllable, IDamageable
@@ -20,14 +22,13 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] public CameraTarget ActionCameraTarget { get; private set; }
         [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
-        [field: SerializeField] public MovementRuntimeData RuntimeMovement { get; private set; }
+        [ReadOnly] public MovementRuntimeData RuntimeMovement;
+        [ReadOnly] public EffectsController Effects;
+        public StatsController Stats;
 
-        public CharacterStats Stats { get; private set; }
-
-        [field: SerializeField] public EffectsController EffectSystem { get; private set; }
 
         #region Modules
-        public TargetingController TargetingController { get; private set; }
+        public TargetingController TargetingController;
         public HealthController HealthController { get; private set; }
         public StaminaController StaminaController { get; private set; }
         #endregion
@@ -40,24 +41,23 @@ namespace LOGIYGames.CharacterCore
 
         private void Awake()
         {
-            Stats = new();
-            Stats.SetBase(StatType.BaseHealth, 100);
-            Stats.SetBase(StatType.BaseStamina, 50);
-            Stats.SetBase(StatType.BaseMana, 10);
-            Stats.SetBase(StatType.Vitality, 10);
-            Stats.SetBase(StatType.Intelegence, 1);
-            Stats.SetBase(StatType.AttackBase, 1);
-            Stats.SetBase(StatType.DefenseBase, 1);
-            Stats.SetBase(StatType.CritRate, 15);
-            Stats.SetBase(StatType.CritDamage, 50);
-
+            //Stats = new();
+            //Stats.SetBase(StatType.BaseHealth, 100);
+            //Stats.SetBase(StatType.BaseStamina, 50);
+            //Stats.SetBase(StatType.BaseMana, 10);
+            //Stats.SetBase(StatType.Vitality, 10);
+            //Stats.SetBase(StatType.Intelegence, 1);
+            //Stats.SetBase(StatType.AttackBase, 1);
+            //Stats.SetBase(StatType.DefenseBase, 1);
+            //Stats.SetBase(StatType.CritRate, 15);
+            //Stats.SetBase(StatType.CritDamage, 50);
+            Motor = GetComponent<MovementWrapperBase>();
+            Sensors = GetComponent<SensorsModule>();
             HealthController = new HealthController(Stats);
             StaminaController = new StaminaController(Stats, 1);
             InitializeStateMachine();
-            TargetingController = new();
-            EffectSystem = new(this);
+            Effects = new(this);
         }
-
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
@@ -85,7 +85,7 @@ namespace LOGIYGames.CharacterCore
             CalculateDeltaYaw();
             MovementStateMachine.Update();
             StaminaController.Tick();
-            EffectSystem.Update();
+            Effects.Update();
         }
 
         #region Rotation Methods
@@ -225,14 +225,14 @@ namespace LOGIYGames.CharacterCore
             Direction direction;
             if (Mathf.Abs(forwardDot) > Mathf.Abs(rightDot))
             {
-                if (forwardDot > 0)
+                if (forwardDot > 0.01f)
                     direction = Direction.Forward;
                 else
                     direction = Direction.Backward;
             }
             else if (Mathf.Abs(forwardDot) < Mathf.Abs(rightDot))
             {
-                if (rightDot > 0)
+                if (rightDot > 0.01f)
                     direction = Direction.Right;
                 else
                     direction = Direction.Left;
@@ -242,6 +242,44 @@ namespace LOGIYGames.CharacterCore
                 direction = Direction.NoMovement;
             }
 
+            return direction;
+        }
+
+        public Direction GetInputRelativeDirection()
+        {
+            Direction direction;
+            if (RotationStrategy is CharacterRelativeRotation)
+            {
+                if (Input.MovementInput.magnitude > 0)
+                {
+                    direction = Direction.Forward;
+
+                }
+                else
+                {
+                    direction = Direction.NoMovement;
+                }
+            }
+            else
+            {
+                Vector3 dir = transform.right * Input.MovementInput.x + transform.forward * Input.MovementInput.y;
+                float forward = Vector3.Dot(transform.forward, dir);
+                float right = Vector3.Dot(transform.right, dir);
+                if (Mathf.Abs(forward) > Mathf.Abs(right))
+                {
+                    if (forward > 0)
+                        direction = Direction.Forward;
+                    else
+                        direction = Direction.Backward;
+                }
+                else
+                {
+                    if (right > 0)
+                        direction = Direction.Right;
+                    else
+                        direction = Direction.Left;
+                }
+            }
             return direction;
         }
         #region IDamageable

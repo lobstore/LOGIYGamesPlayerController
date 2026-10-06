@@ -3,6 +3,7 @@ using System;
 
 namespace LOGIYGames.Shared.Character.Events
 {
+    [Serializable]
     public abstract class EventBase { }
     [Serializable]
     public class JumpPerformedEvent : EventBase

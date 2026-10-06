@@ -107,10 +107,7 @@ namespace LOGIYGames
                 <IdleMovementState, ComboMovementState>(
                 new FuncPredicate(() => character.GetMovementState<ComboMovementState>().CanEnter()
                 ));
-            character.MovementStateMachine.AddTransition
-    <ComboMovementState, IdleMovementState>(
-    new FuncPredicate(() => character.GetMovementState<ComboMovementState>().CanExit()
-    ));
+
             character.MovementStateMachine.AddTransition
                 <IdleMovementState, BackTurnMovementState>(
                 new FuncPredicate(() => character.GetMovementState<BackTurnMovementState>().CanEnter()
@@ -153,7 +150,10 @@ namespace LOGIYGames
                 {
                     return character.GetMovementState<DashMovementState>().CanEnter();
                 }));
-
+            character.MovementStateMachine.AddTransition
+                <RunMovementState, ComboMovementState>(
+                new FuncPredicate(() => character.GetMovementState<ComboMovementState>().CanEnter()
+                ));
 
             character.MovementStateMachine.AddTransition
                 <RunMovementState, SlipJumpMovementState>(
@@ -287,6 +287,12 @@ namespace LOGIYGames
                 {
                     return character.GetMovementState<SprintMovementState>().CanExit()
                     && character.GetMovementState<IdleMovementState>().CanEnter();
+                }));
+            character.MovementStateMachine.AddTransition
+                <SprintMovementState, TurnMovementState>(
+                new FuncPredicate(() =>
+                {
+                    return character.GetMovementState<TurnMovementState>().CanEnter();
                 }));
             #endregion
             // =========================================================
@@ -487,11 +493,18 @@ namespace LOGIYGames
                 }));
 
             character.MovementStateMachine.AddTransition
-                <TurnMovementState, IdleMovementState>(
+                <TurnMovementState, StopMovementState>(
                 new FuncPredicate(() =>
                 {
                     return character.GetMovementState<TurnMovementState>().CanExit() &&
-                           character.GetMovementState<IdleMovementState>().CanEnter();
+                           character.GetMovementState<StopMovementState>().CanEnter();
+                }));
+            character.MovementStateMachine.AddTransition
+                <TurnMovementState, SprintMovementState>(
+                new FuncPredicate(() =>
+                {
+                    return character.GetMovementState<TurnMovementState>().CanExit() &&
+                          character.GetMovementState<SprintMovementState>().CanEnter();
                 }));
 
             character.MovementStateMachine.AddTransition
@@ -501,6 +514,7 @@ namespace LOGIYGames
                     return character.GetMovementState<TurnMovementState>().CanExit() &&
                           character.GetMovementState<RunMovementState>().CanEnter();
                 }));
+
             character.MovementStateMachine.AddTransition
                 <TurnMovementState, GroundJumpMovementState>(
                 new FuncPredicate(() =>
@@ -593,7 +607,7 @@ namespace LOGIYGames
             #region FlyState Transitions
 
             character.MovementStateMachine.AddTransition
-                <FlyMovementState, IdleMovementState>(
+                <FlyMovementState, FallingMovementState>(
                 new FuncPredicate(() => character.GetMovementState<FlyMovementState>().CanExit()
                 ));
             #endregion
@@ -630,6 +644,32 @@ namespace LOGIYGames
                 new FuncPredicate(() => character.GetMovementState<MountingMovementState>().CanExit()
                 ));
             #endregion
+            // =========================================================
+            // Combat
+            // =========================================================
+            #region CombatState Transitions
+
+            character.MovementStateMachine.AddTransition
+                <ComboMovementState, IdleMovementState>(
+                new FuncPredicate(() => character.GetMovementState<ComboMovementState>().CanExit()
+                ));
+            character.MovementStateMachine.AddTransition
+                <ComboMovementState, DashMovementState>(
+                new FuncPredicate(() => character.GetMovementState<ComboMovementState>().CanDodge() &&
+                 character.GetMovementState<DashMovementState>().CanEnter()
+                ));
+            character.MovementStateMachine.AddTransition
+                <ComboMovementState, RollMovementState>(
+                new FuncPredicate(() => character.GetMovementState<ComboMovementState>().CanDodge() &&
+                character.GetMovementState<RollMovementState>().CanEnter()
+                ));
+            character.MovementStateMachine.AddTransition
+                <ComboMovementState, GroundJumpMovementState>(
+                new FuncPredicate(() => character.GetMovementState<ComboMovementState>().CanDodge() &&
+                character.GetMovementState<GroundJumpMovementState>().CanEnter()
+                ));
+            #endregion
+
             #endregion
         }
 

@@ -9,10 +9,9 @@ using UnityEngine;
 public class DamageOverTimeEffect : ContinuousEffect
 {
     [SerializeField] protected DamageData Damage;
-    [ReadOnly][field: SerializeField] public IntervalTimer Timer { get; private set; }
-    public override bool IsFinished => Timer.IsFinished;
-    [ReadOnly][SerializeField] float duration;
-    [ReadOnly][SerializeField] float interval;
+    [field: SerializeField] public IntervalTimer Timer { get; private set; }
+    [SerializeField] float duration;
+    [SerializeField] float interval;
     private GameObject effectGO;
     public DamageOverTimeEffect(DamageOverTimeEffectData effectData) : base(effectData)
     {
@@ -43,6 +42,7 @@ public class DamageOverTimeEffect : ContinuousEffect
 
     public override void OnUpdate(float delta)
     {
+        isFinished = Timer.IsFinished;
         DisplayValue.Value = Mathf.RoundToInt(Timer.CurrentTime.CurrentValue).ToString();
         Timer.Tick();
     }

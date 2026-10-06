@@ -5,13 +5,11 @@ namespace LOGIYGames
 {
     public class StrafeMovement : IMovementStrategy
     {
-        MovementWrapperBase controller;
         Actor Character;
 
         public StrafeMovement(Actor character)
         {
             Character = character;
-            controller = character.GetComponent<MovementWrapperBase>();
         }
 
         public Vector3 GetMovementDirection()

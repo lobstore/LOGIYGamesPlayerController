@@ -22,7 +22,7 @@ namespace LOGIYGames.Scripts.AI
             input.EvadePressed = Driver.EvadePressed;
             input.SprintPressing = Driver.SprintPressed;
             input.CrouchPressed = Driver.CrouchPressed;
-            input.FocusPressed = Driver.FocusPressed;
+            input.SubAttackPressed = Driver.FocusPressed;
             input.AttackPressed = false;
             input.InteractPressed = false;
 

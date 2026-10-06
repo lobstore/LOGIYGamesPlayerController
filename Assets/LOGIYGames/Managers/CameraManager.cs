@@ -1,6 +1,7 @@
 using Alchemy.Hierarchy;
 using Alchemy.Inspector;
 using LOGIYGames.Shared.Extensions;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -24,10 +25,12 @@ namespace LOGIYGames
         [SerializeField] CinemachineCamera FirstPersonCameraController;
         [SerializeField] CinemachineCamera ThirdPersonCameraController;
         [SerializeField] CinemachineCamera TopDownCameraController;
+        [SerializeField] CinemachineCamera LockOnCameraController;
         [SerializeField] bool isActionFP;
         CinemachineCamera instance_FirstPersonCameraController;
         CinemachineCamera instance_ThirdPersonCameraController;
         CinemachineCamera instance_TopDownCameraController;
+        CinemachineCamera instance_LockOnCameraController;
 
         [SerializeField] InputActionAsset inputActions;
         public PlayerCameraInputReader CameraInput { get; private set; }
@@ -43,6 +46,8 @@ namespace LOGIYGames
                 ChooseCamera();
             }
         }
+        [SerializeField] private RectTransform marker;
+
         public void DisableAllCameras()
         {
             foreach (var item in cinemachineCameraControllers)
@@ -66,17 +71,20 @@ namespace LOGIYGames
             instance_FirstPersonCameraController = Instantiate(FirstPersonCameraController, holder.transform);
             instance_ThirdPersonCameraController = Instantiate(ThirdPersonCameraController, holder.transform);
             instance_TopDownCameraController = Instantiate(TopDownCameraController, holder.transform);
+            instance_LockOnCameraController = Instantiate(LockOnCameraController, holder.transform);
             cinemachineCameraControllers.Add(instance_FirstPersonCameraController);
             cinemachineCameraControllers.Add(instance_ThirdPersonCameraController);
             cinemachineCameraControllers.Add(instance_TopDownCameraController);
+            cinemachineCameraControllers.Add(instance_LockOnCameraController);
         }
         protected override void Awake()
         {
             base.Awake();
             Initialize();
         }
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitForEndOfFrame();
             CameraInput.Enable();
             ResetCameraView();
         }
@@ -89,16 +97,71 @@ namespace LOGIYGames
             }
             else
             {
-
                 SetTargetTo(PlayerManager.Instance.CurrentCharacter.CameraTarget);
             }
 
-            ChooseCamera();
+        }
+        bool isLockOn;
+        private void Update()
+        {
+            if (PlayerManager.Instance.CurrentCharacter.TargetingController.HasTarget)
+            {
+                if (PlayerManager.Instance.CurrentCharacter.Input.LockPressed)
+                {
+                    LockOnToggle();
+                }
+            }
+            else
+            {
+                isLockOn = false;
+            }
+
 
         }
+
+        private void LockOnToggle()
+        {
+            if (isLockOn)
+            {
+                isLockOn = false;
+            }
+            else
+            {
+                isLockOn = true;
+            }
+        }
+
         private void LateUpdate()
         {
-            ChooseCamera();
+            if (isLockOn)
+            {
+                SetLockOnView();
+            }
+            else
+            {
+                ChooseCamera();
+
+            }
+
+
+            if (!PlayerManager.Instance.CurrentCharacter.TargetingController.HasTarget || !isLockOn)
+            {
+                marker.gameObject.SetActive(false);
+                return;
+            }
+            else
+            {
+                marker.gameObject.SetActive(true);
+
+                Vector3 screenPosition =
+                    Camera.main.WorldToScreenPoint(
+                        PlayerManager.Instance.CurrentCharacter.TargetingController.CurrentTarget.position
+                    );
+
+                marker.position = screenPosition;
+            }
+
+
         }
         private void ChooseCamera()
         {
@@ -119,6 +182,13 @@ namespace LOGIYGames
                 default:
                     break;
             }
+        }
+
+        public void SetLockOnView()
+        {
+            CurrentCameraController = instance_LockOnCameraController;
+            SetPriorVirtualCamera(CurrentCameraController);
+            instance_LockOnCameraController.LookAt = PlayerManager.Instance.CurrentCharacter.TargetingController.CurrentTarget;
         }
 
         public void SetTargetTo(CameraTarget cameraTarget)

@@ -1,46 +1,47 @@
-using LOGIYGames.CharacterCore;
+using LOGIYGames;
 using UnityEngine;
 
-namespace Perception {
-    public class StimEmitter : MonoBehaviour {
+namespace Perception
+{
+    public class StimEmitter : MonoBehaviour
+    {
         [SerializeField] float walkSpeed = 0.5f;
         [SerializeField] float runSpeed = 1f;
         [SerializeField] float sprintSpeed = 1.5f;
         [SerializeField] float walkRadius = 4f;
         [SerializeField] float runRadius = 8f;
         [SerializeField] float sprintRadius = 18f;
-        
-        Actor player;
-        Transform body;
 
-        void Awake() {
-            player = GetComponent<Actor>();
-            body = transform;
+        MovementWrapperBase controller;
+
+        void Awake()
+        {
+            controller = GetComponent<MovementWrapperBase>();
         }
 
-        void Update() {
-            if (!player || !body) return;
-            var speed = player.RuntimeMovement.CurrentSpeed;
+        void Update()
+        {
+            var speed = controller.Velocity.magnitude;
             if (speed < walkSpeed) return;
             var loud = speed >= sprintSpeed;
-            
-            
+
+
 
             PerceptionHub.Emit(
                 new Stim(
                     loud ? StimType.AudioLoud : StimType.AudioMovement,
-                    body,
-                    body.position,
+                    controller.transform,
+                    controller.transform.position,
                     ResolveRadius(speed))
                 );
         }
         private float ResolveRadius(float speed)
         {
-            if (speed<walkSpeed)
+            if (speed < walkSpeed)
             {
                 return 0;
             }
-            if (speed<runSpeed)
+            if (speed < runSpeed)
             {
                 return walkRadius;
             }

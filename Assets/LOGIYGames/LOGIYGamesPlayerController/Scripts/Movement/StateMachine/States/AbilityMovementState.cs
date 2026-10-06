@@ -1,7 +1,5 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
-using LOGIYGames.Shared.Character.Events;
-using UnityEngine;
 
 namespace LOGIYGames
 {
@@ -10,7 +8,7 @@ namespace LOGIYGames
         //private readonly AbilityController abilityController;
         public AbilityMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
-           // abilityController = ctx.AbilityController;
+            // abilityController = ctx.AbilityController;
         }
 
         public override void Enter()
@@ -18,16 +16,16 @@ namespace LOGIYGames
             base.Enter();
             _character.MovementStrategy = new NoneMovement();
             _character.RotationStrategy = new NoneRotation(_character);
-           // abilityController.BeginAbility();
+            // abilityController.BeginAbility();
         }
         public override void Exit()
         {
             base.Exit();
         }
-        public bool CanExit()
+        public override bool CanExit()
         {
             return false;
-                //abilityController.CurrentAbility == null;
+            //abilityController.CurrentAbility == null;
         }
     }
 }

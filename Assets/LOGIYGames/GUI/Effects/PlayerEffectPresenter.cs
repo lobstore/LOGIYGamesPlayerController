@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
+    [Serializable]
     public class PlayerEffectPresenter : IDisposable
     {
-        public ReactiveProperty<string> DisplayValue = new ReactiveProperty<string>();
-        public ReactiveProperty<Sprite> Icon = new ReactiveProperty<Sprite>();
+        public SerializableReactiveProperty<string> DisplayValue = new ();
+        public SerializableReactiveProperty<Sprite> Icon = new ();
         DisposableBag DisposableBag;
-        PlayerEffectView view;
+        [SerializeField] PlayerEffectView view;
         public PlayerEffectPresenter(RuntimeEffect effect, PlayerEffectView view)
         {
             this.view = view;

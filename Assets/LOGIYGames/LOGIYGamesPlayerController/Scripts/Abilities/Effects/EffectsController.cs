@@ -1,19 +1,18 @@
 using LOGIYGames.CharacterCore;
+using R3;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using Alchemy.Inspector;
-using R3;
 using System.Linq;
+using UnityEngine;
 namespace LOGIYGames
 {
     [Serializable]
     public sealed class EffectsController
     {
         private readonly Actor _owner;
-        [ReadOnly][SerializeReference] private List<RuntimeEffect> _effects = new();
+        [SerializeReference] private List<RuntimeEffect> _effects = new();
         public IReadOnlyList<RuntimeEffect> Effects => _effects;
-        public Subject<IReadOnlyList<RuntimeEffect>> OnContinuousEffectsChanged = new();
+        [NonSerialized] public Subject<IReadOnlyList<RuntimeEffect>> OnContinuousEffectsChanged = new();
         public EffectsController(Actor owner)
         {
             _owner = owner;
@@ -52,7 +51,7 @@ namespace LOGIYGames
 
             _effects.Add(effect);
             if (effect is ContinuousEffect)
-            OnContinuousEffectsChanged.OnNext(_effects);
+                OnContinuousEffectsChanged.OnNext(_effects);
             effect.OnApply();
 
 

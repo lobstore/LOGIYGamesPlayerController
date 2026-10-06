@@ -5,7 +5,7 @@ namespace LOGIYGames.CharacterCore
     [Serializable]
     public class TargetingController
     {
-        public Transform CurrentTarget { get; private set; }
+        public Transform CurrentTarget;
 
         public bool HasTarget =>
             CurrentTarget != null;

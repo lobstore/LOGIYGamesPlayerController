@@ -1,4 +1,3 @@
-using Alchemy.Inspector;
 using LOGIYGames.CharacterCore;
 using R3;
 using System;
@@ -10,17 +9,19 @@ namespace LOGIYGames
     public abstract class RuntimeEffect
     {
         protected Actor Owner;
-        [ReadOnly][field: SerializeField] public EffectData Data { get; protected set; }
+        public EffectData Data;
+        [SerializeField] protected bool isStackable;
+        [SerializeField] protected bool isFinished;
+        public SerializableReactiveProperty<string> DisplayValue = new();
+
+        public bool IsFinished => isFinished;
+        public bool IsStackable => isStackable;
         protected RuntimeEffect(EffectData effectData)
         {
             Data = effectData;
         }
-        protected bool isStackable;
-        public bool IsStackable => isStackable;
 
-        [ReadOnly][field: SerializeField] public virtual bool IsFinished { get; protected set; }
 
-        public ReactiveProperty<string> DisplayValue { get; protected set; } = new();
 
 
 

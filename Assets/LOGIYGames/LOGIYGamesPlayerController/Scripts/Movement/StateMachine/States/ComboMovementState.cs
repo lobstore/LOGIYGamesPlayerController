@@ -29,6 +29,10 @@ public class ComboMovementState : MovementStateBase
         base.LogicUpdate();
         combo.Tick();
     }
+    public bool CanDodge()
+    {
+        return combo.IsDodgeWindowActive();
+    }
     public override bool CanExit()
     {
         return combo.CanExit();

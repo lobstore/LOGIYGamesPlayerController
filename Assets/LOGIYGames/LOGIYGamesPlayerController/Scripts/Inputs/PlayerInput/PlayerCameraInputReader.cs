@@ -8,7 +8,7 @@ namespace LOGIYGames
         InputActionAsset InputActions;
         InputActionMap CameraActionMap;
         public InputAction ZoomAction {  get; private set; }
-        public InputAction LookAction {  get; private set; }
+        private InputAction LookAction;
         public float ZoomDelta => ZoomAction.ReadValue<float>();
         public Vector2 LookInput => LookAction.ReadValue<Vector2>();
 

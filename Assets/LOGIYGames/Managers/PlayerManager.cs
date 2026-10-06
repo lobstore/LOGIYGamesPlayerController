@@ -14,6 +14,8 @@ namespace LOGIYGames
         public PlayerInputReader PlayerInput { get; private set; }
 
         [SerializeField] private CameraPerspectiveType currentControlType;
+        private bool isLockOn;
+
         public CameraPerspectiveType CurrentCameraPerspectiveType
         {
             get { return currentControlType; }
@@ -39,10 +41,46 @@ namespace LOGIYGames
         {
             CharacterInput input = PlayerInput.GetInput();
             CurrentCharacter.UpdateInput(input);
+            if (CurrentCharacter.TargetingController.HasTarget)
+            {
+                if (CurrentCharacter.Input.LockPressed)
+                {
+                    LockOnToggle();
+                }
+            }
+            else
+            {
+                isLockOn = false;
+            }
         }
         private void LateUpdate()
         {
-            UpdateStrategies();
+            
+            if (isLockOn)
+            {
+                SetLockOn();
+            }
+            else
+            {
+                UpdateStrategies();
+
+            }
+        }
+        private void LockOnToggle()
+        {
+            if (isLockOn)
+            {
+                isLockOn = false;
+            }
+            else
+            {
+                isLockOn = true;
+            }
+        }
+        public void SetLockOn()
+        {
+            CurrentCharacter.DefaultMovementStrategy = new StrafeMovement(CurrentCharacter);
+            CurrentCharacter.DefaultRotationStrategy = new TargetLockRotation(CurrentCharacter);
         }
         private void UpdateStrategies()
         {
@@ -75,7 +113,6 @@ namespace LOGIYGames
         public void SetPlayerControlOnCharacter(Actor character)
         {
             CurrentCharacter = character;
-            UpdateStrategies();
             CurrentCharacter.ResetStrategies();
             OnCharacterChanged?.Invoke(CurrentCharacter);
         }

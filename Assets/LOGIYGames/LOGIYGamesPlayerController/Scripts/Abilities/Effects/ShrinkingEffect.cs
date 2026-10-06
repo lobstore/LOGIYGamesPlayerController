@@ -8,12 +8,10 @@ using UnityEngine;
 public class ShrinkingEffect : ContinuousEffect
 {
     [ReadOnly][field: SerializeField] public CountdownTimer Timer { get; private set; }
-    public override bool IsFinished => Timer.IsFinished;
     public ShrinkingEffect(ShrinkingEffectData effectData) : base(effectData)
     {
         Timer = new CountdownTimer(effectData.Duration, false);
     }
-
     public override void OnApply()
     {
         Timer.Start();
@@ -28,6 +26,7 @@ public class ShrinkingEffect : ContinuousEffect
 
     public override void OnUpdate(float delta)
     {
+        isFinished = Timer.IsFinished;
         DisplayValue.Value = Mathf.RoundToInt(Timer.CurrentTime.CurrentValue).ToString();
         Timer.Tick();
     }

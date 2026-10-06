@@ -15,7 +15,7 @@ public class AOETargeting : AbilityTargetingStrategy
     private GameObject previewInstance;
     private GameObject radiusGhost;
 
-    public override void Start(Ability ability, AbilityTargetingController targetingManager)
+    public override void Start(Ability ability, AbilityTargeting targetingManager)
     {
         this.ability = ability;
         this.targetingManager = targetingManager;
@@ -116,7 +116,7 @@ public class AOETargeting : AbilityTargetingStrategy
         }
 
         // ПКМ - отмена
-        if (targetingManager.Character.Input.FocusPressed)
+        if (targetingManager.Character.Input.SubAttackPressed)
         {
             Cancel();
         }

@@ -9,7 +9,7 @@ public class Ability
         Data = abilitySO;
         CooldownTimer = new(abilitySO.Cooldown);
     }
-    public virtual void Target(AbilityTargetingController targetingManager)
+    public virtual void Target(AbilityTargeting targetingManager)
     {
         if (Data.targetingStrategy != null && !targetingManager.IsTargeting)
         {
@@ -23,7 +23,7 @@ public class Ability
         foreach (var effect in Data.effects)
         {
             var runtimeEffect = effect.Create();
-            target?.EffectSystem.AddEffect(runtimeEffect);
+            target?.Effects.AddEffect(runtimeEffect);
         }
     }
 }

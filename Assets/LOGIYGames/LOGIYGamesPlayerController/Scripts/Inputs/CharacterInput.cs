@@ -10,7 +10,7 @@ namespace LOGIYGames.CharacterCore
         public Vector3 LookForward;
         public Vector3 LookRight;
 
-        public bool FocusPressed;
+        public bool SubAttackPressed;
         public bool JumpPressed;
         public bool EvadePressed;
         public bool SprintPressing;
@@ -20,6 +20,6 @@ namespace LOGIYGames.CharacterCore
         public bool InteractHeld;
         public bool AttackPressed;
         public bool AbilityPressed;
-        public bool HeavyAttackPressed;
+        public bool LockPressed;
     }
 }

@@ -6,7 +6,7 @@ public class ProjectileTargeting : AbilityTargetingStrategy {
     public GameObject projectilePrefab;
     public float projectileSpeed = 10f;
 
-    public override void Start(Ability ability, AbilityTargetingController targetingManager) {
+    public override void Start(Ability ability, AbilityTargeting targetingManager) {
         this.ability = ability;
         this.targetingManager = targetingManager;
 

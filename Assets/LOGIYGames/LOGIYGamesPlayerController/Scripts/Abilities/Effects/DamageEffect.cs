@@ -13,7 +13,7 @@ public class DamageEffect : InstantEffect
     public override void OnApply()
     {
         Owner.TakeDamage(Damage);
-        IsFinished = true;
+        isFinished = true;
     }
 
     public override void OnRemove()
