@@ -29,7 +29,7 @@ namespace LOGIYGames.AI
         {
             base.LogicUpdate();
 
-            if (Brain.Target == null)
+            if (Brain.TargetingController.CurrentTarget == null)
             {
                 _lostTimer += Time.deltaTime;
                 return;
@@ -52,7 +52,7 @@ namespace LOGIYGames.AI
         {
             base.PhysicsUpdate();
 
-            if (Brain.Target == null)
+            if (Brain.TargetingController.CurrentTarget == null)
             {
                 Stop();
                 return;
@@ -68,7 +68,7 @@ namespace LOGIYGames.AI
             }
 
             // Move towards target
-            MoveToPosition(Brain.Target.position);
+            MoveToPosition(Brain.TargetingController.CurrentTarget.position);
         }
     }
 }

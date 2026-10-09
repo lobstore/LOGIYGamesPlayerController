@@ -21,23 +21,7 @@ namespace LOGIYGames.AI
         {
             base.Enter();
             SelectRandomPatrolPoint();
-        }
-
-        public override void LogicUpdate()
-        {
-            base.LogicUpdate();
-
-            // Check if target detected - transition to Chase
-            if (Brain.Target != null && Brain.HasLineOfSight())
-            {
-                return;
-            }
-
-            // Check if patrol points exist
-            if (Brain.PatrolPoints == null || Brain.PatrolPoints.Length == 0)
-            {
-                return;
-            }
+            Brain.TargetingController.SetTarget(_currentPatrolPoint);
         }
 
         public override void PhysicsUpdate()
@@ -80,7 +64,7 @@ namespace LOGIYGames.AI
         private bool IsAtPatrolPoint()
         {
             return _currentPatrolPoint == null ||
-                   Vector3.Distance(CharacterTransform.position, _currentPatrolPoint.position) <= _arrivalThreshold;
+                   Brain.GetDistanceToTarget() <= _arrivalThreshold;
         }
 
         /// <summary>

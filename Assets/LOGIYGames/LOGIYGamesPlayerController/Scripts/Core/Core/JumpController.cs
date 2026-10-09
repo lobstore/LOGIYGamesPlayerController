@@ -24,6 +24,10 @@ namespace LOGIYGames.CharacterCore
         {
             JumpCount = 0;
         }
+        private void Update()
+        {
+            ResetJumps();
+        }
         public bool CanExecute(JumpStateData jumpStateData)
         {
             return JumpCount < MaxJumpCount && Character.StaminaController.TryUse(jumpStateData.StaminaUsage);
@@ -58,7 +62,6 @@ namespace LOGIYGames.CharacterCore
                 }
                 JumpCount++;
             });
-            Sens.GroundedEvent.AddListener(_ => ResetJumps());
         }
     }
 }

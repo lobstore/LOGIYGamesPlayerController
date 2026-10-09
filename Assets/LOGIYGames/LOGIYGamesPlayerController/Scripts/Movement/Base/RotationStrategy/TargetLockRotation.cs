@@ -14,23 +14,12 @@ namespace LOGIYGames
 
         public Quaternion GetRotation()
         {
-            if (!_character.TargetingController.HasTarget)
-            {
-                float targetAngleY = Camera.main.transform.eulerAngles.y;
-                Quaternion targetRotation = Quaternion.Euler(0f, targetAngleY, 0f);
-                return targetRotation;
-            }
 
             Vector3 direction =
                 _character.TargetingController.CurrentTarget.position -
                 _character.transform.position;
 
             direction.y = 0;
-
-            if (direction.sqrMagnitude < 0.001f)
-            {
-                return _character.transform.rotation;
-            }
 
             return Quaternion.LookRotation(direction);
         }

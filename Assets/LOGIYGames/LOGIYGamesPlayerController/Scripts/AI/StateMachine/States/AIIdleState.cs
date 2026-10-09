@@ -31,7 +31,7 @@ namespace LOGIYGames.AI
 
             // Setup and start idle timer
             _idleTimer?.Dispose();
-            _idleTimer = new CountdownTimer(_currentIdleDuration);
+            _idleTimer = new CountdownTimer(_currentIdleDuration, false);
             _idleTimer.Start();
         }
 
@@ -44,12 +44,7 @@ namespace LOGIYGames.AI
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-
-            // Check if target detected - transition to Chase
-            if (Brain.Target != null && Brain.HasLineOfSight())
-            {
-                return;
-            }
+            _idleTimer.Tick();
         }
 
         /// <summary>

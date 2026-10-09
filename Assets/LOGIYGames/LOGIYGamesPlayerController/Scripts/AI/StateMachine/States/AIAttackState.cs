@@ -36,7 +36,7 @@ namespace LOGIYGames.AI
             base.LogicUpdate();
 
             // Check if target is null or out of range
-            if (Brain.Target == null || !IsTargetInAttackRange(Brain.Target))
+            if (Brain.TargetingController.CurrentTarget == null || !IsTargetInAttackRange(Brain.TargetingController.CurrentTarget))
             {
                 return;
             }
@@ -73,7 +73,7 @@ namespace LOGIYGames.AI
         {
             base.PhysicsUpdate();
 
-            if (Brain.Target == null)
+            if (Brain.TargetingController.CurrentTarget == null)
             {
                 Stop();
                 return;
@@ -87,7 +87,7 @@ namespace LOGIYGames.AI
             }
 
             // Strafe movement
-            if (_shouldStrafe && IsTargetInAttackRange(Brain.Target))
+            if (_shouldStrafe && IsTargetInAttackRange(Brain.TargetingController.CurrentTarget))
             {
                 Vector3 right = CharacterTransform.right;
                 Vector3 strafePosition = CharacterTransform.position + right * _strafeDirection * 2f;
@@ -99,7 +99,7 @@ namespace LOGIYGames.AI
 
                 if (distance > AttackRange * 0.8f)
                 {
-                    MoveToPosition(Brain.Target.position);
+                    MoveToPosition(Brain.TargetingController.CurrentTarget.position);
                 }
                 else if (distance < AttackRange * 0.3f)
                 {
@@ -114,7 +114,7 @@ namespace LOGIYGames.AI
         }
         public bool IsTargetInAttackRange()
         {
-            return Brain.Target != null && Vector3.Distance(Brain.transform.position, Brain.Target.position) <= Brain.AttackRange;
+            return Brain.TargetingController.CurrentTarget != null && Vector3.Distance(Brain.transform.position, Brain.TargetingController.CurrentTarget.position) <= Brain.AttackRange;
         }
         /// <summary>
         /// Performs the attack action

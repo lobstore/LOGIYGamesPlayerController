@@ -366,12 +366,12 @@ namespace LOGIYGames.Animation
         {
             base.OnLateUpdate(deltaTime);
 
-            animator.SetFloat("Speed", character.RuntimeMovement.CurrentSpeed, animationsCrossFadeSpeed, Time.deltaTime);
+            animator.SetFloat("Speed", character.RuntimeMovement.CurrentSpeed, locomotionCrossFadeSpeed, Time.deltaTime);
             if (character.RotationStrategy is CharacterRelativeRotation or InputRelativeRotation)
             {
 
                 animator.SetFloat("HorizontalSpeed", 0);
-                animator.SetFloat("VerticalSpeed", 1, animationsCrossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", 1, locomotionCrossFadeSpeed, Time.deltaTime);
             }
             else
             {

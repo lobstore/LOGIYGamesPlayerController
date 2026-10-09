@@ -49,8 +49,8 @@ namespace LOGIYGames.AI
         public float MaxIdleDuration { get => maxIdleDuration; set => maxIdleDuration = value; }
         public float PatrolArrivalThreshold { get => patrolArrivalThreshold; set => patrolArrivalThreshold = value; }
 
-        public Transform Target;
-
+        public TargetingController TargetingController;
+        Actor Actor;
         private void Awake()
         {
             if (navMeshAgent == null)
@@ -58,7 +58,17 @@ namespace LOGIYGames.AI
                 navMeshAgent = GetComponent<NavMeshAgent>();
             }
 
-            // Configure NavMeshAgent for pathfinding only (no position/rotation update)
+            ConfigureNavMesh();
+            InputReader = new(this);
+            Actor = GetComponent<Actor>();
+            Actor.DefaultMovementStrategy = new CharacterForwardMovement(Actor);
+            Actor.DefaultRotationStrategy = new CharacterRelativeRotation(Actor);
+
+            InitializeStateMachine();
+        }
+
+        private void ConfigureNavMesh()
+        {
             navMeshAgent.updateRotation = false;
             navMeshAgent.updateUpAxis = false;
             navMeshAgent.updatePosition = true;
@@ -67,22 +77,11 @@ namespace LOGIYGames.AI
             navMeshAgent.speed = 0;
             navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.autoTraverseOffMeshLink = false;
-            InputReader = new(this);
-            var character = GetComponent<Actor>();
-            //character.OnControlReleased.AddListener(() =>
-            //{
-            //    character.UpdateInput(InputReader);
-            //    character.RotationStrategy = new InputRelativeRotation(character);
-            //    character.MovementStrategy = new InputRelativeMovement(character);
-
-            //});
-
         }
 
-        private void Start()
+        private void Update()
         {
-            InitializeStateMachine();
-
+            Actor.UpdateInput(InputReader.GetInput());
         }
 
         private void InitializeStateMachine()
@@ -91,16 +90,11 @@ namespace LOGIYGames.AI
             statesPreset.Init(this);
         }
 
-        public void AddTransition(IState from, IState to, System.Func<bool> condition)
-        {
-            //_stateMachine.AddTransition(from, to, new FuncPredicate(condition));
-        }
-
         public bool HasLineOfSight()
         {
-            if (Target == null) return false;
+            if (TargetingController.CurrentTarget == null) return false;
 
-            Vector3 direction = Target.position - transform.position;
+            Vector3 direction = TargetingController.CurrentTarget.position - transform.position;
             float distance = direction.magnitude;
 
             if (distance > detectionRange) return false;
@@ -109,7 +103,7 @@ namespace LOGIYGames.AI
 
             if (Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, out RaycastHit hit, distance))
             {
-                return hit.transform == Target || hit.transform.IsChildOf(Target);
+                return hit.transform == TargetingController.CurrentTarget || hit.transform.IsChildOf(TargetingController.CurrentTarget);
             }
 
             return true;
@@ -117,9 +111,9 @@ namespace LOGIYGames.AI
 
         public bool IsTargetDetected()
         {
-            if (Target == null) return false;
+            if (TargetingController.CurrentTarget == null) return false;
 
-            float distance = Vector3.Distance(transform.position, Target.position);
+            float distance = Vector3.Distance(transform.position, TargetingController.CurrentTarget.position);
             if (distance > detectionRange) return false;
 
             return HasLineOfSight();
@@ -128,20 +122,20 @@ namespace LOGIYGames.AI
 
         public bool HasLostTarget()
         {
-            if (Target == null) return true;
-            return Vector3.Distance(transform.position, Target.position) > detectionRange * 1.5f;
+            if (TargetingController.CurrentTarget == null) return true;
+            return Vector3.Distance(transform.position, TargetingController.CurrentTarget.position) > detectionRange * 1.5f;
         }
 
         public float GetDistanceToTarget()
         {
-            return Target == null ? float.MaxValue : Vector3.Distance(transform.position, Target.position);
+            return TargetingController.CurrentTarget == null ? float.MaxValue : Vector3.Distance(transform.position, TargetingController.CurrentTarget.position);
         }
 
         public Vector3 GetDirectionToTarget()
         {
-            if (Target == null) return transform.forward;
+            if (TargetingController.CurrentTarget == null) return transform.forward;
 
-            Vector3 direction = Target.position - transform.position;
+            Vector3 direction = TargetingController.CurrentTarget.position - transform.position;
             direction.y = 0;
             return direction.normalized;
         }
@@ -151,11 +145,11 @@ namespace LOGIYGames.AI
             base.OnUpdate(deltaTime);
             if (_stateMachine == null) return;
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
-            FocusPressed = true ? Target != null : false;
+            FocusPressed = true ? TargetingController.CurrentTarget != null : false;
             _stateMachine.Update();
             if (navMeshAgent != null && navMeshAgent.hasPath && !navMeshAgent.pathPending)
             {
-                Vector3 desiredDirection = navMeshAgent.path.corners[1] - transform.position;
+                Vector3 desiredDirection = transform.InverseTransformDirection( navMeshAgent.path.corners[1] - transform.position);
                 desiredDirection.y = 0;
                 MovementInput = new Vector2(desiredDirection.x, desiredDirection.z).normalized;
 

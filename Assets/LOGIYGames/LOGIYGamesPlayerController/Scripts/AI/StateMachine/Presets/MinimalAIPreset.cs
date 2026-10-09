@@ -6,22 +6,20 @@ namespace LOGIYGames
     [CreateAssetMenu(fileName = "MinimalAIPreset", menuName = "AIStateMachine/AIStatesPreset/MinimalAI")]
     public class MinimalAIPreset : AIStatesPresetBase
     {
-        // AI States
-        // TODO Make Builder for AI Archetypes and AI configuration
-        private AIIdleState _idleState;
-        private AIPatrolState _patrolState;
-        private AIChaseState _chaseState;
-        private AIAttackState _attackState;
         public override void Init(AIBrain AIBrainStateDriver)
         {
-            // Initialize all states
-            _idleState = new AIIdleState(AIBrainStateDriver, AIBrainStateDriver.MinIdleDuration, AIBrainStateDriver.MaxIdleDuration);
-            _patrolState = new AIPatrolState(AIBrainStateDriver, AIBrainStateDriver.PatrolArrivalThreshold);
-            _chaseState = new AIChaseState(AIBrainStateDriver, AIBrainStateDriver.LostTargetTimeout);
-            _attackState = new AIAttackState(AIBrainStateDriver);
+
+            //_chaseState = new AIChaseState(AIBrainStateDriver, AIBrainStateDriver.LostTargetTimeout);
+            //_attackState = new AIAttackState(AIBrainStateDriver);
+
+            AIBrainStateDriver.StateMachine.AddState(new AIIdleState(AIBrainStateDriver, AIBrainStateDriver.MinIdleDuration, AIBrainStateDriver.MaxIdleDuration));
+            AIBrainStateDriver.StateMachine.AddState(new AIPatrolState(AIBrainStateDriver, AIBrainStateDriver.PatrolArrivalThreshold));
+            //AIBrainStateDriver.StateMachine.AddState(_chaseState);
+           //AIBrainStateDriver.StateMachine.AddState(_attackState);
+
             ConfigureTransitions(AIBrainStateDriver);
 
-            //AIBrainStateDriver.StateMachine.SetState(_idleState);
+            AIBrainStateDriver.StateMachine.SetState<AIIdleState>();
         }
         /// <summary>
         /// Configures all AI behavior state transitions
@@ -29,32 +27,73 @@ namespace LOGIYGames
         private void ConfigureTransitions(AIBrain AIBrainStateDriver)
         {
             // ----- Idle State Transitions -----
-            AIBrainStateDriver.AddTransition(_idleState, _patrolState, () =>
-                AIBrainStateDriver.PatrolPoints != null && AIBrainStateDriver.PatrolPoints.Length > 0 && _idleState.IsIdleComplete());
-            AIBrainStateDriver.AddTransition(_idleState, _chaseState, () =>
-                AIBrainStateDriver.Target != null && AIBrainStateDriver.IsTargetDetected());
+            AIBrainStateDriver.StateMachine.AddTransition<AIIdleState, AIPatrolState>(
+                new FuncPredicate(() =>
+            {
+                return AIBrainStateDriver.PatrolPoints != null && AIBrainStateDriver.PatrolPoints.Length > 0 && AIBrainStateDriver.StateMachine.GetState<AIIdleState>().IsIdleComplete();
+            }));
+            AIBrainStateDriver.StateMachine.AddTransition<AIIdleState, AIChaseState>(
+             new FuncPredicate(() =>
+            {
+                return AIBrainStateDriver.TargetingController.CurrentTarget != null && AIBrainStateDriver.IsTargetDetected();
+            })
+             );
+
 
             // ----- Patrol State Transitions -----
-            AIBrainStateDriver.AddTransition(_patrolState, _idleState, () =>
-                _patrolState.HasReachedPatrolPoint());
-            AIBrainStateDriver.AddTransition(_patrolState, _chaseState, () =>
-                AIBrainStateDriver.Target != null && AIBrainStateDriver.IsTargetDetected());
+            AIBrainStateDriver.StateMachine.AddTransition<AIPatrolState, AIIdleState>(
+                new FuncPredicate(() =>
+            {
+                return AIBrainStateDriver.StateMachine.GetState<AIPatrolState>().HasReachedPatrolPoint();
+            }));
+
+            AIBrainStateDriver.StateMachine.AddTransition<AIPatrolState, AIChaseState>(
+                new FuncPredicate(() =>
+                {
+                    return AIBrainStateDriver.TargetingController.CurrentTarget != null && AIBrainStateDriver.IsTargetDetected();
+                }));
+
 
             // ----- Chase State Transitions -----
-            AIBrainStateDriver.AddTransition(_chaseState, _attackState, () =>
-                AIBrainStateDriver.Target != null && _attackState.IsTargetInAttackRange());
-            AIBrainStateDriver.AddTransition(_chaseState, _patrolState, () =>
-                AIBrainStateDriver.HasLostTarget() && AIBrainStateDriver.PatrolPoints != null && AIBrainStateDriver.PatrolPoints.Length > 0);
-            AIBrainStateDriver.AddTransition(_chaseState, _idleState, () =>
-                AIBrainStateDriver.HasLostTarget() && (AIBrainStateDriver.PatrolPoints == null || AIBrainStateDriver.PatrolPoints.Length == 0));
+            AIBrainStateDriver.StateMachine.AddTransition<AIChaseState, AIAttackState>(
+             new FuncPredicate(() =>
+             {
+                 return AIBrainStateDriver.TargetingController.CurrentTarget != null && AIBrainStateDriver.StateMachine.GetState<AIAttackState>().IsTargetInAttackRange();
+             }));
+
+            AIBrainStateDriver.StateMachine.AddTransition<AIChaseState, AIPatrolState>(
+            new FuncPredicate(() =>
+            {
+                return AIBrainStateDriver.HasLostTarget() && AIBrainStateDriver.PatrolPoints != null && AIBrainStateDriver.PatrolPoints.Length > 0;
+            }));
+
+            AIBrainStateDriver.StateMachine.AddTransition<AIChaseState, AIIdleState>(
+                                                                new FuncPredicate(() =>
+            {
+                return AIBrainStateDriver.HasLostTarget() && (AIBrainStateDriver.PatrolPoints == null || AIBrainStateDriver.PatrolPoints.Length == 0);
+            }));
+
 
             // ----- Attack State Transitions -----
-            AIBrainStateDriver.AddTransition(_attackState, _chaseState, () =>
-                AIBrainStateDriver.Target != null && !_attackState.IsTargetInAttackRange());
-            AIBrainStateDriver.AddTransition(_attackState, _patrolState, () =>
-                AIBrainStateDriver.HasLostTarget() && AIBrainStateDriver.PatrolPoints != null && AIBrainStateDriver.PatrolPoints.Length > 0);
-            AIBrainStateDriver.AddTransition(_attackState, _idleState, () =>
-                AIBrainStateDriver.HasLostTarget() && (AIBrainStateDriver.PatrolPoints == null || AIBrainStateDriver.PatrolPoints.Length == 0));
+            AIBrainStateDriver.StateMachine.AddTransition<AIAttackState, AIChaseState>(
+            new FuncPredicate(() =>
+            {
+                return AIBrainStateDriver.TargetingController.CurrentTarget != null && !AIBrainStateDriver.StateMachine.GetState<AIAttackState>().IsTargetInAttackRange();
+            }));
+
+            AIBrainStateDriver.StateMachine.AddTransition<AIAttackState, AIPatrolState>(
+             new FuncPredicate(() =>
+             {
+                 return AIBrainStateDriver.HasLostTarget() && AIBrainStateDriver.PatrolPoints != null && AIBrainStateDriver.PatrolPoints.Length > 0;
+             }));
+
+
+            AIBrainStateDriver.StateMachine.AddTransition<AIAttackState, AIIdleState>(
+            new FuncPredicate(() =>
+             {
+                 return AIBrainStateDriver.HasLostTarget() && (AIBrainStateDriver.PatrolPoints == null || AIBrainStateDriver.PatrolPoints.Length == 0);
+             }));
+
         }
     }
 }
