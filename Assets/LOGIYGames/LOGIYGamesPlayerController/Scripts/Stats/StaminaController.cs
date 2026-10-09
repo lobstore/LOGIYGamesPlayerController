@@ -23,21 +23,14 @@ namespace LOGIYGames.CharacterCore
             {
                 _regenDelayTimer.Start();
             });
-            MPStat.OnModifiersChanged.Subscribe((_) =>
-            {
-                UpdateMaxValue();
-            });
-            Stamina.Max.Subscribe((value) =>
-            {
-                Stamina.Current.Value = Mathf.Min(Stamina.Current.CurrentValue, Stamina.Max.CurrentValue);
-            });
-            Stamina.Current.Value = Stamina.Max.CurrentValue;
+
+            Stamina.Current = Stamina.Max;
             UpdateMaxValue();
         }
 
         private void UpdateMaxValue()
         {
-            Stamina.Max.Value = MPStat.Value + (VITStat.Value * MPStat.Value * 0.01f);
+            Stamina.Max = MPStat.Value + (VITStat.Value * MPStat.Value * 0.01f);
         }
         public void Tick()
         {
@@ -47,15 +40,16 @@ namespace LOGIYGames.CharacterCore
                 Restore(m_regenAmount * Time.deltaTime);
 
             }
+            UpdateMaxValue();
         }
         private bool CanRegenerate()
         {
             return !_regenDelayTimer.IsRunning
-                   && Stamina.Current.CurrentValue < Stamina.Max.CurrentValue;
+                   && Stamina.Current < Stamina.Max;
         }
         public bool CanUse(float amount)
         {
-            return Stamina.Current.CurrentValue >= amount;
+            return Stamina.Current >= amount;
         }
 
         public bool TryUse(float amount)
@@ -66,7 +60,7 @@ namespace LOGIYGames.CharacterCore
                 return false;
             }
 
-            Stamina.Current.Value -= amount;
+            Stamina.Current -= amount;
 
             StaminaUsed.OnNext(amount);
 
@@ -75,11 +69,11 @@ namespace LOGIYGames.CharacterCore
 
         public void Restore(float amount)
         {
-            float previous = Stamina.Current.Value;
+            float previous = Stamina.Current;
 
-            Stamina.Current.Value = Mathf.Min(Stamina.Current.CurrentValue + amount, Stamina.Max.CurrentValue);
+            Stamina.Current = Mathf.Min(Stamina.Current + amount, Stamina.Max);
 
-            float restored = Stamina.Current.CurrentValue - previous;
+            float restored = Stamina.Current - previous;
 
             if (restored > 0)
             {

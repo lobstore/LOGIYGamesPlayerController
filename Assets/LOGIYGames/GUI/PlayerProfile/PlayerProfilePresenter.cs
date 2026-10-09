@@ -6,33 +6,16 @@ namespace LOGIYGames
 {
     public class PlayerProfilePresenter : IDisposable
     {
-        public readonly ReactiveProperty<float> Health = new();
-        public readonly ReactiveProperty<float> Stamina = new();
-        public readonly ReactiveProperty<float> MaxHealth = new();
-        public readonly ReactiveProperty<float> MaxStamina = new();
         public readonly ReactiveProperty<string> Name = new();
-
+        public Health HealthModel { get; private set; }
+        public Stamina StaminaModel { get; private set; }
         PlayerProfileView ProfileView;
         DisposableBag DisposableBag;
         public PlayerProfilePresenter(Health health, Stamina stamina, ReactiveProperty<string> name, PlayerProfileView profileView)
         {
+            HealthModel = health;
+            StaminaModel = stamina;
             ProfileView = profileView;
-            DisposableBag.Add(health.Current.Subscribe(value =>
-            {
-                Health.Value = value;
-            }));
-            DisposableBag.Add(health.Max.Subscribe(value =>
-            {
-                MaxHealth.Value = value;
-            }));
-            DisposableBag.Add(stamina.Current.Subscribe(value =>
-            {
-                Stamina.Value = value;
-            }));
-            DisposableBag.Add(stamina.Max.Subscribe(value =>
-            {
-                MaxStamina.Value = value;
-            }));
             DisposableBag.Add(name.Subscribe(value =>
             {
                 Name.Value = value;

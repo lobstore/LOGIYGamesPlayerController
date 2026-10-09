@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 00610b776c39a934ba30c513e7a79324
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283656
+  packageName: Inventory Framework FREE
+  packageVersion: 3.1
+  assetPath: Assets/GDS/Examples/02-Intermediate/02-EquipOnCharacter/UGUI/EquipOnChar.unity
+  uploadId: 1014170

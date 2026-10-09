@@ -85,6 +85,7 @@ namespace LOGIYGames.CharacterCore
             CalculateDeltaYaw();
             MovementStateMachine.Update();
             StaminaController.Tick();
+            HealthController.Tick();
             Effects.Update();
         }
 

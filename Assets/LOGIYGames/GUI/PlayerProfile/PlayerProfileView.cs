@@ -1,3 +1,4 @@
+using LOGIYGames.CharacterCore;
 using R3;
 using TMPro;
 using UnityEngine;
@@ -13,36 +14,23 @@ namespace LOGIYGames
         [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private TextMeshProUGUI characterName;
         DisposableBag subscriprions;
-
+        Health health;
+        Stamina stamina;
         private void Start()
         {
             healthFill.minValue = 0;
             staminaFill.minValue = 0;
         }
-
+        private void LateUpdate()
+        {
+            UpdateHealthBar(health.Current, health.Max);
+            UpdateStaminaBar(stamina.Current, stamina.Max);
+        }
         public void Bind(PlayerProfilePresenter presenter)
         {
-            subscriprions.Add(presenter.Health.Subscribe(_val =>
-            {
-                UpdateHealthBar(_val, presenter.MaxHealth.CurrentValue);
-            }));
-            subscriprions.Add(presenter.MaxHealth.Subscribe(_val =>
-            {
-                UpdateHealthBar(presenter.Health.CurrentValue, _val);
-            }));
+            health = presenter.HealthModel;
+            stamina = presenter.StaminaModel;
 
-
-
-            subscriprions.Add(presenter.Stamina.Subscribe(_val =>
-            {
-                UpdateStaminaBar(_val, presenter.MaxStamina.CurrentValue);
-            }));
-
-            subscriprions.Add(presenter.MaxStamina.Subscribe(_val =>
-            {
-                UpdateStaminaBar(presenter.Stamina.CurrentValue, _val);
-            })); 
-            
             subscriprions.Add(presenter.Name.Subscribe(_val =>
             {
                 UpdateCharacterName(_val);
@@ -57,7 +45,7 @@ namespace LOGIYGames
         {
             healthFill.maxValue = maxValue;
             healthFill.value = value;
-            healthText.text = value.ToString()+" \\ " + maxValue.ToString();
+            healthText.text = value.ToString("0")+" \\ " + maxValue.ToString("0");
         }
         private void UpdateStaminaBar(float value, float maxValue)
         {

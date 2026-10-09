@@ -7,14 +7,18 @@
   <Project Path="CrashKonijn.Goap.Core.csproj" />
   <Project Path="uLipSync.Runtime.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="GDS.Demos.Basic.csproj" />
   <Project Path="CrashKonijn.Goap.Editor.csproj" />
   <Project Path="CrashKonijn.Agent.Runtime.csproj" />
+  <Project Path="GDS.Examples.csproj" />
   <Project Path="UniGLTF.Editor.csproj" />
   <Project Path="UniGLTF.Tests.csproj" />
   <Project Path="UniGLTF.Utils.csproj" />
   <Project Path="CrashKonijn.Goap.Resolver.csproj" />
   <Project Path="uLipSync.Samples.Common.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
+  <Project Path="GDS.Core.UGUI.csproj" />
+  <Project Path="GDS.Core.Editor.csproj" />
   <Project Path="UniGLTF.UniUnlit.Editor.csproj" />
   <Project Path="CrashKonijn.Agent.Core.csproj" />
   <Project Path="UnityChan.csproj" />
@@ -23,9 +27,12 @@
   <Project Path="FastSpringBone10.csproj" />
   <Project Path="VRM10.MToon10.csproj" />
   <Project Path="uLipSync.Editor.csproj" />
+  <Project Path="GDS.Core.UITK.csproj" />
   <Project Path="VRM10.MToon10.Editor.csproj" />
   <Project Path="UniHumanoid.Editor.csproj" />
+  <Project Path="GDS.Common.csproj" />
   <Project Path="VrmLib.csproj" />
+  <Project Path="GDS.Core.csproj" />
   <Project Path="VRM10.Tests.csproj" />
   <Project Path="UniGLTF.UniUnlit.csproj" />
   <Project Path="uLipSync.Samples.WebGL.Runtime.csproj" />
@@ -40,5 +47,6 @@
   <Project Path="uLipSync.Samples.Animator.Runtime.csproj" />
   <Project Path="RealStep.Demo.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Core.UGUI.Editor.csproj" />
   <Project Path="RealStep.Runtime.csproj" />
 </Solution>

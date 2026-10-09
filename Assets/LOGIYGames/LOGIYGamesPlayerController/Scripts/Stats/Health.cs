@@ -5,7 +5,7 @@ namespace LOGIYGames.CharacterCore
     [Serializable]
     public class Health
     {
-        public SerializableReactiveProperty<float> Current = new();
-        public SerializableReactiveProperty<float> Max = new();
+        public float Current;
+        public float Max;
     }
 }

@@ -8,7 +8,7 @@ namespace LOGIYGames
     [Serializable]
     public class Stat
     {
-        public float BaseValue;
+        public int BaseValue;
 
         [SerializeField] private List<StatModifier> _modifiers;
         [NonSerialized] public Subject<Unit> OnModifiersChanged = new();

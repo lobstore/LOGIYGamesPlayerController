@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4b7e49856b8fa014cba97daa69581701
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283656
+  packageName: Inventory Framework FREE
+  packageVersion: 3.1
+  assetPath: Assets/GDS/Examples/02-Intermediate/02-EquipOnCharacter/UGUI/Items/EquipOnChar_Helmet.asset
+  uploadId: 1014170

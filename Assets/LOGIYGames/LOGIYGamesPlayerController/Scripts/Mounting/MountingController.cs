@@ -42,6 +42,7 @@ public class MountingController : MonoBehaviour
         PlayerManager.Instance.PlayerInput.DisableMovement();
         GetComponent<FootIK>().enabled = false;
         GetComponent<MovementWrapperBase>().IsNoClip = true;
+        GetComponent<Animator>().SetBool("IsDriving", true);
         GetComponent<CharacterAnimationController>().PlayAnimation("Driving");
         GetComponent<MovementWrapperBase>().DisableMovement();
         Current.GetComponent<Mountable>().Mount(transform);
@@ -53,7 +54,9 @@ public class MountingController : MonoBehaviour
         Current.GetComponent<PlayerInput>().enabled = false;
         GetComponent<FootIK>().enabled = true;
         GetComponent<MovementWrapperBase>().IsNoClip = false;
-        GetComponent<CharacterAnimationController>().PlayAnimation("Exiting Car");
+        GetComponent<Animator>().SetBool("IsDriving", false);
+
+        //GetComponent<CharacterAnimationController>().PlayAnimation("Exiting Car");
         GetComponent<MovementWrapperBase>().EnableMovement();
         Current = null;
         Target = null;
