@@ -18,17 +18,17 @@ namespace LOGIYGames
         }
         public void Move()
         {
+            if (controller is NavMeshControllerWrapper)
+            {
+                return;
+            }
             if (actor.Input.MovementInput.magnitude > 0)
             {
 
-                dir = Vector3.Lerp(dir, new Vector3(actor.RuntimeMovement.TargetDirection.x, 0, actor.RuntimeMovement.TargetDirection.z), Time.deltaTime * inertia);
-            }
-            else
-            {
-                dir = controller.Velocity.normalized;
+                dir = Vector3.Lerp(dir, actor.RuntimeMovement.TargetDirection, Time.deltaTime * inertia);
             }
 
-            controller.ChangeVelocity(dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed + Vector3.up * controller.Velocity.y);
+            controller.ChangeHorizontalVelocity(dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed);
         }
 
     }

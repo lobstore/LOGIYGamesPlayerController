@@ -6,7 +6,7 @@ namespace LOGIYGames
     [RequireComponent(typeof(CharacterController))]
     public class CharacterControllerWrapper : MovementWrapperBase
     {
-       [SerializeField] private CharacterController m_characterController;
+        [SerializeField] private CharacterController m_characterController;
         private SensorsModule m_sensors;
 
         private Vector3 linearVelocity;
@@ -43,7 +43,7 @@ namespace LOGIYGames
         [SerializeField] private float groundDamping;
         [SerializeField] private bool useGravity;
         [SerializeField] bool freeze;
-        public bool Freeze { get => freeze; set => freeze =value; }
+        public bool Freeze { get => freeze; set => freeze = value; }
         public override Collider Collider => m_characterController;
 
         public override bool IsNoClip
@@ -145,9 +145,13 @@ namespace LOGIYGames
 
         #region Movement
 
-        public override void ChangeVelocity(Vector3 Velocity)
+        public override void ChangeHorizontalVelocity(Vector3 velocity)
         {
-            linearVelocity = Velocity;
+            linearVelocity = new Vector3(velocity.x,Velocity.y,velocity.z);
+        }
+        public override void ChangeVerticalVelocity(float velocityY)
+        {
+            linearVelocity = new Vector3(Velocity.x, velocityY, Velocity.z);
         }
         public override void AddAcceleration(Vector3 accelerationForce)
         {

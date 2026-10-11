@@ -689,10 +689,12 @@ namespace LOGIYGames
             var wallRun = character.GetMovementState<WallRunMovementState>();
             var mantling = character.GetMovementState<MantlingMovementState>();
             var mounting = character.GetMovementState<MountingMovementState>();
+            var slip = character.GetMovementState<SlipJumpMovementState>();
 
             return !character.IsGrounded
                 && (groundJump == null || !groundJump.IsDurationTimerRunning)
             && (roll == null || !roll.IsDurationTimerRunning)
+            && (slip==null || !slip.IsDurationTimerRunning)
             && (hangJump == null || !hangJump.IsDurationTimerRunning)
             && (ladder == null || !ladder.IsActiveState)
             && (wallClimb == null || !wallClimb.IsActiveState)

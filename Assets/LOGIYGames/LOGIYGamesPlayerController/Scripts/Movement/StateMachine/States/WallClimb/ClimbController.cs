@@ -36,7 +36,8 @@ namespace LOGIYGames
                 dir = controller.Velocity.normalized;
             }
 
-            controller.ChangeVelocity(dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed);
+            controller.ChangeHorizontalVelocity(dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed);
+            controller.ChangeVerticalVelocity(dir.y * actor.RuntimeMovement.CurrentSpeed * baseSpeed);
         }
         public bool CanEnter()
         {

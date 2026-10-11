@@ -20,7 +20,8 @@ namespace LOGIYGames
         public abstract float Radius { get; set; }
 
         public virtual void AddAcceleration(Vector3 accelerationForce) { }
-        public abstract void ChangeVelocity(Vector3 velocity);
+        public abstract void ChangeHorizontalVelocity(Vector3 velocity);
+        public abstract void ChangeVerticalVelocity(float velocityY);
         public abstract void AddImpulse(Vector3 impulseForce);
         public virtual void ForceMove(Vector3 velocity) { }
         public abstract void SetRotation(Quaternion rotation);

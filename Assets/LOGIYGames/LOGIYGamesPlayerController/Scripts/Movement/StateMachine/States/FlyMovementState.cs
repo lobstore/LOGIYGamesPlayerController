@@ -20,7 +20,8 @@ namespace LOGIYGames.Movement
             base.PhysicsUpdate();
             if (!Data.IsAnimationDrivenMovement)
             {
-                _controller.ChangeVelocity(_character.RuntimeMovement.TargetDirection * _character.RuntimeMovement.CurrentSpeed * 3.5f);
+                _controller.ChangeHorizontalVelocity(_character.RuntimeMovement.TargetDirection * _character.RuntimeMovement.CurrentSpeed * 3.5f);
+                _controller.ChangeVerticalVelocity(_character.RuntimeMovement.TargetDirection.y * _character.RuntimeMovement.CurrentSpeed * 3.5f);
 
             }
             if (!Data.IsAnimationDrivenRotation)

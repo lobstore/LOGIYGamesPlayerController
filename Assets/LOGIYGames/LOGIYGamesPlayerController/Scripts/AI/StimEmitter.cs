@@ -14,6 +14,8 @@ namespace Perception
 
         MovementWrapperBase controller;
 
+        float speed;
+
         void Awake()
         {
             controller = GetComponent<MovementWrapperBase>();
@@ -21,7 +23,7 @@ namespace Perception
 
         void Update()
         {
-            var speed = controller.Velocity.magnitude;
+            speed = controller.Velocity.magnitude;
             if (speed < walkSpeed) return;
             var loud = speed >= sprintSpeed;
 

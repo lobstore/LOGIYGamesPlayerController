@@ -205,7 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScanRecursively: 1
   SuppressInputWhileBlending: 0
-  IgnoreTimeScale: 1
+  IgnoreTimeScale: 0
   m_ControllerManager:
     Controllers:
     - Name: Look Orbit X
@@ -213,10 +213,10 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: 10
+        Gain: 1
         LegacyInput: 
         LegacyGain: 1
-        CancelDeltaTime: 0
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
         AccelTime: 0
@@ -226,10 +226,10 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: 7023804717853667574, guid: 9e06df9b20553fb4294c748c10c46680, type: 3}
-        Gain: 10
+        Gain: 1
         LegacyInput: 
         LegacyGain: 1
-        CancelDeltaTime: 0
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
         AccelTime: 0

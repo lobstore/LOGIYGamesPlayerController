@@ -1,87 +1,138 @@
+using LOGIYGames.AI;
 using LOGIYGames.CharacterCore;
+using System.Collections.Generic;
+using UniGLTF;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 namespace LOGIYGames
 {
     public class NavMeshControllerWrapper : MovementWrapperBase
     {
-        SensorsModule sensorModule;
+        SensorsModule m_sensors;
         NavMeshAgent agent;
-        CharacterGravity characterGravityModule;
-        CharacterController characterController;
+        [SerializeField] CharacterController m_characterController;
         Actor character;
-        private Vector3 targetVelocity;
+        AIBrain AIBrain;
+        private Vector3 linearVelocity;
+        private LayerMask excludeLayers;
+        private LayerMask includeLayers;
+        [SerializeField] private float aerialDamping;
+        [SerializeField] private float groundDamping;
+        [SerializeField] private float damping;
+        [SerializeField] private bool useGravity;
+        [SerializeField] bool freeze;
+        GroundedReport lastGroundedReport;
+        
 
-        public override float MaxStepHeight { get => throw new System.NotImplementedException(); }
-        public override float Height { get => agent.height; set => agent.height = value; }
-        public override float SlopeLimit { get => sensorModule.MaxStableSlopeAngle; set => sensorModule.MaxStableSlopeAngle = value; }
-        public override Vector3 Center { get => characterController.center; set => characterController.center = value; }
-        public override float Radius { get => agent.radius; set => agent.radius = value; }
-        public override bool UseGravity { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public override GroundedReport LastGroundedReport => lastGroundedReport;
+        public override bool IsNoClip
+        {
+            set
+            {
+                if (value)
+                    m_characterController.excludeLayers = Physics.AllLayers;
+                else
+                    m_characterController.excludeLayers = excludeLayers;
+            }
+        }
 
-        public override Vector3 Velocity { get; }
+        public override float MaxStepHeight
+        {
+            get => m_characterController.stepOffset;
+        }
 
-        public override Collider Collider => characterController;
+        public override float Height
+        {
+            get => m_characterController.height;
+            set => m_characterController.height = value;
+        }
+
+        public override float SlopeLimit
+        {
+            get => m_characterController.slopeLimit;
+            set => m_characterController.slopeLimit = Mathf.Max(0, value);
+        }
+
+        public override Vector3 Center
+        {
+            get => m_characterController.center;
+            set => m_characterController.center = value;
+        }
+
+        public override float Radius
+        {
+            get => m_characterController.radius;
+            set => m_characterController.radius = value;
+        }
+
+        public override bool UseGravity
+        {
+            get => useGravity;
+            set => useGravity = value;
+        }
+
+        public override Vector3 Velocity => linearVelocity;
+
+        public override Collider Collider => m_characterController;
 
         void Awake()
         {
             character = GetComponent<Actor>();
-            sensorModule = GetComponent<SensorsModule>();
+            m_sensors = GetComponent<SensorsModule>();
             agent = GetComponent<NavMeshAgent>();
-            characterGravityModule = GetComponent<CharacterGravity>();
-            characterController = GetComponent<CharacterController>();
+            AIBrain = GetComponent<AIBrain>();
         }
 
         private void Update()
         {
-            if (sensorModule.IsGrounded&& characterGravityModule.CurrentGravity.y<0)
+            if (freeze) return;
+            if (m_sensors.IsGrounded &&  linearVelocity.y<=0)
             {
                 agent.enabled = true;
-            }
-        }
-        public override void AddImpulse(Vector3 force)
-        {
-            agent.enabled = false;
-            if (characterGravityModule != null)
-            {
-                characterGravityModule.CurrentGravity = force ;
-            }
-        }
-
-        public override void ChangeVelocity(Vector3 a_move)
-        {
-            if (agent!=null && agent.isOnNavMesh)
-            {
-
-            agent.Move(a_move*Time.deltaTime);
+                linearVelocity.y = 0f;
             }
             else
             {
-                Vector3 totalVelocity = a_move + characterGravityModule.CurrentGravity;
-                if (sensorModule.IsValidSlope())
-                {
-                    if (sensorModule.IsGrounded && characterGravityModule.CurrentGravity.y < 0 && character.Input.MovementInput.magnitude > 0)
-                    {
-                        ProjectVelocity(totalVelocity);
 
-                    }
-                    else
-                    {
-                        targetVelocity = totalVelocity;
-                    }
-                }
-                else
-                {
-                    ProjectVelocity(totalVelocity);
-                }
-                characterController.Move(targetVelocity * Time.deltaTime);
+                AddAcceleration(Physics.gravity);
+
             }
+
+
+           // agent.baseOffset = Mathf.MoveTowards(agent.baseOffset, linearVelocity.y, Time.deltaTime);
+
+
+
+            //agent.Move(linearVelocity * Time.deltaTime);
+
+            //if (agent.isOnNavMesh)
+            //{
+            //    agent.Move(linearVelocity * Time.deltaTime);
+            //}
+            //else
+            //{
+            //    damping = m_sensors.IsGrounded ? groundDamping : aerialDamping;
+            //    linearVelocity = Vector3.MoveTowards(linearVelocity, Vector3.zero, damping * Time.deltaTime);
+            //    m_characterController.Move(linearVelocity * Time.deltaTime);
+            //}
         }
-        private void ProjectVelocity(Vector3 totalVelocity)
+        public override void AddImpulse(Vector3 impulseForce)
         {
-            targetVelocity = Vector3.ProjectOnPlane(totalVelocity, sensorModule.BelowHit.normal) + Vector3.ProjectOnPlane(-transform.up, sensorModule.BelowHit.normal);
+            linearVelocity += impulseForce;
+        }
+        public override void ForceMove(Vector3 velocity)
+        {
+            //linearVelocity = velocity;
+        }
+        public override void ChangeHorizontalVelocity(Vector3 a_move)
+        {
+           // linearVelocity = a_move;
+        }
+        public override void AddAcceleration(Vector3 accelerationForce)
+        {
+            linearVelocity += accelerationForce * Time.deltaTime;
         }
         public override void SetRotation(Quaternion a_targetRotation)
         {
@@ -95,22 +146,29 @@ namespace LOGIYGames
 
         public override void ResetVelocity()
         {
-            agent.ResetPath();
+            linearVelocity = Vector3.zero;
         }
 
         public override void ResetGravity()
         {
-            throw new System.NotImplementedException();
+            linearVelocity.y = 0;
         }
 
         public override void DisableMovement()
         {
-            throw new System.NotImplementedException();
+            freeze = true;
+            useGravity = false;
         }
 
         public override void EnableMovement()
         {
-            throw new System.NotImplementedException();
+            freeze = false;
+            useGravity = true;
+        }
+
+        public override void ChangeVerticalVelocity(float velocityY)
+        {
+            
         }
     }
 }

@@ -1,5 +1,6 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Scripts.AI;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,11 +15,11 @@ namespace LOGIYGames.AI
         [SerializeField] private NavMeshAgent navMeshAgent;
         [SerializeField] private AIStatesPresetBase statesPreset;
         public Vector2 MovementInput { get; private set; }
-        public bool JumpPressed { get; private set; }
-        public bool EvadePressed { get; private set; }
-        public bool CrouchPressed { get; private set; }
-        public bool SprintPressed { get; private set; }
-        public bool FocusPressed { get; private set; }
+        public bool JumpPressed { get; set; }
+        public bool EvadePressed { get; set; }
+        public bool CrouchPressed { get; set; }
+        public bool SprintPressed { get; set; }
+        public bool FocusPressed { get; set; }
 
 
         [Header("Detection Settings")]
@@ -58,12 +59,15 @@ namespace LOGIYGames.AI
                 navMeshAgent = GetComponent<NavMeshAgent>();
             }
 
-            ConfigureNavMesh();
+
             InputReader = new(this);
             Actor = GetComponent<Actor>();
             Actor.DefaultMovementStrategy = new CharacterForwardMovement(Actor);
             Actor.DefaultRotationStrategy = new CharacterRelativeRotation(Actor);
-
+            if (Actor.Motor is not NavMeshControllerWrapper)
+            {
+                ConfigureNavMesh();
+            }
             InitializeStateMachine();
         }
 
@@ -77,11 +81,6 @@ namespace LOGIYGames.AI
             navMeshAgent.speed = 0;
             navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.autoTraverseOffMeshLink = false;
-        }
-
-        private void Update()
-        {
-            Actor.UpdateInput(InputReader.GetInput());
         }
 
         private void InitializeStateMachine()
@@ -144,12 +143,51 @@ namespace LOGIYGames.AI
 
             base.OnUpdate(deltaTime);
             if (_stateMachine == null) return;
+
+            CrouchPressed = false;
+            JumpPressed = false;
+            EvadePressed = false;
+            CrouchPressed = false;
+            SprintPressed = false;
+            FocusPressed = false;
+
+   
+
+            var link = navMeshAgent.currentOffMeshLinkData.owner as NavMeshLink;
+            if (link != null && navMeshAgent.isOnOffMeshLink)
+            {
+
+                if (link.area == NavMesh.GetAreaFromName("Climbable"))
+                {
+                    navMeshAgent.speed = 0.3f;
+                    navMeshAgent.transform.rotation = link.endTransform.rotation;
+                }
+                if (link.area == NavMesh.GetAreaFromName("Jump"))
+                {
+                    JumpPressed = true;
+
+                    navMeshAgent.speed = 2f;
+                    navMeshAgent.transform.rotation = link.endTransform.rotation;
+                }
+                if (link.area == NavMesh.GetAreaFromName("Roll"))
+                {
+                    CrouchPressed = true;
+
+                    navMeshAgent.speed = 2f;
+                    navMeshAgent.transform.rotation = link.endTransform.rotation;
+                }
+            }
+            else
+            {
+                navMeshAgent.speed = Actor.RuntimeMovement.CurrentSpeed * 3.5f;
+            }
+
             currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
             FocusPressed = true ? TargetingController.CurrentTarget != null : false;
             _stateMachine.Update();
             if (navMeshAgent != null && navMeshAgent.hasPath && !navMeshAgent.pathPending)
             {
-                Vector3 desiredDirection = transform.InverseTransformDirection( navMeshAgent.path.corners[1] - transform.position);
+                Vector3 desiredDirection = transform.InverseTransformDirection(navMeshAgent.path.corners[1] - transform.position);
                 desiredDirection.y = 0;
                 MovementInput = new Vector2(desiredDirection.x, desiredDirection.z).normalized;
 
@@ -158,6 +196,7 @@ namespace LOGIYGames.AI
             {
                 MovementInput = Vector2.zero;
             }
+            Actor.UpdateInput(InputReader.GetInput());
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {

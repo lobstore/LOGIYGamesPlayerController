@@ -88,7 +88,7 @@ namespace LOGIYGames
         #endregion
 
 
-        public override void ChangeVelocity(Vector3 a_move)
+        public override void ChangeHorizontalVelocity(Vector3 a_move)
         {
             Vector3 targetVelocity;
             targetVelocity = a_move;
@@ -172,6 +172,11 @@ namespace LOGIYGames
         }
 
         public override void EnableMovement()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ChangeVerticalVelocity(float velocityY)
         {
             throw new NotImplementedException();
         }
