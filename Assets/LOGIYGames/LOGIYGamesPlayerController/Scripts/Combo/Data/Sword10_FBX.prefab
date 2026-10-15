@@ -52,8 +52,88 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sword10_FBX
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6d6c7c2c421065649a301d6d60153af3, type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6d6c7c2c421065649a301d6d60153af3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7195958348232127250}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6d6c7c2c421065649a301d6d60153af3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4616897363297454340}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6d6c7c2c421065649a301d6d60153af3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2114187097366031484}
   m_SourcePrefab: {fileID: 100100000, guid: 6d6c7c2c421065649a301d6d60153af3, type: 3}
+--- !u!1 &4384903324227436290 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6d6c7c2c421065649a301d6d60153af3, type: 3}
+  m_PrefabInstance: {fileID: 3466407797674754643}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &7195958348232127250
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4384903324227436290}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.5450713, y: 2.08, z: 0.14330931}
+  m_Center: {x: -0.012993246, y: 1.21, z: 0}
+--- !u!114 &4616897363297454340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4384903324227436290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38fe495cda2345c49b595b24935a8d0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.WeaponController
+  Data: {fileID: 11400000, guid: 0b5a4e80a2ab00543809f6e722225588, type: 2}
+  Collider: {fileID: 7195958348232127250}
+--- !u!54 &2114187097366031484
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4384903324227436290}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

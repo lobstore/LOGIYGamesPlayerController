@@ -1,1 +1,0 @@
-// SetBag uses ListBagPropertyDrawer

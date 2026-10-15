@@ -7,35 +7,44 @@ namespace LOGIYGames.Movement
 
     public class RollMovementState : TimedMovementState
     {
-        private JumpStateData _stateData;
-
+        private JumpStateData _jumpStateData;
+        JumpController controller;
         public RollMovementState(Actor ctx, JumpStateData stateData) : base(ctx, stateData)
         {
-            _stateData = stateData;
+            _jumpStateData = stateData;
+            controller = ctx.GetComponent<JumpController>();
 
         }
         public override void Enter()
         {
             base.Enter();
+            float verticalForce;
+            float planarForce;
+            JumpType jumpType = JumpType.Roll;
             if (!Data.IsAnimationDrivenMovement)
             {
-                _character.EventBus.Publish(new JumpPerformedEvent
-                {
-                    jumpType = JumpType.Roll,
-                    planarForce = _stateData.PlanarJumpForce,
-                    verticalForce = _stateData.VerticalJumpForce,
-                });
+                verticalForce = _jumpStateData.VerticalJumpForce;
+                planarForce = _jumpStateData.PlanarJumpForce;
             }
             else
             {
-                _character.EventBus.Publish(new JumpPerformedEvent
-                {
-
-                    jumpType = JumpType.Roll,
-                    planarForce = 0,
-                    verticalForce = 0,
-                });
+                verticalForce = 0;
+                planarForce = 0;
             }
+            _character.EventBus.Publish(new JumpPerformedEvent
+            {
+                jumpType = jumpType,
+                planarForce = planarForce,
+                verticalForce = verticalForce,
+                direction = _character.GetInputRelativeDirection()
+            });
+            controller.Jump(jumpType, verticalForce, planarForce);
+
+        }
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+            _character.Rotate();
 
         }
         public override bool CanEnter()

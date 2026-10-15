@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6856858958671481707}
   - component: {fileID: 1354124467546381048}
   - component: {fileID: 5403077147660180635}
-  - component: {fileID: 3354564584338512877}
   - component: {fileID: 8448001709863631451}
   - component: {fileID: 1843990008812083582}
   - component: {fileID: 1490431780840027318}
@@ -141,23 +140,6 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
---- !u!114 &3354564584338512877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5902921758408453199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Weight: 1
-  FocusTracking: 0
-  FocusTarget: {fileID: 0}
-  FocusOffset: 0
-  Profile: {fileID: 11400000, guid: d77980e7054c1c54b9001cd8f2f21ab4, type: 2}
 --- !u!114 &8448001709863631451
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,77 +2,75 @@ using UnityEngine;
 
 namespace LOGIYGames.AI
 {
-    /// <summary>
-    /// AI Patrol state - AI moves between patrol points
-    /// </summary>
-    public class AIPatrolState : AIBaseState
+    public sealed class AIPatrolState : AIBaseState
     {
-        private Transform _currentPatrolPoint;
-        private readonly float _arrivalThreshold;
+        private int _currentPointIndex = -1;
+        private bool _waiting;
+        private float _waitUntil;
 
-        public AIPatrolState(AIBrain brain, float arrivalThreshold = 0.5f) : base(brain)
+        public AIPatrolState(AIBrain brain) : base(brain)
         {
-            _arrivalThreshold = arrivalThreshold;
-            DetectionRange = brain.DetectionRange;
-            AttackRange = brain.AttackRange;
         }
 
         public override void Enter()
         {
-            base.Enter();
-            SelectRandomPatrolPoint();
-            Brain.TargetingController.SetTarget(_currentPatrolPoint);
+            _waiting = false;
+
+            _currentPointIndex =
+                Brain.GetClosestPatrolPointIndex();
+
+            MoveToCurrentPoint();
         }
 
-        public override void PhysicsUpdate()
+        public override void Exit()
         {
-            base.PhysicsUpdate();
+            _waiting = false;
+        }
 
-            if (Brain.PatrolPoints == null || Brain.PatrolPoints.Length == 0)
+        public override void LogicUpdate()
+        {
+            if (!Brain.HasPatrolPoints)
             {
-                Stop();
+                Brain.StopMoving();
                 return;
             }
 
-            if (_currentPatrolPoint != null && !IsAtPatrolPoint())
+            if (_waiting)
             {
-                MoveToPosition(_currentPatrolPoint.position);
-            }
-            else
-            {
-                Stop();
-            }
-        }
+                if (Time.time < _waitUntil)
+                    return;
 
-        /// <summary>
-        /// Selects a random patrol point
-        /// </summary>
-        private void SelectRandomPatrolPoint()
-        {
-            if (Brain.PatrolPoints == null || Brain.PatrolPoints.Length == 0)
-            {
-                _currentPatrolPoint = null;
+                _currentPointIndex =
+                    Brain.GetNextPatrolPointIndex(
+                        _currentPointIndex);
+
+                _waiting = false;
+
+                MoveToCurrentPoint();
                 return;
             }
 
-            _currentPatrolPoint = Brain.PatrolPoints[Random.Range(0, Brain.PatrolPoints.Length)];
+            if (!Brain.HasReachedDestination())
+                return;
+
+            Brain.StopMoving();
+
+            _waiting = true;
+            _waitUntil = Time.time + Brain.PatrolWaitTime;
         }
 
-        /// <summary>
-        /// Checks if AI has reached the patrol point
-        /// </summary>
-        private bool IsAtPatrolPoint()
+        private void MoveToCurrentPoint()
         {
-            return _currentPatrolPoint == null ||
-                   Brain.GetDistanceToTarget() <= _arrivalThreshold;
-        }
+            Transform point =
+                Brain.GetPatrolPoint(_currentPointIndex);
 
-        /// <summary>
-        /// Checks if AI has reached the patrol point (for transition predicate)
-        /// </summary>
-        public bool HasReachedPatrolPoint()
-        {
-            return _currentPatrolPoint == null || IsAtPatrolPoint();
+            if (point == null)
+            {
+                Brain.StopMoving();
+                return;
+            }
+
+            Brain.SetMoveDestination(point.position);
         }
     }
 }

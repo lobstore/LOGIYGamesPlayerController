@@ -4,31 +4,17 @@ namespace LOGIYGames.Movement
 {
     public class FallingMovementState : MovementStateBase
     {
+        FallingController controller;
         public FallingMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
+            controller = ctx.GetComponent<FallingController>();
         }
 
-        public override void Enter()
-        {
-
-            base.Enter();
-            _character.MovementStrategy = new StrafeMovement(_character);
-        }
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-
-            if (_controller.Velocity.magnitude < _character.RuntimeMovement.CurrentSpeed * 3.5f)
-            {
-
-                _controller.AddAcceleration(_character.RuntimeMovement.TargetDirection * _character.RuntimeMovement.CurrentSpeed * 3.5f);
-            }
-
+            controller.Glide();
             _character.Rotate();
-        }
-        public override void Exit()
-        {
-            base.Exit();
         }
     }
 

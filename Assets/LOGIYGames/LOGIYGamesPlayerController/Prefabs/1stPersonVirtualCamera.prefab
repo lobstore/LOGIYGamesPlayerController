@@ -12,9 +12,8 @@ GameObject:
   - component: {fileID: 644479021886345685}
   - component: {fileID: 1112122697328132918}
   - component: {fileID: 4720824850533462554}
-  - component: {fileID: 1547100494613142329}
-  - component: {fileID: 8149182025060742599}
   - component: {fileID: 4170622409733040555}
+  - component: {fileID: 8149182025060742599}
   - component: {fileID: 4646418619930704880}
   - component: {fileID: -7679893750581215393}
   - component: {fileID: 976841014759332431}
@@ -149,7 +148,7 @@ MonoBehaviour:
       Wait: 2
       Time: 2
     Restrictions: 0
---- !u!114 &1547100494613142329
+--- !u!114 &4170622409733040555
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,14 +157,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7261505452651263688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weight: 1
-  FocusTracking: 0
-  FocusTarget: {fileID: 0}
-  FocusOffset: 0
-  Profile: {fileID: 11400000, guid: d77980e7054c1c54b9001cd8f2f21ab4, type: 2}
+  NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 0.3
+  FrequencyGain: 0.5
+  m_NoiseOffsets: {x: -575.432, y: -385.04184, z: -756.2384}
 --- !u!114 &8149182025060742599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,23 +210,6 @@ MonoBehaviour:
         DecelTime: 0.1
   PlayerIndex: -1
   AutoEnableInputs: 0
---- !u!114 &4170622409733040555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7261505452651263688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 0.3
-  FrequencyGain: 0.5
-  m_NoiseOffsets: {x: -575.432, y: -385.04184, z: -756.2384}
 --- !u!114 &4646418619930704880
 MonoBehaviour:
   m_ObjectHideFlags: 0

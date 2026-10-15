@@ -1,73 +1,107 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Scripts.AI;
+using System;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace LOGIYGames.AI
 {
     public class AIBrain : MonoModuleBase
     {
         public AIInputReader InputReader { get; private set; }
-
+        public CharacterInput Input;
         [Header("References")]
 
         [SerializeField] private NavMeshAgent navMeshAgent;
-        [SerializeField] private AIStatesPresetBase statesPreset;
-        public Vector2 MovementInput { get; private set; }
-        public bool JumpPressed { get; set; }
-        public bool EvadePressed { get; set; }
-        public bool CrouchPressed { get; set; }
-        public bool SprintPressed { get; set; }
-        public bool FocusPressed { get; set; }
-
-
-        [Header("Detection Settings")]
-        [SerializeField] private float detectionRange = 15f;
-        [SerializeField] private float attackRange = 2.5f;
-        [SerializeField] private float lostTargetTimeout = 5f;
-
-        [Header("Patrol Settings")]
-        [SerializeField] private Transform[] patrolPoints;
-        [SerializeField] private float minIdleDuration = 2f;
-        [SerializeField] private float maxIdleDuration = 5f;
-        [SerializeField] private float patrolArrivalThreshold = 0.5f;
+        [SerializeField] private AIStatesBuilder statesPreset;
 
         [Header("Debug")]
         [SerializeField] private bool debugDraw = true;
+
         private string currentStateName;
-
-        // State Machine
-        private StateMachine _stateMachine;
-        public Transform[] PatrolPoints => patrolPoints;
-        public NavMeshAgent NavMeshAgent => navMeshAgent;
-        public float DetectionRange => detectionRange;
-        public float AttackRange => attackRange;
-        public StateMachine StateMachine => _stateMachine;
-
-        public float LostTargetTimeout { get => lostTargetTimeout; set => lostTargetTimeout = value; }
-        public float MinIdleDuration { get => minIdleDuration; set => minIdleDuration = value; }
-        public float MaxIdleDuration { get => maxIdleDuration; set => maxIdleDuration = value; }
-        public float PatrolArrivalThreshold { get => patrolArrivalThreshold; set => patrolArrivalThreshold = value; }
-
-        public TargetingController TargetingController;
+        private StateMachine m_stateMachine;
+        public StateMachine StateMachine => m_stateMachine;
         Actor Actor;
+
+        [Header("AI Perception")]
+        [SerializeField] private Transform target;
+        [SerializeField] private LayerMask targetLayers = ~0;
+        [SerializeField] private float sightRange = 10f;
+
+        [SerializeField, Range(0f, 360f)]
+        private float viewAngle = 180f;
+
+        [SerializeField] private float targetSearchInterval = 0.25f;
+
+        [Header("Patrol")]
+        [SerializeField] private Transform[] patrolPoints;
+        [SerializeField] private float patrolWaitTime = 1f;
+
+        [Header("Combat")]
+        [SerializeField] private float attackRange = 1.7f;
+        [SerializeField] private float attackCooldown = 1.2f;
+        [SerializeField] private float attackHitRangeBonus = 0.25f;
+
+        private float _nextTargetSearchTime;
+
+
+        [Header("Combat Movement")]
+        [SerializeField] private float combatEnterRange = 5f;
+        [SerializeField] private float combatExitRange = 7f;
+
+        [SerializeField] private float preferredCombatDistance = 1.55f;
+        [SerializeField] private float minCombatDistance = 0.9f;
+
+        [SerializeField] private float combatRepathInterval = 0.35f;
+        [Header("Combat Attack")]
+        [SerializeField, Range(0f, 180f)]
+        private float attackAngle = 65f;
+
+        [SerializeField] private float attackCommitTime = 0.65f;
+
+
+
+        public float CombatEnterRange => combatEnterRange;
+
+        public float CombatExitRange =>
+            Mathf.Max(combatExitRange, combatEnterRange);
+
+        public float PreferredCombatDistance => preferredCombatDistance;
+
+        public float MinCombatDistance => minCombatDistance;
+
+        public float CombatRepathInterval =>
+            Mathf.Max(0.1f, combatRepathInterval);
+        public float AttackAngle => attackAngle;
+
+        public float AttackCommitTime => attackCommitTime;
+
+        public float DistanceToTarget
+        {
+            get
+            {
+                if (target == null)
+                    return float.PositiveInfinity;
+
+                Vector3 difference = target.position - transform.position;
+                difference.y = 0f;
+
+                return difference.magnitude;
+            }
+        }
+
+
         private void Awake()
         {
-            if (navMeshAgent == null)
-            {
-                navMeshAgent = GetComponent<NavMeshAgent>();
-            }
-
-
             InputReader = new(this);
+            navMeshAgent = GetComponent<NavMeshAgent>();
             Actor = GetComponent<Actor>();
             Actor.DefaultMovementStrategy = new CharacterForwardMovement(Actor);
             Actor.DefaultRotationStrategy = new CharacterRelativeRotation(Actor);
-            if (Actor.Motor is not NavMeshControllerWrapper)
-            {
-                ConfigureNavMesh();
-            }
+            Actor.OnDamageTaken.AddListener(agressor => { });
+            if (Actor.Motor is not NavMeshControllerWrapper) ConfigureNavMesh();
             InitializeStateMachine();
         }
 
@@ -85,74 +119,28 @@ namespace LOGIYGames.AI
 
         private void InitializeStateMachine()
         {
-            _stateMachine = new StateMachine();
-            statesPreset.Init(this);
-        }
-
-        public bool HasLineOfSight()
-        {
-            if (TargetingController.CurrentTarget == null) return false;
-
-            Vector3 direction = TargetingController.CurrentTarget.position - transform.position;
-            float distance = direction.magnitude;
-
-            if (distance > detectionRange) return false;
-
-            direction.Normalize();
-
-            if (Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, out RaycastHit hit, distance))
-            {
-                return hit.transform == TargetingController.CurrentTarget || hit.transform.IsChildOf(TargetingController.CurrentTarget);
-            }
-
-            return true;
-        }
-
-        public bool IsTargetDetected()
-        {
-            if (TargetingController.CurrentTarget == null) return false;
-
-            float distance = Vector3.Distance(transform.position, TargetingController.CurrentTarget.position);
-            if (distance > detectionRange) return false;
-
-            return HasLineOfSight();
-        }
-
-
-        public bool HasLostTarget()
-        {
-            if (TargetingController.CurrentTarget == null) return true;
-            return Vector3.Distance(transform.position, TargetingController.CurrentTarget.position) > detectionRange * 1.5f;
-        }
-
-        public float GetDistanceToTarget()
-        {
-            return TargetingController.CurrentTarget == null ? float.MaxValue : Vector3.Distance(transform.position, TargetingController.CurrentTarget.position);
-        }
-
-        public Vector3 GetDirectionToTarget()
-        {
-            if (TargetingController.CurrentTarget == null) return transform.forward;
-
-            Vector3 direction = TargetingController.CurrentTarget.position - transform.position;
-            direction.y = 0;
-            return direction.normalized;
+            m_stateMachine = new StateMachine();
+            statesPreset.Build(this);
         }
         public override void OnUpdate(float deltaTime)
         {
 
             base.OnUpdate(deltaTime);
-            if (_stateMachine == null) return;
-
-            CrouchPressed = false;
-            JumpPressed = false;
-            EvadePressed = false;
-            CrouchPressed = false;
-            SprintPressed = false;
-            FocusPressed = false;
-
-   
-
+            if (m_stateMachine == null) return;
+            if (target!= null )
+            {
+                Actor.DefaultMovementStrategy = new StrafeMovement(Actor);
+                Actor.DefaultRotationStrategy = new TargetLockRotation(Actor);
+            }
+            else
+            {
+                Actor.DefaultMovementStrategy = new CharacterForwardMovement(Actor);
+                Actor.DefaultRotationStrategy = new CharacterRelativeRotation(Actor);
+            }
+            Input = new();
+            Input.LookForward = transform.forward;
+            Input.LookRight = transform.right;
+            RefreshTarget();
             var link = navMeshAgent.currentOffMeshLinkData.owner as NavMeshLink;
             if (link != null && navMeshAgent.isOnOffMeshLink)
             {
@@ -164,14 +152,15 @@ namespace LOGIYGames.AI
                 }
                 if (link.area == NavMesh.GetAreaFromName("Jump"))
                 {
-                    JumpPressed = true;
+                    Input.AttackPressed = true;
 
                     navMeshAgent.speed = 2f;
                     navMeshAgent.transform.rotation = link.endTransform.rotation;
                 }
                 if (link.area == NavMesh.GetAreaFromName("Roll"))
                 {
-                    CrouchPressed = true;
+                    Input.MovementInput = Vector2.up;
+                    Input.CrouchPressed = true;
 
                     navMeshAgent.speed = 2f;
                     navMeshAgent.transform.rotation = link.endTransform.rotation;
@@ -182,45 +171,246 @@ namespace LOGIYGames.AI
                 navMeshAgent.speed = Actor.RuntimeMovement.CurrentSpeed * 3.5f;
             }
 
-            currentStateName = _stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
-            FocusPressed = true ? TargetingController.CurrentTarget != null : false;
-            _stateMachine.Update();
+            currentStateName = m_stateMachine.CurrentNode?.State?.GetType().Name ?? "None";
             if (navMeshAgent != null && navMeshAgent.hasPath && !navMeshAgent.pathPending)
             {
                 Vector3 desiredDirection = transform.InverseTransformDirection(navMeshAgent.path.corners[1] - transform.position);
                 desiredDirection.y = 0;
-                MovementInput = new Vector2(desiredDirection.x, desiredDirection.z).normalized;
+                Input.MovementInput = new Vector2(desiredDirection.x, desiredDirection.z).normalized;
 
             }
             else
             {
-                MovementInput = Vector2.zero;
+                Input.MovementInput = Vector2.zero;
             }
+            m_stateMachine.Update();
             Actor.UpdateInput(InputReader.GetInput());
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
             base.OnFixedUpdate(fixedDeltaTime);
-            if (_stateMachine == null) return;
-            _stateMachine.FixedUpdate();
+            if (m_stateMachine == null) return;
+            m_stateMachine.FixedUpdate();
 
 
         }
-        public void SetDestination(Vector3 destination)
+
+        public NavMeshAgent Agent => navMeshAgent;
+
+        public Transform Target => target;
+
+        public bool HasTarget => target != null;
+
+        public bool HasPatrolPoints =>
+            patrolPoints != null &&
+            Array.Exists(patrolPoints, point => point != null);
+
+        public float PatrolWaitTime => patrolWaitTime;
+
+        public float AttackCooldown => attackCooldown;
+
+        public float AttackRange => attackRange;
+
+        public void SetTarget(Transform newTarget)
         {
-            if (navMeshAgent != null && navMeshAgent.isOnNavMesh && navMeshAgent.destination != destination)
-            {
-                navMeshAgent.SetDestination(destination);
-            }
+            target = newTarget;
         }
 
-        public void ClearDestination()
+        public void ClearTarget()
         {
-            if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
+            target = null;
+        }
+
+        public bool SetMoveDestination(Vector3 destination)
+        {
+            if (navMeshAgent == null || !navMeshAgent.isOnNavMesh)
+                return false;
+
+            navMeshAgent.isStopped = false;
+
+            return navMeshAgent.SetDestination(destination);
+        }
+
+        public void StopMoving()
+        {
+            if (navMeshAgent == null || !navMeshAgent.isOnNavMesh)
+                return;
+
+            navMeshAgent.isStopped = true;
+
+            if (!navMeshAgent.isOnOffMeshLink &&
+                navMeshAgent.hasPath)
             {
                 navMeshAgent.ResetPath();
             }
         }
+
+        public bool HasReachedDestination(float extraDistance = 0.15f)
+        {
+            if (navMeshAgent == null ||
+                !navMeshAgent.isOnNavMesh ||
+                navMeshAgent.pathPending ||
+                !navMeshAgent.hasPath)
+            {
+                return false;
+            }
+
+            return navMeshAgent.remainingDistance <=
+                   navMeshAgent.stoppingDistance + extraDistance;
+        }
+
+        public bool IsTargetInAttackRange(float extraRange = 0f)
+        {
+            if (target == null)
+                return false;
+
+            Vector3 difference = target.position - transform.position;
+            difference.y = 0f;
+
+            float effectiveRange = attackRange + extraRange;
+
+            return difference.sqrMagnitude <=
+                   effectiveRange * effectiveRange;
+        }
+
+
+        public Transform GetPatrolPoint(int index)
+        {
+            if (patrolPoints == null ||
+                index < 0 ||
+                index >= patrolPoints.Length)
+            {
+                return null;
+            }
+
+            return patrolPoints[index];
+        }
+
+        public int GetClosestPatrolPointIndex()
+        {
+            if (!HasPatrolPoints)
+                return -1;
+
+            int closestIndex = -1;
+            float closestDistance = float.MaxValue;
+
+            for (int i = 0; i < patrolPoints.Length; i++)
+            {
+                Transform point = patrolPoints[i];
+
+                if (point == null)
+                    continue;
+
+                float distance =
+                    (point.position - transform.position).sqrMagnitude;
+
+                if (distance >= closestDistance)
+                    continue;
+
+                closestDistance = distance;
+                closestIndex = i;
+            }
+
+            return closestIndex;
+        }
+
+        public int GetNextPatrolPointIndex(int currentIndex)
+        {
+            if (patrolPoints == null || patrolPoints.Length == 0)
+                return -1;
+
+            int count = patrolPoints.Length;
+
+            for (int offset = 1; offset <= count; offset++)
+            {
+                int index = (currentIndex + offset + count) % count;
+
+                if (patrolPoints[index] != null)
+                    return index;
+            }
+
+            return -1;
+        }
+
+
+        private void RefreshTarget()
+        {
+            // Сохраняем текущую цель, пока она существует.
+            if (target != null)
+                return;
+
+            if (Time.time < _nextTargetSearchTime)
+                return;
+
+            _nextTargetSearchTime =
+                Time.time + Mathf.Max(0.05f, targetSearchInterval);
+
+            target = FindNearestTarget();
+        }
+
+        private Transform FindNearestTarget()
+        {
+            Collider[] colliders = Physics.OverlapSphere(
+                transform.position,
+                sightRange,
+                targetLayers,
+                QueryTriggerInteraction.Collide);
+
+            Transform nearestTarget = null;
+            float closestDistance = float.MaxValue;
+
+            Vector3 forward = transform.forward;
+            forward.y = 0f;
+
+            foreach (Collider hit in colliders)
+            {
+                Actor candidateActor =
+                    hit.GetComponentInParent<Actor>();
+
+                if (candidateActor == null)
+                    continue;
+
+                // Не обнаруживаем самого себя или коллайдеры своих детей.
+                if (candidateActor == Actor ||
+                    candidateActor.transform.root == transform.root || candidateActor.transform.tag == "Enemy")
+                {
+                    continue;
+                }
+
+                Transform candidate = candidateActor.transform;
+
+                Vector3 direction =
+                    candidate.position - transform.position;
+
+                direction.y = 0f;
+
+                float distance = direction.sqrMagnitude;
+
+                if (distance >= closestDistance)
+                    continue;
+
+                if (viewAngle < 360f &&
+                    forward.sqrMagnitude > 0.0001f &&
+                    Vector3.Angle(forward, direction) > viewAngle * 0.5f)
+                {
+                    continue;
+                }
+
+                closestDistance = distance;
+                nearestTarget = candidate;
+            }
+
+            return nearestTarget;
+        }
+
+        public void RequestAttack(Transform victim)
+        {
+            if (victim == null)
+                return;
+
+            Input.AttackPressed = true;
+        }
+
         private void OnDrawGizmosSelected()
         {
             if (!debugDraw) return;
@@ -241,35 +431,6 @@ namespace LOGIYGames.AI
                 }
             }
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
-
-            if (patrolPoints != null && patrolPoints.Length > 0)
-            {
-                Gizmos.color = Color.blue;
-                for (int i = 0; i < patrolPoints.Length; i++)
-                {
-                    if (patrolPoints[i] == null) continue;
-
-                    Gizmos.DrawWireSphere(patrolPoints[i].position, 0.5f);
-
-                    if (i < patrolPoints.Length - 1 && patrolPoints[i + 1] != null)
-                    {
-                        Gizmos.DrawLine(patrolPoints[i].position, patrolPoints[i + 1].position);
-                    }
-                }
-
-                if (patrolPoints.Length > 1 && patrolPoints[0] != null)
-                {
-                    Gizmos.DrawLine(
-                        patrolPoints[patrolPoints.Length - 1].position,
-                        patrolPoints[0].position
-                    );
-                }
-            }
         }
     }
 }

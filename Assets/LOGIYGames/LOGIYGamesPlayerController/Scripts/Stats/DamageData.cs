@@ -7,5 +7,6 @@ namespace LOGIYGames
         public float Amount;
         public ModifierType ModifierType;
         public DamageType Type;
+        public IDamageable From;
     }
 }

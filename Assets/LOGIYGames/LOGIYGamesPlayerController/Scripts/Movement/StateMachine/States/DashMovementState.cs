@@ -2,44 +2,53 @@ using LOGIYGames.CharacterCore;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
-using UnityEngine;
 
 namespace LOGIYGames
 {
     public class DashMovementState : TimedMovementState
     {
         private JumpStateData _jumpStateData;
+        JumpController controller;
         public DashMovementState(Actor ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _jumpStateData = stateData;
+            controller = ctx.GetComponent<JumpController>();
         }
         public override void Enter()
         {
             base.Enter();
 
+            float verticalForce;
+            float planarForce;
+            JumpType jumpType = JumpType.Dash;
             if (!Data.IsAnimationDrivenMovement)
             {
-                _character.EventBus.Publish(new JumpPerformedEvent
-                {
-
-                    jumpType = JumpType.Dash,
-                    planarForce = _jumpStateData.PlanarJumpForce,
-                    verticalForce = _jumpStateData.VerticalJumpForce,
-                    direction = _character.GetInputRelativeDirection()
-                });
+                verticalForce = _jumpStateData.VerticalJumpForce;
+                planarForce = _jumpStateData.PlanarJumpForce;
             }
             else
             {
-                _character.EventBus.Publish(new JumpPerformedEvent
-                {
-
-                    jumpType = JumpType.Dash,
-                    planarForce = 0,
-                    verticalForce = 0,
-                    direction = _character.GetInputRelativeDirection()
-                });
+                verticalForce = 0;
+                planarForce = 0;
             }
+            _character.EventBus.Publish(new JumpPerformedEvent
+            {
+                jumpType = jumpType,
+                planarForce = planarForce,
+                verticalForce = verticalForce,
+                direction = _character.GetInputRelativeDirection()
+            });
+            controller.Jump(jumpType, verticalForce, planarForce);
 
+        }
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+            if (!Data.IsAnimationDrivenRotation)
+            {
+                _character.Rotate();
+
+            }
         }
         public override bool CanEnter()
         {

@@ -22,13 +22,9 @@ namespace LOGIYGames
             {
                 return;
             }
-            if (actor.Input.MovementInput.magnitude > 0)
-            {
+            dir = Vector3.MoveTowards(controller.Velocity, actor.RuntimeMovement.TargetDirection * actor.RuntimeMovement.CurrentSpeed * baseSpeed, Time.deltaTime * inertia);
 
-                dir = Vector3.Lerp(dir, actor.RuntimeMovement.TargetDirection, Time.deltaTime * inertia);
-            }
-
-            controller.ChangeHorizontalVelocity(dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed);
+            controller.ChangeHorizontalVelocity(dir);
         }
 
     }

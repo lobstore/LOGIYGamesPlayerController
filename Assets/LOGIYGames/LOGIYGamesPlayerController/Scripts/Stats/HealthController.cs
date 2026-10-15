@@ -1,26 +1,32 @@
-using R3;
+using Alchemy.Inspector;
 using System;
+using UnityEditor.iOS.Xcode;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace LOGIYGames.CharacterCore
 {
-    public class HealthController
+    public class HealthController :MonoBehaviour
     {
-        public Health Health { get; private set; }
+        [field:SerializeField] [field: ReadOnly] public Health Health {  get; private set; }
         Stat VITStat;
         Stat HPStat;
-        public readonly UnityEvent Died = new();
-        public HealthController(StatsController stats)
+        public UnityEvent<float> OnCurrentHealthChanged;
+        public UnityEvent<float> OnMaxHealthChanged;
+
+        public UnityEvent Died;
+        Actor Actor;
+        private void Awake()
         {
+            Actor = GetComponent<Actor>();
             Health = new();
-            VITStat = stats.GetStat(StatType.Vitality);
-            HPStat = stats.GetStat(StatType.BaseHealth);
+            VITStat = Actor.Stats.GetStat(StatType.Vitality);
+            HPStat = Actor.Stats.GetStat(StatType.BaseHealth);
             UpdateMaxValue();
             Health.Current = Health.Max;
+            OnCurrentHealthChanged.Invoke(Health.Current);
         }
-        public void Tick()
+        private void Update()
         {
             UpdateMaxValue();
         }
@@ -31,7 +37,7 @@ namespace LOGIYGames.CharacterCore
             switch (damage.ModifierType)
             {
                 case ModifierType.Add:
-                    resultDamage = Math.Clamp(damage.Amount - VITStat.Value, 0, float.MaxValue);
+                    resultDamage = damage.Amount;
                     break;
                 case ModifierType.Multiply:
                     resultDamage = Health.Max * damage.Amount;
@@ -47,7 +53,6 @@ namespace LOGIYGames.CharacterCore
         }
         private void ReduceHealth(float value)
         {
-            Debug.Log("DamageTook: " + value);
             if (Health.Current <= 0)
                 return;
 
@@ -55,14 +60,17 @@ namespace LOGIYGames.CharacterCore
 
             if (Health.Current == 0)
                 Died.Invoke();
+            OnCurrentHealthChanged?.Invoke(Health.Current);
         }
         private void IncreaseHealth(float value)
         {
             Health.Current = Mathf.Min(Health.Current + value, Health.Max);
+            OnCurrentHealthChanged?.Invoke(Health.Current);
         }
         private void UpdateMaxValue()
         {
             Health.Max = HPStat.Value + VITStat.Value * HPStat.Value;
+            OnMaxHealthChanged.Invoke(Health.Max);
         }
     }
 }

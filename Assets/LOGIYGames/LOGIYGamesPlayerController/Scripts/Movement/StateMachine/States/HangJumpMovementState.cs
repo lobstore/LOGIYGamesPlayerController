@@ -1,33 +1,44 @@
 ﻿using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
-using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 namespace LOGIYGames.Movement
 {
     public class HangJumpMovementState : TimedMovementState
     {
-        private JumpStateData _stateData;
+        private JumpStateData _jumpStateData;
+        JumpController controller;
         public HangJumpMovementState(Actor ctx, JumpStateData stateData) : base(ctx, stateData)
         {
-            _stateData = stateData;
-
+            _jumpStateData = stateData;
+            controller = ctx.GetComponent<JumpController>();
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            Direction direction = _character.GetRelativeMovementDirection();
+            float verticalForce;
+            float planarForce;
+            JumpType jumpType = JumpType.HangJump;
+            if (!Data.IsAnimationDrivenMovement)
+            {
+                verticalForce = _jumpStateData.VerticalJumpForce;
+                planarForce = _jumpStateData.PlanarJumpForce;
+            }
+            else
+            {
+                verticalForce = 0;
+                planarForce = 0;
+            }
             _character.EventBus.Publish(new JumpPerformedEvent
             {
-                verticalForce = _stateData.VerticalJumpForce,
-                planarForce = _stateData.PlanarJumpForce,
-                direction = direction,
-                jumpType = JumpType.HangJump
-
+                jumpType = jumpType,
+                planarForce = planarForce,
+                verticalForce = verticalForce,
+                direction = _character.GetInputRelativeDirection()
             });
+            controller.Jump(jumpType, verticalForce, planarForce);
         }
         public override bool CanEnter()
         {

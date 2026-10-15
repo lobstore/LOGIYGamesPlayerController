@@ -5,6 +5,7 @@ using LOGIYGames.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Entities;
 using UnityEngine;
 
 namespace LOGIYGames
@@ -15,12 +16,12 @@ namespace LOGIYGames
         [SerializeField] private WeaponSlot rightHandSlot;
 
         [Header("Weapons")]
-        [SerializeField] private List<WeaponDataSO> weapons = new();
+        [SerializeField] private List<WeaponData> weapons = new();
 
         private Actor character;
         private MantlingController mantlingController;
 
-        private List<WeaponDataSO> rightHandWeapons = new();
+        private List<WeaponData> rightHandWeapons = new();
 
         private int selectedIndex;
         private bool isWeaponEquipped;
@@ -149,19 +150,15 @@ namespace LOGIYGames
             if (rightHandWeapons.Count == 0)
                 return;
 
-            WeaponDataSO weaponToEquip = rightHandWeapons[selectedIndex];
+            WeaponData weaponToEquip = rightHandWeapons[selectedIndex];
 
             if (weaponToEquip == null)
                 return;
 
-            // Если уже экипировано именно это оружие — ничего не делаем.
-            if (isWeaponEquipped &&
-                rightHandSlot.CurrentWeapon == weaponToEquip)
+            if (isWeaponEquipped && rightHandSlot.CurrentWeapon == weaponToEquip)
             {
                 return;
             }
-
-            // Сначала снимаем текущее оружие.
             if (isWeaponEquipped)
             {
                 UnloadRightHandWeapon();
@@ -172,7 +169,7 @@ namespace LOGIYGames
 
             PublishWeaponEvent(
                 WeaponEquipState.Equiped,
-                weaponToEquip);
+                rightHandSlot.CurrentWeapon);
         }
 
         public void UnloadRightHandWeapon()
@@ -180,21 +177,14 @@ namespace LOGIYGames
             if (!isWeaponEquipped)
                 return;
 
-            // Сохраняем ссылку ДО UnloadModel(),
-            // потому что после него CurrentWeapon может стать null.
-            WeaponDataSO currentWeapon = rightHandSlot.CurrentWeapon;
 
-            PublishWeaponEvent(
-                WeaponEquipState.Unequiped,
-                currentWeapon);
+            PublishWeaponEvent( WeaponEquipState.Unequiped, rightHandSlot.CurrentWeapon);
 
             rightHandSlot.UnloadModel();
             isWeaponEquipped = false;
         }
 
-        private void PublishWeaponEvent(
-            WeaponEquipState state,
-            WeaponDataSO weapon)
+        private void PublishWeaponEvent( WeaponEquipState state,WeaponController weapon)
         {
             if (character == null || character.EventBus == null)
                 return;
@@ -203,7 +193,7 @@ namespace LOGIYGames
             {
                 WeaponSlotType = WeaponSlotType.RightHand,
                 WeaponEquipState = state,
-                WeaponData = weapon
+                Weapon = weapon
             });
         }
 
@@ -211,10 +201,7 @@ namespace LOGIYGames
         {
             if (!isWeaponEquipped)
                 return;
-            WeaponDataSO currentWeapon = rightHandSlot.CurrentWeapon;
-            // При mantle модель временно убираем,
-            // но состояние equipped сохраняем.
-            PublishWeaponEvent(WeaponEquipState.Unequiped,currentWeapon);
+            PublishWeaponEvent(WeaponEquipState.Unequiped, rightHandSlot.CurrentWeapon);
             rightHandSlot.UnloadModel();
 
         }
@@ -223,16 +210,10 @@ namespace LOGIYGames
         {
             if (!isWeaponEquipped)
                 return;
-
-            // После mantle возвращаем то же оружие.
             if (rightHandSlot.CurrentWeaponPrefab == null)
             {
-                WeaponDataSO currentWeapon = rightHandWeapons[selectedIndex];
-
-                rightHandSlot.LoadModel(currentWeapon);
-                // При mantle модель временно убираем,
-                // но состояние equipped сохраняем.
-                PublishWeaponEvent(WeaponEquipState.Equiped, currentWeapon);
+                rightHandSlot.LoadModel(rightHandWeapons[selectedIndex]);
+                PublishWeaponEvent(WeaponEquipState.Equiped, rightHandSlot.CurrentWeapon);
             }
 
         }
@@ -243,6 +224,6 @@ namespace LOGIYGames
     {
         public WeaponSlotType WeaponSlotType { get; set; }
         public WeaponEquipState WeaponEquipState { get; set; }
-        public WeaponDataSO WeaponData;
+        public WeaponController Weapon;
     }
 }

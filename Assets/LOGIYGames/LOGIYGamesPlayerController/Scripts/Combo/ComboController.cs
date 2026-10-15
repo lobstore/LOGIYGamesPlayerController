@@ -13,15 +13,14 @@ namespace LOGIYGames.CharacterCore
 
         private float attackTime;
 
-        // Чтобы ResolveTransition() был вызван
-        // только один раз после окончания ComboInputWindow.
         private bool comboInputWindowProcessed;
 
         public InputCommandBuffer CommandBuffer { get; private set; }
 
-        public ComboMovesetSO ComboMovesetSO { get; private set; }
-        [SerializeField] private ComboMovesetSO comboMovesetSO;
-        [SerializeField] private ComboMovesetSO unequiped;
+        public ComboData ComboMovesetSO { get; private set; }
+        [SerializeField] private ComboData unequiped;
+
+        WeaponController CurrentWeapon;
 
         private void Awake()
         {
@@ -45,13 +44,15 @@ namespace LOGIYGames.CharacterCore
             {
                 case WeaponEquipState.Equiped:
 
-                    ComboMovesetSO = evt.WeaponData.ComboSet;
-
+                    CurrentWeapon = evt.Weapon;
+                    ComboMovesetSO = evt.Weapon.Data.ComboData;
                     break;
 
                 case WeaponEquipState.Unequiped:
 
                     ComboMovesetSO = unequiped;
+                    CurrentWeapon?.DisableCollider();
+                    CurrentWeapon = null; 
 
                     ResetCombo();
 
@@ -88,13 +89,11 @@ namespace LOGIYGames.CharacterCore
 
             CommandBuffer.Clear();
 
-            // Здесь запускаем animation/state:
-            //
             character.EventBus.Publish(new ComboAttackEvent()
             {
                 AnimationData = attack.Animation
             });
-            //     attack.Animation.AnimationName);
+            CurrentWeapon?.EnableCollider();
         }
 
         private bool IsAttackValid(AttackNodeSO attack)
@@ -252,7 +251,7 @@ namespace LOGIYGames.CharacterCore
 
             if (attackTime < currentAttack.TotalDuration)
                 return;
-
+            CurrentWeapon?.DisableCollider();
             ResetCombo();
         }
 

@@ -8,37 +8,37 @@ namespace LOGIYGames.Movement
     public class GroundJumpMovementState : TimedMovementState
     {
         JumpController controller;
-        private JumpStateData _stateData;
+        private JumpStateData _jumpStateData;
         public GroundJumpMovementState(Actor ctx, JumpStateData stateData) : base(ctx, stateData)
         {
-            _stateData = stateData;
+            _jumpStateData = stateData;
             controller = ctx.GetComponent<JumpController>();
         }
         public override void Enter()
         {
             base.Enter();
 
-            float planarForce = _stateData.PlanarJumpForce;
+            float verticalForce;
+            float planarForce;
+            JumpType jumpType = JumpType.GroundJump;
             if (!Data.IsAnimationDrivenMovement)
             {
-                _character.EventBus.Publish(new JumpPerformedEvent
-                {
-                    jumpType = JumpType.GroundJump,
-                    planarForce = _stateData.PlanarJumpForce,
-                    verticalForce = _stateData.VerticalJumpForce,
-                    direction = _character.GetInputRelativeDirection()
-                });
+                verticalForce = _jumpStateData.VerticalJumpForce;
+                planarForce = _jumpStateData.PlanarJumpForce;
             }
             else
             {
-                _character.EventBus.Publish(new JumpPerformedEvent
-                {
-                    jumpType = JumpType.GroundJump,
-                    planarForce = 0,
-                    verticalForce = 0,
-                    direction = _character.GetInputRelativeDirection()
-                });
+                verticalForce = 0;
+                planarForce = 0;
             }
+            _character.EventBus.Publish(new JumpPerformedEvent
+            {
+                jumpType = jumpType,
+                planarForce = planarForce,
+                verticalForce = verticalForce,
+                direction = _character.GetInputRelativeDirection()
+            });
+            controller.Jump(jumpType,verticalForce,planarForce);
 
         }
         public override void PhysicsUpdate()
@@ -51,7 +51,7 @@ namespace LOGIYGames.Movement
             return base.CanEnter()
                 && (_character.Sensors.IsValidSlope() || _character.Sensors.GroundAngle <= 0)
                 && _character.Input.JumpPressed
-                && controller.CanExecute(_stateData);
+                && controller.CanExecute(_jumpStateData);
         }
 
     }

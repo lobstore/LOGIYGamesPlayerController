@@ -107,7 +107,7 @@ namespace LOGIYGames
                 }
                 else
                 {
-                   // m_rigidbody.linearVelocity = targetVelocity * actor.RuntimeMovement.CurrentSpeed * baseSpeed;
+                   // m_rigidbody.linearVelocity = targetVelocity * actor.RuntimeMovement.CurrentSpeed * acceleration;
                 }
             }
             else

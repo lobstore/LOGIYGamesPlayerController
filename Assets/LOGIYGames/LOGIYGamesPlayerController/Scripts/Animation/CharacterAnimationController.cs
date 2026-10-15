@@ -294,8 +294,8 @@ namespace LOGIYGames.Animation
                 switch (evt.WeaponEquipState)
                 {
                     case WeaponEquipState.Equiped:
-                        animator.runtimeAnimatorController = evt.WeaponData.AnimatorOverride;
-                        if (evt.WeaponData.TwoHandsRequired)
+                        animator.runtimeAnimatorController = evt.Weapon.Data.AnimatorOverride;
+                        if (evt.Weapon.Data.TwoHandsRequired)
                         {
                             PlayAnimation("Equip", 3);
                         }
@@ -316,7 +316,7 @@ namespace LOGIYGames.Animation
                         break;
                     case WeaponEquipState.Unequiped:
                         animator.runtimeAnimatorController = defaultOverride;
-                        if (evt.WeaponData.TwoHandsRequired)
+                        if (evt.Weapon.Data.TwoHandsRequired)
                         {
                             PlayAnimation("Unequip", 3);
 

@@ -12,10 +12,6 @@ namespace LOGIYGames
 
         private readonly HashSet<ITransition> _anyTransitions = new();
 
-        // =====================================================
-        // UPDATE
-        // =====================================================
-
         public void Update()
         {
             var transition = GetTransition();
@@ -38,10 +34,6 @@ namespace LOGIYGames
             CurrentNode?.State?.LateUpdate();
         }
 
-        // =====================================================
-        // STATES
-        // =====================================================
-
         public void AddState(IState state)
         {
             var type = state.GetType();
@@ -60,18 +52,15 @@ namespace LOGIYGames
             if (!_nodes.ContainsKey(type))
                 return;
 
-            // Remove all transitions TO this state
             foreach (var node in _nodes.Values)
             {
                 node.Transitions.RemoveWhere(
                     t => t.To == type);
             }
 
-            // Remove any transitions TO this state
             _anyTransitions.RemoveWhere(
                 t => t.To == type);
 
-            // Exit current state if needed
             if (CurrentNode != null &&
                 CurrentNode.State.GetType() == type)
             {
@@ -98,10 +87,6 @@ namespace LOGIYGames
 
             return null;
         }
-
-        // =====================================================
-        // SET / CHANGE STATE
-        // =====================================================
 
         public void SetState<T>()
             where T : IState
@@ -141,10 +126,6 @@ namespace LOGIYGames
 
             CurrentNode = nextNode;
         }
-
-        // =====================================================
-        // TRANSITIONS
-        // =====================================================
 
         public void AddTransition<TFrom, TTo>(
             IPredicate condition)
@@ -199,10 +180,6 @@ namespace LOGIYGames
                 t => t.To == toType);
         }
 
-        // =====================================================
-        // HELPERS
-        // =====================================================
-
         public bool IsInState<T>()
             where T : IState
         {
@@ -227,10 +204,6 @@ namespace LOGIYGames
                     return transition;
             }
 
-            // State transitions
-            //if (CurrentNode == null)
-            //    return null;
-
             foreach (var transition in CurrentNode.Transitions)
             {
                 if (!HasTransitionTarget(transition))
@@ -248,10 +221,6 @@ namespace LOGIYGames
         {
             return _nodes.ContainsKey(transition.To);
         }
-
-        // =====================================================
-        // NODE
-        // =====================================================
 
         public class StateNode
         {

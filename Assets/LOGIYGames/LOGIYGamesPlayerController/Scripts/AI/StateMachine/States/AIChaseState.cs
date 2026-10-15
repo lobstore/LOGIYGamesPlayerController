@@ -2,73 +2,57 @@ using UnityEngine;
 
 namespace LOGIYGames.AI
 {
-    /// <summary>
-    /// AI Chase state - AI pursues the target
-    /// </summary>
-    public class AIChaseState : AIBaseState
+    public sealed class AIChaseState : AIBaseState
     {
-        private readonly float _lostChaseDuration;
-        private float _lostTimer;
-        private bool _wasTargetVisible;
+        private const float RepathInterval = 0.2f;
+        private const float TargetMoveThreshold = 0.5f;
 
-        public AIChaseState(AIBrain brain, float lostChaseDuration = 3f) : base(brain)
+        private float _nextRepathTime;
+        private Vector3 _lastTargetPosition;
+
+        public AIChaseState(AIBrain brain) : base(brain)
         {
-            _lostChaseDuration = lostChaseDuration;
-            DetectionRange = brain.DetectionRange;
-            AttackRange = brain.AttackRange;
         }
 
         public override void Enter()
         {
-            base.Enter();
-            _lostTimer = 0f;
-            _wasTargetVisible = false;
+            _nextRepathTime = 0f;
+
+            UpdateDestination();
+        }
+
+        public override void Exit()
+        {
         }
 
         public override void LogicUpdate()
         {
-            base.LogicUpdate();
-
-            if (Brain.TargetingController.CurrentTarget == null)
-            {
-                _lostTimer += Time.deltaTime;
+            if (!Brain.HasTarget)
                 return;
-            }
 
-            bool canSeeTarget = Brain.HasLineOfSight();
+            bool targetMoved =
+                (Brain.Target.position - _lastTargetPosition)
+                .sqrMagnitude >=
+                TargetMoveThreshold * TargetMoveThreshold;
 
-            if (canSeeTarget)
+            if (Time.time >= _nextRepathTime || targetMoved)
             {
-                _lostTimer = 0f;
-                _wasTargetVisible = true;
-            }
-            else if (_wasTargetVisible)
-            {
-                _lostTimer += Time.deltaTime;
+                UpdateDestination();
             }
         }
 
-        public override void PhysicsUpdate()
+        private void UpdateDestination()
         {
-            base.PhysicsUpdate();
+            Transform target = Brain.Target;
 
-            if (Brain.TargetingController.CurrentTarget == null)
-            {
-                Stop();
+            if (target == null)
                 return;
-            }
 
-            float distanceToTarget = Brain.GetDistanceToTarget();
+            Brain.SetMoveDestination(target.position);
 
-            // If too close, stop
-            if (distanceToTarget <= AttackRange * 0.5f)
-            {
-                Stop();
-                return;
-            }
+            _lastTargetPosition = target.position;
 
-            // Move towards target
-            MoveToPosition(Brain.TargetingController.CurrentTarget.position);
+            _nextRepathTime = Time.time + RepathInterval;
         }
     }
 }

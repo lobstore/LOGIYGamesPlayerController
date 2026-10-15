@@ -1,15 +1,17 @@
 using Alchemy.Inspector;
 using LOGIYGames.Movement;
 using LOGIYGames.Shared.Enums;
+using LOGIYGames.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+using UnityEngine.Events;
 namespace LOGIYGames.CharacterCore
 {
     public partial class Actor : MonoModuleBase, IControllable, IDamageable
     {
+        public UnityEvent<IDamageable> OnDamageTaken = new();
         public CharacterInput Input { get; private set; }
         public IMovementStrategy MovementStrategy { get; set; }
         public IRotationStrategy RotationStrategy { get; set; }
@@ -22,14 +24,14 @@ namespace LOGIYGames.CharacterCore
         [field: SerializeField] public CameraTarget ActionCameraTarget { get; private set; }
         [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
         [field: SerializeField] public SensorsModule Sensors { get; private set; }
-        [ReadOnly] public MovementRuntimeData RuntimeMovement;
-        [ReadOnly] public EffectsController Effects;
-        public StatsController Stats;
+        [ReadOnly] public MovementData RuntimeMovement;
 
 
         #region Modules
+        [ReadOnly] public EffectsController Effects;
+        public HealthController HealthController {  get; private set; }
+        public StatsController Stats;
         public TargetingController TargetingController;
-        public HealthController HealthController { get; private set; }
         public StaminaController StaminaController { get; private set; }
         #endregion
 
@@ -43,17 +45,10 @@ namespace LOGIYGames.CharacterCore
         {
             //Stats = new();
             //Stats.SetBase(StatType.BaseHealth, 100);
-            //Stats.SetBase(StatType.BaseStamina, 50);
-            //Stats.SetBase(StatType.BaseMana, 10);
-            //Stats.SetBase(StatType.Vitality, 10);
-            //Stats.SetBase(StatType.Intelegence, 1);
-            //Stats.SetBase(StatType.AttackBase, 1);
-            //Stats.SetBase(StatType.DefenseBase, 1);
-            //Stats.SetBase(StatType.CritRate, 15);
-            //Stats.SetBase(StatType.CritDamage, 50);
+
             Motor = GetComponent<MovementWrapperBase>();
             Sensors = GetComponent<SensorsModule>();
-            HealthController = new HealthController(Stats);
+            HealthController = this.GetOrAddComponent<HealthController>();
             StaminaController = new StaminaController(Stats, 1);
             InitializeStateMachine();
             Effects = new(this);
@@ -85,7 +80,6 @@ namespace LOGIYGames.CharacterCore
             CalculateDeltaYaw();
             MovementStateMachine.Update();
             StaminaController.Tick();
-            HealthController.Tick();
             Effects.Update();
         }
 
@@ -102,7 +96,8 @@ namespace LOGIYGames.CharacterCore
         }
         public void Rotate(Quaternion targetRotation, float turnSpeed = 0)
         {
-            if (turnSpeed > 0f)
+            
+            if (turnSpeed > 0f && RotationStrategy is not MousePlanarRotation)
             {
                 Quaternion smoothedRotation = Quaternion.Slerp(Motor.Rotation, targetRotation, turnSpeed * Time.deltaTime);
                 Motor.SetRotation(smoothedRotation);
@@ -132,7 +127,7 @@ namespace LOGIYGames.CharacterCore
         #endregion
         private void UpdateSpeed()
         {
-            if (RuntimeMovement.CurrentSpeed < RuntimeMovement.TargetSpeed && Input.MovementInput.magnitude > 0)
+            if (RuntimeMovement.CurrentSpeed < RuntimeMovement.TargetSpeed )
             {
 
                 RuntimeMovement.CurrentSpeed = Mathf.MoveTowards(RuntimeMovement.CurrentSpeed, RuntimeMovement.TargetSpeed, RuntimeMovement.Acceleration * Time.deltaTime);
@@ -286,6 +281,7 @@ namespace LOGIYGames.CharacterCore
         #region IDamageable
         public void TakeDamage(DamageData damage)
         {
+            OnDamageTaken.Invoke(damage.From);
             HealthController.TakeDamage(damage);
         }
         #endregion
