@@ -11,7 +11,7 @@ namespace LOGIYGames
         [SerializeField] InputActionAsset InputActions;
         public UnityEvent<Actor> OnCharacterChanged = new();
         public Actor CurrentCharacter { get; private set; }
-        public PlayerInputReader PlayerInput { get; private set; }
+        public PlayerInputReader InputReader { get; private set; }
 
         [SerializeField] private CameraPerspectiveType currentControlType;
         private bool isLockOn;
@@ -28,19 +28,17 @@ namespace LOGIYGames
         protected override void Awake()
         {
             base.Awake();
-            PlayerInput = new(InputActions, Camera.main.transform);
+            InputReader = new(InputActions, Camera.main.transform);
         }
 
         private void Start()
         {
             SetPlayerControlOnCharacter(InitCharacter);
-            PlayerInput?.Enable();
+            InputReader?.Enable();
         }
 
         private void Update()
         {
-            CharacterInput input = PlayerInput.GetInput();
-            CurrentCharacter.UpdateInput(input);
             if (CurrentCharacter.TargetingController.HasTarget)
             {
                 if (CurrentCharacter.Input.LockPressed)
@@ -79,32 +77,32 @@ namespace LOGIYGames
         }
         public void SetLockOn()
         {
-            CurrentCharacter.DefaultMovementStrategy = new StrafeMovement(CurrentCharacter);
-            CurrentCharacter.DefaultRotationStrategy = new TargetLockRotation(CurrentCharacter);
+            CurrentCharacter.MovementStrategy = new StrafeMovement(CurrentCharacter);
+            CurrentCharacter.RotationStrategy = new TargetLockRotation(CurrentCharacter);
         }
         private void UpdateStrategies()
         {
             switch (currentControlType)
             {
                 case CameraPerspectiveType.FirstPerson:
-                    CurrentCharacter.DefaultMovementStrategy = new StrafeMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new MousePlanarRotation(CurrentCharacter);
-                    PlayerInput = new(InputActions, CurrentCharacter.transform);
+                    CurrentCharacter.MovementStrategy = new StrafeMovement(CurrentCharacter);
+                    CurrentCharacter.RotationStrategy = new MousePlanarRotation(CurrentCharacter);
+                    InputReader = new(InputActions, CurrentCharacter.transform);
                     break;
                 case CameraPerspectiveType.ThirdPersonFreeLook:
-                    CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new CharacterRelativeRotation(CurrentCharacter);
-                    PlayerInput = new(InputActions, Camera.main.transform);
+                    CurrentCharacter.MovementStrategy = new CharacterForwardMovement(CurrentCharacter);
+                    CurrentCharacter.RotationStrategy = new CharacterRelativeRotation(CurrentCharacter);
+                    InputReader = new(InputActions, Camera.main.transform);
                     break;
                 case CameraPerspectiveType.ThirdPersonLookForward:
-                    CurrentCharacter.DefaultMovementStrategy = new StrafeMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new CharacterForwardRotation(CurrentCharacter);
-                    PlayerInput = new(InputActions, Camera.main.transform);
+                    CurrentCharacter.MovementStrategy = new StrafeMovement(CurrentCharacter);
+                    CurrentCharacter.RotationStrategy = new CharacterForwardRotation(CurrentCharacter);
+                    InputReader = new(InputActions, Camera.main.transform);
                     break;
                 case CameraPerspectiveType.Top_Down:
-                    CurrentCharacter.DefaultMovementStrategy = new CharacterForwardMovement(CurrentCharacter);
-                    CurrentCharacter.DefaultRotationStrategy = new CharacterRelativeRotation(CurrentCharacter);
-                    PlayerInput = new(InputActions, Camera.main.transform);
+                    CurrentCharacter.MovementStrategy = new CharacterForwardMovement(CurrentCharacter);
+                    CurrentCharacter.RotationStrategy = new CharacterRelativeRotation(CurrentCharacter);
+                    InputReader = new(InputActions, Camera.main.transform);
                     break;
                 default:
                     break;
@@ -113,7 +111,7 @@ namespace LOGIYGames
         public void SetPlayerControlOnCharacter(Actor character)
         {
             CurrentCharacter = character;
-            CurrentCharacter.ResetStrategies();
+            CurrentCharacter.SetInput(InputReader);
             OnCharacterChanged?.Invoke(CurrentCharacter);
         }
     }

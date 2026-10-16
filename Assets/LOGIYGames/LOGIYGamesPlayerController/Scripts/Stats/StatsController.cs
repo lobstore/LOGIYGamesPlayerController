@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    [Serializable]
-    public class StatsController
+    public class StatsController : MonoBehaviour
     {
         [SerializeField] private Dictionary<StatType, Stat> _stats;
         public IReadOnlyDictionary<StatType, Stat> Stats => _stats;

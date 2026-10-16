@@ -1,7 +1,7 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Extensions;
+using Unity.AppUI.Core;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 namespace LOGIYGames
 {
@@ -20,39 +20,62 @@ namespace LOGIYGames
             controller = GetComponent<MovementWrapperBase>();
             actor = GetComponent<Actor>();
         }
+        public void Enter()
+        {
+            controller.UseGravity = false;
+            GetComponent<Animator>().SetBool("IsWallClimbing", true);
+        }
+        public void Exit()
+        {
+            controller.UseGravity = true;
+            GetComponent<Animator>().SetBool("IsWallClimbing", false);
+        }
         public void Magnit()
         {
             controller.AddAcceleration(-sensorModule.LegsFrontHit.normal * 10);
+            actor.RotateToDirection(-sensorModule.LegsFrontHit.normal);
         }
+
         public void Climb()
         {
-            if (actor.Input.MovementInput.magnitude > 0)
-            {
+            Vector2 input = actor.Input.MovementInput;
 
-                dir = Vector3.Lerp(dir, actor.RuntimeMovement.TargetDirection, Time.deltaTime * inertia);
+            if (input.sqrMagnitude > 0.001f)
+            {
+                Vector3 targetDir =
+                   controller.Collider.transform.right * input.x +
+                    controller.Collider.transform.up * input.y;
+
+                dir = Vector3.Lerp(
+                    dir,
+                    targetDir,
+                    Time.deltaTime * inertia
+                );
+                dir= Vector3.ProjectOnPlane(dir, sensorModule.LegsFrontHit.normal);
             }
             else
             {
                 dir = controller.Velocity.normalized;
             }
 
-            controller.ChangeHorizontalVelocity(dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed);
-            controller.ChangeVerticalVelocity(dir.y * actor.RuntimeMovement.CurrentSpeed * baseSpeed);
+            Vector3 velocity = dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed;
+
+            controller.ChangeHorizontalVelocity(velocity);
+            controller.ChangeVerticalVelocity(velocity.y);
         }
+
         public bool CanEnter()
         {
-           return actor.Sensors.IsObstacleLegsFront &&
-                    actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include) &&
-                    actor.Input.MovementInput.magnitude > 0
-                        && (actor.transform.InverseTransformDirection(controller.Velocity).z > 0
-                        || actor.transform.InverseTransformDirection(controller.Velocity).y > 0);
+            return actor.Sensors.IsObstacleLegsFront &&
+                     actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include) &&
+                     actor.Input.MovementInput.y > 0;
         }
         public bool CanExit()
         {
-           return actor.Input.InteractPressed ||
-                    !actor.Sensors.IsObstacleLegsFront ||
-                    !actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include) ||
-                    (actor.IsGrounded && actor.Input.MovementInput.y < 0);
+            return actor.Input.InteractPressed ||
+                     !actor.Sensors.IsObstacleLegsFront ||
+                     !actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include) ||
+                     (actor.IsGrounded && actor.Input.MovementInput.y < 0);
         }
     }
 }

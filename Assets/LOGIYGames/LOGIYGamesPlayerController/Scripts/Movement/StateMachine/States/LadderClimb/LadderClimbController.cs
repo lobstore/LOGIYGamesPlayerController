@@ -4,11 +4,19 @@ namespace LOGIYGames.CharacterCore
     public class LadderClimbController : MonoBehaviour
     {
         Actor character;
+        MovementWrapperBase controller;
         public Ladder Ladder { get; private set; }
-        public float t {  get; set; }
+        float t;
+        float distanceTravelled;
         private void Awake()
         {
             character = GetComponent<Actor>();
+            controller = GetComponent<MovementWrapperBase>();
+        }
+        public void Enter()
+        {
+            distanceTravelled = 0.01f;
+            controller.UseGravity = false;
         }
         private void OnTriggerEnter(Collider other)
         {
@@ -26,25 +34,35 @@ namespace LOGIYGames.CharacterCore
                     Exit();
             }
         }
+        public Vector3 GetCurrentPosition()
+        {
+            return Ladder.GetPosition(t);
+        }
+        public Vector3 GetCurrentDirection()
+        {
+            return Ladder.GetDirection(t);
+        }
         public void Tick()
         {
-            Vector3 pos = Ladder.GetPosition(t);
-            // выход сверху/снизу
-            if (t <= 0f || t >= 1f)
-            {
-                Exit();
-            }
+            distanceTravelled += character.RuntimeMovement.TargetSpeed * character.Input.MovementInput.y * Time.deltaTime;
+            t = distanceTravelled / Ladder.Lenght;
+            t = Mathf.Clamp01(t);
+            Vector3 pos = GetCurrentPosition();
 
-            // прыжок/выход
-            if (character.Input.JumpPressed)
-            {
-                Exit();
-            }
             character.transform.position = pos;
         }
-        private void Exit()
+        public void Exit()
         {
             Ladder = null;
+            controller.UseGravity = true;
+        }
+        public bool CanExit()
+        {
+            return (t <= 0f || t >= 1f) || Ladder == null;
+        }
+        public bool CanEnter()
+        {
+            return Ladder != null && character.Input.InteractPressed;
         }
     }
 }

@@ -93,7 +93,7 @@ namespace LOGIYGames
         {
             if (isActionFP)
             {
-                SetTargetTo(PlayerManager.Instance.CurrentCharacter.ActionCameraTarget);
+               // SetTargetTo(PlayerManager.Instance.CurrentCharacter.ActionCameraTarget);
             }
             else
             {

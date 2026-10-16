@@ -12,8 +12,6 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-            _character.RotationStrategy = new ToMoveDirectionRotation(_character);
-            _character.MovementStrategy = new WallRunMovement(_character);
             _controller.UseGravity = false;
             _character.EventBus.Publish(new WallrunEnterEvent
             {

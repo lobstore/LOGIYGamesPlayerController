@@ -39,7 +39,7 @@ public class MountingController : MonoBehaviour
         Current.GetComponent<PlayerInput>().enabled = true;
         CameraManager.Instance.CameraInput.Disable();
         CameraManager.Instance.DisableAllCameras();
-        PlayerManager.Instance.PlayerInput.DisableMovement();
+        PlayerManager.Instance.InputReader.DisableMovement();
         GetComponent<FootIK>().enabled = false;
         GetComponent<MovementWrapperBase>().IsNoClip = true;
         GetComponent<Animator>().SetBool("IsDriving", true);
@@ -61,7 +61,7 @@ public class MountingController : MonoBehaviour
         Current = null;
         Target = null;
         ExitRequested = false;
-        PlayerManager.Instance.PlayerInput.EnableMovement();
+        PlayerManager.Instance.InputReader.EnableMovement();
         CameraManager.Instance.CameraInput.Enable();
         CameraManager.Instance.EnableAllCameras();
     }

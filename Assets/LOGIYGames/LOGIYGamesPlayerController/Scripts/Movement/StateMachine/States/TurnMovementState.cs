@@ -15,7 +15,6 @@ public class TurnMovementState : TimedMovementState
     }
     public override void Enter()
     {
-        _character.MovementStrategy = new CharacterForwardMovement(_character);
         _character.EventBus.Publish(new TurnPerformedEvent
         {
             movementSpeed = _character.RuntimeMovement.CurrentSpeed,
@@ -34,7 +33,7 @@ public class TurnMovementState : TimedMovementState
         }
         if (!Data.IsAnimationDrivenRotation)
         {
-            _character.Rotate(targetRotation);
+            _character.Rotate();
 
         }
     }
@@ -43,7 +42,6 @@ public class TurnMovementState : TimedMovementState
     {
         return base.CanEnter()
             && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle
-            && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) < TurnData.MaxAngle
-            && _character.DefaultMovementStrategy is not StrafeMovement;
+            && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) < TurnData.MaxAngle;
     }
 }

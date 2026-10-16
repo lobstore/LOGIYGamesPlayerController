@@ -70,10 +70,10 @@ Material:
     - _AlphaMode: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DoubleSided: 0
+    - _DoubleSided: 1
     - _GiEqualization: 0.9
     - _M_AlphaToMask: 0
-    - _M_CullMode: 2
+    - _M_CullMode: 0
     - _M_DebugMode: 0
     - _M_DstBlend: 0
     - _M_EditMode: 1
@@ -86,7 +86,7 @@ Material:
     - _RimFresnelPower: 100
     - _RimLift: 0.1
     - _RimLightingMix: 1
-    - _ShadingShiftFactor: 0.24
+    - _ShadingShiftFactor: -0.2
     - _ShadingShiftTexScale: 0
     - _ShadingToonyFactor: 1
     - _TransparentWithZWrite: 0

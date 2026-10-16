@@ -120,7 +120,6 @@ namespace LOGIYGames.Animation
                         if (evt.fallingSpeed > -7)
                         {
                             PlayAnimation(_data.Landing_Light_Forward);
-
                         }
                         else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
                         {
@@ -150,7 +149,6 @@ namespace LOGIYGames.Animation
                         if (evt.fallingSpeed > -7)
                         {
                             PlayAnimation(_data.Landing_Light_Idle);
-
                         }
                         else if (evt.fallingSpeed < -7 && evt.fallingSpeed > -10)
                         {
@@ -173,12 +171,10 @@ namespace LOGIYGames.Animation
                     if (evt.angle > 0)
                     {
                         PlayAnimation(_data.Run_Turn_90R);
-
                     }
                     else
                     {
                         PlayAnimation(_data.Run_Turn_90L);
-
                     }
                 }
                 else
@@ -186,12 +182,10 @@ namespace LOGIYGames.Animation
                     if (evt.angle > 0)
                     {
                         PlayAnimation(_data.Idle_Turn_90R);
-
                     }
                     else
                     {
                         PlayAnimation(_data.Idle_Turn_90L);
-
                     }
                 }
             });
@@ -202,12 +196,10 @@ namespace LOGIYGames.Animation
                     if (evt.angle > 0)
                     {
                         PlayAnimation(_data.Run_BackTurn_Right);
-
                     }
                     else
                     {
                         PlayAnimation(_data.Run_BackTurn_Left);
-
                     }
                 }
                 else if (evt.movementSpeed < GetStateSpeed<RunMovementState>())
@@ -215,12 +207,10 @@ namespace LOGIYGames.Animation
                     if (evt.angle > 0)
                     {
                         PlayAnimation(_data.Walk_BackTurn_Right);
-
                     }
                     else
                     {
                         PlayAnimation(_data.Walk_BackTurn_Left);
-
                     }
                 }
             });
@@ -319,7 +309,6 @@ namespace LOGIYGames.Animation
                         if (evt.Weapon.Data.TwoHandsRequired)
                         {
                             PlayAnimation("Unequip", 3);
-
                         }
                         else
                         {
@@ -339,7 +328,6 @@ namespace LOGIYGames.Animation
                     default:
                         break;
                 }
-
             });
             character.EventBus.Subscribe<ComboAttackEvent>((evt) =>
             {
@@ -357,21 +345,15 @@ namespace LOGIYGames.Animation
             animator.CrossFade(animhash, animationsCrossFadeSpeed, layer);
         }
         Vector2 XYinput;
-        public override void OnUpdate(float deltaTime)
-        {
-            base.OnUpdate(deltaTime);
-            animator.SetBool("IsGrounded", character.IsGrounded);
-        }
         public override void OnFixedUpdate(float deltaTime)
         {
-            base.OnLateUpdate(deltaTime);
-
-            animator.SetFloat("Speed", character.RuntimeMovement.CurrentSpeed, locomotionCrossFadeSpeed, Time.deltaTime);
+            base.OnFixedUpdate(deltaTime);
+            animator.SetBool("IsGrounded", character.IsGrounded);
+            animator.SetFloat("Speed", character.RuntimeMovement.CurrentSpeed, locomotionCrossFadeSpeed, deltaTime);
             if (character.RotationStrategy is CharacterRelativeRotation or InputRelativeRotation)
             {
-
                 animator.SetFloat("HorizontalSpeed", 0);
-                animator.SetFloat("VerticalSpeed", 1, locomotionCrossFadeSpeed, Time.deltaTime);
+                animator.SetFloat("VerticalSpeed", 1, locomotionCrossFadeSpeed, deltaTime);
             }
             else
             {
@@ -379,25 +361,18 @@ namespace LOGIYGames.Animation
                 {
                     XYinput = character.Input.MovementInput;
                 }
-                //var dir = transform.InverseTransformDirection(controller.Velocity);
-                // XYinput = new Vector2(dir.x,dir.z).normalized;
                 var snapped = SnapDirection(XYinput);
-
                 var horizontal = snapped.x;
                 var vertical = snapped.y;
-                animator.SetFloat("VerticalSpeed", vertical, locomotionCrossFadeSpeed, Time.deltaTime);
-                animator.SetFloat("HorizontalSpeed", horizontal, locomotionCrossFadeSpeed, Time.deltaTime);
-
+                animator.SetFloat("VerticalSpeed", vertical, locomotionCrossFadeSpeed, deltaTime);
+                animator.SetFloat("HorizontalSpeed", horizontal, locomotionCrossFadeSpeed, deltaTime);
             }
-
             animator.SetBool("IsMoving", character.Input.MovementInput.magnitude > 0);
-
             animator.SetBool("IsFalling", character.GetMovementState<FallingMovementState>().IsActiveState);
             animator.SetBool("IsFocusing", character.Input.SubAttackPressed);
-            animator.SetFloat("InputX", character.Input.MovementInput.x, locomotionCrossFadeSpeed, Time.deltaTime);
-            animator.SetFloat("InputY", character.Input.MovementInput.y, locomotionCrossFadeSpeed, Time.deltaTime);
-
-            animator.SetFloat("TurnAngle", character.RuntimeMovement.DeltaYaw, rotationAnimationsBlendTime, Time.deltaTime);
+            animator.SetFloat("InputX", character.Input.MovementInput.x, locomotionCrossFadeSpeed, deltaTime);
+            animator.SetFloat("InputY", character.Input.MovementInput.y, locomotionCrossFadeSpeed, deltaTime);
+            animator.SetFloat("TurnAngle", character.RuntimeMovement.DeltaYaw, rotationAnimationsBlendTime, deltaTime);
         }
         private static readonly Vector2[] EightDirections =
         {

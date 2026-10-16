@@ -6,6 +6,7 @@ namespace LOGIYGames
     [RequireComponent(typeof(CharacterController))]
     public class CharacterControllerWrapper : MovementWrapperBase
     {
+        [SerializeField] private CapsuleCollider collider;
         [SerializeField] private CharacterController m_characterController;
         private SensorsModule m_sensors;
 
@@ -44,7 +45,7 @@ namespace LOGIYGames
         [SerializeField] private bool useGravity;
         [SerializeField] bool freeze;
         public bool Freeze { get => freeze; set => freeze = value; }
-        public override Collider Collider => m_characterController;
+        public override Collider Collider => collider;
 
         public override bool IsNoClip
         {
@@ -64,8 +65,8 @@ namespace LOGIYGames
 
         public override float Height
         {
-            get => m_characterController.height;
-            set => m_characterController.height = value;
+            get => collider.height;
+            set => collider.height = value;
         }
 
         public override float SlopeLimit
@@ -76,14 +77,14 @@ namespace LOGIYGames
 
         public override Vector3 Center
         {
-            get => m_characterController.center;
-            set => m_characterController.center = value;
+            get => collider.center;
+            set => collider.center = value;
         }
 
         public override float Radius
         {
-            get => m_characterController.radius;
-            set => m_characterController.radius = value;
+            get => collider.radius;
+            set => collider.radius = value;
         }
 
         public override bool UseGravity

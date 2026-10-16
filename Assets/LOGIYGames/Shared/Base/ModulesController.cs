@@ -23,15 +23,13 @@ namespace LOGIYGames
             foreach (var module in enabledModules)
             {
                 module.OnUpdate(Time.deltaTime);
-
             }
         }
         private void FixedUpdate()
         {
             foreach (var module in enabledModules)
             {
-                module.OnFixedUpdate(Time.deltaTime);
-
+                module.OnFixedUpdate(Time.fixedDeltaTime);
             }
         }
         private void LateUpdate()
@@ -39,7 +37,6 @@ namespace LOGIYGames
             foreach (var module in enabledModules)
             {
                 module.OnLateUpdate(Time.deltaTime);
-
             }
         }
     }

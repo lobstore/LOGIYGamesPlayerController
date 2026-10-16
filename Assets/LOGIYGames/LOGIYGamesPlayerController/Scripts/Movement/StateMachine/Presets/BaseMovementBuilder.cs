@@ -563,9 +563,14 @@ namespace LOGIYGames
                 {
                     return character.GetMovementState<GroundJumpMovementState>().CanEnter();
                 }));
+            character.MovementStateMachine.AddTransition
+                <TurnMovementState, IdleMovementState>(
+                new FuncPredicate(() =>
+                {
+                    return character.GetMovementState<TurnMovementState>().CanExit() &&
+                            character.GetMovementState<IdleMovementState>().CanEnter();
+                }));
             #endregion
-
-
             // =========================================================
             // LADDER
             // =========================================================
@@ -622,7 +627,6 @@ namespace LOGIYGames
                 <WallRunMovementState, IdleMovementState>(
                 new FuncPredicate(() => !character.GetMovementState<WallRunMovementState>().CanEnter()));
             #endregion
-
             // =========================================================
             // Crouch
             // =========================================================
@@ -635,7 +639,6 @@ namespace LOGIYGames
                     return character.GetMovementState<CrouchMovementState>().CanExit();
                 }));
             #endregion
-
             // =========================================================
             // Mounting
             // =========================================================

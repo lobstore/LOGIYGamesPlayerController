@@ -5,9 +5,12 @@ namespace LOGIYGames
 {
     public class FallingController : MonoBehaviour
     {
-        MovementWrapperBase controller;
-        Actor actor;
-        [SerializeField] float acceleration = 3.5f;
+        private MovementWrapperBase controller;
+        private Actor actor;
+
+        [SerializeField] private float acceleration = 3.5f;
+        [SerializeField] private float maxHorizontalSpeed = 8f;
+
         private void Awake()
         {
             controller = GetComponent<MovementWrapperBase>();
@@ -16,16 +19,27 @@ namespace LOGIYGames
 
         public void Glide()
         {
-            if (controller is NavMeshControllerWrapper)
-            {
+            Vector2 input = actor.Input.MovementInput;
+
+            if (input.sqrMagnitude < 0.01f)
                 return;
-            }
-            if (actor.Input.MovementInput.magnitude > 0)
+
+            Vector3 direction = actor.RuntimeMovement.TargetDirection.normalized;
+
+            controller.AddAcceleration(direction * acceleration);
+
+            Vector3 velocity = controller.Velocity; // Подставь свой getter скорости
+            Vector3 horizontalVelocity = new Vector3(velocity.x, 0f, velocity.z);
+
+            if (horizontalVelocity.magnitude > maxHorizontalSpeed)
             {
+                horizontalVelocity = horizontalVelocity.normalized * maxHorizontalSpeed;
 
-                controller.AddAcceleration(actor.RuntimeMovement.TargetDirection * acceleration);
+                velocity.x = horizontalVelocity.x;
+                velocity.z = horizontalVelocity.z;
+
+                controller.ChangeHorizontalVelocity(velocity); // Подставь свой метод установки скорости
             }
-
         }
     }
 }

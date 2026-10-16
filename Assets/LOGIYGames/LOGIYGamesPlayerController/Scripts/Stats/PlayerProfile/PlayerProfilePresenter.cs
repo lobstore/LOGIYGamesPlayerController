@@ -6,26 +6,20 @@ namespace LOGIYGames
 {
     public class PlayerProfilePresenter : IDisposable
     {
-        public readonly ReactiveProperty<string> Name = new();
+        public string Name;
         public Health HealthModel { get; private set; }
         public Stamina StaminaModel { get; private set; }
         PlayerProfileView ProfileView;
-        DisposableBag DisposableBag;
-        public PlayerProfilePresenter(Health health, Stamina stamina, ReactiveProperty<string> name, PlayerProfileView profileView)
+        public PlayerProfilePresenter(Actor actor, PlayerProfileView profileView)
         {
-            HealthModel = health;
-            StaminaModel = stamina;
+            HealthModel = actor.HealthController.Health;
+            StaminaModel = actor.StaminaController.Stamina;
             ProfileView = profileView;
-            DisposableBag.Add(name.Subscribe(value =>
-            {
-                Name.Value = value;
-            }));
             ProfileView.Bind(this);
         }
         public void Dispose()
         {
             ProfileView.Unbind();
-            DisposableBag.Dispose();
         }
     }
 }

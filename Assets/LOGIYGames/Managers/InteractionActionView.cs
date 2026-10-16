@@ -47,7 +47,7 @@ namespace LOGIYGames
                 {
                     action.Execute(context);
                     Hide();
-                    PlayerManager.Instance.PlayerInput.Enable();
+                    PlayerManager.Instance.InputReader.Enable();
                     CameraManager.Instance.CameraInput.Enable();
                     CameraManager.Instance.ResetCameraView();
                 });

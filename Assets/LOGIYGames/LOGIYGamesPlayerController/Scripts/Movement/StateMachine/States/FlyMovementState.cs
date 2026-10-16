@@ -11,7 +11,6 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-            _character.MovementStrategy = new Input360LookMovement(_character);
             _character.GetComponent<MovementWrapperBase>().UseGravity = false;
             _animator.SetBool("IsFlying", true);
         }

@@ -14,6 +14,7 @@ namespace LOGIYGames
         [SerializeField] private float m_belowCheckDistance = 0.8f;
         [SerializeField] private float m_castUpSphereRadius = 0.2f;
         [SerializeField] private float m_castDownSphereRadius = 0.2f;
+        [SerializeField] private float m_legsDistanceCheck = 0.8f;
         [SerializeField] private float m_detectionOriginYOffset = 0f;
         public UnityEvent<bool> GroundedEvent = new();
 
@@ -28,6 +29,7 @@ namespace LOGIYGames
         private string m_legsRightObstacleName;
         private string m_legsLeftObstacleName;
         private string m_legsForwardObstacleName;
+        private string m_legsBehindObstacleName;
         [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color rayColor;
         [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color groundPlaneColor;
         [ShowIf(nameof(m_showDebugInfo))][SerializeField] Color groundedSphereColor;
@@ -61,6 +63,7 @@ namespace LOGIYGames
         private RaycastHit m_legsRightHit;
         private RaycastHit m_aboveHit;
         private RaycastHit m_legsFrontHit;
+        private RaycastHit m_legsBehindHit;
 
         // Public Properties
         public RaycastHit BelowHit => m_belowHit;
@@ -97,6 +100,7 @@ namespace LOGIYGames
             }
         }
         public bool IsObstacleLegsFront { get; private set; }
+        public bool IsObstacleLegsBehind { get; private set; }
         public bool IsObstacleLegsRight { get; private set; }
         public bool IsObstacleLegsLeft { get; private set; }
         /// <summary>
@@ -137,6 +141,7 @@ namespace LOGIYGames
             LegsLeftObstaclesDetection();
             LegsRightObstaclesDetection();
             LegsFrontObstaclesDetection();
+            LegsBehindObstaclesDetection();
             IsGrounded = Physics.SphereCast(
                 DetectionOrigin,
                 m_castDownSphereRadius,
@@ -172,7 +177,17 @@ namespace LOGIYGames
                 DetectionOrigin,
                 transform.forward,
                 out m_legsFrontHit,
-                0.5f,
+                m_legsDistanceCheck,
+                m_includeLayers
+            );
+        }
+        private void LegsBehindObstaclesDetection()
+        {
+            IsObstacleLegsBehind = Physics.Raycast(
+                DetectionOrigin,
+                -transform.forward,
+                out m_legsBehindHit,
+                m_legsDistanceCheck,
                 m_includeLayers
             );
         }
@@ -182,7 +197,7 @@ namespace LOGIYGames
                 DetectionOrigin,
                 transform.right,
                 out m_legsRightHit,
-                0.5f,
+                m_legsDistanceCheck,
                 m_includeLayers
             );
         }
@@ -192,7 +207,7 @@ namespace LOGIYGames
                 DetectionOrigin,
                 -transform.right,
                 out m_legsLeftHit,
-                0.5f,
+                m_legsDistanceCheck,
                 m_includeLayers
             );
         }

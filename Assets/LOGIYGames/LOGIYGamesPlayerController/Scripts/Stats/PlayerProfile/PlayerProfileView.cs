@@ -1,5 +1,6 @@
 using LOGIYGames.CharacterCore;
 using R3;
+using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,9 +14,9 @@ namespace LOGIYGames
         [SerializeField] private Slider staminaFill;
         [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private TextMeshProUGUI characterName;
-        DisposableBag subscriprions;
         Health health;
         Stamina stamina;
+        string Name;
         private void Start()
         {
             healthFill.minValue = 0;
@@ -25,21 +26,16 @@ namespace LOGIYGames
         {
             UpdateHealthBar(health.Current, health.Max);
             UpdateStaminaBar(stamina.Current, stamina.Max);
+            UpdateCharacterName(Name);
         }
         public void Bind(PlayerProfilePresenter presenter)
         {
             health = presenter.HealthModel;
             stamina = presenter.StaminaModel;
-
-            subscriprions.Add(presenter.Name.Subscribe(_val =>
-            {
-                UpdateCharacterName(_val);
-            }));
-            subscriprions.AddTo(this);
+            Name = presenter.Name;
         }
         public void Unbind()
         {
-            subscriprions.Dispose();
         }
         private void UpdateHealthBar(float value, float maxValue)
         {

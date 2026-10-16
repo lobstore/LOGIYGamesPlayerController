@@ -14,17 +14,12 @@ namespace LOGIYGames
 
         public Quaternion GetRotation()
         {
-            if (Ladder.Ladder != null)
-            {
-                Vector3 up = Ladder.Ladder.GetDirection(Ladder.t); // вверх по лестнице
-                Vector3 right = Vector3.Cross(Vector3.forward, up).normalized;
+            Vector3 up = Ladder.GetCurrentDirection(); // вверх по лестнице
+            Vector3 right = Vector3.Cross(Vector3.forward, up).normalized;
 
-                Vector3 forward = Vector3.Cross(up, right).normalized;
+            Vector3 forward = Vector3.Cross(up, right).normalized;
 
-                return Quaternion.LookRotation(forward, up);
-            }
-
-            return Ladder.transform.rotation;
+            return Quaternion.LookRotation(forward, up);
 
         }
     }

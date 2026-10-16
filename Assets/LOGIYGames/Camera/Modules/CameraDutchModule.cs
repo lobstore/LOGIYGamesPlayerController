@@ -16,7 +16,7 @@ namespace LOGIYGames
         private void Start()
         {
             cinemachineCamera = GetComponent<CinemachineCamera>();
-            inputReader = PlayerManager.Instance.PlayerInput;
+            inputReader = PlayerManager.Instance.InputReader;
         }
         void Update()
         {

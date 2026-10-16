@@ -1,3 +1,4 @@
+using Alchemy.Inspector;
 using LOGIYGames.CharacterCore;
 using R3;
 using System;
@@ -6,20 +7,19 @@ using System.Linq;
 using UnityEngine;
 namespace LOGIYGames
 {
-    [Serializable]
-    public sealed class EffectsController
+    public class EffectsController : MonoBehaviour
     {
-        private readonly Actor _owner;
-        [SerializeReference] private List<RuntimeEffect> _effects = new();
+        private Actor _owner;
+        [ReadOnly] [SerializeReference] private List<RuntimeEffect> _effects = new();
         public IReadOnlyList<RuntimeEffect> Effects => _effects;
         [NonSerialized] public Subject<IReadOnlyList<RuntimeEffect>> OnContinuousEffectsChanged = new();
-        public EffectsController(Actor owner)
+        private void Awake ()
         {
-            _owner = owner;
+            _owner = GetComponent<Actor>();
         }
 
 
-        public void Update()
+        private void Update()
         {
             float delta = Time.deltaTime;
 

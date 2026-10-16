@@ -41,8 +41,7 @@ namespace LOGIYGames
         public override bool CanEnter()
         {
             return base.CanEnter()
-                && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle
-                && _character.DefaultMovementStrategy is not StrafeMovement;
+                && Mathf.Abs(_character.RuntimeMovement.DeltaYaw) > TurnData.MinAngle;
         }
     }
 

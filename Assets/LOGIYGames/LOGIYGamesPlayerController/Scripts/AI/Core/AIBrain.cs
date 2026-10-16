@@ -10,7 +10,7 @@ namespace LOGIYGames.AI
 {
     public class AIBrain : MonoModuleBase
     {
-        public AIInputReader InputReader { get; private set; }
+        private ICharacterInputReader InputReader;
         public CharacterInput Input;
         [Header("References")]
 
@@ -95,11 +95,10 @@ namespace LOGIYGames.AI
 
         private void Awake()
         {
-            InputReader = new(this);
+            InputReader = new AIInputReader(this);
             navMeshAgent = GetComponent<NavMeshAgent>();
             Actor = GetComponent<Actor>();
-            Actor.DefaultMovementStrategy = new CharacterForwardMovement(Actor);
-            Actor.DefaultRotationStrategy = new CharacterRelativeRotation(Actor);
+            Actor.SetInput(InputReader);
             Actor.OnDamageTaken.AddListener(agressor => { });
             if (Actor.Motor is not NavMeshControllerWrapper) ConfigureNavMesh();
             InitializeStateMachine();
@@ -127,16 +126,6 @@ namespace LOGIYGames.AI
 
             base.OnUpdate(deltaTime);
             if (m_stateMachine == null) return;
-            if (target!= null )
-            {
-                Actor.DefaultMovementStrategy = new StrafeMovement(Actor);
-                Actor.DefaultRotationStrategy = new TargetLockRotation(Actor);
-            }
-            else
-            {
-                Actor.DefaultMovementStrategy = new CharacterForwardMovement(Actor);
-                Actor.DefaultRotationStrategy = new CharacterRelativeRotation(Actor);
-            }
             Input = new();
             Input.LookForward = transform.forward;
             Input.LookRight = transform.right;
@@ -184,7 +173,7 @@ namespace LOGIYGames.AI
                 Input.MovementInput = Vector2.zero;
             }
             m_stateMachine.Update();
-            Actor.UpdateInput(InputReader.GetInput());
+
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {

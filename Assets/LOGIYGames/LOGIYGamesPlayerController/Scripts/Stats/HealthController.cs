@@ -1,14 +1,12 @@
 using Alchemy.Inspector;
-using System;
-using UnityEditor.iOS.Xcode;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace LOGIYGames.CharacterCore
 {
-    public class HealthController :MonoBehaviour
+    public class HealthController : MonoBehaviour
     {
-        [field:SerializeField] [field: ReadOnly] public Health Health {  get; private set; }
+        [field: SerializeField][field: ReadOnly] public Health Health { get; private set; }
         Stat VITStat;
         Stat HPStat;
         public UnityEvent<float> OnCurrentHealthChanged;
@@ -20,13 +18,16 @@ namespace LOGIYGames.CharacterCore
         {
             Actor = GetComponent<Actor>();
             Health = new();
+        }
+        private void Start()
+        {
             VITStat = Actor.Stats.GetStat(StatType.Vitality);
             HPStat = Actor.Stats.GetStat(StatType.BaseHealth);
             UpdateMaxValue();
             Health.Current = Health.Max;
             OnCurrentHealthChanged.Invoke(Health.Current);
         }
-        private void Update()
+        private void LateUpdate()
         {
             UpdateMaxValue();
         }

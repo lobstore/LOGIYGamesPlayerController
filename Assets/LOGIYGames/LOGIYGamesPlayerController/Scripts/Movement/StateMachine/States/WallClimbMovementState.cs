@@ -5,20 +5,15 @@ namespace LOGIYGames
 {
     public class WallClimbMovementState : MovementStateBase
     {
-        SensorsModule sensorModule;
         ClimbController controller;
         public WallClimbMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
-            sensorModule = ctx.GetComponent<SensorsModule>();
             controller = ctx.GetComponent<ClimbController>();
         }
         public override void Enter()
         {
             base.Enter();
-            _character.MovementStrategy = new WallClimbMovement(sensorModule, _character);
-            _character.RotationStrategy = new WallClimbRotaion(sensorModule);
-            _controller.UseGravity = false;
-            _animator.SetBool("IsWallClimbing", true);
+            controller.Enter();
         }
         public override void PhysicsUpdate()
         {
@@ -28,18 +23,12 @@ namespace LOGIYGames
                 controller.Climb();
 
             }
-            if (!Data.IsAnimationDrivenRotation)
-            {
-                _character.Rotate();
-
-            }
             controller.Magnit();
         }
         public override void Exit()
         {
             base.Exit();
-            _animator.SetBool("IsWallClimbing", false);
-            _controller.UseGravity = true;
+            controller.Exit();
         }
         public override bool CanExit()
         {

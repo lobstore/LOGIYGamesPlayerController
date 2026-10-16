@@ -71,13 +71,13 @@ namespace LOGIYGames
             owner = GetComponent<Actor>();
             OnActionsShown.AddListener((_) =>
             {
-                PlayerManager.Instance.PlayerInput.Disable();
+                PlayerManager.Instance.InputReader.Disable();
                 CameraManager.Instance.CameraInput.Disable();
                 CameraManager.Instance.SetLookAtTo(CurrentInteractable as Transform);
             });
             OnActionsHidden.AddListener(() =>
             {
-                PlayerManager.Instance.PlayerInput.Enable();
+                PlayerManager.Instance.InputReader.Enable();
                 CameraManager.Instance.CameraInput.Enable();
                 CameraManager.Instance.ResetCameraView();
             });

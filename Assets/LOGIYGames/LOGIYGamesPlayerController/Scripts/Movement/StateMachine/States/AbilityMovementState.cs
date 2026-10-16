@@ -14,8 +14,6 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            _character.MovementStrategy = new NoneMovement();
-            _character.RotationStrategy = new NoneRotation(_character);
             // abilityController.BeginAbility();
         }
         public override void Exit()

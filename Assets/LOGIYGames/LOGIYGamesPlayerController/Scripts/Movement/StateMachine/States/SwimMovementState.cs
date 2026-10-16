@@ -14,8 +14,6 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-            _character.RotationStrategy = new ToMovementDirectionRotation(_character);
-            _character.MovementStrategy = new Input360LookMovement(_character);
             _character.GetComponent<MovementWrapperBase>().UseGravity = false;
         }
         public override void Exit()

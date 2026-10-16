@@ -50,7 +50,6 @@ namespace LOGIYGames.Movement
         public virtual void Exit()
         {
             IsActiveState = false;
-            _character.ResetStrategies();
             if (Data.ResetVelocityOnExit)
             {
                 _controller.ResetVelocity();

@@ -1,38 +1,42 @@
 using LOGIYGames.Timers;
 using R3;
 using UnityEngine;
+using UnityEngine.Events;
 namespace LOGIYGames.CharacterCore
 {
-    public class StaminaController
+    public class StaminaController : MonoBehaviour
     {
         public Stamina Stamina { get; private set; }
         CountdownTimer _regenDelayTimer;
+        [SerializeField] float delayBeforeRegen;
         Stat VITStat;
-        public Stat MPStat { get; private set; }
-        public Subject<float> StaminaUsed = new();
-        public Subject<float> StaminaRestored = new();
-        public Subject<Unit> Exhausted = new();
-        public StaminaController(StatsController stats, float delayBeforeRegen = 0)
+        public Stat SPStat { get; private set; }
+        public UnityEvent<float> StaminaUsed = new();
+        public UnityEvent<float> StaminaRestored = new();
+        public UnityEvent Exhausted = new();
+        Actor Actor;
+        private void Awake()
         {
+            Actor = GetComponent<Actor>();
             Stamina = new Stamina();
-            MPStat = stats.GetStat(StatType.BaseStamina);
-            VITStat = stats.GetStat(StatType.Vitality);
-  
             _regenDelayTimer = new(delayBeforeRegen);
-            StaminaUsed.Subscribe((_) =>
+            StaminaUsed.AddListener((_) =>
             {
                 _regenDelayTimer.Start();
             });
-
+        }
+        private void Start()
+        {
+            SPStat = Actor.Stats.GetStat(StatType.BaseStamina);
+            VITStat = Actor.Stats.GetStat(StatType.Vitality);
             Stamina.Current = Stamina.Max;
             UpdateMaxValue();
         }
-
         private void UpdateMaxValue()
         {
-            Stamina.Max = MPStat.Value + (VITStat.Value * MPStat.Value * 0.01f);
+            Stamina.Max = SPStat.Value + (VITStat.Value * SPStat.Value * 0.01f);
         }
-        public void Tick()
+        private void Update()
         {
             var m_regenAmount = VITStat.Value / 10f + 1;
             if (CanRegenerate())
@@ -56,13 +60,13 @@ namespace LOGIYGames.CharacterCore
         {
             if (!CanUse(amount))
             {
-                Exhausted.OnNext(Unit.Default);
+                Exhausted.Invoke();
                 return false;
             }
 
             Stamina.Current -= amount;
 
-            StaminaUsed.OnNext(amount);
+            StaminaUsed.Invoke(amount);
 
             return true;
         }
@@ -77,7 +81,7 @@ namespace LOGIYGames.CharacterCore
 
             if (restored > 0)
             {
-                StaminaRestored.OnNext(restored);
+                StaminaRestored.Invoke(restored);
             }
         }
     }

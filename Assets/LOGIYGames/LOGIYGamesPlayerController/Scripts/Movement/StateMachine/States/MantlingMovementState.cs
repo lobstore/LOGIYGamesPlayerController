@@ -20,8 +20,6 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-            _character.RotationStrategy = new NoneRotation(_character);
-            _character.MovementStrategy = new NoneMovement();
             _controller.UseGravity = false;
             _controller.IsNoClip = true;
             MantlingController.BeginMantling();

@@ -11,28 +11,22 @@ namespace LOGIYGames.CharacterCore
 {
     public partial class Actor : MonoModuleBase, IControllable, IDamageable
     {
-        public UnityEvent<IDamageable> OnDamageTaken = new();
-        public CharacterInput Input { get; private set; }
-        public IMovementStrategy MovementStrategy { get; set; }
-        public IRotationStrategy RotationStrategy { get; set; }
-        public IRotationStrategy DefaultRotationStrategy { get; set; }
-        public IMovementStrategy DefaultMovementStrategy { get; set; }
-
-        public IEventDispatcher EventBus { get; private set; } = new EventDispatcher();
-
+        [SerializeReference][ReadOnly] ICharacterInputReader InputReader;
+        [field:SerializeField] [field: ReadOnly] public CharacterInput Input { get; private set; }
+        [field: SerializeReference][field: ReadOnly] public IMovementStrategy MovementStrategy { get; set; }
+        [field: SerializeReference][field: ReadOnly] public IRotationStrategy RotationStrategy { get; set; }
+        [field: SerializeReference][field: ReadOnly] public IEventDispatcher EventBus { get; private set; } = new EventDispatcher();
         [field: SerializeField] public CameraTarget CameraTarget { get; private set; }
-        [field: SerializeField] public CameraTarget ActionCameraTarget { get; private set; }
-        [field: SerializeField] public MovementWrapperBase Motor { get; private set; }
-        [field: SerializeField] public SensorsModule Sensors { get; private set; }
         [ReadOnly] public MovementData RuntimeMovement;
 
-
         #region Modules
-        [ReadOnly] public EffectsController Effects;
+        public MovementWrapperBase Motor { get; private set; }
+        public SensorsModule Sensors { get; private set; }
+        public EffectsController Effects { get; private set; }
         public HealthController HealthController {  get; private set; }
-        public StatsController Stats;
-        public TargetingController TargetingController;
         public StaminaController StaminaController { get; private set; }
+        public StatsController Stats {  get; private set; }
+        public TargetingController TargetingController;
         #endregion
 
         [Header("State Machine Configuration")]
@@ -40,18 +34,15 @@ namespace LOGIYGames.CharacterCore
         public MovementBuilder movementPreset;
         private Dictionary<Type, MovementStateBase> m_movementStates = new();
         public bool IsGrounded { get => Sensors.IsGrounded; }
-
         private void Awake()
         {
-            //Stats = new();
-            //Stats.SetBase(StatType.BaseHealth, 100);
-
             Motor = GetComponent<MovementWrapperBase>();
             Sensors = GetComponent<SensorsModule>();
             HealthController = this.GetOrAddComponent<HealthController>();
-            StaminaController = new StaminaController(Stats, 1);
+            StaminaController = this.GetOrAddComponent<StaminaController>();
+            Effects = this.GetOrAddComponent<EffectsController>();
+            Stats = this.GetOrAddComponent<StatsController>();
             InitializeStateMachine();
-            Effects = new(this);
         }
         public override void OnFixedUpdate(float fixedDeltaTime)
         {
@@ -67,6 +58,7 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
+            Input = InputReader.GetInput();
             if (MovementStrategy != null)
             {
                 RuntimeMovement.TargetDirection = MovementStrategy.GetMovementDirection();
@@ -79,8 +71,6 @@ namespace LOGIYGames.CharacterCore
             UpdateSpeed();
             CalculateDeltaYaw();
             MovementStateMachine.Update();
-            StaminaController.Tick();
-            Effects.Update();
         }
 
         #region Rotation Methods
@@ -127,7 +117,7 @@ namespace LOGIYGames.CharacterCore
         #endregion
         private void UpdateSpeed()
         {
-            if (RuntimeMovement.CurrentSpeed < RuntimeMovement.TargetSpeed )
+            if (RuntimeMovement.CurrentSpeed < RuntimeMovement.TargetSpeed && Input.MovementInput.magnitude>0)
             {
 
                 RuntimeMovement.CurrentSpeed = Mathf.MoveTowards(RuntimeMovement.CurrentSpeed, RuntimeMovement.TargetSpeed, RuntimeMovement.Acceleration * Time.deltaTime);
@@ -186,35 +176,27 @@ namespace LOGIYGames.CharacterCore
         }
         #endregion
         #region IControllable
-        public void UpdateInput(CharacterInput inputReader)
+        public void SetInput(ICharacterInputReader inputReader)
         {
-            Input = inputReader;
+            InputReader = inputReader;
         }
         public void ResetInput()
         {
             Input = new CharacterInput();
         }
-        public void ResetStrategies()
-        {
-            RotationStrategy = DefaultRotationStrategy;
-            MovementStrategy = DefaultMovementStrategy;
-        }
 
         #endregion
-
-
-
         public Direction GetRelativeMovementDirection()
         {
             Vector3 localDir;
-            if (RuntimeMovement.TargetDirection.magnitude > 0)
-            {
-                localDir = Motor.transform.InverseTransformDirection(RuntimeMovement.TargetDirection);
-            }
-            else
-            {
+            //if (RuntimeMovement.TargetDirection.magnitude > 0)
+            //{
+            //    localDir = Motor.transform.InverseTransformDirection(RuntimeMovement.TargetDirection);
+            //}
+            //else
+            //{
                 localDir = Motor.transform.InverseTransformDirection(Motor.Velocity);
-            }
+            //}
             float forwardDot = Vector3.Dot(localDir, Vector3.forward);
             float rightDot = Vector3.Dot(localDir, Vector3.right);
             float upDot = Vector3.Dot(localDir, Vector3.up);
@@ -240,7 +222,6 @@ namespace LOGIYGames.CharacterCore
 
             return direction;
         }
-
         public Direction GetInputRelativeDirection()
         {
             Direction direction;
@@ -284,6 +265,7 @@ namespace LOGIYGames.CharacterCore
             OnDamageTaken.Invoke(damage.From);
             HealthController.TakeDamage(damage);
         }
+        public UnityEvent<IDamageable> OnDamageTaken = new();
         #endregion
     }
 }

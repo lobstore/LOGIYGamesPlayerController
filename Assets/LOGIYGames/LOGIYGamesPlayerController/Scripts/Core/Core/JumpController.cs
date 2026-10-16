@@ -35,7 +35,15 @@ namespace LOGIYGames.CharacterCore
             switch (jumpType)
             {
                 case JumpType.GroundJump:
+                    if (Character.Input.MovementInput.magnitude >0)
+                    {
                     Motor.AddImpulse(Character.RuntimeMovement.TargetDirection * planarForce + Character.transform.up * verticalForce);
+
+                    }
+                    else
+                    {
+                        Motor.AddImpulse(Character.transform.up * verticalForce);
+                    }
                     break;
                 case JumpType.HangJump:
                     Motor.AddImpulse(Character.Sensors.LegsFrontHit.normal * planarForce + verticalForce * Character.transform.up);

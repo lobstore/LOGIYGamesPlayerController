@@ -9,15 +9,11 @@ namespace LOGIYGames
     public class SlipJumpMovementState : TimedMovementState
     {
         private JumpStateData _jumpStateData;
-        protected float StandingHeight;
-        protected float CrouchHeight;
         JumpController controller;
         public SlipJumpMovementState(Actor ctx, JumpStateData stateData) : base(ctx, stateData)
         {
             _jumpStateData = stateData;
             controller = ctx.GetComponent<JumpController>();
-            StandingHeight = _controller.Height;
-            CrouchHeight = StandingHeight * 0.5f;
         }
         public override void Enter()
         {
@@ -44,16 +40,6 @@ namespace LOGIYGames
                 direction = _character.GetInputRelativeDirection()
             });
             controller.Jump(jumpType, verticalForce, planarForce);
-        }
-        public override void Exit()
-        {
-            base.Exit();
-            _controller.Height = StandingHeight;
-        }
-        public override void PhysicsUpdate()
-        {
-            base.PhysicsUpdate();
-            _controller.Height = Mathf.MoveTowards(_controller.Height, CrouchHeight, Time.fixedDeltaTime);
         }
         public override bool CanEnter()
         {

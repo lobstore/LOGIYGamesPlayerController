@@ -12,8 +12,6 @@ public class ComboMovementState : MovementStateBase
     public override void Enter()
     {
         base.Enter();
-        _character.MovementStrategy = new NoneMovement();
-        _character.RotationStrategy = new NoneRotation(_character);
 
         combo.BeginCombo();
         _character.ResetInput();

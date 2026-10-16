@@ -26,7 +26,7 @@ namespace LOGIYGames
                     else
                     {
                         CameraManager.Instance.CameraInput.Enable();
-                        PlayerManager.Instance.PlayerInput.Enable();
+                        PlayerManager.Instance.InputReader.Enable();
                         Cursor.lockState = CursorLockMode.Locked;
                     }
                 }

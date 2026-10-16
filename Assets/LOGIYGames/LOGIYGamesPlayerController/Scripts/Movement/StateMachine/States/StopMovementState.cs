@@ -21,8 +21,7 @@ public class StopMovementState : TimedMovementState
     {
         return base.CanEnter() 
             && _character.Input.MovementInput.magnitude == 0 
-            && _character.RuntimeMovement.CurrentSpeed > 0.1
-            && _character.DefaultMovementStrategy is not StrafeMovement;
+            && _character.RuntimeMovement.CurrentSpeed > 0.1;
     }
 }
 
