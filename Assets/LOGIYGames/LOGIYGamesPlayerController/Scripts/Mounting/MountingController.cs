@@ -3,14 +3,13 @@ using LOGIYGames.Animation;
 using LOGIYGames.CharacterCore;
 using RealStep;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class MountingController : MonoBehaviour
 {
     Actor actor;
     private GameObject Current;
     private GameObject Target;
-    public bool ExitRequested {  get; private set; }
+    public bool ExitRequested { get; private set; }
     public bool IsMounted => Current != null;
     private void Awake()
     {
@@ -36,10 +35,10 @@ public class MountingController : MonoBehaviour
     public void Mount()
     {
         Current = Target;
-        Current.GetComponent<PlayerInput>().enabled = true;
-        CameraManager.Instance.CameraInput.Disable();
-        CameraManager.Instance.DisableAllCameras();
-        PlayerManager.Instance.InputReader.DisableMovement();
+        //Current.GetComponent<PlayerInput>().enabled = true;
+        //CameraManager.Instance.CameraInput.Disable();
+        //CameraManager.Instance.DisableAllCameras();
+        //PlayerManager.Instance.InputReader.DisableMovement();
         GetComponent<FootIK>().enabled = false;
         GetComponent<MovementWrapperBase>().IsNoClip = true;
         GetComponent<Animator>().SetBool("IsDriving", true);
@@ -51,7 +50,7 @@ public class MountingController : MonoBehaviour
     public void Dismount()
     {
         Current.GetComponent<Mountable>().Dismount();
-        Current.GetComponent<PlayerInput>().enabled = false;
+        //Current.GetComponent<PlayerInput>().enabled = false;
         GetComponent<FootIK>().enabled = true;
         GetComponent<MovementWrapperBase>().IsNoClip = false;
         GetComponent<Animator>().SetBool("IsDriving", false);
@@ -61,9 +60,9 @@ public class MountingController : MonoBehaviour
         Current = null;
         Target = null;
         ExitRequested = false;
-        PlayerManager.Instance.InputReader.EnableMovement();
-        CameraManager.Instance.CameraInput.Enable();
-        CameraManager.Instance.EnableAllCameras();
+        // PlayerManager.Instance.InputReader.EnableMovement();
+        // CameraManager.Instance.CameraInput.Enable();
+        //CameraManager.Instance.EnableAllCameras();
     }
 
     private void OnTriggerStay(Collider other)

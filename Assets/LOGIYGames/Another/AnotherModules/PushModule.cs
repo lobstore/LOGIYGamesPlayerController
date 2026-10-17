@@ -25,7 +25,7 @@ namespace LOGIYGames
             // we only push objects to the sides never up and down
             Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
 
-            // If you know how fast your character is trying to move,
+            // If you know how fast your actor is trying to move,
             // then you can also multiply the push velocity by that.
 
             // Apply the push

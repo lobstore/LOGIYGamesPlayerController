@@ -60,14 +60,14 @@ namespace LOGIYGames
 
         public void EnableIK()
         {
-            _leftTargetWeight = 1f;
-            _rightTargetWeight = 1f;
+            EnableLHandIK();
+            EnableRHandIK();
         }
 
         public void DisableIK()
         {
-            _leftTargetWeight = 0f;
-            _rightTargetWeight = 0f;
+            DisableLHandIK();
+            DisableRHandIK();
         }
 
         public void EnableLHandIK() => _leftTargetWeight = 1f;
@@ -76,22 +76,15 @@ namespace LOGIYGames
         public void EnableRHandIK() => _rightTargetWeight = 1f;
         public void DisableRHandIK() => _rightTargetWeight = 0f;
 
-        private void SetTarget(
-            Transform target,
-            Vector3 point,
-            Vector3 normal,
-            Vector3 rotationOffset)
+        private void SetTarget(Transform target, Vector3 point, Vector3 normal, Vector3 rotationOffset)
         {
-            if (target == null || normal.sqrMagnitude < 0.0001f)
+            if (target == null)
                 return;
 
             normal.Normalize();
 
             Vector3 forward =
                 Vector3.Cross(normal, -transform.forward);
-
-            if (forward.sqrMagnitude < 0.0001f)
-                return;
 
             forward.Normalize();
 

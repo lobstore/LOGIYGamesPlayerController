@@ -21,7 +21,7 @@ namespace LOGIYGames
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            ladderMovementController.Tick();
+            ladderMovementController.Climb();
         }
         public override void Exit()
         {

@@ -14,7 +14,7 @@ namespace LOGIYGames
 
         public Quaternion GetRotation()
         {
-            Vector3 up = Ladder.GetCurrentDirection(); // вверх по лестнице
+            Vector3 up = Vector3.up; // вверх по лестнице
             Vector3 right = Vector3.Cross(Vector3.forward, up).normalized;
 
             Vector3 forward = Vector3.Cross(up, right).normalized;

@@ -15,7 +15,7 @@ namespace LOGIYGames
 
         public Vector3 GetMovementDirection()
         {
-            return Ladder.GetCurrentPosition() - Character.transform.position;
+            return Character.transform.position;
         }
     }
 }

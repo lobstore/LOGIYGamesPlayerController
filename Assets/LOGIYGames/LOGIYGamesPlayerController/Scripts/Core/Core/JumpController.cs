@@ -1,6 +1,8 @@
 using Alchemy.Inspector;
+using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 namespace LOGIYGames.CharacterCore
 {
     public class JumpController : MonoBehaviour
@@ -70,6 +72,13 @@ namespace LOGIYGames.CharacterCore
                     break;
 
             }
+            Character.EventBus.Publish(new JumpPerformedEvent
+            {
+                jumpType = jumpType,
+                planarForce = planarForce,
+                verticalForce = verticalForce,
+                direction = Character.GetInputRelativeDirection()
+            });
             JumpCount++;
         }
         public void Tick()

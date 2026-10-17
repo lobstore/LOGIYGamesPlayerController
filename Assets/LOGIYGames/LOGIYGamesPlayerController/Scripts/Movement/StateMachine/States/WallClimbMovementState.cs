@@ -5,10 +5,10 @@ namespace LOGIYGames
 {
     public class WallClimbMovementState : MovementStateBase
     {
-        ClimbController controller;
+        WallClimbController controller;
         public WallClimbMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
-            controller = ctx.GetComponent<ClimbController>();
+            controller = ctx.GetComponent<WallClimbController>();
         }
         public override void Enter()
         {

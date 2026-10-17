@@ -270,7 +270,7 @@ namespace CommandTerminal
             command_text = GUILayout.TextField(command_text, input_style);
 
             if (input_fix && command_text.Length > 0) {
-                command_text = cached_command_text; // Otherwise the TextField picks up the ToggleHotkey character event
+                command_text = cached_command_text; // Otherwise the TextField picks up the ToggleHotkey actor event
                 input_fix = false;                  // Prevents checking string Length every draw call
             }
 

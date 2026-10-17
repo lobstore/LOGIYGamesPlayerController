@@ -17,7 +17,6 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
-
             float verticalForce;
             float planarForce;
             JumpType jumpType = JumpType.GroundJump;
@@ -31,20 +30,7 @@ namespace LOGIYGames.Movement
                 verticalForce = 0;
                 planarForce = 0;
             }
-            _character.EventBus.Publish(new JumpPerformedEvent
-            {
-                jumpType = jumpType,
-                planarForce = planarForce,
-                verticalForce = verticalForce,
-                direction = _character.GetInputRelativeDirection()
-            });
             controller.Jump(jumpType,verticalForce,planarForce);
-
-        }
-        public override void PhysicsUpdate()
-        {
-            base.PhysicsUpdate();
-            _character.Rotate();
         }
         public override bool CanEnter()
         {

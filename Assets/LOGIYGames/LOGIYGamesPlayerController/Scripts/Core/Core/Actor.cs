@@ -12,7 +12,7 @@ namespace LOGIYGames.CharacterCore
     public partial class Actor : MonoModuleBase, IControllable, IDamageable
     {
         [SerializeReference][ReadOnly] ICharacterInputReader InputReader;
-        [field:SerializeField] [field: ReadOnly] public CharacterInput Input { get; private set; }
+        [field: SerializeField][field: ReadOnly] public CharacterInput Input { get; private set; }
         [field: SerializeReference][field: ReadOnly] public IMovementStrategy MovementStrategy { get; set; }
         [field: SerializeReference][field: ReadOnly] public IRotationStrategy RotationStrategy { get; set; }
         [field: SerializeReference][field: ReadOnly] public IEventDispatcher EventBus { get; private set; } = new EventDispatcher();
@@ -23,9 +23,9 @@ namespace LOGIYGames.CharacterCore
         public MovementWrapperBase Motor { get; private set; }
         public SensorsModule Sensors { get; private set; }
         public EffectsController Effects { get; private set; }
-        public HealthController HealthController {  get; private set; }
+        public HealthController HealthController { get; private set; }
         public StaminaController StaminaController { get; private set; }
-        public StatsController Stats {  get; private set; }
+        public StatsController Stats { get; private set; }
         public TargetingController TargetingController;
         #endregion
 
@@ -58,7 +58,10 @@ namespace LOGIYGames.CharacterCore
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            Input = InputReader.GetInput();
+            if (InputReader != null)
+            {
+                Input = InputReader.GetInput();
+            }
             if (MovementStrategy != null)
             {
                 RuntimeMovement.TargetDirection = MovementStrategy.GetMovementDirection();
@@ -86,7 +89,7 @@ namespace LOGIYGames.CharacterCore
         }
         public void Rotate(Quaternion targetRotation, float turnSpeed = 0)
         {
-            
+
             if (turnSpeed > 0f && RotationStrategy is not MousePlanarRotation)
             {
                 Quaternion smoothedRotation = Quaternion.Slerp(Motor.Rotation, targetRotation, turnSpeed * Time.deltaTime);
@@ -117,7 +120,7 @@ namespace LOGIYGames.CharacterCore
         #endregion
         private void UpdateSpeed()
         {
-            if (RuntimeMovement.CurrentSpeed < RuntimeMovement.TargetSpeed && Input.MovementInput.magnitude>0)
+            if (RuntimeMovement.CurrentSpeed < RuntimeMovement.TargetSpeed && Input.MovementInput.magnitude > 0)
             {
 
                 RuntimeMovement.CurrentSpeed = Mathf.MoveTowards(RuntimeMovement.CurrentSpeed, RuntimeMovement.TargetSpeed, RuntimeMovement.Acceleration * Time.deltaTime);
@@ -195,7 +198,7 @@ namespace LOGIYGames.CharacterCore
             //}
             //else
             //{
-                localDir = Motor.transform.InverseTransformDirection(Motor.Velocity);
+            localDir = Motor.transform.InverseTransformDirection(Motor.Velocity);
             //}
             float forwardDot = Vector3.Dot(localDir, Vector3.forward);
             float rightDot = Vector3.Dot(localDir, Vector3.right);

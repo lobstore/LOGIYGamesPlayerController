@@ -70,7 +70,7 @@ namespace LOGIYGames
             m_rigidbody = GetComponent<Rigidbody>();
             m_sensors = GetComponent<SensorsModule>();
 
-            // Configure Rigidbody for character controller
+            // Configure Rigidbody for actor controller
             m_rigidbody.freezeRotation = true;
             m_rigidbody.interpolation = RigidbodyInterpolation.None;
             m_rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;

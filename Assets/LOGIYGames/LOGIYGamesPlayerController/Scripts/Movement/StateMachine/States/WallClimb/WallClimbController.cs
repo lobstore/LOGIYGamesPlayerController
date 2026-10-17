@@ -5,18 +5,16 @@ using UnityEngine;
 
 namespace LOGIYGames
 {
-    public class ClimbController : MonoBehaviour
+    public class WallClimbController : MonoBehaviour
     {
         [SerializeField] float baseSpeed = 3.5f;
         [SerializeField] float inertia;
         MovementWrapperBase controller;
         Actor actor;
-        SensorsModule sensorModule;
         Vector3 dir;
         [SerializeField] LayerMask include;
         private void Awake()
         {
-            sensorModule = GetComponent<SensorsModule>();
             controller = GetComponent<MovementWrapperBase>();
             actor = GetComponent<Actor>();
         }
@@ -32,8 +30,8 @@ namespace LOGIYGames
         }
         public void Magnit()
         {
-            controller.AddAcceleration(-sensorModule.LegsFrontHit.normal * 10);
-            actor.RotateToDirection(-sensorModule.LegsFrontHit.normal);
+            controller.AddAcceleration(-actor.Sensors.LegsFrontHit.normal * 10);
+            actor.RotateToDirection(-actor.Sensors.LegsFrontHit.normal);
         }
 
         public void Climb()
@@ -51,7 +49,7 @@ namespace LOGIYGames
                     targetDir,
                     Time.deltaTime * inertia
                 );
-                dir= Vector3.ProjectOnPlane(dir, sensorModule.LegsFrontHit.normal);
+                dir= Vector3.ProjectOnPlane(dir, actor.Sensors.LegsFrontHit.normal);
             }
             else
             {

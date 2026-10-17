@@ -1,68 +1,91 @@
+using LOGIYGames.Shared.Extensions;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
     public class LadderClimbController : MonoBehaviour
     {
-        Actor character;
+        Actor actor;
         MovementWrapperBase controller;
-        public Ladder Ladder { get; private set; }
-        float t;
-        float distanceTravelled;
+        private GameObject LDR;
+
+        public bool IsInTrigger { get; private set; }
+
+        [SerializeField] LayerMask include;
+        Vector3 dir;
+        [SerializeField] float baseSpeed = 3.5f;
+        [SerializeField] float inertia;
         private void Awake()
         {
-            character = GetComponent<Actor>();
+            actor = GetComponent<Actor>();
             controller = GetComponent<MovementWrapperBase>();
+
         }
         public void Enter()
         {
-            distanceTravelled = 0.01f;
+            controller.SetPosition(new Vector3(LDR.transform.position.x, controller.transform.position.y, LDR.transform.position.z));
             controller.UseGravity = false;
         }
-        private void OnTriggerEnter(Collider other)
+        public void Climb()
         {
-            if (other.TryGetComponent(out Ladder ladder))
+            Vector2 input = actor.Input.MovementInput;
+
+            if (input.sqrMagnitude > 0.001f)
             {
-                Ladder = ladder;
+                Vector3 targetDir = controller.Collider.transform.up * input.y;
+
+                dir = Vector3.Lerp(
+                    dir,
+                    targetDir,
+                    Time.deltaTime * inertia
+                );
+                //dir = Vector3.ProjectOnPlane(dir, actor.Sensors.LegsFrontHit.normal);
+            }
+            else
+            {
+                dir = controller.Velocity.normalized;
+            }
+
+            Vector3 velocity = dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed;
+
+            controller.ChangeHorizontalVelocity(velocity);
+            controller.ChangeVerticalVelocity(velocity.y);
+            Rotate();
+        }
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.gameObject.IsLayerInMask(include))
+            {
+                IsInTrigger = true;
+                LDR = other.gameObject;
+            }
+            else
+            {
+                IsInTrigger = false;
             }
         }
-
         private void OnTriggerExit(Collider other)
         {
-            if (other.TryGetComponent(out Ladder ladder))
-            {
-                if (Ladder == ladder)
-                    Exit();
-            }
-        }
-        public Vector3 GetCurrentPosition()
-        {
-            return Ladder.GetPosition(t);
-        }
-        public Vector3 GetCurrentDirection()
-        {
-            return Ladder.GetDirection(t);
-        }
-        public void Tick()
-        {
-            distanceTravelled += character.RuntimeMovement.TargetSpeed * character.Input.MovementInput.y * Time.deltaTime;
-            t = distanceTravelled / Ladder.Lenght;
-            t = Mathf.Clamp01(t);
-            Vector3 pos = GetCurrentPosition();
-
-            character.transform.position = pos;
+            IsInTrigger = false;
+            LDR = null;
         }
         public void Exit()
         {
-            Ladder = null;
             controller.UseGravity = true;
         }
         public bool CanExit()
         {
-            return (t <= 0f || t >= 1f) || Ladder == null;
+            return actor.Input.InteractPressed ||
+                     !IsInTrigger;
         }
         public bool CanEnter()
         {
-            return Ladder != null && character.Input.InteractPressed;
+            return IsInTrigger && actor.Input.InteractPressed;
+        }
+        void Rotate()
+        {
+
+            //controller.AddAcceleration(-actor.Sensors.LegsFrontHit.normal * 10);
+            actor.RotateToDirection(LDR.transform.forward);
         }
     }
 }

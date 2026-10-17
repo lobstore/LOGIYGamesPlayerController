@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LOGIYGames
 {
 
     public class Mountable : MonoBehaviour
     {
+        public UnityEvent OnMounted =new();
+
         [Header("Mount")]
         [SerializeField] private Transform mountPoint;
         [SerializeField] private Transform dismountPoint;
@@ -30,14 +33,16 @@ namespace LOGIYGames
             );
 
             objectToMount.localPosition = Vector3.zero;
+            objectToMount.localScale = Vector3.one;
 
             SetupSteeringWheelIK(objectToMount);
+            OnMounted.Invoke();
         }
 
         public void Dismount()
         {
-            if (mountedObject == null || dismountPoint == null)
-                return;
+            //if (mountedObject == null || dismountPoint == null)
+            //    return;
 
             DisableSteeringWheelIK();
 
@@ -96,7 +101,6 @@ namespace LOGIYGames
 
             if (leftHandGrip == null || rightHandGrip == null)
                 return;
-
             handsIK.LeftHandPoint = leftHandGrip.position;
             handsIK.RightHandPoint = rightHandGrip.position;
 

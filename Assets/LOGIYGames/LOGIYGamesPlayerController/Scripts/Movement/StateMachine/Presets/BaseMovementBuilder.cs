@@ -68,6 +68,8 @@ namespace LOGIYGames
                 new FuncPredicate(() => character.GetMovementState<SwimMovementState>().CanEnter()));
             character.MovementStateMachine.AddAnyTransition<MountingMovementState>(
                 new FuncPredicate(() => character.GetMovementState<MountingMovementState>().CanEnter()));
+            character.MovementStateMachine.AddAnyTransition<LadderMovementState>(
+                new FuncPredicate(() => character.GetMovementState<LadderMovementState>().CanEnter()));
             character.MovementStateMachine.AddAnyTransition<FlyMovementState>(
                 new FuncPredicate(() => character.GetMovementState<FlyMovementState>().CanEnter()));
 
@@ -99,7 +101,7 @@ namespace LOGIYGames
                     return character.GetMovementState<CrouchMovementState>().CanEnter();
                 }));
 
-            //character.MovementStateMachine.AddTransition
+            //actor.MovementStateMachine.AddTransition
             //    <IdleMovementState, WalkMovementState>(
             //    new FuncPredicate(() => Input.GetKeyDown(KeyCode.Z)));
 
@@ -575,11 +577,6 @@ namespace LOGIYGames
             // LADDER
             // =========================================================
             #region LadderState Transitions
-
-            character.MovementStateMachine.AddTransition
-                <IdleMovementState, LadderMovementState>(
-                new FuncPredicate(() => character.GetMovementState<LadderMovementState>().CanEnter()));
-
             character.MovementStateMachine.AddTransition
                 <LadderMovementState, IdleMovementState>(
                 new FuncPredicate(() =>

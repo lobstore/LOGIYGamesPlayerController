@@ -518,7 +518,6 @@ GameObject:
   - component: {fileID: 3120071890074617233}
   - component: {fileID: 3471656661120506481}
   - component: {fileID: 8571873929838690286}
-  - component: {fileID: 3908075250044683421}
   - component: {fileID: 2379149554327104188}
   - component: {fileID: 8885245861654570547}
   - component: {fileID: 2302464141872781061}
@@ -531,6 +530,7 @@ GameObject:
   - component: {fileID: 8386607019983488391}
   - component: {fileID: 5092786301432646561}
   - component: {fileID: 6982139331576512220}
+  - component: {fileID: 2718015185571247645}
   m_Layer: 12
   m_Name: Character
   m_TagString: Character
@@ -656,7 +656,7 @@ MonoBehaviour:
       m_Calls: []
   m_includeLayers:
     serializedVersion: 2
-    m_Bits: 593
+    m_Bits: 16977
   m_groundLayers:
     serializedVersion: 2
     m_Bits: 65
@@ -832,6 +832,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a44987964670a44b26a048f717f108, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.CharacterCore.LadderClimbController
+  include:
+    serializedVersion: 2
+    m_Bits: 16384
+  baseSpeed: 3.5
+  inertia: 10
 --- !u!114 &5416445008551645531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -970,23 +975,6 @@ MonoBehaviour:
   groundDamping: 0
   useGravity: 1
   freeze: 0
---- !u!114 &3908075250044683421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427882813280634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b289e6ab77daaf4a9320ef820d0e86f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.ClimbController
-  baseSpeed: 1
-  inertia: 10
-  include:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!114 &2379149554327104188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1233,6 +1221,23 @@ MonoBehaviour:
     value:
       BaseValue: 100
       _modifiers: []
+--- !u!114 &2718015185571247645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427882813280634629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6789b6016c2074e881b260d6e18986, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LOGIYGames.WallClimbController
+  baseSpeed: 3.5
+  inertia: 10
+  include:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!1 &429161026492987245
 GameObject:
   m_ObjectHideFlags: 0
