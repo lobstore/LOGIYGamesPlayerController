@@ -13,11 +13,9 @@ namespace LOGIYGames.CharacterCore
         [SerializeField] UnityEvent OnRHandAttack = new();
         [SerializeField] UnityEvent OnLHandAttack = new();
         private Animator animator;
-        private Actor character;
 
         private void Awake()
         {
-            character = GetComponent<Actor>();
             animator = GetComponent<Animator>();
         }
 

@@ -1,4 +1,3 @@
-using GenshinImpactMovementSystem;
 using LOGIYGames.CharacterCore;
 using System;
 using UnityEngine;
@@ -11,12 +10,12 @@ namespace LOGIYGames
     {
         [Header("Rigidbody Controller Settings")]
 
-        [SerializeField] CharacterCapsuleCollider characterCapsuleCollider;
+        [SerializeField] CapsuleCollider characterCapsuleCollider;
 
         private Rigidbody m_rigidbody;
         [SerializeField] Actor actor;
         [SerializeField] float maxStepHeight;
-        public override Collider Collider => characterCapsuleCollider.Collider;
+        public override Collider Collider => characterCapsuleCollider;
 
         private SensorsModule m_sensors;
         [SerializeField] private float baseSpeed = 3.5f;
@@ -26,10 +25,10 @@ namespace LOGIYGames
         public override float MaxStepHeight { get => maxStepHeight; }
         public override float Height
         {
-            get => characterCapsuleCollider.Collider.height;
+            get => characterCapsuleCollider.height;
             set
             {
-                characterCapsuleCollider.Collider.height = value;
+                characterCapsuleCollider.height = value;
             }
         }
 
@@ -37,19 +36,19 @@ namespace LOGIYGames
 
         public override Vector3 Center
         {
-            get => characterCapsuleCollider.Collider.center;
+            get => characterCapsuleCollider.center;
             set
             {
-                characterCapsuleCollider.Collider.center = value;
+                characterCapsuleCollider.center = value;
             }
         }
 
         public override float Radius
         {
-            get => characterCapsuleCollider.Collider.radius;
+            get => characterCapsuleCollider.radius;
             set
             {
-                characterCapsuleCollider.Collider.radius = value;
+                characterCapsuleCollider.radius = value;
             }
         }
 
@@ -63,10 +62,8 @@ namespace LOGIYGames
         #endregion
 
         #region Unity Lifecycle
-
         private void Awake()
         {
-            characterCapsuleCollider = GetComponent<CharacterCapsuleCollider>();
             m_rigidbody = GetComponent<Rigidbody>();
             m_sensors = GetComponent<SensorsModule>();
 
@@ -75,64 +72,16 @@ namespace LOGIYGames
             m_rigidbody.interpolation = RigidbodyInterpolation.None;
             m_rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
-
-        private void Update()
-        {
-            m_rigidbody.linearDamping = actor.RuntimeMovement.Deceleration;
-            
-        }
-        private void FixedUpdate()
-        {
-            //Float();
-        }
         #endregion
 
 
         public override void ChangeHorizontalVelocity(Vector3 a_move)
         {
-            Vector3 targetVelocity;
-            targetVelocity = a_move;
-            if (m_sensors.IsOnSlope && UseProjectionOnPlane)
+            m_rigidbody.linearVelocity = new Vector3(a_move.x, m_rigidbody.linearVelocity.y, a_move.z);
+            if (m_sensors.IsGrounded && m_rigidbody.linearVelocity.y<=0)
             {
-                targetVelocity = Vector3.ProjectOnPlane(
-                    targetVelocity,
-                    m_sensors.BelowHit.normal
-                );
-            }
-            if (m_sensors.IsGrounded)
-            {
-                if (m_rigidbody.linearVelocity.magnitude <= actor.RuntimeMovement.CurrentSpeed * baseSpeed)
-                {
-                    m_rigidbody.AddForce(targetVelocity * actor.RuntimeMovement.Acceleration, ForceMode.Acceleration);
-                }
-                else
-                {
-                   // m_rigidbody.linearVelocity = targetVelocity * actor.RuntimeMovement.CurrentSpeed * acceleration;
-                }
-            }
-            else
-            {
-                m_rigidbody.AddForce(targetVelocity * actor.RuntimeMovement.Acceleration, ForceMode.Acceleration);
-            }
-  
-        }
-        private void Float()
-        {
-            if (m_sensors.IsGrounded)
-            {
-
-                float distanceToFloatingPoint = characterCapsuleCollider.Collider.center.y * transform.localScale.y - m_sensors.GroundHit.distance;
-
-                if (distanceToFloatingPoint <= 0f)
-                {
-                    return;
-                }
-
-                float amountToLift = distanceToFloatingPoint * characterCapsuleCollider.StepData.StepReachForce - m_rigidbody.linearVelocity.y;
-
-                Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
-
-                m_rigidbody.AddForce(liftForce * 10, ForceMode.Acceleration);
+                m_rigidbody.linearVelocity = Vector3.ProjectOnPlane(m_rigidbody.linearVelocity, m_sensors.GroundHit.normal);
+                
             }
         }
         public override void ForceMove(Vector3 a_move)
@@ -168,17 +117,16 @@ namespace LOGIYGames
 
         public override void DisableMovement()
         {
-            throw new NotImplementedException();
         }
 
         public override void EnableMovement()
         {
-            throw new NotImplementedException();
+
         }
 
         public override void ChangeVerticalVelocity(float velocityY)
         {
-            throw new NotImplementedException();
+            m_rigidbody.linearVelocity = new(m_rigidbody.linearVelocity.x, velocityY, m_rigidbody.linearVelocity.z);
         }
     }
 }

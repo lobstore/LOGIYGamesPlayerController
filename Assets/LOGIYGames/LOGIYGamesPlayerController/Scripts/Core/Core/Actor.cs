@@ -192,69 +192,29 @@ namespace LOGIYGames.CharacterCore
         public Direction GetRelativeMovementDirection()
         {
             Vector3 localDir;
-            //if (RuntimeMovement.TargetDirection.magnitude > 0)
-            //{
-            //    localDir = Motor.transform.InverseTransformDirection(RuntimeMovement.TargetDirection);
-            //}
-            //else
-            //{
             localDir = Motor.transform.InverseTransformDirection(Motor.Velocity);
-            //}
-            float forwardDot = Vector3.Dot(localDir, Vector3.forward);
-            float rightDot = Vector3.Dot(localDir, Vector3.right);
-            float upDot = Vector3.Dot(localDir, Vector3.up);
             Direction direction;
-            if (Mathf.Abs(forwardDot) > Mathf.Abs(rightDot))
-            {
-                if (forwardDot > 0.01f)
-                    direction = Direction.Forward;
-                else
-                    direction = Direction.Backward;
-            }
-            else if (Mathf.Abs(forwardDot) < Mathf.Abs(rightDot))
-            {
-                if (rightDot > 0.01f)
-                    direction = Direction.Right;
-                else
-                    direction = Direction.Left;
-            }
-            else
+            if (localDir.magnitude == 0)
             {
                 direction = Direction.NoMovement;
             }
-
-            return direction;
-        }
-        public Direction GetInputRelativeDirection()
-        {
-            Direction direction;
-            if (RotationStrategy is CharacterRelativeRotation)
-            {
-                if (Input.MovementInput.magnitude > 0)
-                {
-                    direction = Direction.Forward;
-
-                }
-                else
-                {
-                    direction = Direction.NoMovement;
-                }
-            }
             else
             {
-                Vector3 dir = transform.right * Input.MovementInput.x + transform.forward * Input.MovementInput.y;
-                float forward = Vector3.Dot(transform.forward, dir);
-                float right = Vector3.Dot(transform.right, dir);
-                if (Mathf.Abs(forward) > Mathf.Abs(right))
+
+
+                float forwardDot = Vector3.Dot(localDir, Vector3.forward);
+                float rightDot = Vector3.Dot(localDir, Vector3.right);
+                float upDot = Vector3.Dot(localDir, Vector3.up);
+                if (Mathf.Abs(forwardDot) > Mathf.Abs(rightDot))
                 {
-                    if (forward > 0)
+                    if (forwardDot > 0.01f)
                         direction = Direction.Forward;
                     else
                         direction = Direction.Backward;
                 }
                 else
                 {
-                    if (right > 0)
+                    if (rightDot > 0.01f)
                         direction = Direction.Right;
                     else
                         direction = Direction.Left;
@@ -262,6 +222,7 @@ namespace LOGIYGames.CharacterCore
             }
             return direction;
         }
+
         #region IDamageable
         public void TakeDamage(DamageData damage)
         {

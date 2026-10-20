@@ -7,6 +7,7 @@ using UnityEngine;
 public class MountingController : MonoBehaviour
 {
     Actor actor;
+    MovementWrapperBase controller;
     private GameObject Current;
     private GameObject Target;
     public bool ExitRequested { get; private set; }
@@ -14,6 +15,7 @@ public class MountingController : MonoBehaviour
     private void Awake()
     {
         actor = GetComponent<Actor>();
+        controller = GetComponent<MovementWrapperBase>();
     }
     private void Update()
     {
@@ -40,11 +42,13 @@ public class MountingController : MonoBehaviour
         //CameraManager.Instance.DisableAllCameras();
         //PlayerManager.Instance.InputReader.DisableMovement();
         GetComponent<FootIK>().enabled = false;
-        GetComponent<MovementWrapperBase>().IsNoClip = true;
+        controller.IsNoClip = true;
+        controller.UseGravity = false;
         GetComponent<Animator>().SetBool("IsDriving", true);
         GetComponent<CharacterAnimationController>().PlayAnimation("Driving");
-        GetComponent<MovementWrapperBase>().DisableMovement();
+        controller.DisableMovement();
         Current.GetComponent<Mountable>().Mount(transform);
+
     }
 
     public void Dismount()
@@ -52,11 +56,12 @@ public class MountingController : MonoBehaviour
         Current.GetComponent<Mountable>().Dismount();
         //Current.GetComponent<PlayerInput>().enabled = false;
         GetComponent<FootIK>().enabled = true;
-        GetComponent<MovementWrapperBase>().IsNoClip = false;
+        controller.IsNoClip = false;
+        controller.UseGravity = true;
         GetComponent<Animator>().SetBool("IsDriving", false);
 
         //GetComponent<CharacterAnimationController>().PlayAnimation("Exiting Car");
-        GetComponent<MovementWrapperBase>().EnableMovement();
+        controller.EnableMovement();
         Current = null;
         Target = null;
         ExitRequested = false;

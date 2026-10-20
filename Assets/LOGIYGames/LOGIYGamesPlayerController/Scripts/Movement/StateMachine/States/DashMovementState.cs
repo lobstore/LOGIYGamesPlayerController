@@ -17,7 +17,7 @@ namespace LOGIYGames
         public override void Enter()
         {
             base.Enter();
-
+            controller.Enter();
             float verticalForce;
             float planarForce;
             JumpType jumpType = JumpType.Dash;
@@ -31,24 +31,13 @@ namespace LOGIYGames
                 verticalForce = 0;
                 planarForce = 0;
             }
-            _character.EventBus.Publish(new JumpPerformedEvent
-            {
-                jumpType = jumpType,
-                planarForce = planarForce,
-                verticalForce = verticalForce,
-                direction = _character.GetInputRelativeDirection()
-            });
             controller.Jump(jumpType, verticalForce, planarForce);
 
         }
-        public override void PhysicsUpdate()
+        public override void Exit()
         {
-            base.PhysicsUpdate();
-            if (!Data.IsAnimationDrivenRotation)
-            {
-                _character.Rotate();
-
-            }
+            base.Exit();
+            controller.Exit();
         }
         public override bool CanEnter()
         {

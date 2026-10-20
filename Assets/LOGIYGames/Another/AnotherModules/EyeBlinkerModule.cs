@@ -12,7 +12,7 @@ namespace LOGIYGames
         public string blinkBlendshapeName = "Fcl_EYE_Close";
 
         private Vrm10RuntimeExpression _expressions;
-        public ExpressionKey blinkExpression = ExpressionKey.Blink;
+        private ExpressionKey blinkExpression = ExpressionKey.Blink;
 
         private float BlinkValue { get => _expressions.GetWeight(blinkExpression); set => _expressions.SetWeight(blinkExpression, value); }
 

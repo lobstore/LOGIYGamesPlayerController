@@ -12,7 +12,7 @@ public class EyesNystagmusModule : MonoModuleBase
     [Header("Random Offset Settings")]
     [SerializeField] private float maxOffsetRadius = 0.1f; // Максимальный радиус случайного смещения
     [SerializeField] private Vector2 offsetIntervalRange = new Vector2(2f, 5f); // Интервал между смещениями (мин, макс)
-    [SerializeField] private AnimationCurve distanceToOffsetCurve; // Кривая для зависимости радиуса от расстояния
+    [SerializeField] private AnimationCurve distanceToRadiusCurve; // Кривая для зависимости радиуса от расстояния
 
     [SerializeField] private Transform SightTransform;
     private Vector3? LookTargetPosition { get => Vrm10Runtime.LookAt.LookAtInput.WorldPosition; set => Vrm10Runtime.LookAt.LookAtInput = new LookAtInput { WorldPosition = value }; }
@@ -32,7 +32,7 @@ public class EyesNystagmusModule : MonoModuleBase
     }
     private void Start()
     {
-        offsetTimer = new CountdownTimer(GetRandomOffsetInterval());
+        offsetTimer = new CountdownTimer(GetRandomOffsetInterval(), false);
         offsetTimer.Start();
 
     }
@@ -40,8 +40,9 @@ public class EyesNystagmusModule : MonoModuleBase
     public override void OnUpdate(float deltaTime)
     {
         base.OnUpdate(deltaTime);
+        offsetTimer.Tick();
         ProcessNystagmus();
-        LookTargetPosition = SightTransform.position + transform.forward+ currentOffset;
+        LookTargetPosition = SightTransform.position + transform.forward + currentOffset;
     }
     private void ProcessNystagmus()
     {
@@ -84,7 +85,7 @@ public class EyesNystagmusModule : MonoModuleBase
         float normalizedDistance = Mathf.Clamp01((distance - minDistance) / (maxDistance - minDistance));
 
         // Получаем значение из кривой (кривая должна быть убывающей)
-        float curveValue = distanceToOffsetCurve.Evaluate(normalizedDistance);
+        float curveValue = distanceToRadiusCurve.Evaluate(normalizedDistance);
 
         // Применяем к максимальному радиусу
         return maxOffsetRadius * curveValue;

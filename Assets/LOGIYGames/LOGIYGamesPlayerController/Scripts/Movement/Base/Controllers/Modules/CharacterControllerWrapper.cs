@@ -127,7 +127,7 @@ namespace LOGIYGames
             if (freeze) return;
             if (useGravity)
             {
-                AddAcceleration(Physics.gravity);
+                AddAcceleration(Physics.gravity * GravityMultiplier);
                 if (m_sensors.IsGrounded && linearVelocity.y < 0)
                 {
                     linearVelocity.y = magnit;

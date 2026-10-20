@@ -16,6 +16,7 @@ namespace LOGIYGames
         [SerializeField] private float m_castDownSphereRadius = 0.2f;
         [SerializeField] private float m_legsDistanceCheck = 0.8f;
         [SerializeField] private float m_detectionOriginYOffset = 0f;
+        [SerializeField] float legsDetectionYOffset = 0;
         public UnityEvent<bool> GroundedEvent = new();
 
         [Header("Layer Masks")]
@@ -127,6 +128,10 @@ namespace LOGIYGames
                 UpdateDebugInfo();
             }
         }
+        public float GetPlaneAbsAngle(Vector3 normal)
+        {
+            return Vector3.Angle(normal, Vector3.up);
+        }
         public bool IsValidSlope()
         {
             float angle = Vector3.Angle(m_belowHit.normal, transform.up);
@@ -174,7 +179,7 @@ namespace LOGIYGames
         private void LegsFrontObstaclesDetection()
         {
             IsObstacleLegsFront = Physics.Raycast(
-                DetectionOrigin,
+                DetectionOrigin + transform.up * legsDetectionYOffset,
                 transform.forward,
                 out m_legsFrontHit,
                 m_legsDistanceCheck,
@@ -184,7 +189,7 @@ namespace LOGIYGames
         private void LegsBehindObstaclesDetection()
         {
             IsObstacleLegsBehind = Physics.Raycast(
-                DetectionOrigin,
+                DetectionOrigin + transform.up * legsDetectionYOffset,
                 -transform.forward,
                 out m_legsBehindHit,
                 m_legsDistanceCheck,
@@ -194,7 +199,7 @@ namespace LOGIYGames
         private void LegsRightObstaclesDetection()
         {
             IsObstacleLegsRight = Physics.Raycast(
-                DetectionOrigin,
+                DetectionOrigin + transform.up * legsDetectionYOffset,
                 transform.right,
                 out m_legsRightHit,
                 m_legsDistanceCheck,
@@ -204,7 +209,7 @@ namespace LOGIYGames
         private void LegsLeftObstaclesDetection()
         {
             IsObstacleLegsLeft = Physics.Raycast(
-                DetectionOrigin,
+                DetectionOrigin + transform.up * legsDetectionYOffset,
                 -transform.right,
                 out m_legsLeftHit,
                 m_legsDistanceCheck,
@@ -239,9 +244,9 @@ namespace LOGIYGames
             DrawSphereCasts(DetectionOrigin);
             DrawBelowPlane();
 
-            Debug.DrawRay(DetectionOrigin, transform.forward * 0.5f, rayColor);
-            Debug.DrawRay(DetectionOrigin, transform.right * 0.5f, rayColor);
-            Debug.DrawRay(DetectionOrigin, -transform.right * 0.5f, rayColor);
+            Debug.DrawRay(DetectionOrigin + transform.up * legsDetectionYOffset, transform.forward * m_legsDistanceCheck, rayColor);
+            Debug.DrawRay(DetectionOrigin + transform.up * legsDetectionYOffset, transform.right * m_legsDistanceCheck, rayColor);
+            Debug.DrawRay(DetectionOrigin + transform.up * legsDetectionYOffset, -transform.right * m_legsDistanceCheck, rayColor);
         }
 
         private void DrawBelowPlane()

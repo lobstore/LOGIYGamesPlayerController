@@ -48,10 +48,50 @@ namespace LOGIYGames.Animation
                                 break;
                         }
                         break;
-                    case JumpType.HangJump:
-                        PlayAnimation(_data.Jump_Braced_Backward);
+                    case JumpType.BracedJump:
+                        if (character.Input.MovementInput.magnitude>0)
+                        {
+                            switch (evt.direction)
+                            {
+                                case Direction.Left:
+                                    PlayAnimation(_data.Jump_Braced_Left);
+                                    break;
+                                case Direction.Right:
+                                    PlayAnimation(_data.Jump_Braced_Right);
+                                    break;
+                                case Direction.Forward:
+                                    PlayAnimation(_data.Jump_Braced_Up);
+                                    break;
+                                case Direction.Backward:
+                                    PlayAnimation(_data.Jump_Braced_Down);
+                                    break;
+                                case Direction.NoMovement:
+                              
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            PlayAnimation(_data.Jump_Braced_Backward);
+                        }
+
+             
                         break;
                     case JumpType.WallRunJump:
+                        switch (evt.direction)
+                        {
+                            case Direction.Left:
+                                PlayAnimation(_data.WallRunJump_Left);
+                                break;
+                            case Direction.Right:
+                                PlayAnimation(_data.WallRunJump_Right);
+                                break;
+                            default:
+                                break;
+                        }
+                    
                         break;
                     case JumpType.Dash:
                         switch (evt.direction)
@@ -412,9 +452,16 @@ namespace LOGIYGames.Animation
                 return;
 
             Vector3 delta = animator.velocity;
+            if (controller.UseGravity && controller.Velocity.y <= 0)
+            {
+                controller.ChangeHorizontalVelocity(delta);
+            }
+            else
+            {
 
-            controller.ForceMove(delta);
-            transform.rotation *= animator.deltaRotation;
+                controller.ForceMove(delta);
+            }
+            controller.SetRotation(controller.Rotation * animator.deltaRotation);
         }
 
         private float GetStateSpeed<T>() where T : MovementStateBase

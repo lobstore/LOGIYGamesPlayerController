@@ -1,4 +1,5 @@
 using LOGIYGames.Shared.Extensions;
+using RealStep;
 using UnityEngine;
 namespace LOGIYGames.CharacterCore
 {
@@ -13,7 +14,6 @@ namespace LOGIYGames.CharacterCore
         [SerializeField] LayerMask include;
         Vector3 dir;
         [SerializeField] float baseSpeed = 3.5f;
-        [SerializeField] float inertia;
         private void Awake()
         {
             actor = GetComponent<Actor>();
@@ -23,33 +23,21 @@ namespace LOGIYGames.CharacterCore
         public void Enter()
         {
             controller.SetPosition(new Vector3(LDR.transform.position.x, controller.transform.position.y, LDR.transform.position.z));
+            GetComponent<Animator>().SetBool("IsOnLadder", true);
+            GetComponent<FootIK>().enabled = false;
             controller.UseGravity = false;
         }
         public void Climb()
         {
             Vector2 input = actor.Input.MovementInput;
+            Vector3 targetDir = controller.Collider.transform.up * input.y;
 
-            if (input.sqrMagnitude > 0.001f)
-            {
-                Vector3 targetDir = controller.Collider.transform.up * input.y;
-
-                dir = Vector3.Lerp(
-                    dir,
-                    targetDir,
-                    Time.deltaTime * inertia
-                );
-                //dir = Vector3.ProjectOnPlane(dir, actor.Sensors.LegsFrontHit.normal);
-            }
-            else
-            {
-                dir = controller.Velocity.normalized;
-            }
+            //dir = Vector3.ProjectOnPlane(dir, actor.Sensors.LegsFrontHit.normal);
 
             Vector3 velocity = dir * actor.RuntimeMovement.CurrentSpeed * baseSpeed;
 
             controller.ChangeHorizontalVelocity(velocity);
             controller.ChangeVerticalVelocity(velocity.y);
-            Rotate();
         }
         private void OnTriggerStay(Collider other)
         {
@@ -71,6 +59,8 @@ namespace LOGIYGames.CharacterCore
         public void Exit()
         {
             controller.UseGravity = true;
+            GetComponent<Animator>().SetBool("IsOnLadder", false);
+            GetComponent<FootIK>().enabled = true;
         }
         public bool CanExit()
         {
@@ -81,7 +71,7 @@ namespace LOGIYGames.CharacterCore
         {
             return IsInTrigger && actor.Input.InteractPressed;
         }
-        void Rotate()
+        public void Rotate()
         {
 
             //controller.AddAcceleration(-actor.Sensors.LegsFrontHit.normal * 10);

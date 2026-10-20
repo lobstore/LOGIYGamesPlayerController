@@ -1,46 +1,38 @@
 ﻿using LOGIYGames.CharacterCore;
-using LOGIYGames.Shared.Character.Events;
-using UnityEngine;
 namespace LOGIYGames.Movement
 {
     public class WallRunMovementState : MovementStateBase
     {
-        Vector3 normal;
+        WallrunController controller;
         public WallRunMovementState(Actor ctx, MovementStateData stateData) : base(ctx, stateData)
         {
+            controller = ctx.GetComponent<WallrunController>();
         }
         public override void Enter()
         {
             base.Enter();
-            _controller.UseGravity = false;
-            _character.EventBus.Publish(new WallrunEnterEvent
-            {
-                IsRightSide = _character.Sensors.IsObstacleLegsRight ? true : false
-            });
+            controller.Enter();
         }
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            normal = _character.Sensors.IsObstacleLegsRight ? _character.Sensors.LegsRightHit.normal : _character.Sensors.LegsLeftHit.normal;
+
+            controller.LogicUpdate();
         }
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-            _controller.ForceMove(-normal);
+
+            controller.Rotate();
         }
         public override void Exit()
         {
             base.Exit();
-            _controller.UseGravity = true;
+            controller.Exit();
         }
         public override bool CanEnter()
         {
-            return base.CanEnter() && (_character.Sensors.IsObstacleLegsLeft
-                || _character.Sensors.IsObstacleLegsRight)
-                && !_character.Sensors.IsGrounded
-                && _character.Input.MovementInput.y > 0
-                && !_character.Sensors.IsObstacleLegsFront
-                && Vector3.Angle(_character.transform.forward, Camera.main.transform.forward) < 60;
+            return base.CanEnter() && controller.CanEnter();
         }
     }
 }

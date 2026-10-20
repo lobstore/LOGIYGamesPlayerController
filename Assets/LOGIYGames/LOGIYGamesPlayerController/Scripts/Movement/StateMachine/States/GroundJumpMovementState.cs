@@ -1,7 +1,5 @@
 ﻿using LOGIYGames.CharacterCore;
-using LOGIYGames.Shared.Character.Events;
 using LOGIYGames.Shared.Enums;
-using UnityEngine;
 
 namespace LOGIYGames.Movement
 {
@@ -17,6 +15,7 @@ namespace LOGIYGames.Movement
         public override void Enter()
         {
             base.Enter();
+            controller.Enter();
             float verticalForce;
             float planarForce;
             JumpType jumpType = JumpType.GroundJump;
@@ -30,7 +29,12 @@ namespace LOGIYGames.Movement
                 verticalForce = 0;
                 planarForce = 0;
             }
-            controller.Jump(jumpType,verticalForce,planarForce);
+            controller.Jump(jumpType, verticalForce, planarForce);
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            controller.Exit();
         }
         public override bool CanEnter()
         {

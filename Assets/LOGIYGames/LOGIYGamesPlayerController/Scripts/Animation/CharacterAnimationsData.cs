@@ -13,6 +13,12 @@ namespace LOGIYGames.Animation
         public int Jump_Grounded_Backward { get; } = Animator.StringToHash(nameof(Jump_Grounded_Backward));
         public int Jump_Grounded_Up { get; } = Animator.StringToHash(nameof(Jump_Grounded_Up));
         public int Jump_Braced_Backward { get; } = Animator.StringToHash(nameof(Jump_Braced_Backward));
+        public int Jump_Braced_Up { get; } = Animator.StringToHash(nameof(Jump_Braced_Up));
+        public int Jump_Braced_Left { get; } = Animator.StringToHash(nameof(Jump_Braced_Left));
+        public int Jump_Braced_Right { get; } = Animator.StringToHash(nameof(Jump_Braced_Right));
+        public int Jump_Braced_Down { get; } = Animator.StringToHash(nameof(Jump_Braced_Down));
+        public int WallRunJump_Right { get; } = Animator.StringToHash(nameof(WallRunJump_Right));
+        public int WallRunJump_Left { get; } = Animator.StringToHash(nameof(WallRunJump_Left));
 
         public int Run_Stop_Left { get; } = Animator.StringToHash(nameof(Run_Stop_Left));
         public int Run_Stop_Right { get; } = Animator.StringToHash(nameof(Run_Stop_Right));

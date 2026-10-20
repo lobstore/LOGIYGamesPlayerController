@@ -1,5 +1,6 @@
 using LOGIYGames.CharacterCore;
 using LOGIYGames.Shared.Extensions;
+using RealStep;
 using Unity.AppUI.Core;
 using UnityEngine;
 
@@ -22,15 +23,18 @@ namespace LOGIYGames
         {
             controller.UseGravity = false;
             GetComponent<Animator>().SetBool("IsWallClimbing", true);
+            GetComponent<FootIK>().enabled = false;
+            //controller.SetPosition(new Vector3(actor.Sensors.LegsFrontHit.point.x - controller.transform.forward.x*0.2f, controller.transform.position.y, actor.Sensors.LegsFrontHit.point.z - controller.transform.forward.z * 0.2f));
         }
         public void Exit()
         {
             controller.UseGravity = true;
             GetComponent<Animator>().SetBool("IsWallClimbing", false);
+            GetComponent<FootIK>().enabled = true; ;
         }
         public void Magnit()
         {
-            controller.AddAcceleration(-actor.Sensors.LegsFrontHit.normal * 10);
+            controller.ForceMove(controller.Velocity - actor.Sensors.LegsFrontHit.normal);
             actor.RotateToDirection(-actor.Sensors.LegsFrontHit.normal);
         }
 
@@ -64,14 +68,13 @@ namespace LOGIYGames
 
         public bool CanEnter()
         {
-            return actor.Sensors.IsObstacleLegsFront &&
-                     actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include) &&
-                     actor.Input.MovementInput.y > 0;
+            return actor.Sensors.GetPlaneAbsAngle(actor.Sensors.LegsFrontHit.normal) > actor.Sensors.MaxStableSlopeAngle &&
+                     actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include);
         }
         public bool CanExit()
         {
             return actor.Input.InteractPressed ||
-                     !actor.Sensors.IsObstacleLegsFront ||
+                     !actor.Sensors.IsObstacleLegsFront || actor.Sensors.GetPlaneAbsAngle(actor.Sensors.LegsFrontHit.normal) <= actor.Sensors.MaxStableSlopeAngle ||
                      !actor.Sensors.LegsFrontHit.collider.gameObject.IsLayerInMask(include) ||
                      (actor.IsGrounded && actor.Input.MovementInput.y < 0);
         }

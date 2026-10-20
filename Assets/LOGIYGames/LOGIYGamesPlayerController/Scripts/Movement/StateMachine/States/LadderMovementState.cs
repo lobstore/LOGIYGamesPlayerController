@@ -21,7 +21,9 @@ namespace LOGIYGames
         public override void LogicUpdate()
         {
             base.LogicUpdate();
+            if (!Data.IsAnimationDrivenMovement ) 
             ladderMovementController.Climb();
+            ladderMovementController.Rotate();
         }
         public override void Exit()
         {

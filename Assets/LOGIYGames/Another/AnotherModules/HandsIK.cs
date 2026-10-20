@@ -8,8 +8,8 @@ namespace LOGIYGames
         [SerializeField] private TwoBoneIKConstraint leftConstraint;
         [SerializeField] private TwoBoneIKConstraint rightConstraint;
 
-        [SerializeField] private Transform leftTarget;
-        [SerializeField] private Transform rightTarget;
+        private Transform leftTarget;
+        private Transform rightTarget;
 
         [SerializeField] private float weightSpeed = 10f;
 
@@ -27,7 +27,12 @@ namespace LOGIYGames
 
         private float _leftTargetWeight;
         private float _rightTargetWeight;
+        private void Awake()
+        {
+            leftTarget = leftConstraint.data.target;
+            rightTarget = rightConstraint.data.target;
 
+        }
         private void Update()
         {
             var delta = Time.deltaTime * weightSpeed;

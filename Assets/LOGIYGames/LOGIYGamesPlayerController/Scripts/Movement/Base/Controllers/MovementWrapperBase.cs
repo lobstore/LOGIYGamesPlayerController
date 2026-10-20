@@ -6,6 +6,7 @@ namespace LOGIYGames
     {
         public virtual GroundedReport LastGroundedReport { get; }
         public abstract bool UseGravity { get; set; }
+        public float GravityMultiplier { get; set; } = 1;
         public abstract float MaxStepHeight { get; }
         public abstract float Height { get; set; }
         public abstract float SlopeLimit { get; set; }
